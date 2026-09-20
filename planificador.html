@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planificador de Sesiones - Fisiología</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+header {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
+.subtitle { font-size: 1.1em; opacity: 0.9; }
+.controls {
+    padding: 20px 40px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    font-family: inherit;
+}
+.btn-primary { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4); }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; }
+.btn-print { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
+.btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4); }
+.btn-danger { background: #dc3545; color: white; }
+.btn-danger:hover { background: #c82333; }
+.btn-edit { background: #ffc107; color: #333; padding: 8px 16px; font-size: 0.9em; }
+.btn-delete { background: #dc3545; color: white; padding: 8px 16px; font-size: 0.9em; }
+.btn-small { padding: 6px 12px; font-size: 0.85em; }
+.btn-sync { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 8px 16px; font-size: 0.9em; }
+.btn-sync:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
+
+.dropdown { position: relative; display: inline-block; margin-left: auto; }
+.btn-dropdown {
+    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-dropdown:hover { background: linear-gradient(135deg, #343a40 0%, #212529 100%); }
+.dropdown-arrow { font-size: 0.8em; transition: transform 0.3s; }
+.dropdown.open .dropdown-arrow { transform: rotate(180deg); }
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    min-width: 240px;
+    padding: 8px 0;
+    z-index: 100;
+    border: 1px solid #e9ecef;
+}
+.dropdown.open .dropdown-menu { display: block; }
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 0.95em;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.dropdown-item:hover { background: #f8f9fa; color: #11998e; }
+.dropdown-item.danger { color: #dc3545; }
+.dropdown-divider { height: 1px; background: #e9ecef; margin: 6px 0; }
+
+.info-box {
+    margin: 20px 40px;
+    padding: 20px;
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    border-radius: 8px;
+}
+.info-box h3 { color: #1976D2; margin-bottom: 10px; }
+
+.filtros {
+    padding: 15px 40px;
+    background: #f8f9fa;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.filtro-btn {
+    padding: 8px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.filtro-btn.active { background: #11998e; color: white; border-color: #11998e; }
+.filtro-btn:hover { border-color: #11998e; }
+
+.sesiones-container { padding: 40px; }
+.sesion-card {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+.sesion-card:hover { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
+.sesion-card.estado-previsto { border-left: 6px solid #6c757d; }
+.sesion-card.estado-realizado { border-left: 6px solid #28a745; background: #f0fdf4; }
+.sesion-card.estado-pausa { border-left: 6px solid #ffc107; background: #fffbeb; }
+.sesion-card.estado-descartado { border-left: 6px solid #dc3545; background: #fef2f2; opacity: 0.7; }
+
+.sesion-header {
+    padding: 20px 25px;
+    background: #f8f9fa;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.sesion-info { flex: 1; min-width: 250px; }
+.sesion-fecha {
+    display: inline-block;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.sesion-titulo { font-size: 1.4em; color: #333; margin-bottom: 8px; }
+.sesion-estado {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 10px;
+}
+.estado-previsto .sesion-estado { background: #e2e3e5; color: #383d41; }
+.estado-realizado .sesion-estado { background: #d4edda; color: #155724; }
+.estado-pausa .sesion-estado { background: #fff3cd; color: #856404; }
+.estado-descartado .sesion-estado { background: #f8d7da; color: #721c24; }
+
+.sesion-meta {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #666;
+}
+.sesion-meta-item { display: flex; align-items: center; gap: 4px; }
+.sesion-toggle {
+    font-size: 1.5em;
+    color: #11998e;
+    transition: transform 0.3s;
+}
+.sesion-card.open .sesion-toggle { transform: rotate(180deg); }
+
+.sesion-body {
+    display: none;
+    padding: 25px;
+    border-top: 1px solid #e9ecef;
+}
+.sesion-card.open .sesion-body { display: block; }
+
+.sesion-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+.sesion-section h4 {
+    color: #11998e;
+    margin-bottom: 10px;
+    font-size: 1.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.sesion-section p { line-height: 1.6; color: #555; }
+
+.actividades-lista { list-style: none; }
+.actividad-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.actividad-tiempo {
+    background: #11998e;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.actividad-descripcion { flex: 1; min-width: 200px; }
+
+.recursos-lista { list-style: none; }
+.recursos-lista li { margin-bottom: 6px; }
+.recursos-lista a {
+    color: #11998e;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    word-break: break-all;
+}
+.recursos-lista a:hover { color: #0d7a6e; text-decoration: underline; }
+.recursos-lista a::after { content: "↗"; font-size: 0.8em; opacity: 0.7; }
+
+.tags-container { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    background: #e7f3ff;
+    color: #1976D2;
+}
+.tag.espacio { background: #fff3cd; color: #856404; }
+.tag.medio { background: #f3e5f5; color: #6a1b9a; }
+
+.observaciones-box {
+    background: #fffde7;
+    border-left: 4px solid #fbc02d;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-style: italic;
+    color: #5d4037;
+}
+
+.sesion-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+    flex-wrap: wrap;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+.modal.active { display: block; }
+.modal-content {
+    background-color: white;
+    margin: 30px auto;
+    padding: 40px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 800px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.modal-xl { max-width: 1000px; }
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+.close:hover { color: #333; }
+.modal-content h2 {
+    color: #11998e;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+.modal-subtitle { color: #666; font-size: 0.95em; margin-bottom: 20px; }
+
+.form-group { margin-bottom: 18px; }
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95em;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: inherit;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #11998e;
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+.checkbox-item input { transform: scale(1.1); }
+
+.actividades-editor {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+.actividad-editor-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+.actividad-editor-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.btn-remove-actividad {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+}
+.btn-add-actividad {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+    flex-wrap: wrap;
+}
+
+.historial-lista { max-height: 500px; overflow-y: auto; margin: 20px 0; }
+.historial-item {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.historial-item.current { background: #e7f3ff; border-color: #2196F3; }
+.historial-info { flex: 1; }
+.historial-fecha { font-weight: 700; color: #333; margin-bottom: 4px; }
+.historial-detalle { font-size: 0.85em; color: #666; }
+.historial-badge {
+    display: inline-block;
+    background: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    margin-left: 8px;
+}
+.historial-actions { display: flex; gap: 8px; }
+.btn-restore { background: #28a745; color: white; padding: 6px 14px; font-size: 0.85em; border: none; border-radius: 6px; cursor: pointer; }
+.btn-delete-version { background: #dc3545; color: white; padding: 6px 14px; font-size: 0.85em; border: none; border-radius: 6px; cursor: pointer; }
+
+.editor-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #856404;
+}
+.editor-textarea {
+    width: 100%;
+    min-height: 400px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    resize: vertical;
+}
+
+.log-section {
+    padding: 30px 40px;
+    border-top: 2px solid #e9ecef;
+}
+.log-section h3 {
+    color: #11998e;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    border-left: 5px solid #38ef7d;
+    padding-left: 15px;
+}
+.log-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.log-item {
+    background: white;
+    border-left: 4px solid #11998e;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.log-item.log-sync { border-left-color: #ffc107; background: #fffbeb; }
+.log-item.log-state { border-left-color: #28a745; background: #f0fdf4; }
+.log-item.log-edit { border-left-color: #17a2b8; background: #ecfeff; }
+.log-item.log-delete { border-left-color: #dc3545; background: #fef2f2; }
+.log-item.log-alumno { border-left-color: #6f42c1; background: #f3e5f5; }
+.log-fecha {
+    font-weight: 700;
+    color: #11998e;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+.log-contenido { flex: 1; color: #333; }
+.log-usuario {
+    font-size: 0.8em;
+    color: #666;
+    font-style: italic;
+}
+.log-vacio { text-align: center; padding: 30px; color: #999; font-style: italic; }
+.log-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    font-weight: 500;
+}
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #17a2b8; }
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #64748b;
+    font-size: 0.95em;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.empty-state { text-align: center; padding: 40px; color: #999; font-style: italic; }
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    header { padding: 30px 20px; }
+    header h1 { font-size: 1.8em; }
+    .controls, .filtros { padding: 15px 20px; }
+    .sesiones-container { padding: 20px; }
+    .modal-content { padding: 25px; margin: 20px auto; }
+    .form-row { grid-template-columns: 1fr; }
+    .actividad-editor-row { grid-template-columns: 1fr; }
+    .dropdown { margin-left: 0; flex: 1 1 100%; }
+    .btn-dropdown { width: 100%; justify-content: center; }
+    .log-section { padding: 20px; }
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border-radius: 0; max-width: 100%; }
+    header { background: none; color: #000; padding: 20px 0; border-bottom: 3px solid #333; }
+    header h1, header h2, .subtitle { color: #000 !important; text-shadow: none; }
+    .no-print { display: none !important; }
+    .sesion-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc; margin-bottom: 15px; }
+    .sesion-body { display: block !important; }
+    .sesion-toggle { display: none; }
+    .sesion-actions { display: none; }
+    .sesion-header { cursor: default; }
+    footer { border-top: 2px solid #333; color: #333; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📅 Planificador de Sesiones</h1>
+        <h2>Fisiología Aplicada a la Danza</h2>
+        <p class="subtitle">Curso 2026-2027 · Herramienta para la profesora</p>
+    </header>
+
+    <div class="controls no-print">
+        <button id="btnAddSesion" class="btn btn-primary">➕ Añadir Sesión</button>
+        <button id="btnPrint" class="btn btn-print">🖨️ Imprimir / PDF</button>
+        <div class="dropdown">
+            <button id="btnDropdown" class="btn btn-dropdown">
+                ⚙️ Más opciones <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <button class="dropdown-item" id="btnHistory">📜 Historial</button>
+                <button class="dropdown-item" id="btnEditor">✏️ Editor JSON</button>
+                <button class="dropdown-item" id="btnAutoBackup">💾 Copia Automática</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" id="btnExport">📥 Exportar</button>
+                <button class="dropdown-item" id="btnImport">📤 Importar</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item danger" id="btnReset">🔄 Restablecer</button>
+            </div>
+        </div>
+        <input type="file" id="fileInput" accept=".json" style="display: none;">
+    </div>
+
+    <div class="filtros no-print">
+        <strong style="margin-right: 10px;">Filtrar por estado:</strong>
+        <button class="filtro-btn active" data-filtro="todas">Todas</button>
+        <button class="filtro-btn" data-filtro="previsto">⏳ Previstas</button>
+        <button class="filtro-btn" data-filtro="realizado">✅ Realizadas</button>
+        <button class="filtro-btn" data-filtro="pausa">⏸️ En pausa</button>
+        <button class="filtro-btn" data-filtro="descartado">❌ Descartadas</button>
+    </div>
+
+    <div class="info-box no-print">
+        <h3>ℹ️ Información</h3>
+        <p>Este planificador te permite gestionar cada sesión con todo el detalle. Los cambios se guardan automáticamente y se pueden sincronizar con la ficha del alumno mediante el botón <strong>🔄 Actualizar sesión</strong>.</p>
+        <p><strong>💡 Consejo:</strong> Haz clic en cualquier sesión para expandirla. Todas las acciones quedan registradas en el log inferior.</p>
+    </div>
+
+    <div id="sesionesContainer" class="sesiones-container"></div>
+
+    <!-- SECCIÓN LOG -->
+    <div class="log-section no-print">
+        <h3>📜 Log de Acciones</h3>
+        <div id="logContainer" class="log-container">
+            <div class="log-vacio">Aún no hay acciones registradas.</div>
+        </div>
+        <div class="log-actions">
+            <button class="btn btn-secondary btn-small" onclick="renderizarLog()">🔄 Actualizar log</button>
+            <button class="btn btn-danger btn-small" onclick="netejarLog()">🗑️ Limpiar log</button>
+            <button class="btn btn-secondary btn-small" onclick="exportarLog()">📥 Exportar log</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDICIÓN SESIÓN -->
+<div id="modalSesion" class="modal">
+    <div class="modal-content modal-xl">
+        <span class="close" data-modal="modalSesion">&times;</span>
+        <h2 id="modalSesionTitle">Añadir Sesión</h2>
+        <form id="sesionForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>📅 Fecha:</label>
+                    <input type="date" id="sesionFecha" required>
+                </div>
+                <div class="form-group">
+                    <label>🕐 Horario:</label>
+                    <input type="text" id="sesionHorario" placeholder="Ej: 12:00 - 15:00 (3h)">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>📌 Título de la sesión:</label>
+                <input type="text" id="sesionTitulo" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>🎯 Estado:</label>
+                    <select id="sesionEstado">
+                        <option value="previsto">⏳ Prevista</option>
+                        <option value="realizado">✅ Realizada</option>
+                        <option value="pausa">⏸️ En pausa</option>
+                        <option value="descartado">❌ Descartada</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>📍 Espacio de trabajo:</label>
+                    <select id="sesionEspacio">
+                        <option value="aula_ordinaria">Aula ordinaria</option>
+                        <option value="aula_practicas">Aula de prácticas</option>
+                        <option value="ambos">Ambos espacios</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>🎯 Objetivos de la sesión:</label>
+                <textarea id="sesionObjetivos" rows="3" placeholder="¿Qué debe haber aprendido el alumnado al final de la sesión?"></textarea>
+            </div>
+            <div class="form-group">
+                <label>📋 Actividades planificadas:</label>
+                <div class="actividades-editor" id="actividadesEditor"></div>
+                <button type="button" class="btn-add-actividad" onclick="addActividad()">➕ Añadir actividad</button>
+            </div>
+            <div class="form-group">
+                <label>🔗 Recursos HTML a utilizar (una URL por línea):</label>
+                <textarea id="sesionRecursos" rows="4" placeholder="https://jpainous.github.io/dansa_tema03/..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>📚 Trabajo previo recomendado:</label>
+                <textarea id="sesionTrabajoPrevio" rows="2" placeholder="Lectura, vídeo, repaso..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>📝 Trabajo complementario:</label>
+                <textarea id="sesionTrabajoComp" rows="2" placeholder="Ejercicios, casos prácticos, lectura..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>🎥 Medios audiovisuales:</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" value="Proyector"> Proyector</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Ordenador"> Ordenador</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Altavoces"> Altavoces</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Pizarra digital"> Pizarra digital</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Vídeos"> Vídeos</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Material anatómico"> Material anatómico</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Modelos 3D"> Modelos 3D</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>📝 Observaciones:</label>
+                <textarea id="sesionObservaciones" rows="3" placeholder="Notas personales, incidencias, ajustes..."></textarea>
+            </div>
+            <input type="hidden" id="sesionId">
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                <button type="button" class="btn btn-secondary" data-modal="modalSesion">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL HISTORIAL -->
+<div id="modalHistorial" class="modal">
+    <div class="modal-content">
+        <span class="close" data-modal="modalHistorial">&times;</span>
+        <h2>📜 Historial de Versiones</h2>
+        <div id="historialLista" class="historial-lista"></div>
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" data-modal="modalHistorial">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITOR JSON -->
+<div id="modalEditor" class="modal">
+    <div class="modal-content modal-xl">
+        <span class="close" data-modal="modalEditor">&times;</span>
+        <h2>✏️ Editor JSON</h2>
+        <div class="editor-warning">⚠️ <strong>Precaución:</strong> Modificar el JSON manualmente puede romper la aplicación.</div>
+        <textarea id="editorJSON" class="editor-textarea" spellcheck="false"></textarea>
+        <div class="form-actions">
+            <button type="button" id="btnAplicarJSON" class="btn btn-primary">✅ Aplicar</button>
+            <button type="button" id="btnFormatearJSON" class="btn btn-secondary">🎨 Formatear</button>
+            <button type="button" id="btnCopiarJSON" class="btn btn-secondary">📋 Copiar</button>
+            <button type="button" class="btn btn-secondary" data-modal="modalEditor">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+</footer>
+
+<script>
+// ==========================================
+// CONFIGURACIÓN
+// ==========================================
+const STORAGE_KEY = 'planificadorSesiones';
+const HISTORY_KEY = 'planificadorHistorial';
+const SHARED_KEY = 'fisiologiaSharedData';
+const MAX_HISTORY = 20;
+
+let state = { sesiones: [] };
+let filtroActual = 'todas';
+let actividadesTemp = [];
+
+// ==========================================
+// DATOS INICIALES
+// ==========================================
+const datosIniciales = {
+    sesiones: [
+        {
+            id: 'ses-1', fecha: '2026-10-09', horario: '12:00 - 15:00 (3h)',
+            titulo: 'Presentación. Homeostasis y Fisiología celular',
+            estado: 'previsto', espacio: 'aula_ordinaria',
+            objetivos: 'Comprender los niveles de organización del cuerpo humano, los líquidos corporales y los mecanismos de homeostasis durante el movimiento.',
+            actividades: [
+                { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura, profesora y metodología. Entrega de la guía de recursos.' },
+                { tiempo: '12:30-13:30', descripcion: 'Niveles de organización del cuerpo humano. Líquidos intra y extracelular. Variables del medio interno.' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
+                { tiempo: '13:45-14:30', descripcion: 'Homeostasis: definición, rangos fisiológicos, sistemas de regulación (nervioso y endocrino).' },
+                { tiempo: '14:30-15:00', descripcion: 'Retroalimentación negativa y positiva. Homeostasis en el movimiento. Actividad interactiva con recursos HTML.' }
+            ],
+            recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html','https://jpainous.github.io/dansa_tema03/esqueleto_00_A.html'],
+            trabajoPrevio: 'Ninguno (primera sesión).',
+            trabajoComplementario: 'Explorar el recurso "homeostasis_movimiento.html" y resolver los 10 casos prácticos del Bloque 1 en casos_practicos02_A.html.',
+            medios: ['Proyector', 'Ordenador', 'Pizarra digital'],
+            observaciones: ''
+        },
+        {
+            id: 'ses-2', fecha: '2026-10-16', horario: '12:00 - 15:00 (3h)',
+            titulo: 'Sistema musculoesquelético I',
+            estado: 'previsto', espacio: 'ambos',
+            objetivos: 'Conocer la estructura muscular desde la fibra hasta el sarcómero, el mecanismo de contracción y los tipos de contracción aplicados a la danza.',
+            actividades: [
+                { tiempo: '12:00-12:15', descripcion: 'Repaso de la sesión anterior y dudas.' },
+                { tiempo: '12:15-13:15', descripcion: 'Tipos de músculos. Estructura muscular: fibra, miofibrilla, sarcómero, miofilamentos (actina y miosina).' },
+                { tiempo: '13:15-13:30', descripcion: 'Descanso' },
+                { tiempo: '13:30-14:15', descripcion: 'Unidad motora. Mecanismo de contracción: papel del calcio y ATP. Ciclo de la miosina.' },
+                { tiempo: '14:15-15:00', descripcion: 'Tipos de contracción (concéntrica, excéntrica, isométrica). Práctica en aula de prácticas: análisis de un plié y un relevé.' }
+            ],
+            recursos: ['https://jpainous.github.io/dansa_tema03/actividades_sarcomero.html','https://jpainous.github.io/dansa_tema03/miosina_actina.html','https://jpainous.github.io/dansa_tema03/calcio_atp.html','https://jpainous.github.io/dansa_tema03/contraccion_muscular.html','https://jpainous.github.io/dansa_tema03/unidad_motora.html'],
+            trabajoPrevio: 'Repasar el recurso "homeostasis_movimiento.html" y completar los casos del Bloque 1.',
+            trabajoComplementario: 'Resolver los Bloques 2 y 3 de casos_practicos02_A.html.',
+            medios: ['Proyector', 'Ordenador', 'Pizarra digital', 'Altavoces', 'Vídeos'],
+            observaciones: ''
+        },
+        {
+            id: 'ses-3', fecha: '2026-10-23', horario: '12:00 - 15:00 (3h)',
+            titulo: 'Sistema musculoesquelético II',
+            estado: 'previsto', espacio: 'ambos',
+            objetivos: 'Identificar los componentes de la cadena biomecánica, clasificar los huesos, comprender la remodelación ósea y analizar los planos de movimiento.',
+            actividades: [
+                { tiempo: '12:00-12:15', descripcion: 'Repaso rápido de la sesión anterior.' },
+                { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: músculo, tendón, hueso, articulación, ligamento.' },
+                { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y partes del hueso largo. Histología y remodelación ósea (Ley de Wolff).' },
+                { tiempo: '13:45-14:00', descripcion: 'Descanso' },
+                { tiempo: '14:00-14:30', descripcion: 'Articulaciones y fisiología del cartílago.' },
+                { tiempo: '14:30-15:00', descripcion: 'Planos de movimiento y propiocepción. Práctica: identificar planos en gestos de danza.' }
+            ],
+            recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_01_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_02_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_03_D.html','https://jpainous.github.io/dansa_tema03/esqueleto_04_tendones.html','https://jpainous.github.io/dansa_tema03/esqueleto_05_articulaciones_A.html','https://jpainous.github.io/dansa_tema03/planos_movimiento.html'],
+            trabajoPrevio: 'Completar los Bloques 2 y 3 de casos_practicos02_A.html.',
+            trabajoComplementario: 'Resolver el Bloque 5 de casos_practicos02_B.html (huesos). Empezar a pensar en el trabajo oral.',
+            medios: ['Proyector', 'Ordenador', 'Pizarra digital', 'Material anatómico'],
+            observaciones: ''
+        }
+    ]
+};
+
+// ==========================================
+// UTILIDADES
+// ==========================================
+function generarId(prefijo) {
+    return prefijo + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+}
+
+function formatearFecha(f) {
+    if (!f) return 'Sin fecha';
+    const partes = f.split('-');
+    if (partes.length !== 3) return f;
+    const [y, m, d] = partes;
+    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const mesIdx = parseInt(m) - 1;
+    if (mesIdx < 0 || mesIdx > 11) return f;
+    return `${parseInt(d)}-${meses[mesIdx]}-${y}`;
+}
+
+function formatearFechaISO(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function extraerNombre(url) {
+    if (!url) return 'Recurso';
+    const p = url.split('/');
+    return p[p.length - 1] || url;
+}
+
+function generarNombreArchivo() {
+    const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    return `planificador_sesiones_${fecha}.json`;
+}
+
+function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = mensaje;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, duracion);
+}
+
+function getEspacioTexto(espacio) {
+    const map = {
+        'aula_ordinaria': '🏫 Aula ordinaria',
+        'aula_practicas': '🩰 Aula de prácticas',
+        'ambos': '🏫🩰 Ambos espacios'
+    };
+    return map[espacio] || espacio;
+}
+
+function getEstadoTexto(estado) {
+    const map = {
+        'previsto': '⏳ Prevista',
+        'realizado': '✅ Realizada',
+        'pausa': '⏸️ En pausa',
+        'descartado': '❌ Descartada'
+    };
+    return map[estado] || estado;
+}
+
+// ==========================================
+// GESTIÓN DEL ESTADO
+// ==========================================
+function migrarDatos(datos) {
+    if (!datos || !datos.sesiones) return null;
+    datos.sesiones = datos.sesiones.map(s => ({
+        id: s.id || generarId('ses'),
+        fecha: s.fecha || '',
+        horario: s.horario || '',
+        titulo: s.titulo || 'Sin título',
+        estado: s.estado || 'previsto',
+        espacio: s.espacio || 'aula_ordinaria',
+        objetivos: s.objetivos || '',
+        actividades: Array.isArray(s.actividades) ? s.actividades : [],
+        recursos: Array.isArray(s.recursos) ? s.recursos : [],
+        trabajoPrevio: s.trabajoPrevio || '',
+        trabajoComplementario: s.trabajoComplementario || '',
+        medios: Array.isArray(s.medios) ? s.medios : [],
+        observaciones: s.observaciones || ''
+    }));
+    return datos;
+}
+
+function guardarEstado(crearBackup = true) {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (crearBackup) crearVersionHistorial();
+        return true;
+    } catch (e) {
+        console.error('Error al guardar:', e);
+        mostrarToast('❌ Error al guardar', 'error');
+        return false;
+    }
+}
+
+function cargarEstado() {
+    try {
+        const datos = localStorage.getItem(STORAGE_KEY);
+        if (datos) {
+            const migrados = migrarDatos(JSON.parse(datos));
+            if (migrados) state = migrados;
+            else state = JSON.parse(JSON.stringify(datosIniciales));
+        } else {
+            state = JSON.parse(JSON.stringify(datosIniciales));
+        }
+        guardarEstado(false);
+    } catch (e) {
+        state = JSON.parse(JSON.stringify(datosIniciales));
+        guardarEstado(false);
+    }
+}
+
+function restablecerEstado() {
+    if (confirm('¿Restablecer todos los datos a los valores iniciales? Se perderán todos los cambios.')) {
+        state = JSON.parse(JSON.stringify(datosIniciales));
+        guardarEstado();
+        renderizar();
+        mostrarToast('✅ Datos restablecidos', 'success');
+        registrarLog('restablecer', 'Datos restablecidos a valores iniciales');
+    }
+}
+
+// ==========================================
+// HISTORIAL
+// ==========================================
+function crearVersionHistorial() {
+    try {
+        let historial = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        historial.unshift({
+            id: 'v-' + Date.now(),
+            fecha: new Date().toISOString(),
+            datos: JSON.parse(JSON.stringify(state))
+        });
+        if (historial.length > MAX_HISTORY) historial = historial.slice(0, MAX_HISTORY);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(historial));
+    } catch (e) { console.error(e); }
+}
+
+function obtenerHistorial() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch (e) { return []; }
+}
+
+function restaurarVersion(id) {
+    const h = obtenerHistorial();
+    const v = h.find(x => x.id === id);
+    if (!v) return;
+    if (confirm('¿Restaurar esta versión?')) {
+        const m = migrarDatos(JSON.parse(JSON.stringify(v.datos)));
+        if (m) {
+            state = m;
+            guardarEstado();
+            renderizar();
+            mostrarToast('✅ Versión restaurada', 'success');
+            cerrarModal('modalHistorial');
+            registrarLog('restaurar', `Versión ${formatearFechaISO(v.fecha)} restaurada`);
+        }
+    }
+}
+
+function eliminarVersion(id) {
+    if (!confirm('¿Eliminar esta versión?')) return;
+    let h = obtenerHistorial().filter(x => x.id !== id);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+    renderizarHistorial();
+    mostrarToast('🗑️ Versión eliminada', 'info');
+}
+
+function renderizarHistorial() {
+    const lista = document.getElementById('historialLista');
+    const h = obtenerHistorial();
+    if (h.length === 0) {
+        lista.innerHTML = '<div class="empty-state">No hay versiones en el historial.</div>';
+        return;
+    }
+    lista.innerHTML = h.map((v, i) => `
+        <div class="historial-item ${i === 0 ? 'current' : ''}">
+            <div class="historial-info">
+                <div class="historial-fecha">📅 ${formatearFechaISO(v.fecha)} ${i === 0 ? '<span class="historial-badge">ACTUAL</span>' : ''}</div>
+                <div class="historial-detalle">${v.datos.sesiones.length} sesiones</div>
+            </div>
+            <div class="historial-actions">
+                ${i !== 0 ? `<button class="btn-restore" onclick="restaurarVersion('${v.id}')">♻️ Restaurar</button>` : ''}
+                <button class="btn-delete-version" onclick="eliminarVersion('${v.id}')">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ==========================================
+// SINCRONIZACIÓN Y LOG
+// ==========================================
+function obtenerDatosCompartidos() {
+    try {
+        const datos = localStorage.getItem(SHARED_KEY);
+        if (datos) return JSON.parse(datos);
+    } catch (e) { console.error(e); }
+    return { sesiones: [], log: [], sesionActualizadaId: null };
+}
+
+function guardarDatosCompartidos(datos) {
+    try {
+        localStorage.setItem(SHARED_KEY, JSON.stringify(datos));
+        return true;
+    } catch (e) {
+        console.error(e);
+        mostrarToast('❌ Error al guardar datos compartidos', 'error');
+        return false;
+    }
+}
+
+function registrarLog(accion, detalle, usuario = 'Profesora') {
+    const datos = obtenerDatosCompartidos();
+    const entrada = {
+        id: 'log-' + Date.now(),
+        fecha: new Date().toISOString(),
+        accion: accion,
+        detalle: detalle,
+        usuario: usuario
+    };
+    datos.log.unshift(entrada);
+    if (datos.log.length > 200) datos.log = datos.log.slice(0, 200);
+    guardarDatosCompartidos(datos);
+    renderizarLog();
+}
+
+function sincronizarSesion(id) {
+    const s = state.sesiones.find(x => x.id === id);
+    if (!s) return;
+    
+    const confirmacion = confirm(
+        `🔄 ¿Actualizar la sesión "${s.titulo}" a la ficha del alumno?\n\n` +
+        `Esto hará:\n` +
+        `• Cambiar el estado a "✅ Realizada" (si estaba prevista o en pausa)\n` +
+        `• Enviar los datos actualizados a la ficha del alumno\n` +
+        `• Registrar la acción en el log\n\n` +
+        `¿Continuar?`
+    );
+    
+    if (!confirmacion) return;
+    
+    // Cambiar estado
+    const estadoAnterior = s.estado;
+    if (s.estado === 'previsto' || s.estado === 'pausa') {
+        s.estado = 'realizado';
+    }
+    
+    // Actualizar datos compartidos
+    const datos = obtenerDatosCompartidos();
+    datos.sesiones = JSON.parse(JSON.stringify(state.sesiones));
+    datos.sesionActualizadaId = id;
+    datos.ultimaActualizacion = new Date().toISOString();
+    guardarDatosCompartidos(datos);
+    
+    // Guardar estado local y registrar al log
+    guardarEstado();
+    renderizar();
+    
+    let detalle = `Sesión "${s.titulo}" (${formatearFecha(s.fecha)}) actualizada y enviada a la ficha del alumno.`;
+    if (estadoAnterior !== s.estado) {
+        detalle += ` Estado cambiado: ${getEstadoTexto(estadoAnterior)} → ${getEstadoTexto(s.estado)}`;
+        registrarLog('cambio_estado', detalle);
+    }
+    registrarLog('sincronizacion', detalle);
+    
+    mostrarToast('✅ Sesión actualizada y enviada a la ficha del alumno', 'success');
+}
+
+function renderizarLog() {
+    const container = document.getElementById('logContainer');
+    if (!container) return;
+    const datos = obtenerDatosCompartidos();
+    const log = datos.log || [];
+    
+    if (log.length === 0) {
+        container.innerHTML = '<div class="log-vacio">Aún no hay acciones registradas.</div>';
+        return;
+    }
+    
+    container.innerHTML = log.map(l => {
+        const clase = {
+            'sincronizacion': 'log-sync',
+            'cambio_estado': 'log-state',
+            'edicion': 'log-edit',
+            'creacion': 'log-edit',
+            'eliminacion': 'log-delete',
+            'restablecer': 'log-delete',
+            'restaurar': 'log-edit',
+            'sincronizacion_alumno': 'log-alumno'
+        }[l.accion] || '';
+        
+        const icono = {
+            'sincronizacion': '🔄',
+            'cambio_estado': '📊',
+            'edicion': '✏️',
+            'creacion': '➕',
+            'eliminacion': '🗑️',
+            'restablecer': '🔄',
+            'restaurar': '♻️',
+            'sincronizacion_alumno': '👨‍🎓'
+        }[l.accion] || '📝';
+        
+        return `
+            <div class="log-item ${clase}">
+                <span class="log-fecha">${formatearFechaISO(l.fecha)}</span>
+                <span class="log-contenido">${icono} <strong>${l.detalle}</strong></span>
+                <span class="log-usuario">— ${l.usuario}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function netejarLog() {
+    if (!confirm('¿Seguro que quieres limpiar todo el log de acciones? Esta acción no se puede deshacer.')) return;
+    const datos = obtenerDatosCompartidos();
+    datos.log = [];
+    guardarDatosCompartidos(datos);
+    renderizarLog();
+    mostrarToast('🗑️ Log limpiado', 'info');
+}
+
+function exportarLog() {
+    const datos = obtenerDatosCompartidos();
+    const log = datos.log || [];
+    let text = 'LOG DE ACCIONES - Fisiología Aplicada a la Danza\n';
+    text += '===========================================\n\n';
+    log.forEach(l => {
+        text += `[${formatearFechaISO(l.fecha)}] ${l.usuario}: ${l.detalle}\n`;
+    });
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `log_fisiologia_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    mostrarToast('📥 Log exportado', 'success');
+}
+
+// ==========================================
+// RENDERIZADO
+// ==========================================
+function renderizar() {
+    const container = document.getElementById('sesionesContainer');
+    container.innerHTML = '';
+
+    let sesiones = state.sesiones.slice().sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
+    if (filtroActual !== 'todas') {
+        sesiones = sesiones.filter(s => s.estado === filtroActual);
+    }
+
+    if (sesiones.length === 0) {
+        container.innerHTML = '<div class="empty-state">No hay sesiones con este filtro.</div>';
+        return;
+    }
+
+    sesiones.forEach(s => container.appendChild(crearSesionCard(s)));
+}
+
+function crearSesionCard(s) {
+    const div = document.createElement('div');
+    div.className = `sesion-card estado-${s.estado}`;
+    div.dataset.id = s.id;
+
+    let actividadesHTML = '';
+    if (s.actividades.length > 0) {
+        actividadesHTML = '<ul class="actividades-lista">' + s.actividades.map(a => `
+            <li class="actividad-item">
+                <span class="actividad-tiempo">${a.tiempo}</span>
+                <span class="actividad-descripcion">${a.descripcion}</span>
+            </li>
+        `).join('') + '</ul>';
+    } else {
+        actividadesHTML = '<p style="color:#999;font-style:italic;">Sin actividades planificadas.</p>';
+    }
+
+    let recursosHTML = '';
+    if (s.recursos.length > 0) {
+        recursosHTML = '<ul class="recursos-lista">' + s.recursos.map(u => `
+            <li><a href="${u}" target="_blank">${extraerNombre(u)}</a></li>
+        `).join('') + '</ul>';
+    } else {
+        recursosHTML = '<p style="color:#999;font-style:italic;">Sin recursos asignados.</p>';
+    }
+
+    let mediosHTML = '';
+    if (s.medios.length > 0) {
+        mediosHTML = '<div class="tags-container">' + s.medios.map(m => `<span class="tag medio">🎥 ${m}</span>`).join('') + '</div>';
+    } else {
+        mediosHTML = '<p style="color:#999;font-style:italic;">Sin medios específicos.</p>';
+    }
+
+    let observacionesHTML = '';
+    if (s.observaciones && s.observaciones.trim().length > 0) {
+        observacionesHTML = `<div class="observaciones-box"><strong>📝 Observaciones:</strong> ${s.observaciones}</div>`;
+    }
+
+    div.innerHTML = `
+        <div class="sesion-header" onclick="toggleSesion('${s.id}')">
+            <div class="sesion-info">
+                <span class="sesion-fecha">📅 ${formatearFecha(s.fecha)}</span>
+                ${s.horario ? `<span style="margin-left:10px;color:#666;font-size:0.9em;">🕐 ${s.horario}</span>` : ''}
+                <h3 class="sesion-titulo">${s.titulo} <span class="sesion-estado">${getEstadoTexto(s.estado)}</span></h3>
+                <div class="sesion-meta">
+                    <span class="sesion-meta-item">📍 ${getEspacioTexto(s.espacio)}</span>
+                    <span class="sesion-meta-item">📋 ${s.actividades.length} actividades</span>
+                    <span class="sesion-meta-item">🔗 ${s.recursos.length} recursos</span>
+                </div>
+            </div>
+            <span class="sesion-toggle">▼</span>
+        </div>
+        <div class="sesion-body">
+            ${s.objetivos ? `<div class="sesion-section"><h4>🎯 Objetivos</h4><p>${s.objetivos}</p></div>` : ''}
+            <div class="sesion-section"><h4>📋 Actividades planificadas</h4>${actividadesHTML}</div>
+            <div class="sesion-section"><h4>🔗 Recursos HTML</h4>${recursosHTML}</div>
+            <div class="sesion-section"><h4>🎥 Medios audiovisuales</h4>${mediosHTML}</div>
+            ${s.trabajoPrevio ? `<div class="sesion-section"><h4>📚 Trabajo previo</h4><p>${s.trabajoPrevio}</p></div>` : ''}
+            ${s.trabajoComplementario ? `<div class="sesion-section"><h4>📝 Trabajo complementario</h4><p>${s.trabajoComplementario}</p></div>` : ''}
+            ${observacionesHTML ? `<div class="sesion-section"><h4>📝 Observaciones</h4>${observacionesHTML}</div>` : ''}
+            <div class="sesion-actions no-print">
+                <button class="btn btn-edit btn-small" onclick="editarSesion('${s.id}')">✏️ Editar</button>
+                <button class="btn btn-sync btn-small" onclick="sincronizarSesion('${s.id}')" title="Actualizar datos en la ficha del alumno">🔄 Actualizar sesión</button>
+                <button class="btn btn-delete btn-small" onclick="eliminarSesion('${s.id}')">🗑️ Eliminar</button>
+            </div>
+        </div>
+    `;
+    return div;
+}
+
+function toggleSesion(id) {
+    const card = document.querySelector(`.sesion-card[data-id="${id}"]`);
+    if (card) card.classList.toggle('open');
+}
+
+// ==========================================
+// MODAL EDICIÓN
+// ==========================================
+function addActividad() {
+    actividadesTemp.push({ tiempo: '', descripcion: '' });
+    renderizarActividadesEditor();
+}
+
+function removeActividad(idx) {
+    actividadesTemp.splice(idx, 1);
+    renderizarActividadesEditor();
+}
+
+function renderizarActividadesEditor() {
+    const editor = document.getElementById('actividadesEditor');
+    if (actividadesTemp.length === 0) {
+        editor.innerHTML = '<p style="color:#999;font-style:italic;">Sin actividades. Haz clic en "Añadir actividad".</p>';
+        return;
+    }
+    editor.innerHTML = actividadesTemp.map((a, i) => `
+        <div class="actividad-editor-item">
+            <div class="actividad-editor-row">
+                <input type="text" placeholder="Ej: 12:00-12:30" value="${a.tiempo}" onchange="actualizarActividad(${i}, 'tiempo', this.value)">
+                <input type="text" placeholder="Descripción de la actividad" value="${a.descripcion}" onchange="actualizarActividad(${i}, 'descripcion', this.value)">
+                <button type="button" class="btn-remove-actividad" onclick="removeActividad(${i})">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function actualizarActividad(idx, campo, valor) {
+    actividadesTemp[idx][campo] = valor;
+}
+
+function abrirModalSesion(id) {
+    const form = document.getElementById('sesionForm');
+    form.reset();
+    document.getElementById('sesionId').value = '';
+    document.querySelectorAll('.checkbox-group input').forEach(cb => cb.checked = false);
+    actividadesTemp = [];
+
+    if (id) {
+        const s = state.sesiones.find(x => x.id === id);
+        if (s) {
+            document.getElementById('modalSesionTitle').textContent = 'Editar Sesión';
+            document.getElementById('sesionId').value = s.id;
+            document.getElementById('sesionFecha').value = s.fecha;
+            document.getElementById('sesionHorario').value = s.horario;
+            document.getElementById('sesionTitulo').value = s.titulo;
+            document.getElementById('sesionEstado').value = s.estado;
+            document.getElementById('sesionEspacio').value = s.espacio;
+            document.getElementById('sesionObjetivos').value = s.objetivos;
+            document.getElementById('sesionRecursos').value = s.recursos.join('\n');
+            document.getElementById('sesionTrabajoPrevio').value = s.trabajoPrevio;
+            document.getElementById('sesionTrabajoComp').value = s.trabajoComplementario;
+            document.getElementById('sesionObservaciones').value = s.observaciones;
+            actividadesTemp = JSON.parse(JSON.stringify(s.actividades));
+            document.querySelectorAll('.checkbox-group input').forEach(cb => {
+                if (s.medios.includes(cb.value)) cb.checked = true;
+            });
+        }
+    } else {
+        document.getElementById('modalSesionTitle').textContent = 'Añadir Sesión';
+    }
+    renderizarActividadesEditor();
+    abrirModal('modalSesion');
+}
+
+function editarSesion(id) { abrirModalSesion(id); }
+
+function eliminarSesion(id) {
+    const s = state.sesiones.find(x => x.id === id);
+    if (!s) return;
+    if (confirm(`¿Eliminar la sesión "${s.titulo}"?`)) {
+        state.sesiones = state.sesiones.filter(x => x.id !== id);
+        guardarEstado();
+        renderizar();
+        mostrarToast('🗑️ Sesión eliminada', 'info');
+        registrarLog('eliminacion', `Sesión "${s.titulo}" (${formatearFecha(s.fecha)}) eliminada`);
+    }
+}
+
+document.getElementById('sesionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    try {
+        const id = document.getElementById('sesionId').value;
+        const recursos = document.getElementById('sesionRecursos').value.split('\n').map(r => r.trim()).filter(r => r.length > 0);
+        const medios = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(cb => cb.value);
+
+        const datos = {
+            fecha: document.getElementById('sesionFecha').value,
+            horario: document.getElementById('sesionHorario').value,
+            titulo: document.getElementById('sesionTitulo').value.trim(),
+            estado: document.getElementById('sesionEstado').value,
+            espacio: document.getElementById('sesionEspacio').value,
+            objetivos: document.getElementById('sesionObjetivos').value,
+            actividades: actividadesTemp.filter(a => a.tiempo || a.descripcion),
+            recursos: recursos,
+            trabajoPrevio: document.getElementById('sesionTrabajoPrevio').value,
+            trabajoComplementario: document.getElementById('sesionTrabajoComp').value,
+            medios: medios,
+            observaciones: document.getElementById('sesionObservaciones').value
+        };
+
+        if (id) {
+            const i = state.sesiones.findIndex(x => x.id === id);
+            if (i !== -1) state.sesiones[i] = { ...state.sesiones[i], ...datos };
+            registrarLog('edicion', `Sesión "${datos.titulo}" (${formatearFecha(datos.fecha)}) modificada. Estado: ${getEstadoTexto(datos.estado)}`);
+        } else {
+            state.sesiones.push({ id: generarId('ses'), ...datos });
+            registrarLog('creacion', `Sesión "${datos.titulo}" (${formatearFecha(datos.fecha)}) creada. Estado: ${getEstadoTexto(datos.estado)}`);
+        }
+
+        guardarEstado();
+        renderizar();
+        cerrarModal('modalSesion');
+        mostrarToast('💾 Sesión guardada', 'success');
+    } catch (err) {
+        console.error(err);
+        mostrarToast('❌ Error: ' + err.message, 'error');
+    }
+});
+
+// ==========================================
+// MODALES
+// ==========================================
+function abrirModal(id) { document.getElementById(id).classList.add('active'); }
+function cerrarModal(id) { document.getElementById(id).classList.remove('active'); }
+
+function abrirHistorial() {
+    renderizarHistorial();
+    abrirModal('modalHistorial');
+    closeDropdown();
+}
+
+function abrirEditor() {
+    document.getElementById('editorJSON').value = JSON.stringify(state, null, 2);
+    abrirModal('modalEditor');
+    closeDropdown();
+}
+
+function aplicarCambiosJSON() {
+    try {
+        const nuevos = JSON.parse(document.getElementById('editorJSON').value);
+        const m = migrarDatos(nuevos);
+        if (!m) { mostrarToast('❌ Formato incorrecto', 'error'); return; }
+        if (confirm('¿Aplicar cambios?')) {
+            state = m;
+            guardarEstado();
+            renderizar();
+            mostrarToast('✅ Cambios aplicados', 'success');
+            cerrarModal('modalEditor');
+            registrarLog('edicion', 'Datos modificados mediante editor JSON');
+        }
+    } catch (e) { mostrarToast('❌ JSON inválido: ' + e.message, 'error', 5000); }
+}
+
+function formatearJSON() {
+    try {
+        const d = JSON.parse(document.getElementById('editorJSON').value);
+        document.getElementById('editorJSON').value = JSON.stringify(d, null, 2);
+        mostrarToast('🎨 JSON formateado', 'info');
+    } catch (e) { mostrarToast('❌ JSON inválido', 'error'); }
+}
+
+function copiarJSON() {
+    const ed = document.getElementById('editorJSON');
+    ed.select();
+    document.execCommand('copy');
+    mostrarToast('📋 JSON copiado', 'success');
+}
+
+function exportarDatos() {
+    try {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = generarNombreArchivo();
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        mostrarToast('📥 Exportado', 'success');
+        registrarLog('exportar', 'Datos exportados a archivo JSON');
+    } catch (e) { mostrarToast('❌ Error', 'error'); }
+    closeDropdown();
+}
+
+function copiaAutomatica() {
+    exportarDatos();
+}
+
+function importarDatos(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const datos = JSON.parse(e.target.result);
+            const m = migrarDatos(datos);
+            if (m && confirm('¿Importar datos? Se reemplazarán los actuales.')) {
+                state = m;
+                guardarEstado();
+                renderizar();
+                mostrarToast('📤 Importado', 'success');
+                registrarLog('importar', 'Datos importados desde archivo JSON');
+            } else { mostrarToast('❌ Formato incorrecto', 'error'); }
+        } catch (err) { mostrarToast('❌ Error: ' + err.message, 'error'); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+function imprimirPDF() {
+    closeDropdown();
+    setTimeout(() => window.print(), 100);
+}
+
+// ==========================================
+// DROPDOWN
+// ==========================================
+function toggleDropdown() {
+    document.querySelector('.dropdown').classList.toggle('open');
+}
+function closeDropdown() {
+    const d = document.querySelector('.dropdown');
+    if (d) d.classList.remove('open');
+}
+
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
+document.getElementById('btnAddSesion').addEventListener('click', () => abrirModalSesion());
+document.getElementById('btnPrint').addEventListener('click', imprimirPDF);
+document.getElementById('btnHistory').addEventListener('click', abrirHistorial);
+document.getElementById('btnEditor').addEventListener('click', abrirEditor);
+document.getElementById('btnAutoBackup').addEventListener('click', copiaAutomatica);
+document.getElementById('btnExport').addEventListener('click', exportarDatos);
+document.getElementById('btnImport').addEventListener('click', () => { closeDropdown(); setTimeout(() => document.getElementById('fileInput').click(), 100); });
+document.getElementById('fileInput').addEventListener('change', importarDatos);
+document.getElementById('btnReset').addEventListener('click', restablecerEstado);
+
+document.getElementById('btnAplicarJSON').addEventListener('click', aplicarCambiosJSON);
+document.getElementById('btnFormatearJSON').addEventListener('click', formatearJSON);
+document.getElementById('btnCopiarJSON').addEventListener('click', copiarJSON);
+
+document.getElementById('btnDropdown').addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleDropdown();
+});
+
+document.addEventListener('click', function(e) {
+    const d = document.querySelector('.dropdown');
+    if (d && !d.contains(e.target)) closeDropdown();
+});
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => setTimeout(closeDropdown, 100));
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDropdown();
+        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+    }
+});
+
+document.querySelectorAll('.close, [data-modal]').forEach(el => {
+    el.addEventListener('click', function() {
+        const id = this.dataset.modal || (this.closest('.modal') ? this.closest('.modal').id : null);
+        if (id) cerrarModal(id);
+    });
+});
+
+window.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal')) e.target.classList.remove('active');
+});
+
+// FILTROS
+document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        filtroActual = this.dataset.filtro;
+        renderizar();
+    });
+});
+
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    cargarEstado();
+    renderizar();
+    renderizarLog();
+    console.log('✅ Planificador cargado. Sesiones:', state.sesiones.length);
+});
+</script>
+</body>
+</html>

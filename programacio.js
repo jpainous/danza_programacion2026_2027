@@ -1,10 +1,11 @@
 // ==========================================
-// PROGRAMACIÓN DIDÁCTICA - LÓGICA COMPLETA (v4.0)
-// Con Historial, Editor JSON y Menú Desplegable
+// PROGRAMACIÓN DIDÁCTICA - LÓGICA (v5.0)
+// Con Historial, Editor JSON, Menú Desplegable y Sincronización
 // ==========================================
 
 const STORAGE_KEY = 'programacioFisiologia';
 const HISTORY_KEY = 'programacioHistorial';
+const SHARED_KEY = 'fisiologiaSharedData';
 const MAX_HISTORY = 20;
 
 let state = { secciones: [], temas: [] };
@@ -16,22 +17,22 @@ let state = { secciones: [], temas: [] };
 const datosIniciales = {
     secciones: [
         { id: 'sec-1', icono: '📋', titulo: '1. Datos Identificativos',
-          contenido: '<ul><li><strong>Asignatura:</strong> Fisiología del Sistema Musculoesquelético</li><li><strong>Nivel:</strong> Formación en Danza</li><li><strong>Curso académico:</strong> 2026-2027</li><li><strong>Profesora:</strong> Dra. Cèlia Painous, MD, PhD</li><li><strong>Carácter:</strong> Obligatoria</li></ul>',
+          contenido: '<ul><li><strong>Asignatura:</strong> Fisiología del Sistema Musculoesquelético</li><li><strong>Nivel:</strong> Formación en Danza</li><li><strong>Curso académico:</strong> 2026-2027</li><li><strong>Profesora:</strong> Dra. Cèlia Painous, MD, PhD</li><li><strong>Carácter:</strong> Obligatoria</li><li><strong>Plan de estudios:</strong> <a href="https://jpainous.github.io/danza_t01/plaestudisFISIOLOGIA.pdf" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">📄 Ver documento PDF</a></li></ul><div id="indicadorSync"></div>',
           tieneTemas: false },
         { id: 'sec-2', icono: '🎯', titulo: '2. Descripción y Justificación',
-          contenido: '<p>Esta asignatura proporciona al alumnado de danza los fundamentos fisiológicos y anatómicos necesarios para comprender cómo funciona el cuerpo humano en movimiento. Se aleja del enfoque médico tradicional para adoptar una <strong>perspectiva aplicada y somática</strong>, utilizando la danza (plié, relevé, grand jeté, turnout) como eje vertebrador.</p><p>El objetivo es que el bailarín comprenda su propio "instrumento" para optimizar su técnica, mejorar el rendimiento y prevenir lesiones.</p>',
+          contenido: '<p>Esta asignatura proporciona al alumnado de danza los fundamentos de <strong>anatomía, fisiología y biomecánica</strong> del cuerpo humano, ofreciendo una <strong>visión global e integradora</strong> de sus sistemas orgánicos y sus <strong>adaptaciones a la actividad física</strong>.</p><p>Se aleja del enfoque médico tradicional para adoptar una perspectiva aplicada y somática, utilizando la danza (<em>plié, relevé, grand jeté, turnout</em>) como eje vertebrador. El objetivo es que el bailarín comprenda su propio cuerpo como su principal <strong>vehículo de expresión artística</strong>, desarrollando la capacidad de síntesis para relacionar estos sistemas como un todo. Así, podrá <strong>optimizar su técnica, mejorar su rendimiento creativo, prevenir patologías frecuentes</strong> y fomentar una <strong>actitud positiva y de interés</strong> hacia el funcionamiento de su propio instrumento de trabajo.</p>',
           tieneTemas: false },
         { id: 'sec-3', icono: '🏆', titulo: '3. Competencias y Objetivos',
-          contenido: '<p><strong>Competencias Generales:</strong></p><ul><li>Comprender el cuerpo humano como un sistema integrado y dinámico.</li><li>Aplicar conocimientos científicos a la práctica artística y técnica de la danza.</li></ul><p><strong>Objetivos Específicos:</strong></p><ol><li>Identificar los niveles de organización del cuerpo y los mecanismos de homeostasis durante el esfuerzo físico.</li><li>Explicar el mecanismo molecular de la contracción muscular (papel del calcio, ATP, actina y miosina).</li><li>Clasificar los componentes de la cadena biomecánica y describir su respuesta a la carga mecánica.</li><li>Analizar gestos técnicos de danza identificando planos de movimiento, roles musculares y propiocepción.</li></ol>',
+          contenido: '<p><strong>Competencias Generales:</strong></p><ul><li><strong>CG3:</strong> Conocer los principios básicos, tanto teóricos como prácticos, del funcionamiento del cuerpo humano, con el objeto de proporcionar una visión global e integradora del mismo.</li></ul><p><strong>Competencias Específicas:</strong></p><ul><li><strong>CECI 3:</strong> Conocer la anatomía, fisiología y biomecánica del cuerpo humano, sus capacidades y limitaciones como vehículo de expresión artística, así como las patologías más frecuentes y su prevención, para poder optimizar la interpretación y la labor creativa.</li></ul><p><strong>Otras Competencias de la Asignatura:</strong></p><ul><li>Desarrollar la capacidad de síntesis y de visiones globales (seminarios).</li><li>Desarrollar la aplicación de los conocimientos a la práctica: habilidades y actitudes (práctica).</li></ul><p><strong>Resultados de Aprendizaje:</strong></p><p><em>Conocimientos:</em></p><ul><li><strong>C1:</strong> Conocer la estructura y las bases funcionales de los sistemas orgánicos del ser humano.</li><li><strong>C2:</strong> Conocer las adaptaciones de estos sistemas a la actividad física.</li></ul><p><em>Habilidades, procedimientos o destrezas:</em></p><ul><li><strong>H1:</strong> Relacionar los diferentes sistemas en el funcionamiento del organismo como un todo.</li><li><strong>H2:</strong> Aplicar los conocimientos adquiridos a su campo de trabajo.</li></ul><p><em>Actitudes:</em></p><ul><li><strong>A1:</strong> Interés por el funcionamiento del propio cuerpo.</li><li><strong>A2:</strong> Actitud positiva ante un campo de conocimiento que no siempre encaja con sus intereses artísticos.</li><li><strong>A3:</strong> Tomar conciencia de la importancia de estos conocimientos para una mejor ejecución de su trabajo.</li></ul>',
           tieneTemas: false },
         { id: 'sec-4', icono: '📅', titulo: '4. Cronograma y Temporalización',
           contenido: '<p>La asignatura se estructura en sesiones semanales. A continuación se detallan los temas, fechas y recursos asociados.</p>',
           tieneTemas: true },
         { id: 'sec-5', icono: '📚', titulo: '5. Metodología Docente',
-          contenido: '<p>Se utilizará una metodología <strong>activo-participativa</strong>:</p><ul><li><strong>Clases magistrales interactivas:</strong> Uso de presentaciones con apoyos visuales y esquemas animados.</li><li><strong>Aprendizaje basado en recursos digitales:</strong> Uso guiado de los archivos HTML interactivos.</li><li><strong>Resolución de Casos Prácticos:</strong> Trabajo individual o en parejas con los 70 casos prácticos diseñados.</li><li><strong>Práctica Somática en el aula:</strong> Ejercicios de movimiento donde el alumnado analiza la biomecánica de su propio cuerpo.</li></ul>',
+          contenido: '<p>Se utilizará una metodología <strong>activo-participativa</strong>:</p><ul><li><strong>Clases magistrales interactivas:</strong> Uso de presentaciones con apoyos visuales y esquemas animados.</li><li><strong>Aprendizaje basado en recursos digitales:</strong> Uso guiado de los archivos HTML interactivos.</li><li><strong>Resolución de Casos Prácticos:</strong> Trabajo individual o en parejas con los 70 casos prácticos diseñados.</li><li><strong>Taller de análisis biomecánico aplicado a la danza:</strong> Ejercicios de movimiento donde el alumnado analiza la biomecánica de su propio cuerpo y de gestos técnicos (plié, relevé, grand jeté, arabesque).</li></ul>',
           tieneTemas: false },
         { id: 'sec-6', icono: '📝', titulo: '6. Sistema de Evaluación',
-          contenido: '<table style="width:100%;border-collapse:collapse;margin-top:10px;"><thead><tr style="background:#667eea;color:white;"><th style="padding:10px;text-align:left;">Instrumento</th><th style="padding:10px;text-align:left;">Descripción</th><th style="padding:10px;text-align:center;">Ponderación</th></tr></thead><tbody><tr style="background:#f8f9fa;"><td style="padding:10px;">Tests y Casos Prácticos</td><td style="padding:10px;">Resolución de los módulos de casos prácticos</td><td style="padding:10px;text-align:center;">30%</td></tr><tr><td style="padding:10px;">Trabajo Oral</td><td style="padding:10px;">Análisis fisiológico de una secuencia de danza</td><td style="padding:10px;text-align:center;">40%</td></tr><tr style="background:#f8f9fa;"><td style="padding:10px;">Examen Final</td><td style="padding:10px;">Prueba integradora global</td><td style="padding:10px;text-align:center;">30%</td></tr></tbody></table>',
+          contenido: '<p>La evaluación será <strong>continua, formativa y sumativa</strong>, combinando diferentes instrumentos que permiten valorar tanto los conocimientos teóricos como su aplicación práctica y las actitudes desarrolladas.</p><h3 style="color:#667eea; margin-top:20px;">📊 Instrumentos de Evaluación</h3><table style="width:100%;border-collapse:collapse;margin-top:10px;"><thead><tr style="background:#667eea;color:white;"><th style="padding:10px;text-align:left;">Instrumento</th><th style="padding:10px;text-align:left;">Descripción</th><th style="padding:10px;text-align:center;">Ponderación</th><th style="padding:10px;text-align:left;">Competencias/Resultados que evalúa</th></tr></thead><tbody><tr style="background:#f8f9fa;"><td style="padding:10px;"><strong>Tests y Casos Prácticos</strong></td><td style="padding:10px;">Resolución de los módulos interactivos de casos prácticos aplicados a la danza (con justificación de respuestas).</td><td style="padding:10px;text-align:center;"><strong>30%</strong></td><td style="padding:10px;"><strong>C1, C2, H2</strong><br><small>Conocimientos teóricos y aplicación al campo de trabajo</small></td></tr><tr><td style="padding:10px;"><strong>Trabajo Oral</strong></td><td style="padding:10px;">Práctica somática de integración biomecánica: análisis fisiológico de una secuencia de danza en grupos (identificación de contracciones, planos de movimiento y roles musculares) + presentación oral.</td><td style="padding:10px;text-align:center;"><strong>40%</strong></td><td style="padding:10px;"><strong>CECI 3, H1, H2, A1, A3</strong><br><small>Visión integradora, aplicación práctica, interés por el propio cuerpo y consciencia de la importancia de los conocimientos</small></td></tr><tr style="background:#f8f9fa;"><td style="padding:10px;"><strong>Examen Final</strong></td><td style="padding:10px;">Prueba integradora global de toda la asignatura que combina preguntas teóricas y aplicadas.</td><td style="padding:10px;text-align:center;"><strong>30%</strong></td><td style="padding:10px;"><strong>CG3, CECI 3, C1, C2, H1, H2</strong><br><small>Evaluación global de todos los resultados de aprendizaje cognitivos y procedimentales</small></td></tr></tbody></table><h3 style="color:#667eea; margin-top:25px;">🌟 Evaluación de Actitudes (Transversal)</h3><p>Las actitudes se evaluarán de forma <strong>continua y observacional</strong> a lo largo de todo el curso, mediante la participación en clase, la actitud ante los contenidos y el interés demostrado:</p><ul><li><strong>A1 - Interés por el funcionamiento del propio cuerpo:</strong> Participación activa en las prácticas somáticas y preguntas sobre la propia experiencia corporal.</li><li><strong>A2 - Actitud positiva ante un campo de conocimiento que no siempre encaja con sus intereses artísticos:</strong> Disposición para abordar contenidos científicos con rigor y curiosidad, aunque no sean su ámbito principal.</li><li><strong>A3 - Consciencia de la importancia de estos conocimientos para una mejor ejecución de su trabajo:</strong> Capacidad de conectar los contenidos teóricos con la práctica artística cotidiana.</li></ul><p style="background:#e7f3ff;border-left:4px solid #2196F3;padding:10px 15px;border-radius:6px;margin-top:10px;"><strong>💡 Nota:</strong> Las actitudes no tienen una ponderación numérica específica, pero se tendrán en cuenta como <strong>criterio cualitativo</strong> en la evaluación final y pueden ser determinantes en casos límite.</p><h3 style="color:#667eea; margin-top:25px;">✅ Criterios de Aprobación</h3><ul><li>Es necesario obtener una <strong>calificación mínima de 5/10</strong> en la suma ponderada de los tres instrumentos principales.</li><li>Se recomienda obtener como mínimo un <strong>4/10 en cada uno de los tres instrumentos</strong> para garantizar una evaluación equilibrada.</li><li>La asistencia y participación activa en las prácticas es <strong>imprescindible</strong> para superar la asignatura.</li></ul><h3 style="color:#667eea; margin-top:25px;">🔄 Evaluación Continua</h3><p>La evaluación continua permite detectar dificultades de aprendizaje a lo largo del curso y ofrecer <strong>retroalimentación constante</strong> al alumnado. Las actividades formativas (como los casos prácticos interactivos) no siempre computan para la nota final, pero son <strong>herramientas esenciales</strong> para consolidar los aprendizajes y preparar las pruebas evaluables.</p>',
           tieneTemas: false }
     ],
     temas: [
@@ -289,6 +290,149 @@ function copiarJSON() {
 }
 
 // ==========================================
+// SINCRONIZACIÓN CON PLANIFICADOR Y FICHA
+// ==========================================
+
+function obtenerDatosCompartidos() {
+    try {
+        const datos = localStorage.getItem(SHARED_KEY);
+        if (datos) return JSON.parse(datos);
+    } catch (e) { console.error(e); }
+    return { sesiones: [], log: [], sesionActualizadaId: null, ultimaActualizacion: null };
+}
+
+function comprobarEstadoSincronizacion() {
+    try {
+        const datos = obtenerDatosCompartidos();
+        const indicador = document.getElementById('indicadorSync');
+        
+        if (!indicador) return;
+        
+        if (datos.ultimaActualizacion) {
+            const fecha = new Date(datos.ultimaActualizacion);
+            const fechaFormateada = fecha.toLocaleDateString('es-ES', { 
+                day: '2-digit', month: 'short', year: 'numeric', 
+                hour: '2-digit', minute: '2-digit' 
+            });
+            
+            const numSesiones = datos.sesiones ? datos.sesiones.length : 0;
+            const numAccionesAlumnos = datos.log ? datos.log.filter(l => l.accion === 'sincronizacion_alumno').length : 0;
+            
+            indicador.className = 'indicador-sync';
+            indicador.innerHTML = `
+                <strong>🔄 Última sincronización con el Planificador:</strong> ${fechaFormateada}<br>
+                <small>📊 ${numSesiones} sesiones sincronizadas · 👨‍🎓 ${numAccionesAlumnos} alumnos han cargado datos actualizados</small>
+            `;
+        } else {
+            indicador.className = 'indicador-sync sin_datos';
+            indicador.innerHTML = `
+                <strong>ℹ️ Sincronización:</strong> Aún no se ha sincronizado con el Planificador de Sesiones.<br>
+                <small>Usa el Planificador para gestionar las sesiones y sincronizar con las fichas del alumnado.</small>
+            `;
+        }
+        
+        // Log en consola
+        if (datos.ultimaActualizacion) {
+            const fecha = new Date(datos.ultimaActualizacion);
+            console.log(`✅ Última sincronización: ${fecha.toLocaleString('es-ES')}`);
+            console.log(`📊 Sesiones sincronizadas: ${datos.sesiones ? datos.sesiones.length : 0}`);
+        }
+    } catch (e) {
+        console.error('Error al comprobar sincronización:', e);
+    }
+}
+
+function verResumenSincronizacion() {
+    const datos = obtenerDatosCompartidos();
+    const contenido = document.getElementById('syncResumenContenido');
+    
+    let html = '<div class="sync-resumen">';
+    
+    // Estado general
+    html += '<h3>🔗 Estado de la Integración</h3>';
+    
+    if (datos.ultimaActualizacion) {
+        const fecha = new Date(datos.ultimaActualizacion);
+        const fechaFormateada = fecha.toLocaleDateString('es-ES', { 
+            day: '2-digit', month: 'short', year: 'numeric', 
+            hour: '2-digit', minute: '2-digit' 
+        });
+        
+        const numSesiones = datos.sesiones ? datos.sesiones.length : 0;
+        const numAccionesAlumnos = datos.log ? datos.log.filter(l => l.accion === 'sincronizacion_alumno').length : 0;
+        const numAccionesProfesora = datos.log ? datos.log.filter(l => l.usuario === 'Profesora').length : 0;
+        
+        html += `
+            <div class="sync-stats">
+                <div class="sync-stat-card">
+                    <div class="sync-stat-numero">${numSesiones}</div>
+                    <div class="sync-stat-label">Sesiones sincronizadas</div>
+                </div>
+                <div class="sync-stat-card">
+                    <div class="sync-stat-numero">${numAccionesProfesora}</div>
+                    <div class="sync-stat-label">Acciones profesora</div>
+                </div>
+                <div class="sync-stat-card">
+                    <div class="sync-stat-numero">${numAccionesAlumnos}</div>
+                    <div class="sync-stat-label">Cargas de alumnos</div>
+                </div>
+                <div class="sync-stat-card">
+                    <div class="sync-stat-numero">${datos.log ? datos.log.length : 0}</div>
+                    <div class="sync-stat-label">Total acciones en log</div>
+                </div>
+            </div>
+            <p style="margin-top:15px;"><strong>📅 Última actualización:</strong> ${fechaFormateada}</p>
+        `;
+    } else {
+        html += `
+            <div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;border-radius:6px;">
+                <strong>ℹ️ Sin sincronizaciones aún</strong><br>
+                <p style="margin-top:8px;">Abre el <strong>Planificador de Sesiones</strong> y pulsa "🔄 Actualizar sesión" en cualquier sesión para iniciar la sincronización con las fichas del alumnado.</p>
+            </div>
+        `;
+    }
+    
+    // Log de acciones
+    html += '<h3>📜 Log de Acciones Compartido</h3>';
+    
+    if (datos.log && datos.log.length > 0) {
+        html += '<div class="sync-log-list">';
+        datos.log.slice(0, 30).forEach(l => {
+            const clase = l.accion === 'sincronizacion_alumno' ? 'log-alumno' : (l.accion === 'sincronizacion' ? 'log-sync' : '');
+            const icono = {
+                'sincronizacion': '🔄',
+                'sincronizacion_alumno': '👨‍🎓',
+                'cambio_estado': '📊',
+                'edicion': '✏️',
+                'creacion': '➕',
+                'eliminacion': '🗑️'
+            }[l.accion] || '📝';
+            
+            html += `
+                <div class="sync-log-item ${clase}">
+                    <span class="sync-log-fecha">${formatearFechaISO(l.fecha)}</span>
+                    <span class="sync-log-contenido">${icono} ${l.detalle}</span>
+                    <span class="sync-log-usuario">— ${l.usuario}</span>
+                </div>
+            `;
+        });
+        html += '</div>';
+        
+        if (datos.log.length > 30) {
+            html += `<p style="margin-top:10px;color:#666;font-size:0.9em;"><em>Mostrando las 30 acciones más recientes de ${datos.log.length} totales. Consulta el log completo en el Planificador.</em></p>`;
+        }
+    } else {
+        html += '<p style="color:#999;font-style:italic;">No hay acciones registradas en el log compartido.</p>';
+    }
+    
+    html += '</div>';
+    contenido.innerHTML = html;
+    
+    abrirModal('modalSync');
+    closeDropdown();
+}
+
+// ==========================================
 // DROPDOWN - MENÚ DESPLEGABLE
 // ==========================================
 
@@ -324,6 +468,9 @@ function renderizar() {
         try { container.appendChild(crearElementoSeccion(seccion)); }
         catch (e) { console.error('Error al renderizar sección', seccion, e); }
     });
+    
+    // Actualizar indicador de sincronización después de renderizar
+    setTimeout(comprobarEstadoSincronizacion, 100);
 }
 
 function crearElementoSeccion(seccion) {
@@ -654,7 +801,7 @@ function importarDatos(event) {
 // EVENT LISTENERS
 // ==========================================
 
-// Botones principales (visibles siempre)
+// Botones principales
 document.getElementById('btnAddSeccion').addEventListener('click', () => abrirModalSeccion());
 document.getElementById('btnAddTema').addEventListener('click', () => {
     const secs = state.secciones.filter(s => s.tieneTemas);
@@ -670,6 +817,7 @@ document.getElementById('btnPrint').addEventListener('click', imprimirPDF);
 document.getElementById('btnHistory').addEventListener('click', abrirHistorial);
 document.getElementById('btnEditor').addEventListener('click', abrirEditor);
 document.getElementById('btnAutoBackup').addEventListener('click', copiaAutomatica);
+document.getElementById('btnResumenSync').addEventListener('click', verResumenSincronizacion);
 document.getElementById('btnExport').addEventListener('click', exportarDatos);
 document.getElementById('btnImport').addEventListener('click', () => {
     closeDropdown();
@@ -683,13 +831,12 @@ document.getElementById('btnAplicarJSON').addEventListener('click', aplicarCambi
 document.getElementById('btnFormatearJSON').addEventListener('click', formatearJSON);
 document.getElementById('btnCopiarJSON').addEventListener('click', copiarJSON);
 
-// Dropdown - Toggle al hacer clic en el botón
+// Dropdown
 document.getElementById('btnDropdown').addEventListener('click', function(e) {
     e.stopPropagation();
     toggleDropdown();
 });
 
-// Dropdown - Cerrar al hacer clic fuera
 document.addEventListener('click', function(e) {
     const dropdown = document.querySelector('.dropdown');
     if (dropdown && !dropdown.contains(e.target)) {
@@ -697,23 +844,20 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Dropdown - Cerrar al hacer clic en cualquier opción
 document.querySelectorAll('.dropdown-item').forEach(item => {
     item.addEventListener('click', function() {
         setTimeout(closeDropdown, 100);
     });
 });
 
-// Dropdown - Cerrar con tecla Escape
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeDropdown();
-        // También cerrar modales abiertos
         document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
     }
 });
 
-// Cerrar modales al hacer clic en X o botones de cancelar
+// Cerrar modales
 document.querySelectorAll('.close, [data-modal]').forEach(el => {
     el.addEventListener('click', function() {
         const modalId = this.dataset.modal || (this.closest('.modal') ? this.closest('.modal').id : null);
@@ -721,7 +865,6 @@ document.querySelectorAll('.close, [data-modal]').forEach(el => {
     });
 });
 
-// Cerrar modal al hacer clic fuera
 window.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal')) e.target.classList.remove('active');
 });
@@ -733,5 +876,5 @@ window.addEventListener('click', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     cargarEstado();
     renderizar();
-    console.log('✅ Programación Didáctica v4.0 cargada. Temas:', state.temas.length);
+    console.log('✅ Programación Didáctica v5.0 cargada. Temas:', state.temas.length);
 });

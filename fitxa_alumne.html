@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Trabajo del Alumno - Fisiología</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+header {
+    background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
+.subtitle { font-size: 1.1em; opacity: 0.9; }
+
+.controls {
+    padding: 20px 40px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    font-family: inherit;
+}
+.btn-primary { background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(238, 90, 111, 0.4); }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; }
+.btn-print { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
+.btn-send { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
+.btn-danger { background: #dc3545; color: white; }
+.btn-small { padding: 6px 12px; font-size: 0.85em; }
+
+/* ALERTA DE SINCRONIZACIÓN */
+.sync-alert {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+    border: 2px solid #ffc107;
+    border-left: 6px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 40px;
+    display: none;
+    animation: pulse 2s infinite;
+}
+.sync-alert.visible { display: block; }
+.sync-alert h3 {
+    color: #856404;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.sync-alert p { color: #5d4037; line-height: 1.6; margin-bottom: 10px; }
+.sync-alert-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+.btn-sync-load {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+.btn-sync-dismiss {
+    background: #6c757d;
+    color: white;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+}
+
+.info-box {
+    margin: 20px 40px;
+    padding: 20px;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+}
+.info-box h3 { color: #856404; margin-bottom: 10px; }
+.info-box p { margin-bottom: 8px; line-height: 1.6; }
+
+.section {
+    padding: 30px 40px;
+    border-bottom: 1px solid #e9ecef;
+}
+.section h3 {
+    color: #ee5a6f;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    border-left: 5px solid #ff6b6b;
+    padding-left: 15px;
+}
+.section h4 {
+    color: #ee5a6f;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.15em;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.form-group { margin-bottom: 18px; }
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: inherit;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ee5a6f;
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+
+/* SESIÓN SELECCIONADA */
+.sesion-info-box {
+    background: linear-gradient(135deg, #fff5f7 0%, #ffe0e6 100%);
+    border: 2px solid #ff6b6b;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+}
+.sesion-info-box h4 {
+    color: #ee5a6f;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+.sesion-info-box p { line-height: 1.6; color: #555; margin-bottom: 8px; }
+.sesion-info-box strong { color: #333; }
+
+/* ACTIVIDADES */
+.actividades-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+}
+.actividad-item {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    transition: all 0.3s;
+}
+.actividad-item:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.actividad-item.estado-hecha { border-left: 6px solid #28a745; background: #f0fdf4; }
+.actividad-item.estado-no_hecha { border-left: 6px solid #dc3545; background: #fef2f2; }
+.actividad-item.estado-pendiente { border-left: 6px solid #ffc107; background: #fffbeb; }
+
+.actividad-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.actividad-tiempo {
+    background: #ee5a6f;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+.actividad-descripcion {
+    flex: 1;
+    font-size: 1em;
+    color: #333;
+    min-width: 200px;
+}
+.actividad-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+.estado-btn {
+    padding: 6px 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.estado-btn:hover { transform: translateY(-1px); }
+.estado-btn.active-hecha { background: #28a745; color: white; border-color: #28a745; }
+.estado-btn.active-no_hecha { background: #dc3545; color: white; border-color: #dc3545; }
+.estado-btn.active-pendiente { background: #ffc107; color: #333; border-color: #ffc107; }
+
+.observaciones-actividad {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 50px;
+}
+.observaciones-actividad:focus {
+    outline: none;
+    border-color: #ee5a6f;
+}
+
+/* HISTORIAL Y LOG */
+.historial-container,
+.log-alumne-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.historial-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+.historial-fecha {
+    font-weight: 700;
+    color: #ee5a6f;
+    margin-bottom: 5px;
+}
+.historial-contenido { color: #555; line-height: 1.6; }
+
+.log-item {
+    background: white;
+    border-left: 4px solid #ee5a6f;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.log-item.log-sync { border-left-color: #ffc107; background: #fffbeb; }
+.log-item.log-state { border-left-color: #28a745; background: #f0fdf4; }
+.log-item.log-edit { border-left-color: #17a2b8; background: #ecfeff; }
+.log-fecha {
+    font-weight: 700;
+    color: #ee5a6f;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+.log-contenido { flex: 1; color: #333; }
+
+/* RESUMEN */
+.resumen-box {
+    background: linear-gradient(135deg, #e7f3ff 0%, #d1e7ff 100%);
+    border: 2px solid #2196F3;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+.resumen-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+.resumen-numero {
+    font-size: 2em;
+    font-weight: 800;
+    color: #ee5a6f;
+}
+.resumen-label {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    font-weight: 500;
+}
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #17a2b8; }
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #64748b;
+    font-size: 0.95em;
+    background: #f8f9fa;
+}
+
+.empty-state { text-align: center; padding: 30px; color: #999; font-style: italic; }
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    header { padding: 30px 20px; }
+    header h1 { font-size: 1.8em; }
+    .section { padding: 20px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .controls { padding: 15px 20px; }
+    .info-box, .sync-alert { margin: 15px 20px; }
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border-radius: 0; max-width: 100%; }
+    header { background: none; color: #000; padding: 20px 0; border-bottom: 3px solid #333; }
+    header h1, header h2, .subtitle { color: #000 !important; text-shadow: none; }
+    .no-print { display: none !important; }
+    .section { break-inside: avoid; page-break-inside: avoid; }
+    .actividad-item { break-inside: avoid; }
+    .sync-alert { display: none !important; }
+    footer { border-top: 2px solid #333; color: #333; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📝 Ficha de Trabajo del Alumno</h1>
+        <h2>Fisiología Aplicada a la Danza</h2>
+        <p class="subtitle">Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+    </header>
+
+    <div class="controls no-print">
+        <button id="btnGuardar" class="btn btn-primary">💾 Guardar Ficha</button>
+        <button id="btnImprimir" class="btn btn-print">🖨️ Imprimir / PDF</button>
+        <button id="btnEnviar" class="btn btn-send">📧 Enviar a la profesora</button>
+        <button id="btnHistorial" class="btn btn-secondary">📜 Ver Historial</button>
+        <button id="btnNuevaSesion" class="btn btn-secondary">➕ Nueva Actuación</button>
+    </div>
+
+    <!-- ALERTA DE SINCRONIZACIÓN -->
+    <div id="syncAlert" class="sync-alert no-print">
+        <h3>🔄 🆕 ¡Nueva sesión disponible!</h3>
+        <p>La profesora ha actualizado una sesión. ¿Quieres cargar los nuevos datos en tu ficha?</p>
+        <div id="syncAlertInfo"></div>
+        <div class="sync-alert-actions">
+            <button class="btn btn-sync-load" onclick="cargarDatosActualizados()">✅ Cargar nuevos datos</button>
+            <button class="btn btn-sync-dismiss" onclick="descartarActualizacion()">❌ Descartar</button>
+        </div>
+    </div>
+
+    <div class="info-box no-print">
+        <h3>ℹ️ Instrucciones</h3>
+        <p>Rellena tus datos personales, selecciona la sesión y marca el estado de cada actividad. Puedes guardar tu progreso y crear múltiples actuaciones si la sesión se desarrolla en varios días.</p>
+        <p><strong>💡 Consejo:</strong> Si la profesora actualiza una sesión, aparecerá un aviso amarillo en la parte superior. Puedes cargar los nuevos datos con un clic.</p>
+    </div>
+
+    <!-- DATOS PERSONALES -->
+    <div class="section">
+        <h3>👤 Datos Personales</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Nombre completo:</label>
+                <input type="text" id="aluNombre" placeholder="Ej: María López García">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="aluEmail" placeholder="tu.email@ejemplo.com">
+            </div>
+            <div class="form-group">
+                <label>Curso / Grupo:</label>
+                <input type="text" id="aluCurso" placeholder="Ej: 2º A">
+            </div>
+            <div class="form-group">
+                <label>Email de la profesora:</label>
+                <input type="email" id="profEmail" placeholder="celia.painous@ejemplo.com">
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECCIÓN DE SESIÓN -->
+    <div class="section">
+        <h3>📅 Sesión de Trabajo</h3>
+        <div class="form-group">
+            <label>Selecciona la sesión:</label>
+            <select id="sesionSelect">
+                <option value="">-- Selecciona una sesión --</option>
+            </select>
+        </div>
+        <div id="sesionInfoBox"></div>
+    </div>
+
+    <!-- ACTUACIÓN ACTUAL -->
+    <div class="section">
+        <h3>🎯 Actuación Actual</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>📅 Fecha de esta actuación:</label>
+                <input type="date" id="actFecha">
+            </div>
+            <div class="form-group">
+                <label>🕐 Hora de inicio:</label>
+                <input type="time" id="actHoraInicio">
+            </div>
+            <div class="form-group">
+                <label>🕐 Hora de finalización:</label>
+                <input type="time" id="actHoraFin">
+            </div>
+            <div class="form-group">
+                <label>📍 Espacio de trabajo:</label>
+                <select id="actEspacio">
+                    <option value="aula_ordinaria">Aula ordinaria</option>
+                    <option value="aula_practicas">Aula de prácticas</option>
+                    <option value="ambos">Ambos espacios</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTIVIDADES -->
+    <div class="section">
+        <h3>📋 Estado de las Actividades</h3>
+        <div id="actividadesContainer" class="actividades-container">
+            <div class="empty-state">Selecciona una sesión para ver las actividades.</div>
+        </div>
+    </div>
+
+    <!-- TRABAJO COMPLEMENTARIO -->
+    <div class="section">
+        <h3>📚 Trabajo Complementario (fuera del horario presencial)</h3>
+        <div class="form-group">
+            <label>¿Has realizado el trabajo previo recomendado?</label>
+            <select id="trabajoPrevio">
+                <option value="">-- Selecciona --</option>
+                <option value="si_completo">✅ Sí, completo</option>
+                <option value="si_parcial">⚠️ Sí, parcialmente</option>
+                <option value="no">❌ No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>¿Has realizado el trabajo complementario posterior?</label>
+            <select id="trabajoComp">
+                <option value="">-- Selecciona --</option>
+                <option value="si_completo">✅ Sí, completo</option>
+                <option value="si_parcial">⚠️ Sí, parcialmente</option>
+                <option value="no">❌ No</option>
+                <option value="pendiente">⏳ Pendiente</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>📝 Observaciones sobre el trabajo complementario:</label>
+            <textarea id="obsTrabajo" rows="3" placeholder="Dificultades encontradas, tiempo dedicado, dudas..."></textarea>
+        </div>
+    </div>
+
+    <!-- OBSERVACIONES GENERALES -->
+    <div class="section">
+        <h3>💭 Observaciones Generales</h3>
+        <div class="form-group">
+            <label>Reflexiones, dudas, comentarios sobre la sesión:</label>
+            <textarea id="obsGenerales" rows="4" placeholder="¿Qué has aprendido? ¿Qué te ha resultado más difícil? ¿Qué te gustaría profundizar?"></textarea>
+        </div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="section">
+        <h3>📊 Resumen de esta Actuación</h3>
+        <div id="resumenBox" class="resumen-box">
+            <div class="resumen-grid">
+                <div class="resumen-item">
+                    <div class="resumen-numero" id="resHechas">0</div>
+                    <div class="resumen-label">✅ Actividades hechas</div>
+                </div>
+                <div class="resumen-item">
+                    <div class="resumen-numero" id="resNoHechas">0</div>
+                    <div class="resumen-label">❌ No hechas</div>
+                </div>
+                <div class="resumen-item">
+                    <div class="resumen-numero" id="resPendientes">0</div>
+                    <div class="resumen-label">⏳ Pendientes</div>
+                </div>
+                <div class="resumen-item">
+                    <div class="resumen-numero" id="resTotal">0</div>
+                    <div class="resumen-label">📋 Total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORIAL Y LOG -->
+    <div class="section">
+        <h3>📜 Historial de Actuaciones y Acciones</h3>
+        <h4>📚 Historial de Actuaciones</h4>
+        <div id="historialContainer" class="historial-container">
+            <div class="empty-state">Aún no hay actuaciones registradas. Haz clic en "➕ Nueva Actuación" al finalizar una sesión.</div>
+        </div>
+        
+        <h4>📋 Log de Acciones Personales</h4>
+        <div id="logAlumneContainer" class="log-alumne-container">
+            <div class="empty-state">Aún no hay acciones registradas.</div>
+        </div>
+        <div class="no-print" style="margin-top: 15px;">
+            <button class="btn btn-danger btn-small" onclick="limpiarLogAlumne()">🗑️ Limpiar log personal</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+</footer>
+
+<script>
+// ==========================================
+// CONFIGURACIÓN
+// ==========================================
+const STORAGE_KEY = 'fitxaAlumne';
+const SHARED_KEY = 'fisiologiaSharedData';
+const LOG_ALUMNE_KEY = 'logAlumne';
+
+// Sesiones disponibles (valores por defecto, se actualizan con sincronización)
+let SESIONES_DISPONIBLES = [
+    { id: 'ses-1', fecha: '2026-10-09', titulo: 'Presentación. Homeostasis y Fisiología celular', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura y metodología' },
+        { tiempo: '12:30-13:30', descripcion: 'Niveles de organización. Líquidos corporales' },
+        { tiempo: '13:45-14:30', descripcion: 'Homeostasis: rangos fisiológicos y sistemas de regulación' },
+        { tiempo: '14:30-15:00', descripcion: 'Retroalimentación y homeostasis en el movimiento' }
+      ],
+      trabajoPrevio: 'Ninguno (primera sesión).',
+      trabajoComplementario: 'Explorar homeostasis_movimiento.html y resolver casos del Bloque 1.'
+    },
+    { id: 'ses-2', fecha: '2026-10-16', titulo: 'Sistema musculoesquelético I', horario: '12:00-15:00', espacio: 'ambos',
+      actividades: [
+        { tiempo: '12:00-12:15', descripcion: 'Repaso sesión anterior' },
+        { tiempo: '12:15-13:15', descripcion: 'Estructura muscular: fibra, sarcómero, miofilamentos' },
+        { tiempo: '13:30-14:15', descripcion: 'Unidad motora y mecanismo de contracción' },
+        { tiempo: '14:15-15:00', descripcion: 'Práctica: tipos de contracción en plié y relevé' }
+      ],
+      trabajoPrevio: 'Repasar homeostasis_movimiento.html.',
+      trabajoComplementario: 'Resolver Bloques 2 y 3 de casos_practicos02_A.html.'
+    },
+    { id: 'ses-3', fecha: '2026-10-23', titulo: 'Sistema musculoesquelético II', horario: '12:00-15:00', espacio: 'ambos',
+      actividades: [
+        { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: 5 componentes' },
+        { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y remodelación' },
+        { tiempo: '14:00-14:30', descripcion: 'Articulaciones y cartílago' },
+        { tiempo: '14:30-15:00', descripcion: 'Planos de movimiento y propiocepción' }
+      ],
+      trabajoPrevio: 'Completar Bloques 2 y 3 de casos_practicos02_A.html.',
+      trabajoComplementario: 'Resolver Bloque 5 de casos_practicos02_B.html.'
+    },
+    { id: 'ses-5', fecha: '2026-11-06', titulo: 'Sistema nervioso I', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso' },
+        { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis y unidad motora' },
+        { tiempo: '13:45-15:00', descripcion: 'Control voluntario del movimiento' }
+      ],
+      trabajoPrevio: 'Repasar unidad motora.',
+      trabajoComplementario: 'Avanzar con casos_practicos02_B.html.'
+    },
+    { id: 'ses-6', fecha: '2026-11-13', titulo: 'Preparación trabajos orales', horario: '12:00-15:00', espacio: 'aula_practicas',
+      actividades: [
+        { tiempo: '12:00-12:30', descripcion: 'Explicación del trabajo oral' },
+        { tiempo: '12:30-13:30', descripcion: 'Formación de grupos' },
+        { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos con tutorización' }
+      ],
+      trabajoPrevio: 'Completar casos prácticos Bloques 1-4.',
+      trabajoComplementario: 'Avanzar con el análisis del grupo.'
+    },
+    { id: 'ses-7', fecha: '2026-11-20', titulo: 'Sistema nervioso II / Sueño', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo' },
+        { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y recuperación' },
+        { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza' }
+      ],
+      trabajoPrevio: 'Repasar homeostasis.',
+      trabajoComplementario: 'Preparar presentaciones orales.'
+    },
+    { id: 'ses-8', fecha: '2026-11-27', titulo: 'Presentaciones orales / La sangre', horario: '12:00-15:00', espacio: 'ambos',
+      actividades: [
+        { tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos' },
+        { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre' }
+      ],
+      trabajoPrevio: 'Tener preparada la presentación oral.',
+      trabajoComplementario: 'Preparar evaluación parcial.'
+    },
+    { id: 'ses-9', fecha: '2026-12-04', titulo: 'Sistema Hormonal', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-13:00', descripcion: 'Sistema endocrino' },
+        { tiempo: '13:00-13:45', descripcion: 'Hormonas y ejercicio' },
+        { tiempo: '14:00-15:00', descripcion: 'Remodelación ósea y hormonal' }
+      ],
+      trabajoPrevio: 'Repasar retroalimentación.',
+      trabajoComplementario: 'Preparar evaluación parcial.'
+    },
+    { id: 'ses-10', fecha: '2026-12-11', titulo: 'Nutrición', horario: '12:00-15:00', espacio: 'ambos',
+      actividades: [
+        { tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista' },
+        { tiempo: '13:45-15:00', descripcion: 'Actividad práctica: análisis de menús' }
+      ],
+      trabajoPrevio: 'Reflexionar sobre hábitos alimentarios.',
+      trabajoComplementario: 'Preparar evaluación parcial.'
+    },
+    { id: 'ses-11', fecha: '2026-12-18', titulo: 'EVALUACIÓN PARCIAL', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual' },
+        { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y feedback' }
+      ],
+      trabajoPrevio: 'Repasar temas 1-10.',
+      trabajoComplementario: 'Descanso de Navidad.'
+    },
+    { id: 'ses-12', fecha: '2027-01-08', titulo: 'Aparato Cardiovascular', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-13:00', descripcion: 'Estructura del corazón' },
+        { tiempo: '13:00-13:45', descripcion: 'Circulación y transporte de gases' },
+        { tiempo: '14:00-15:00', descripcion: 'Adaptaciones al ejercicio' }
+      ],
+      trabajoPrevio: 'Repasar homeostasis.',
+      trabajoComplementario: 'Avanzar con aparato respiratorio.'
+    },
+    { id: 'ses-13', fecha: '2027-01-15', titulo: 'Aparato Respiratorio', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-13:00', descripcion: 'Mecánica ventilatoria' },
+        { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso y pH' },
+        { tiempo: '14:00-15:00', descripcion: 'Respiración en la danza' }
+      ],
+      trabajoPrevio: 'Repasar aparato cardiovascular.',
+      trabajoComplementario: 'Preparar examen final.'
+    },
+    { id: 'ses-14', fecha: '2027-01-22', titulo: 'EXAMEN FINAL', horario: '12:00-15:00', espacio: 'aula_ordinaria',
+      actividades: [
+        { tiempo: '12:00-13:30', descripcion: 'Examen integrador' },
+        { tiempo: '13:45-15:00', descripcion: 'Corrección y despedida' }
+      ],
+      trabajoPrevio: 'Repasar todo el curso.',
+      trabajoComplementario: '¡Curso completado!'
+    }
+];
+
+let state = {
+    datosAlumno: { nombre: '', email: '', curso: '', profEmail: '' },
+    sesionActual: null,
+    actuacionActual: {
+        fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
+        actividades: [], trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
+    },
+    historial: []
+};
+
+// ==========================================
+// UTILIDADES
+// ==========================================
+function mostrarToast(msg, tipo = 'info') {
+    const t = document.createElement('div');
+    t.className = `toast ${tipo}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => {
+        t.style.transition = 'opacity 0.3s';
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 300);
+    }, 3000);
+}
+
+function formatearFecha(f) {
+    if (!f) return '';
+    const partes = f.split('-');
+    if (partes.length !== 3) return f;
+    const [y, m, d] = partes;
+    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    return `${parseInt(d)}-${meses[parseInt(m)-1]}-${y}`;
+}
+
+function formatearFechaISO(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('es-ES', { 
+        day: '2-digit', month: 'short', year: 'numeric', 
+        hour: '2-digit', minute: '2-digit' 
+    });
+}
+
+function getEspacioTexto(e) {
+    return { 'aula_ordinaria': '🏫 Aula ordinaria', 'aula_practicas': '🩰 Aula de prácticas', 'ambos': '🏫🩰 Ambos' }[e] || e;
+}
+
+// ==========================================
+// GESTIÓN DEL ESTADO
+// ==========================================
+function guardarEstado() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        return true;
+    } catch (e) {
+        mostrarToast('❌ Error al guardar', 'error');
+        return false;
+    }
+}
+
+function cargarEstado() {
+    try {
+        const d = localStorage.getItem(STORAGE_KEY);
+        if (d) state = JSON.parse(d);
+    } catch (e) { console.error(e); }
+}
+
+// ==========================================
+// SINCRONIZACIÓN Y LOG
+// ==========================================
+function obtenerDatosCompartidos() {
+    try {
+        const datos = localStorage.getItem(SHARED_KEY);
+        if (datos) return JSON.parse(datos);
+    } catch (e) { console.error(e); }
+    return { sesiones: [], log: [], sesionActualizadaId: null };
+}
+
+function guardarDatosCompartidos(datos) {
+    try {
+        localStorage.setItem(SHARED_KEY, JSON.stringify(datos));
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+function registrarLogAlumne(accion, detalle) {
+    try {
+        let log = JSON.parse(localStorage.getItem(LOG_ALUMNE_KEY) || '[]');
+        log.unshift({
+            id: 'loga-' + Date.now(),
+            fecha: new Date().toISOString(),
+            accion: accion,
+            detalle: detalle,
+            alumno: state.datosAlumno.nombre || 'Alumno/a'
+        });
+        if (log.length > 100) log = log.slice(0, 100);
+        localStorage.setItem(LOG_ALUMNE_KEY, JSON.stringify(log));
+        renderizarLogAlumne();
+    } catch (e) { console.error(e); }
+}
+
+function comprobarActualizaciones() {
+    const datos = obtenerDatosCompartidos();
+    if (!datos.sesionActualizadaId) return;
+    
+    const sesion = SESIONES_DISPONIBLES.find(s => s.id === datos.sesionActualizadaId);
+    if (!sesion) return;
+    
+    // Mostrar aviso
+    const alertBox = document.getElementById('syncAlert');
+    const infoBox = document.getElementById('syncAlertInfo');
+    infoBox.innerHTML = `
+        <p><strong>📅 Fecha:</strong> ${formatearFecha(sesion.fecha)}<br>
+        <strong>📌 Título:</strong> ${sesion.titulo}<br>
+        <strong>🕐 Horario:</strong> ${sesion.horario}</p>
+    `;
+    alertBox.classList.add('visible');
+    
+    // Actualizar las sesiones disponibles con los datos del planificador
+    if (datos.sesiones && datos.sesiones.length > 0) {
+        datos.sesiones.forEach(s => {
+            const idx = SESIONES_DISPONIBLES.findIndex(sd => sd.id === s.id);
+            if (idx !== -1) {
+                SESIONES_DISPONIBLES[idx] = {
+                    ...SESIONES_DISPONIBLES[idx],
+                    titulo: s.titulo,
+                    horario: s.horario,
+                    espacio: s.espacio,
+                    actividades: s.actividades || SESIONES_DISPONIBLES[idx].actividades,
+                    trabajoPrevio: s.trabajoPrevio || SESIONES_DISPONIBLES[idx].trabajoPrevio,
+                    trabajoComplementario: s.trabajoComplementario || SESIONES_DISPONIBLES[idx].trabajoComplementario
+                };
+            }
+        });
+        inicializarSelectSesiones();
+    }
+    
+    registrarLogAlumne('aviso_sync', `Aviso de actualización recibido para la sesión "${sesion.titulo}"`);
+}
+
+function cargarDatosActualizados() {
+    const datos = obtenerDatosCompartidos();
+    if (!datos.sesionActualizadaId) return;
+    
+    const sesionActualizada = datos.sesiones.find(s => s.id === datos.sesionActualizadaId);
+    if (!sesionActualizada) {
+        mostrarToast('⚠️ No se han encontrado los datos', 'error');
+        return;
+    }
+    
+    // Cargar la sesión actualizada
+    document.getElementById('sesionSelect').value = sesionActualizada.id;
+    mostrarInfoSesion(sesionActualizada.id);
+    
+    // Ocultar el aviso y limpiar el flag
+    document.getElementById('syncAlert').classList.remove('visible');
+    datos.sesionActualizadaId = null;
+    guardarDatosCompartidos(datos);
+    
+    // Registrar al log personal
+    registrarLogAlumne('sincronizacion', `Datos de la sesión "${sesionActualizada.titulo}" cargados desde el planificador de la profesora`);
+    
+    // Registrar también al log compartido
+    const nombreAlumno = state.datosAlumno.nombre || 'Alumno/a';
+    const logCompartido = obtenerDatosCompartidos();
+    logCompartido.log.unshift({
+        id: 'log-' + Date.now(),
+        fecha: new Date().toISOString(),
+        accion: 'sincronizacion_alumno',
+        detalle: `${nombreAlumno} ha cargado los datos actualizados de la sesión "${sesionActualizada.titulo}"`,
+        usuario: nombreAlumno
+    });
+    guardarDatosCompartidos(logCompartido);
+    
+    mostrarToast('✅ Datos actualizados cargados', 'success');
+}
+
+function descartarActualizacion() {
+    const datos = obtenerDatosCompartidos();
+    datos.sesionActualizadaId = null;
+    guardarDatosCompartidos(datos);
+    document.getElementById('syncAlert').classList.remove('visible');
+    registrarLogAlumne('descartar', 'Actualización de la profesora descartada');
+    mostrarToast('Actualización descartada', 'info');
+}
+
+function renderizarLogAlumne() {
+    const container = document.getElementById('logAlumneContainer');
+    if (!container) return;
+    try {
+        const log = JSON.parse(localStorage.getItem(LOG_ALUMNE_KEY) || '[]');
+        if (log.length === 0) {
+            container.innerHTML = '<div class="empty-state">Aún no hay acciones registradas.</div>';
+            return;
+        }
+        container.innerHTML = log.map(l => {
+            const icono = {
+                'sincronizacion': '🔄',
+                'descartar': '❌',
+                'guardar': '💾',
+                'nueva_actuacion': '➕',
+                'cambio_estado': '📊',
+                'aviso_sync': '🔔',
+                'enviar': '📧'
+            }[l.accion] || '📝';
+            return `
+                <div class="log-item">
+                    <span class="log-fecha">${formatearFechaISO(l.fecha)}</span>
+                    <span class="log-contenido">${icono} ${l.detalle}</span>
+                </div>
+            `;
+        }).join('');
+    } catch (e) {
+        container.innerHTML = '<div class="empty-state">Error al cargar el log.</div>';
+    }
+}
+
+function limpiarLogAlumne() {
+    if (!confirm('¿Seguro que quieres limpiar tu log personal de acciones? Esta acción no se puede deshacer.')) return;
+    localStorage.removeItem(LOG_ALUMNE_KEY);
+    renderizarLogAlumne();
+    mostrarToast('🗑️ Log personal limpiado', 'info');
+}
+
+// ==========================================
+// INICIALIZACIÓN DE SESIONES
+// ==========================================
+function inicializarSelectSesiones() {
+    const sel = document.getElementById('sesionSelect');
+    const valorActual = sel.value;
+    sel.innerHTML = '<option value="">-- Selecciona una sesión --</option>';
+    SESIONES_DISPONIBLES.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${formatearFecha(s.fecha)} - ${s.titulo}`;
+        sel.appendChild(opt);
+    });
+    if (valorActual) sel.value = valorActual;
+}
+
+function cargarDatosAlumno() {
+    document.getElementById('aluNombre').value = state.datosAlumno.nombre || '';
+    document.getElementById('aluEmail').value = state.datosAlumno.email || '';
+    document.getElementById('aluCurso').value = state.datosAlumno.curso || '';
+    document.getElementById('profEmail').value = state.datosAlumno.profEmail || '';
+}
+
+function guardarDatosAlumno() {
+    state.datosAlumno = {
+        nombre: document.getElementById('aluNombre').value,
+        email: document.getElementById('aluEmail').value,
+        curso: document.getElementById('aluCurso').value,
+        profEmail: document.getElementById('profEmail').value
+    };
+}
+
+function mostrarInfoSesion(id) {
+    const box = document.getElementById('sesionInfoBox');
+    if (!id) {
+        box.innerHTML = '';
+        state.sesionActual = null;
+        document.getElementById('actividadesContainer').innerHTML = '<div class="empty-state">Selecciona una sesión para ver las actividades.</div>';
+        state.actuacionActual.actividades = [];
+        actualizarResumen();
+        return;
+    }
+    const sesion = SESIONES_DISPONIBLES.find(s => s.id === id);
+    if (!sesion) return;
+
+    state.sesionActual = sesion;
+    state.actuacionActual.actividades = sesion.actividades.map(a => ({
+        tiempo: a.tiempo,
+        descripcion: a.descripcion,
+        estado: 'pendiente',
+        observaciones: ''
+    }));
+
+    box.innerHTML = `
+        <div class="sesion-info-box">
+            <h4>📌 ${sesion.titulo}</h4>
+            <p><strong>📅 Fecha:</strong> ${formatearFecha(sesion.fecha)} · <strong>🕐 Horario:</strong> ${sesion.horario}</p>
+            <p><strong>📍 Espacio previsto:</strong> ${getEspacioTexto(sesion.espacio)}</p>
+            ${sesion.trabajoPrevio ? `<p><strong>📚 Trabajo previo:</strong> ${sesion.trabajoPrevio}</p>` : ''}
+            ${sesion.trabajoComplementario ? `<p><strong>📝 Trabajo complementario:</strong> ${sesion.trabajoComplementario}</p>` : ''}
+        </div>
+    `;
+    renderizarActividades();
+}
+
+function renderizarActividades() {
+    const container = document.getElementById('actividadesContainer');
+    if (!state.actuacionActual.actividades || state.actuacionActual.actividades.length === 0) {
+        container.innerHTML = '<div class="empty-state">No hay actividades para esta sesión.</div>';
+        return;
+    }
+    container.innerHTML = state.actuacionActual.actividades.map((a, i) => `
+        <div class="actividad-item estado-${a.estado}" data-idx="${i}">
+            <div class="actividad-header">
+                <span class="actividad-tiempo">${a.tiempo}</span>
+                <span class="actividad-descripcion">${a.descripcion}</span>
+            </div>
+            <div class="actividad-controls">
+                <button class="estado-btn ${a.estado === 'hecha' ? 'active-hecha' : ''}" onclick="cambiarEstado(${i}, 'hecha')">✅ Hecha</button>
+                <button class="estado-btn ${a.estado === 'no_hecha' ? 'active-no_hecha' : ''}" onclick="cambiarEstado(${i}, 'no_hecha')">❌ No hecha</button>
+                <button class="estado-btn ${a.estado === 'pendiente' ? 'active-pendiente' : ''}" onclick="cambiarEstado(${i}, 'pendiente')">⏳ Pendiente</button>
+            </div>
+            <textarea class="observaciones-actividad" placeholder="Observaciones sobre esta actividad..." onchange="actualizarObs(${i}, this.value)">${a.observaciones || ''}</textarea>
+        </div>
+    `).join('');
+    actualizarResumen();
+}
+
+function cambiarEstado(idx, estado) {
+    const estadoAnterior = state.actuacionActual.actividades[idx].estado;
+    state.actuacionActual.actividades[idx].estado = estado;
+    if (estadoAnterior !== estado) {
+        registrarLogAlumne('cambio_estado', `Actividad "${state.actuacionActual.actividades[idx].tiempo}" cambiada a: ${estado}`);
+    }
+    renderizarActividades();
+}
+
+function actualizarObs(idx, valor) {
+    state.actuacionActual.actividades[idx].observaciones = valor;
+}
+
+function actualizarResumen() {
+    const acts = state.actuacionActual.actividades || [];
+    document.getElementById('resHechas').textContent = acts.filter(a => a.estado === 'hecha').length;
+    document.getElementById('resNoHechas').textContent = acts.filter(a => a.estado === 'no_hecha').length;
+    document.getElementById('resPendientes').textContent = acts.filter(a => a.estado === 'pendiente').length;
+    document.getElementById('resTotal').textContent = acts.length;
+}
+
+function cargarActuacionActual() {
+    document.getElementById('actFecha').value = state.actuacionActual.fecha || '';
+    document.getElementById('actHoraInicio').value = state.actuacionActual.horaInicio || '';
+    document.getElementById('actHoraFin').value = state.actuacionActual.horaFin || '';
+    document.getElementById('actEspacio').value = state.actuacionActual.espacio || 'aula_ordinaria';
+    document.getElementById('trabajoPrevio').value = state.actuacionActual.trabajoPrevio || '';
+    document.getElementById('trabajoComp').value = state.actuacionActual.trabajoComp || '';
+    document.getElementById('obsTrabajo').value = state.actuacionActual.obsTrabajo || '';
+    document.getElementById('obsGenerales').value = state.actuacionActual.obsGenerales || '';
+}
+
+function guardarActuacionActual() {
+    state.actuacionActual.fecha = document.getElementById('actFecha').value;
+    state.actuacionActual.horaInicio = document.getElementById('actHoraInicio').value;
+    state.actuacionActual.horaFin = document.getElementById('actHoraFin').value;
+    state.actuacionActual.espacio = document.getElementById('actEspacio').value;
+    state.actuacionActual.trabajoPrevio = document.getElementById('trabajoPrevio').value;
+    state.actuacionActual.trabajoComp = document.getElementById('trabajoComp').value;
+    state.actuacionActual.obsTrabajo = document.getElementById('obsTrabajo').value;
+    state.actuacionActual.obsGenerales = document.getElementById('obsGenerales').value;
+}
+
+function renderizarHistorial() {
+    const container = document.getElementById('historialContainer');
+    if (!state.historial || state.historial.length === 0) {
+        container.innerHTML = '<div class="empty-state">Aún no hay actuaciones registradas. Haz clic en "➕ Nueva Actuación" al finalizar una sesión.</div>';
+        return;
+    }
+    container.innerHTML = state.historial.map((h, i) => {
+        const hechas = h.actividades.filter(a => a.estado === 'hecha').length;
+        const total = h.actividades.length;
+        return `
+            <div class="historial-item">
+                <div class="historial-fecha">📅 ${formatearFecha(h.fecha)} · 🕐 ${h.horaInicio || '?'} - ${h.horaFin || '?'}</div>
+                <div class="historial-contenido">
+                    <strong>${h.tituloSesion || 'Sesión'}</strong> · ${hechas}/${total} actividades completadas<br>
+                    ${h.obsGenerales ? `<em>"${h.obsGenerales}"</em>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function nuevaActuacion() {
+    if (!state.sesionActual) {
+        mostrarToast('⚠️ Primero selecciona una sesión', 'error');
+        return;
+    }
+    if (!state.actuacionActual.fecha) {
+        mostrarToast('⚠️ Rellena al menos la fecha de la actuación', 'error');
+        return;
+    }
+    if (!confirm('¿Guardar la actuación actual en el historial y empezar una nueva?')) return;
+
+    const acts = state.actuacionActual.actividades || [];
+    const hechas = acts.filter(a => a.estado === 'hecha').length;
+    const total = acts.length;
+
+    const nueva = {
+        ...JSON.parse(JSON.stringify(state.actuacionActual)),
+        tituloSesion: state.sesionActual.titulo,
+        fechaGuardado: new Date().toISOString()
+    };
+    state.historial.push(nueva);
+
+    state.actuacionActual = {
+        fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
+        actividades: state.sesionActual.actividades.map(a => ({
+            tiempo: a.tiempo, descripcion: a.descripcion, estado: 'pendiente', observaciones: ''
+        })),
+        trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
+    };
+
+    guardarEstado();
+    cargarActuacionActual();
+    renderizarActividades();
+    renderizarHistorial();
+    registrarLogAlumne('nueva_actuacion', `Nueva actuación registrada para "${state.sesionActual.titulo}" (${hechas}/${total} actividades)`);
+    mostrarToast('✅ Actuación guardada en el historial', 'success');
+}
+
+// ==========================================
+// IMPRIMIR / ENVIAR
+// ==========================================
+function imprimirPDF() { 
+    registrarLogAlumne('imprimir', 'Ficha impresa o exportada a PDF');
+    window.print(); 
+}
+
+function enviarEmail() {
+    const profEmail = document.getElementById('profEmail').value;
+    if (!profEmail) {
+        mostrarToast('⚠️ Indica el email de la profesora', 'error');
+        return;
+    }
+    const nombre = document.getElementById('aluNombre').value || 'Alumno/a';
+    const sesion = state.sesionActual;
+    if (!sesion) {
+        mostrarToast('⚠️ Selecciona una sesión', 'error');
+        return;
+    }
+
+    const acts = state.actuacionActual.actividades || [];
+    const hechas = acts.filter(a => a.estado === 'hecha').length;
+    const total = acts.length;
+
+    let body = `FICHA DE TRABAJO DEL ALUMNO\n`;
+    body += `Fisiología Aplicada a la Danza\n\n`;
+    body += `Alumno/a: ${nombre}\n`;
+    body += `Email: ${document.getElementById('aluEmail').value}\n`;
+    body += `Curso: ${document.getElementById('aluCurso').value}\n\n`;
+    body += `SESIÓN: ${sesion.titulo}\n`;
+    body += `Fecha sesión: ${formatearFecha(sesion.fecha)}\n`;
+    body += `Fecha actuación: ${formatearFecha(state.actuacionActual.fecha)}\n`;
+    body += `Horario: ${state.actuacionActual.horaInicio} - ${state.actuacionActual.horaFin}\n\n`;
+    body += `ACTIVIDADES: ${hechas}/${total} completadas\n\n`;
+    acts.forEach(a => {
+        const est = { 'hecha': '✅', 'no_hecha': '❌', 'pendiente': '⏳' }[a.estado];
+        body += `${est} ${a.tiempo} - ${a.descripcion}\n`;
+        if (a.observaciones) body += `   → ${a.observaciones}\n`;
+    });
+    body += `\nTrabajo previo: ${state.actuacionActual.trabajoPrevio || 'No indicado'}\n`;
+    body += `Trabajo complementario: ${state.actuacionActual.trabajoComp || 'No indicado'}\n`;
+    if (state.actuacionActual.obsTrabajo) body += `Observaciones trabajo: ${state.actuacionActual.obsTrabajo}\n`;
+    if (state.actuacionActual.obsGenerales) body += `\nReflexiones personales:\n${state.actuacionActual.obsGenerales}\n`;
+
+    const subject = encodeURIComponent(`Ficha trabajo - ${nombre} - ${sesion.titulo}`);
+    window.location.href = `mailto:${profEmail}?subject=${subject}&body=${encodeURIComponent(body)}`;
+    registrarLogAlumne('enviar', `Ficha enviada a la profesora (${profEmail})`);
+}
+
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
+document.getElementById('sesionSelect').addEventListener('change', function() {
+    mostrarInfoSesion(this.value);
+});
+
+['aluNombre','aluEmail','aluCurso','profEmail'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => { 
+        guardarDatosAlumno(); 
+        guardarEstado(); 
+        registrarLogAlumne('guardar', `Datos personales actualizados: ${state.datosAlumno.nombre || '(sin nombre)'}`);
+    });
+});
+
+['actFecha','actHoraInicio','actHoraFin','actEspacio','trabajoPrevio','trabajoComp','obsTrabajo','obsGenerales'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => { 
+        guardarActuacionActual(); 
+        guardarEstado(); 
+    });
+});
+
+document.getElementById('btnGuardar').addEventListener('click', () => {
+    guardarDatosAlumno();
+    guardarActuacionActual();
+    guardarEstado();
+    registrarLogAlumne('guardar', 'Ficha guardada manualmente');
+    mostrarToast('💾 Ficha guardada', 'success');
+});
+
+document.getElementById('btnImprimir').addEventListener('click', imprimirPDF);
+document.getElementById('btnEnviar').addEventListener('click', enviarEmail);
+document.getElementById('btnNuevaSesion').addEventListener('click', nuevaActuacion);
+document.getElementById('btnHistorial').addEventListener('click', () => {
+    document.getElementById('historialContainer').scrollIntoView({ behavior: 'smooth' });
+});
+
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarSelectSesiones();
+    cargarEstado();
+    cargarDatosAlumno();
+    cargarActuacionActual();
+    if (state.sesionActual) {
+        document.getElementById('sesionSelect').value = state.sesionActual.id;
+        mostrarInfoSesion(state.sesionActual.id);
+    }
+    renderizarHistorial();
+    renderizarLogAlumne();
+    comprobarActualizaciones();
+    console.log('✅ Ficha del alumno cargada');
+});
+</script>
+</body>
+</html>
