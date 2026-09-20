@@ -14,25 +14,40 @@
             <p class="subtitle">Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
         </header>
 
+        <!-- BARRA DE CONTROLES REORGANITZADA -->
         <div class="controls no-print">
+            <!-- Botones principales (siempre visibles) -->
             <button id="btnAddTema" class="btn btn-primary">➕ Añadir Tema</button>
-            <button id="btnAddSeccion" class="btn btn-secondary">📑 Añadir Sección</button>
+            <button id="btnAddSeccion" class="btn btn-primary">📑 Añadir Sección</button>
             <button id="btnPrint" class="btn btn-print">🖨️ Imprimir / PDF</button>
-            <button id="btnExport" class="btn btn-secondary">📥 Exportar Datos</button>
-            <button id="btnImport" class="btn btn-secondary">📤 Importar Datos</button>
-            <button id="btnReset" class="btn btn-danger">🔄 Restablecer</button>
+            
+            <!-- Menú desplegable con botones secundarios -->
+            <div class="dropdown">
+                <button id="btnDropdown" class="btn btn-dropdown">
+                    ⚙️ Más opciones <span class="dropdown-arrow">▾</span>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <button class="dropdown-item" id="btnHistory">📜 Historial de versiones</button>
+                    <button class="dropdown-item" id="btnEditor">✏️ Editor JSON</button>
+                    <button class="dropdown-item" id="btnAutoBackup">💾 Copia Automática</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" id="btnExport">📥 Exportar Datos</button>
+                    <button class="dropdown-item" id="btnImport">📤 Importar Datos</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item danger" id="btnReset">🔄 Restablecer</button>
+                </div>
+            </div>
+            
             <input type="file" id="fileInput" accept=".json" style="display: none;">
         </div>
 
         <div class="info-box no-print">
             <h3>ℹ️ Información</h3>
-            <p>Los cambios se guardan automáticamente en tu navegador. Puedes exportar los datos para hacer una copia de seguridad o importarlos en otro dispositivo.</p>
-            <p><strong>Estado de los temas:</strong> Los temas 1, 2 y 3 tienen presentaciones y recursos HTML creados. El resto están en desarrollo.</p>
+            <p>Los cambios se guardan automáticamente en tu navegador. Cada modificación crea una <strong>copia de seguridad</strong> en el historial (hasta 20 versiones).</p>
+            <p><strong>💡 Consejo:</strong> Usa "⚙️ Más opciones → Editor JSON" para editar directamente el código o trabajar en un editor externo y luego importar los cambios.</p>
         </div>
 
-        <div id="seccionesContainer" class="secciones-container">
-            <!-- Las secciones se generan dinámicamente con JavaScript -->
-        </div>
+        <div id="seccionesContainer" class="secciones-container"></div>
     </div>
 
     <!-- Modal para añadir/editar temas -->
@@ -55,11 +70,11 @@
                 </div>
                 <div class="form-group">
                     <label for="temaRecursos">Recursos HTML (una URL por línea):</label>
-                    <textarea id="temaRecursos" rows="5" placeholder="https://jpainous.github.io/dansa_tema03/archivo1.html&#10;https://jpainous.github.io/dansa_tema03/archivo2.html"></textarea>
+                    <textarea id="temaRecursos" rows="5" placeholder="https://jpainous.github.io/dansa_tema03/archivo1.html"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="temaObservaciones">📝 Observaciones:</label>
-                    <textarea id="temaObservaciones" rows="3" placeholder="Notas personales, ajustes pendientes, material complementario..."></textarea>
+                    <textarea id="temaObservaciones" rows="3" placeholder="Notas personales, ajustes pendientes..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="temaEstado">Estado:</label>
@@ -87,7 +102,7 @@
             <form id="seccionForm">
                 <div class="form-group">
                     <label for="seccionTitulo">Título de la Sección:</label>
-                    <input type="text" id="seccionTitulo" required placeholder="Ej: Datos Identificativos, Objetivos, Cronograma...">
+                    <input type="text" id="seccionTitulo" required placeholder="Ej: Datos Identificativos, Objetivos...">
                 </div>
                 <div class="form-group">
                     <label for="seccionIcono">Icono (emoji):</label>
@@ -95,7 +110,7 @@
                 </div>
                 <div class="form-group">
                     <label for="seccionContenido">Contenido (admite HTML básico):</label>
-                    <textarea id="seccionContenido" rows="8" placeholder="Escribe el contenido de la sección..."></textarea>
+                    <textarea id="seccionContenido" rows="8"></textarea>
                 </div>
                 <div class="form-group">
                     <label>
@@ -108,6 +123,38 @@
                     <button type="button" class="btn btn-secondary" data-modal="modalSeccion">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal de Historial de versiones -->
+    <div id="modalHistorial" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" data-modal="modalHistorial">&times;</span>
+            <h2>📜 Historial de Versiones</h2>
+            <p class="modal-subtitle">Cada cambio crea automáticamente una copia de seguridad. Puedes restaurar cualquier versión anterior.</p>
+            <div id="historialLista" class="historial-lista"></div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-modal="modalHistorial">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Editor JSON -->
+    <div id="modalEditor" class="modal">
+        <div class="modal-content modal-xl">
+            <span class="close" data-modal="modalEditor">&times;</span>
+            <h2>✏️ Editor JSON</h2>
+            <p class="modal-subtitle">Edita directamente el código JSON de la programación. Útil para trabajar en un editor externo y luego importar los cambios.</p>
+            <div class="editor-warning">
+                ⚠️ <strong>Precaución:</strong> Modificar el JSON manualmente puede romper la aplicación si el formato no es válido. Se creará una copia de seguridad automáticamente antes de aplicar cambios.
+            </div>
+            <textarea id="editorJSON" class="editor-textarea" spellcheck="false"></textarea>
+            <div class="form-actions">
+                <button type="button" id="btnAplicarJSON" class="btn btn-primary">✅ Aplicar Cambios</button>
+                <button type="button" id="btnFormatearJSON" class="btn btn-secondary">🎨 Formatear</button>
+                <button type="button" id="btnCopiarJSON" class="btn btn-secondary">📋 Copiar al Portapapeles</button>
+                <button type="button" class="btn btn-secondary" data-modal="modalEditor">Cancelar</button>
+            </div>
         </div>
     </div>
 

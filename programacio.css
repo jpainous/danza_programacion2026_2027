@@ -1,3 +1,6 @@
+/* ============================================ */
+/* RESET Y BASE                                 */
+/* ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +13,7 @@ body {
     min-height: 100vh;
     padding: 20px;
     color: #333;
+    line-height: 1.6;
 }
 
 .container {
@@ -21,7 +25,9 @@ body {
     overflow: hidden;
 }
 
-/* HEADER */
+/* ============================================ */
+/* HEADER                                       */
+/* ============================================ */
 header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -33,6 +39,7 @@ header h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: 800;
 }
 
 header h2 {
@@ -46,7 +53,9 @@ header h2 {
     opacity: 0.9;
 }
 
-/* CONTROLES */
+/* ============================================ */
+/* CONTROLES (BARRA SUPERIOR)                   */
+/* ============================================ */
 .controls {
     padding: 20px 40px;
     background: #f8f9fa;
@@ -54,6 +63,7 @@ header h2 {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .btn {
@@ -64,6 +74,7 @@ header h2 {
     cursor: pointer;
     transition: all 0.3s;
     font-weight: 600;
+    font-family: inherit;
 }
 
 .btn-primary {
@@ -131,7 +142,146 @@ header h2 {
     font-size: 0.85em;
 }
 
-/* INFO BOX */
+.btn-restore {
+    background: #28a745;
+    color: white;
+    padding: 6px 14px;
+    font-size: 0.85em;
+}
+
+.btn-restore:hover {
+    background: #218838;
+}
+
+.btn-delete-version {
+    background: #dc3545;
+    color: white;
+    padding: 6px 14px;
+    font-size: 0.85em;
+}
+
+.btn-delete-version:hover {
+    background: #c82333;
+}
+
+.btn-add-tema-seccion {
+    margin-top: 15px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 12px 24px;
+}
+
+.btn-add-tema-seccion:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+/* ============================================ */
+/* DROPDOWN - MENÚ DESPLEGABLE                  */
+/* ============================================ */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+}
+
+.btn-dropdown {
+    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-dropdown:hover {
+    background: linear-gradient(135deg, #343a40 0%, #212529 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 58, 64, 0.4);
+}
+
+.btn-dropdown.active {
+    background: linear-gradient(135deg, #343a40 0%, #212529 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
+}
+
+.dropdown-arrow {
+    font-size: 0.8em;
+    transition: transform 0.3s;
+}
+
+.dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    min-width: 240px;
+    padding: 8px 0;
+    z-index: 100;
+    border: 1px solid #e9ecef;
+    animation: fadeInDown 0.2s ease-out;
+}
+
+.dropdown.open .dropdown-menu {
+    display: block;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 0.95em;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    color: #667eea;
+    padding-left: 24px;
+}
+
+.dropdown-item.danger {
+    color: #dc3545;
+}
+
+.dropdown-item.danger:hover {
+    background: #fff5f5;
+    color: #c82333;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #e9ecef;
+    margin: 6px 0;
+}
+
+/* ============================================ */
+/* INFO BOX                                     */
+/* ============================================ */
 .info-box {
     margin: 20px 40px;
     padding: 20px;
@@ -150,7 +300,9 @@ header h2 {
     line-height: 1.6;
 }
 
-/* SECCIONES */
+/* ============================================ */
+/* SECCIONES                                    */
+/* ============================================ */
 .secciones-container {
     padding: 40px;
 }
@@ -162,6 +314,7 @@ header h2 {
     padding: 25px;
     margin-bottom: 25px;
     transition: all 0.3s;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .seccion:hover {
@@ -175,6 +328,8 @@ header h2 {
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid #e9ecef;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .seccion-titulo {
@@ -201,7 +356,8 @@ header h2 {
     margin-bottom: 20px;
 }
 
-.seccion-contenido ul, .seccion-contenido ol {
+.seccion-contenido ul,
+.seccion-contenido ol {
     margin-left: 25px;
     margin-top: 10px;
 }
@@ -220,13 +376,16 @@ header h2 {
     margin-top: 10px;
 }
 
-.seccion-contenido th, .seccion-contenido td {
+.seccion-contenido th,
+.seccion-contenido td {
     padding: 10px;
     text-align: left;
     border: 1px solid #e9ecef;
 }
 
-/* TEMAS */
+/* ============================================ */
+/* TEMAS (CARDS)                                */
+/* ============================================ */
 .temas-lista {
     margin-top: 15px;
 }
@@ -239,6 +398,7 @@ header h2 {
     margin-bottom: 15px;
     transition: all 0.3s;
     position: relative;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .tema-card:hover {
@@ -248,14 +408,17 @@ header h2 {
 
 .tema-card.completo {
     border-left: 6px solid #28a745;
+    background: #f0fdf4;
 }
 
 .tema-card.parcial {
     border-left: 6px solid #ffc107;
+    background: #fffbeb;
 }
 
 .tema-card.pendiente {
     border-left: 6px solid #6c757d;
+    background: #f8f9fa;
 }
 
 .tema-header {
@@ -274,13 +437,14 @@ header h2 {
 
 .tema-data {
     display: inline-block;
-    background: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 0.85em;
     font-weight: 600;
     margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
 }
 
 .tema-titulo {
@@ -319,7 +483,9 @@ header h2 {
     margin-bottom: 12px;
 }
 
-/* OBSERVACIONES */
+/* ============================================ */
+/* OBSERVACIONES                                */
+/* ============================================ */
 .tema-observaciones {
     background: #fffde7;
     border: 1px solid #fff176;
@@ -338,8 +504,16 @@ header h2 {
     margin-bottom: 4px;
 }
 
+/* ============================================ */
+/* RECURSOS HTML                                */
+/* ============================================ */
 .tema-recursos {
     margin-top: 12px;
+    background: #f0f4ff;
+    border: 1px solid #c7d2fe;
+    border-left: 4px solid #667eea;
+    border-radius: 6px;
+    padding: 12px 16px;
 }
 
 .tema-recursos h4 {
@@ -371,6 +545,7 @@ header h2 {
 .recursos-lista a:hover {
     color: #764ba2;
     text-decoration: underline;
+    transform: translateX(3px);
 }
 
 .recursos-lista a::after {
@@ -388,18 +563,9 @@ header h2 {
     flex-wrap: wrap;
 }
 
-.btn-add-tema-seccion {
-    margin-top: 15px;
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-}
-
-.btn-add-tema-seccion:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-}
-
-/* MODAL */
+/* ============================================ */
+/* MODALES                                      */
+/* ============================================ */
 .modal {
     display: none;
     position: fixed;
@@ -425,6 +591,15 @@ header h2 {
     max-width: 600px;
     position: relative;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-large {
+    max-width: 800px;
+}
+
+.modal-xl {
+    max-width: 1000px;
 }
 
 .close {
@@ -444,11 +619,126 @@ header h2 {
 
 .modal-content h2 {
     color: #667eea;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     padding-bottom: 15px;
     border-bottom: 2px solid #e9ecef;
 }
 
+.modal-subtitle {
+    color: #666;
+    font-size: 0.95em;
+    margin-bottom: 20px;
+}
+
+/* ============================================ */
+/* HISTORIAL                                    */
+/* ============================================ */
+.historial-lista {
+    max-height: 500px;
+    overflow-y: auto;
+    margin: 20px 0;
+}
+
+.historial-item {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    transition: all 0.2s;
+}
+
+.historial-item:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.historial-item.current {
+    background: #e7f3ff;
+    border-color: #2196F3;
+}
+
+.historial-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.historial-fecha {
+    font-weight: 700;
+    color: #333;
+    font-size: 1em;
+    margin-bottom: 4px;
+}
+
+.historial-detalle {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.historial-badge {
+    display: inline-block;
+    background: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.historial-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.historial-vacio {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-style: italic;
+}
+
+/* ============================================ */
+/* EDITOR JSON                                  */
+/* ============================================ */
+.editor-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #856404;
+}
+
+.editor-textarea {
+    width: 100%;
+    min-height: 400px;
+    padding: 15px;
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 0.9em;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.editor-textarea:focus {
+    outline: none;
+    border-color: #fd7e14;
+}
+
+/* ============================================ */
+/* FORMULARIOS                                  */
+/* ============================================ */
 .form-group {
     margin-bottom: 20px;
 }
@@ -478,6 +768,7 @@ header h2 {
 .form-group select:focus {
     outline: none;
     border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-group textarea {
@@ -496,9 +787,12 @@ header h2 {
     margin-top: 25px;
     padding-top: 20px;
     border-top: 2px solid #e9ecef;
+    flex-wrap: wrap;
 }
 
-/* FOOTER */
+/* ============================================ */
+/* FOOTER                                       */
+/* ============================================ */
 footer {
     text-align: center;
     padding: 30px 20px;
@@ -508,32 +802,63 @@ footer {
     background: #f8f9fa;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    body { padding: 10px; }
-    header { padding: 30px 20px; }
-    header h1 { font-size: 1.8em; }
-    header h2 { font-size: 1.2em; }
-    .controls { padding: 15px 20px; }
-    .btn { padding: 10px 16px; font-size: 0.9em; }
-    .info-box { margin: 15px 20px; }
-    .secciones-container { padding: 20px; }
-    .seccion { padding: 20px; }
-    .seccion-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .tema-header { flex-direction: column; }
-    .modal-content { padding: 25px; margin: 20px auto; }
+/* ============================================ */
+/* TOAST NOTIFICATIONS                          */
+/* ============================================ */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
 }
 
-/* ANIMACIONES */
+.toast.success {
+    background: #28a745;
+}
+
+.toast.error {
+    background: #dc3545;
+}
+
+.toast.info {
+    background: #17a2b8;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ============================================ */
+/* ANIMACIONES                                  */
+/* ============================================ */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.tema-card, .seccion {
-    animation: fadeIn 0.3s ease-out;
-}
-
+/* ============================================ */
+/* UTILIDADES                                   */
+/* ============================================ */
 .empty-state {
     text-align: center;
     padding: 40px;
@@ -541,8 +866,93 @@ footer {
     font-style: italic;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* ============================================ */
-/* ESTILOS DE IMPRESIÓN / PDF                   */
+/* RESPONSIVE                                   */
+/* ============================================ */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        padding: 30px 20px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    header h2 {
+        font-size: 1.2em;
+    }
+
+    .controls {
+        padding: 15px 20px;
+        justify-content: flex-start;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.9em;
+        flex: 1 1 auto;
+        min-width: 120px;
+    }
+
+    .info-box {
+        margin: 15px 20px;
+    }
+
+    .secciones-container {
+        padding: 20px;
+    }
+
+    .seccion {
+        padding: 20px;
+    }
+
+    .seccion-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tema-header {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        padding: 25px;
+        margin: 20px auto;
+    }
+
+    .historial-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dropdown {
+        margin-left: 0;
+        flex: 1 1 100%;
+        margin-top: 5px;
+    }
+
+    .btn-dropdown {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        right: 0;
+        left: 0;
+        min-width: 100%;
+    }
+}
+
+/* ============================================ */
+/* IMPRESIÓN / PDF                              */
 /* ============================================ */
 @media print {
     body {
@@ -629,7 +1039,6 @@ footer {
         box-shadow: none !important;
         break-inside: avoid;
         page-break-inside: avoid;
-        background: #fafafa !important;
     }
 
     .tema-card:hover {
@@ -637,15 +1046,27 @@ footer {
         transform: none !important;
     }
 
-    .tema-card.completo { border-left: 4px solid #28a745 !important; }
-    .tema-card.parcial { border-left: 4px solid #ffc107 !important; }
-    .tema-card.pendiente { border-left: 4px solid #999 !important; }
+    .tema-card.completo {
+        border-left: 4px solid #28a745 !important;
+        background: #f0fdf4 !important;
+    }
+
+    .tema-card.parcial {
+        border-left: 4px solid #ffc107 !important;
+        background: #fffbeb !important;
+    }
+
+    .tema-card.pendiente {
+        border-left: 4px solid #999 !important;
+        background: #f8f9fa !important;
+    }
 
     .tema-data {
         background: #333 !important;
         color: white !important;
         font-size: 9pt !important;
         padding: 3px 8px !important;
+        box-shadow: none !important;
     }
 
     .tema-titulo {
@@ -665,6 +1086,13 @@ footer {
     .tema-observaciones {
         background: #fffde7 !important;
         border: 1px solid #e0d68a !important;
+        font-size: 9pt !important;
+        padding: 8px 12px !important;
+    }
+
+    .tema-recursos {
+        background: #f0f4ff !important;
+        border: 1px solid #c7d2fe !important;
         font-size: 9pt !important;
         padding: 8px 12px !important;
     }
