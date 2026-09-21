@@ -1,54 +1,47 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ficha de Trabajo del Alumno - Fisiología</title>
+<title data-i18n="titol_pagina">Fitxa de Treball de l'Alumne</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
-    min-height: 100vh;
-    padding: 20px;
-    color: #333;
-}
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-}
-header {
-    background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
-    color: white;
-    padding: 40px;
-    text-align: center;
-}
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%); min-height: 100vh; padding: 20px; color: #333; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+header { background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%); color: white; padding: 40px; text-align: center; position: relative; }
 header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
 header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 .subtitle { font-size: 1.1em; opacity: 0.9; }
 
-.controls {
-    padding: 20px 40px;
-    background: #f8f9fa;
-    border-bottom: 2px solid #e9ecef;
+/* SELECTOR D'IDIOMA */
+.language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
 }
-.btn {
-    padding: 12px 24px;
+.language-selector label { color: white; font-size: 1.2em; }
+.language-selector select {
+    padding: 6px 10px;
     border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.9em;
     font-family: inherit;
+    cursor: pointer;
+    background: white;
+    color: #ee5a6f;
+    font-weight: 600;
 }
+.language-selector select:focus { outline: 2px solid #fff; }
+
+.controls { padding: 20px 40px; background: #f8f9fa; border-bottom: 2px solid #e9ecef; display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: 600; font-family: inherit; }
 .btn-primary { background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%); color: white; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(238, 90, 111, 0.4); }
 .btn-secondary { background: #6c757d; color: white; }
@@ -58,307 +51,87 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 .btn-danger { background: #dc3545; color: white; }
 .btn-small { padding: 6px 12px; font-size: 0.85em; }
 
-.sync-alert {
-    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
-    border: 2px solid #ffc107;
-    border-left: 6px solid #f59e0b;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 40px;
-    display: none;
-    animation: pulse 2s infinite;
-}
+.sync-alert { background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); border: 2px solid #ffc107; border-left: 6px solid #f59e0b; border-radius: 12px; padding: 20px; margin: 20px 40px; display: none; animation: pulse 2s infinite; }
 .sync-alert.visible { display: block; }
-.sync-alert h3 {
-    color: #856404;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+.sync-alert h3 { color: #856404; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
 .sync-alert p { color: #5d4037; line-height: 1.6; margin-bottom: 10px; }
-.sync-alert-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
+.sync-alert-actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
 .btn-sync-load { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
 .btn-sync-dismiss { background: #6c757d; color: white; }
 
-@keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-    50% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
-}
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 50% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } }
 
-.info-box {
-    margin: 20px 40px;
-    padding: 20px;
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
-    border-radius: 8px;
-}
+.info-box { margin: 20px 40px; padding: 20px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px; }
 .info-box h3 { color: #856404; margin-bottom: 10px; }
 .info-box p { margin-bottom: 8px; line-height: 1.6; }
 
-.section {
-    padding: 30px 40px;
-    border-bottom: 1px solid #e9ecef;
-}
-.section h3 {
-    color: #ee5a6f;
-    margin-bottom: 20px;
-    font-size: 1.4em;
-    border-left: 5px solid #ff6b6b;
-    padding-left: 15px;
-}
-.section h4 {
-    color: #ee5a6f;
-    margin-top: 25px;
-    margin-bottom: 10px;
-    font-size: 1.15em;
-}
+.section { padding: 30px 40px; border-bottom: 1px solid #e9ecef; }
+.section h3 { color: #ee5a6f; margin-bottom: 20px; font-size: 1.4em; border-left: 5px solid #ff6b6b; padding-left: 15px; }
+.section h4 { color: #ee5a6f; margin-top: 25px; margin-bottom: 10px; font-size: 1.15em; }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .form-group { margin-bottom: 18px; }
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #333;
-}
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 10px 14px;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    font-size: 1em;
-    font-family: inherit;
-}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #ee5a6f;
-}
+.form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em; font-family: inherit; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #ee5a6f; }
 .form-group textarea { resize: vertical; min-height: 70px; }
 
-.sesion-info-box {
-    background: linear-gradient(135deg, #fff5f7 0%, #ffe0e6 100%);
-    border: 2px solid #ff6b6b;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 15px;
-}
-.sesion-info-box h4 {
-    color: #ee5a6f;
-    margin-bottom: 10px;
-    font-size: 1.2em;
-}
+.sesion-info-box { background: linear-gradient(135deg, #fff5f7 0%, #ffe0e6 100%); border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; margin-top: 15px; }
+.sesion-info-box h4 { color: #ee5a6f; margin-bottom: 10px; font-size: 1.2em; }
 .sesion-info-box p { line-height: 1.6; color: #555; margin-bottom: 8px; }
 .sesion-info-box strong { color: #333; }
 
-/* ACTIVITATS AMB TIPUS */
-.actividades-container {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 15px;
-}
-
-.actividad-item {
-    background: white;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 12px;
-    transition: all 0.3s;
-}
+.actividades-container { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-top: 15px; }
+.actividad-item { background: white; border: 2px solid #e9ecef; border-radius: 10px; padding: 15px; margin-bottom: 12px; transition: all 0.3s; }
 .actividad-item:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 .actividad-item.estado-hecha { border-left: 6px solid #28a745; background: #f0fdf4; }
 .actividad-item.estado-no_hecha { border-left: 6px solid #dc3545; background: #fef2f2; }
 .actividad-item.estado-pendiente { border-left: 6px solid #ffc107; background: #fffbeb; }
 
-.actividad-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.actividad-tiempo {
-    background: #ee5a6f;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 0.85em;
-    font-weight: 600;
-}
-.actividad-descripcion {
-    flex: 1;
-    font-size: 1em;
-    color: #333;
-    min-width: 200px;
-}
-.actividad-tipo-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.75em;
-    font-weight: 600;
-    white-space: nowrap;
-}
+.actividad-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+.actividad-tiempo { background: #ee5a6f; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; }
+.actividad-descripcion { flex: 1; font-size: 1em; color: #333; min-width: 200px; }
+.actividad-tipo-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75em; font-weight: 600; white-space: nowrap; }
 .tipo-teorica { background: #cfe2ff; color: #084298; }
 .tipo-practica { background: #d1e7dd; color: #0f5132; }
 .tipo-evaluacion { background: #f8d7da; color: #842029; }
 .tipo-descanso { background: #fff3cd; color: #664d03; }
 .tipo-gestion { background: #e2e3e5; color: #41464b; }
 
-.actividad-controls {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-.estado-btn {
-    padding: 6px 14px;
-    border: 2px solid #e9ecef;
-    border-radius: 20px;
-    background: white;
-    cursor: pointer;
-    font-size: 0.85em;
-    font-weight: 600;
-    transition: all 0.2s;
-    font-family: inherit;
-}
+.actividad-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.estado-btn { padding: 6px 14px; border: 2px solid #e9ecef; border-radius: 20px; background: white; cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all 0.2s; font-family: inherit; }
 .estado-btn:hover { transform: translateY(-1px); }
 .estado-btn.active-hecha { background: #28a745; color: white; border-color: #28a745; }
 .estado-btn.active-no_hecha { background: #dc3545; color: white; border-color: #dc3545; }
 .estado-btn.active-pendiente { background: #ffc107; color: #333; border-color: #ffc107; }
 
-.observaciones-actividad {
-    margin-top: 10px;
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    font-size: 0.9em;
-    font-family: inherit;
-    resize: vertical;
-    min-height: 50px;
-}
-.observaciones-actividad:focus {
-    outline: none;
-    border-color: #ee5a6f;
-}
+.observaciones-actividad { margin-top: 10px; width: 100%; padding: 8px 12px; border: 1px solid #e9ecef; border-radius: 6px; font-size: 0.9em; font-family: inherit; resize: vertical; min-height: 50px; }
+.observaciones-actividad:focus { outline: none; border-color: #ee5a6f; }
 
-.historial-container,
-.log-alumne-container {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 15px;
-    max-height: 400px;
-    overflow-y: auto;
-}
-.historial-item {
-    background: white;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    font-size: 0.9em;
-}
-.historial-fecha {
-    font-weight: 700;
-    color: #ee5a6f;
-    margin-bottom: 5px;
-}
+.historial-container, .log-alumne-container { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-top: 15px; max-height: 400px; overflow-y: auto; }
+.historial-item { background: white; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; font-size: 0.9em; }
+.historial-fecha { font-weight: 700; color: #ee5a6f; margin-bottom: 5px; }
 .historial-contenido { color: #555; line-height: 1.6; }
 
-.log-item {
-    background: white;
-    border-left: 4px solid #ee5a6f;
-    border-radius: 6px;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    font-size: 0.9em;
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+.log-item { background: white; border-left: 4px solid #ee5a6f; border-radius: 6px; padding: 10px 15px; margin-bottom: 8px; font-size: 0.9em; display: flex; justify-content: space-between; align-items: start; gap: 10px; flex-wrap: wrap; }
 .log-item.log-sync { border-left-color: #ffc107; background: #fffbeb; }
 .log-item.log-state { border-left-color: #28a745; background: #f0fdf4; }
 .log-item.log-edit { border-left-color: #17a2b8; background: #ecfeff; }
-.log-fecha {
-    font-weight: 700;
-    color: #ee5a6f;
-    font-size: 0.85em;
-    white-space: nowrap;
-}
+.log-fecha { font-weight: 700; color: #ee5a6f; font-size: 0.85em; white-space: nowrap; }
 .log-contenido { flex: 1; color: #333; }
 
-.resumen-box {
-    background: linear-gradient(135deg, #e7f3ff 0%, #d1e7ff 100%);
-    border: 2px solid #2196F3;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 20px;
-}
-.resumen-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
-}
-.resumen-item {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-}
-.resumen-numero {
-    font-size: 2em;
-    font-weight: 800;
-    color: #ee5a6f;
-}
-.resumen-label {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 5px;
-}
+.resumen-box { background: linear-gradient(135deg, #e7f3ff 0%, #d1e7ff 100%); border: 2px solid #2196F3; border-radius: 12px; padding: 20px; margin-top: 20px; }
+.resumen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+.resumen-item { background: white; padding: 15px; border-radius: 8px; text-align: center; }
+.resumen-numero { font-size: 2em; font-weight: 800; color: #ee5a6f; }
+.resumen-label { font-size: 0.85em; color: #666; margin-top: 5px; }
 
-.toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #333;
-    color: white;
-    padding: 14px 24px;
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    z-index: 2000;
-    font-weight: 500;
-}
+.toast { position: fixed; bottom: 30px; right: 30px; background: #333; color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); z-index: 2000; font-weight: 500; }
 .toast.success { background: #28a745; }
 .toast.error { background: #dc3545; }
 .toast.info { background: #17a2b8; }
 
-footer {
-    text-align: center;
-    padding: 30px 20px;
-    color: #64748b;
-    font-size: 0.95em;
-    background: #f8f9fa;
-}
+footer { text-align: center; padding: 30px 20px; color: #64748b; font-size: 0.95em; background: #f8f9fa; }
 
 .empty-state { text-align: center; padding: 30px; color: #999; font-style: italic; }
 
@@ -366,6 +139,7 @@ footer {
     body { padding: 10px; }
     header { padding: 30px 20px; }
     header h1 { font-size: 1.8em; }
+    .language-selector { position: static; margin: 15px auto 0; width: fit-content; }
     .section { padding: 20px; }
     .form-grid { grid-template-columns: 1fr; }
     .controls { padding: 15px 20px; }
@@ -377,6 +151,7 @@ footer {
     .container { box-shadow: none; border-radius: 0; max-width: 100%; }
     header { background: none; color: #000; padding: 20px 0; border-bottom: 3px solid #333; }
     header h1, header h2, .subtitle { color: #000 !important; text-shadow: none; }
+    .language-selector { display: none !important; }
     .no-print { display: none !important; }
     .section { break-inside: avoid; page-break-inside: avoid; }
     .actividad-item { break-inside: avoid; }
@@ -388,347 +163,665 @@ footer {
 <body>
 <div class="container">
     <header>
-        <h1>📝 Ficha de Trabajo del Alumno</h1>
-        <h2>Fisiología Aplicada a la Danza</h2>
-        <p class="subtitle">Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+        <h1 data-i18n="titol_pagina">📝 Fitxa de Treball de l'Alumne</h1>
+        <h2 data-i18n="subtitol_pagina">Fisiologia Aplicada a la Dansa</h2>
+        <p class="subtitle" data-i18n="subtitol2_pagina">Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+        
+        <!-- SELECTOR D'IDIOMA -->
+        <div class="language-selector">
+            <label for="selectorIdioma">🌐</label>
+            <select id="selectorIdioma" onchange="aplicarIdioma(this.value)">
+                <option value="ca">Català</option>
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
     </header>
 
     <div class="controls no-print">
-        <button id="btnGuardar" class="btn btn-primary">💾 Guardar Ficha</button>
-        <button id="btnImprimir" class="btn btn-print">🖨️ Imprimir / PDF</button>
-        <button id="btnEnviar" class="btn btn-send">📧 Enviar a la profesora</button>
-        <button id="btnHistorial" class="btn btn-secondary">📜 Ver Historial</button>
-        <button id="btnNuevaSesion" class="btn btn-secondary">➕ Nueva Actuación</button>
-	<button id="btnBorrarFicha" class="btn btn-danger">🗑️ Esborrar fitxa</button>
+        <button id="btnGuardar" class="btn btn-primary" data-i18n="btn_guardar">💾 Guardar Fitxa</button>
+        <button id="btnImprimir" class="btn btn-print" data-i18n="btn_imprimir">🖨️ Imprimir / PDF</button>
+        <button id="btnEnviar" class="btn btn-send" data-i18n="btn_enviar">📧 Enviar a la professora</button>
+        <button id="btnHistorial" class="btn btn-secondary" data-i18n="btn_veure_historial">📜 Veure Historial</button>
+        <button id="btnNuevaSesion" class="btn btn-secondary" data-i18n="btn_nova_actuacio">➕ Nova Actuació</button>
     </div>
 
+    <!-- ALERTA DE SINCRONITZACIÓ -->
     <div id="syncAlert" class="sync-alert no-print">
-        <h3>🔄 🆕 ¡Nueva sesión disponible!</h3>
-        <p>La profesora ha actualizado una sesión. ¿Quieres cargar los nuevos datos en tu ficha?</p>
+        <h3 data-i18n="sync_alert_titol">🔄 🆕 Nova sessió disponible!</h3>
+        <p data-i18n="sync_alert_text">La professora ha actualitzat una sessió. Vols carregar les noves dades a la teva fitxa?</p>
         <div id="syncAlertInfo"></div>
         <div class="sync-alert-actions">
-            <button class="btn btn-sync-load" onclick="cargarDatosActualizados()">✅ Cargar nuevos datos</button>
-            <button class="btn btn-sync-dismiss" onclick="descartarActualizacion()">❌ Descartar</button>
+            <button class="btn btn-sync-load" onclick="cargarDatosActualizados()" data-i18n="btn_carregar_dades">✅ Carregar noves dades</button>
+            <button class="btn btn-sync-dismiss" onclick="descartarActualizacion()" data-i18n="btn_descartar">❌ Descartar</button>
         </div>
     </div>
 
     <div class="info-box no-print">
-        <h3>ℹ️ Instrucciones</h3>
-        <p>Rellena tus datos personales, selecciona la sesión y marca el estado de cada actividad. Puedes crear múltiples actuaciones si la sesión se desarrolla en varios días.</p>
-        <p><strong>💡 Consejo:</strong> Si la profesora actualiza una sesión, aparecerá un aviso amarillo. Las actividades que ves son las que la profesora ha seleccionado para ti.</p>
+        <h3 data-i18n="info_titol">ℹ️ Instruccions</h3>
+        <p data-i18n="info_text1">Omple les teves dades personals, selecciona la sessió i marca l'estat de cada activitat. Pots crear múltiples actuacions si la sessió es desenvolupa en diversos dies.</p>
+        <p data-i18n="info_text2"><strong>💡 Consell:</strong> Si la professora actualitza una sessió, apareixerà un avís groc. Les activitats que veus són les que la professora ha seleccionat per a tu.</p>
     </div>
 
     <div class="section">
-        <h3>👤 Datos Personales</h3>
+        <h3 data-i18n="sec_dades_personals">👤 Dades Personals</h3>
         <div class="form-grid">
             <div class="form-group">
-                <label>Nombre completo:</label>
-                <input type="text" id="aluNombre" placeholder="Ej: María López García">
+                <label data-i18n="lbl_nom">Nom complet:</label>
+                <input type="text" id="aluNombre" data-i18n-placeholder="ph_nom" placeholder="Ex: Maria López García">
             </div>
             <div class="form-group">
-                <label>Email:</label>
-                <input type="email" id="aluEmail" placeholder="tu.email@ejemplo.com">
+                <label data-i18n="lbl_email">Correu electrònic:</label>
+                <input type="email" id="aluEmail" data-i18n-placeholder="ph_email" placeholder="tu.email@exemple.com">
             </div>
             <div class="form-group">
-                <label>Curso / Grupo:</label>
-                <input type="text" id="aluCurso" placeholder="Ej: 2º A">
+                <label data-i18n="lbl_curs">Curs / Grup:</label>
+                <input type="text" id="aluCurso" data-i18n-placeholder="ph_curs" placeholder="Ex: 2n A">
             </div>
             <div class="form-group">
-                <label>Email de la profesora:</label>
-                <input type="email" id="profEmail" placeholder="celia.painous@ejemplo.com">
+                <label data-i18n="lbl_email_prof">Correu de la professora:</label>
+                <input type="email" id="profEmail" data-i18n-placeholder="ph_email_prof" placeholder="celia.painous@exemple.com">
             </div>
         </div>
     </div>
 
     <div class="section">
-        <h3>📅 Sesión de Trabajo</h3>
+        <h3 data-i18n="sec_sessio">📅 Sessió de Treball</h3>
         <div class="form-group">
-            <label>Selecciona la sesión:</label>
+            <label data-i18n="lbl_seleccionar_sessio">Selecciona la sessió:</label>
             <select id="sesionSelect">
-                <option value="">-- Selecciona una sesión --</option>
+                <option value="" data-i18n="opt_seleccionar">-- Selecciona una sessió --</option>
             </select>
         </div>
         <div id="sesionInfoBox"></div>
     </div>
 
     <div class="section">
-        <h3>🎯 Actuación Actual</h3>
+        <h3 data-i18n="sec_actuacio">🎯 Actuació Actual</h3>
         <div class="form-grid">
             <div class="form-group">
-                <label>📅 Fecha de esta actuación:</label>
+                <label data-i18n="lbl_data_actuacio">📅 Data d'aquesta actuació:</label>
                 <input type="date" id="actFecha">
             </div>
             <div class="form-group">
-                <label>🕐 Hora de inicio:</label>
+                <label data-i18n="lbl_hora_inici">🕐 Hora d'inici:</label>
                 <input type="time" id="actHoraInicio">
             </div>
             <div class="form-group">
-                <label>🕐 Hora de finalización:</label>
+                <label data-i18n="lbl_hora_fi">🕐 Hora de finalització:</label>
                 <input type="time" id="actHoraFin">
             </div>
             <div class="form-group">
-                <label>📍 Espacio de trabajo:</label>
+                <label data-i18n="lbl_espai">📍 Espai de treball:</label>
                 <select id="actEspacio">
-                    <option value="aula_ordinaria">Aula ordinaria</option>
-                    <option value="aula_practicas">Aula de prácticas</option>
-                    <option value="ambos">Ambos espacios</option>
+                    <option value="aula_ordinaria" data-i18n="espai_ordinaria">Aula ordinària</option>
+                    <option value="aula_practicas" data-i18n="espai_practiques">Aula de pràctiques</option>
+                    <option value="ambos" data-i18n="espai_ambdos">Ambdós espais</option>
                 </select>
             </div>
         </div>
     </div>
 
     <div class="section">
-        <h3>📋 Estado de las Actividades</h3>
+        <h3 data-i18n="sec_activitats">📋 Estat de les Activitats</h3>
         <div id="actividadesContainer" class="actividades-container">
-            <div class="empty-state">Selecciona una sesión para ver las actividades.</div>
+            <div class="empty-state" data-i18n="act_buit">Selecciona una sessió per veure les activitats.</div>
         </div>
     </div>
 
     <div class="section">
-        <h3>📚 Trabajo Complementario (fuera del horario presencial)</h3>
+        <h3 data-i18n="sec_treball_comp">📚 Treball Complementari (fora de l'horari presencial)</h3>
         <div class="form-group">
-            <label>¿Has realizado el trabajo previo recomendado?</label>
+            <label data-i18n="lbl_treball_previ">Has realitzat el treball previ recomanat?</label>
             <select id="trabajoPrevio">
-                <option value="">-- Selecciona --</option>
-                <option value="si_completo">✅ Sí, completo</option>
-                <option value="si_parcial">⚠️ Sí, parcialmente</option>
-                <option value="no">❌ No</option>
+                <option value="" data-i18n="opt_seleccionar">-- Selecciona --</option>
+                <option value="si_completo" data-i18n="opt_si_complet">✅ Sí, complet</option>
+                <option value="si_parcial" data-i18n="opt_si_parcial">⚠️ Sí, parcialment</option>
+                <option value="no" data-i18n="opt_no">❌ No</option>
             </select>
         </div>
         <div class="form-group">
-            <label>¿Has realizado el trabajo complementario posterior?</label>
+            <label data-i18n="lbl_treball_posterior">Has realitzat el treball complementari posterior?</label>
             <select id="trabajoComp">
-                <option value="">-- Selecciona --</option>
-                <option value="si_completo">✅ Sí, completo</option>
-                <option value="si_parcial">⚠️ Sí, parcialmente</option>
-                <option value="no">❌ No</option>
-                <option value="pendiente">⏳ Pendiente</option>
+                <option value="" data-i18n="opt_seleccionar">-- Selecciona --</option>
+                <option value="si_completo" data-i18n="opt_si_complet">✅ Sí, complet</option>
+                <option value="si_parcial" data-i18n="opt_si_parcial">⚠️ Sí, parcialment</option>
+                <option value="no" data-i18n="opt_no">❌ No</option>
+                <option value="pendiente" data-i18n="opt_pendent">⏳ Pendent</option>
             </select>
         </div>
         <div class="form-group">
-            <label>📝 Observaciones sobre el trabajo complementario:</label>
-            <textarea id="obsTrabajo" rows="3" placeholder="Dificultades encontradas, tiempo dedicado, dudas..."></textarea>
+            <label data-i18n="lbl_obs_treball">📝 Observacions sobre el treball complementari:</label>
+            <textarea id="obsTrabajo" rows="3" data-i18n-placeholder="ph_obs_treball" placeholder="Dificultats trobades, temps dedicat, dubtes..."></textarea>
         </div>
     </div>
 
     <div class="section">
-        <h3>💭 Observaciones Generales</h3>
+        <h3 data-i18n="sec_obs_generals">💭 Observacions Generals</h3>
         <div class="form-group">
-            <label>Reflexiones, dudas, comentarios sobre la sesión:</label>
-            <textarea id="obsGenerales" rows="4" placeholder="¿Qué has aprendido? ¿Qué te ha resultado más difícil? ¿Qué te gustaría profundizar?"></textarea>
+            <label data-i18n="lbl_reflexions">Reflexions, dubtes, comentaris sobre la sessió:</label>
+            <textarea id="obsGenerales" rows="4" data-i18n-placeholder="ph_reflexions" placeholder="Què has après? Què t'ha resultat més difícil? Què t'agradaria aprofundir?"></textarea>
         </div>
     </div>
 
     <div class="section">
-        <h3>📊 Resumen de esta Actuación</h3>
+        <h3 data-i18n="sec_resum">📊 Resum d'aquesta Actuació</h3>
         <div id="resumenBox" class="resumen-box">
             <div class="resumen-grid">
                 <div class="resumen-item">
                     <div class="resumen-numero" id="resHechas">0</div>
-                    <div class="resumen-label">✅ Actividades hechas</div>
+                    <div class="resumen-label" data-i18n="res_fetes">✅ Activitats fetes</div>
                 </div>
                 <div class="resumen-item">
                     <div class="resumen-numero" id="resNoHechas">0</div>
-                    <div class="resumen-label">❌ No hechas</div>
+                    <div class="resumen-label" data-i18n="res_no_fetes">❌ No fetes</div>
                 </div>
                 <div class="resumen-item">
                     <div class="resumen-numero" id="resPendientes">0</div>
-                    <div class="resumen-label">⏳ Pendientes</div>
+                    <div class="resumen-label" data-i18n="res_pendents">⏳ Pendents</div>
                 </div>
                 <div class="resumen-item">
                     <div class="resumen-numero" id="resTotal">0</div>
-                    <div class="resumen-label">📋 Total</div>
+                    <div class="resumen-label" data-i18n="res_total">📋 Total</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="section">
-        <h3>📜 Historial de Actuaciones y Acciones</h3>
-        <h4>📚 Historial de Actuaciones</h4>
+        <h3 data-i18n="sec_historial">📜 Historial d'Actuacions i Accions</h3>
+        <h4 data-i18n="sub_historial_act">📚 Historial d'Actuacions</h4>
         <div id="historialContainer" class="historial-container">
-            <div class="empty-state">Aún no hay actuaciones registradas.</div>
+            <div class="empty-state" data-i18n="hist_buit">Encara no hi ha actuacions registrades. Fes clic a "➕ Nova Actuació" en finalitzar una sessió.</div>
         </div>
         
-        <h4>📋 Log de Acciones Personales</h4>
+        <h4 data-i18n="sub_log_personal">📋 Log d'Accions Personals</h4>
         <div id="logAlumneContainer" class="log-alumne-container">
-            <div class="empty-state">Aún no hay acciones registradas.</div>
+            <div class="empty-state" data-i18n="log_buit">Encara no hi ha accions registrades.</div>
         </div>
         <div class="no-print" style="margin-top: 15px;">
-            <button class="btn btn-danger btn-small" onclick="limpiarLogAlumne()">🗑️ Limpiar log personal</button>
+            <button class="btn btn-danger btn-small" onclick="limpiarLogAlumne()" data-i18n="btn_netejar_log">🗑️ Netejar log personal</button>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+    <p data-i18n="footer_text">🩰 Fisiologia aplicada a la Dansa · Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
 </footer>
 
 <script>
 // ==========================================
-// CONFIGURACIÓN
+// MOTOR DE TRADUCCIÓ (CA/ES/EN)
+// ==========================================
+const diccionario = {
+    ca: {
+        titol_pagina: "📝 Fitxa de Treball de l'Alumne",
+        subtitol_pagina: "Fisiologia Aplicada a la Dansa",
+        subtitol2_pagina: "Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+        btn_guardar: "💾 Guardar Fitxa",
+        btn_imprimir: "🖨️ Imprimir / PDF",
+        btn_enviar: "📧 Enviar a la professora",
+        btn_veure_historial: "📜 Veure Historial",
+        btn_nova_actuacio: "➕ Nova Actuació",
+        sync_alert_titol: "🔄 🆕 Nova sessió disponible!",
+        sync_alert_text: "La professora ha actualitzat una sessió. Vols carregar les noves dades a la teva fitxa?",
+        btn_carregar_dades: "✅ Carregar noves dades",
+        btn_descartar: "❌ Descartar",
+        info_titol: "ℹ️ Instruccions",
+        info_text1: "Omple les teves dades personals, selecciona la sessió i marca l'estat de cada activitat. Pots crear múltiples actuacions si la sessió es desenvolupa en diversos dies.",
+        info_text2: '<strong>💡 Consell:</strong> Si la professora actualitza una sessió, apareixerà un avís groc. Les activitats que veus són les que la professora ha seleccionat per a tu.',
+        sec_dades_personals: "👤 Dades Personals",
+        lbl_nom: "Nom complet:",
+        ph_nom: "Ex: Maria López García",
+        lbl_email: "Correu electrònic:",
+        ph_email: "tu.email@exemple.com",
+        lbl_curs: "Curs / Grup:",
+        ph_curs: "Ex: 2n A",
+        lbl_email_prof: "Correu de la professora:",
+        ph_email_prof: "celia.painous@exemple.com",
+        sec_sessio: "📅 Sessió de Treball",
+        lbl_seleccionar_sessio: "Selecciona la sessió:",
+        opt_seleccionar: "-- Selecciona --",
+        sec_actuacio: "🎯 Actuació Actual",
+        lbl_data_actuacio: "📅 Data d'aquesta actuació:",
+        lbl_hora_inici: "🕐 Hora d'inici:",
+        lbl_hora_fi: "🕐 Hora de finalització:",
+        lbl_espai: "📍 Espai de treball:",
+        espai_ordinaria: "Aula ordinària",
+        espai_practiques: "Aula de pràctiques",
+        espai_ambdos: "Ambdós espais",
+        sec_activitats: "📋 Estat de les Activitats",
+        act_buit: "Selecciona una sessió per veure les activitats.",
+        sec_treball_comp: "📚 Treball Complementari (fora de l'horari presencial)",
+        lbl_treball_previ: "Has realitzat el treball previ recomanat?",
+        lbl_treball_posterior: "Has realitzat el treball complementari posterior?",
+        opt_si_complet: "✅ Sí, complet",
+        opt_si_parcial: "⚠️ Sí, parcialment",
+        opt_no: "❌ No",
+        opt_pendent: "⏳ Pendent",
+        lbl_obs_treball: "📝 Observacions sobre el treball complementari:",
+        ph_obs_treball: "Dificultats trobades, temps dedicat, dubtes...",
+        sec_obs_generals: "💭 Observacions Generals",
+        lbl_reflexions: "Reflexions, dubtes, comentaris sobre la sessió:",
+        ph_reflexions: "Què has après? Què t'ha resultat més difícil? Què t'agradaria aprofundir?",
+        sec_resum: "📊 Resum d'aquesta Actuació",
+        res_fetes: "✅ Activitats fetes",
+        res_no_fetes: "❌ No fetes",
+        res_pendents: "⏳ Pendents",
+        res_total: "📋 Total",
+        sec_historial: "📜 Historial d'Actuacions i Accions",
+        sub_historial_act: "📚 Historial d'Actuacions",
+        hist_buit: 'Encara no hi ha actuacions registrades. Fes clic a "➕ Nova Actuació" en finalitzar una sessió.',
+        sub_log_personal: "📋 Log d'Accions Personals",
+        log_buit: "Encara no hi ha accions registrades.",
+        btn_netejar_log: "🗑️ Netejar log personal",
+        footer_text: "🩰 Fisiologia aplicada a la Dansa · Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+        // Missatges dinàmics
+        toast_guardat: "💾 Fitxa guardada",
+        toast_imprès: "Fitxa impresa o exportada a PDF",
+        toast_enviat: "Fitxa enviada a la professora",
+        toast_error_email: "⚠️ Indica el correu de la professora",
+        toast_error_sessio: "⚠️ Selecciona una sessió",
+        toast_error_data: "⚠️ Omple com a mínim la data de l'actuació",
+        toast_actuacio_guardada: "✅ Actuació guardada a l'historial",
+        toast_dades_carregades: "✅ Dades actualitzades carregades",
+        toast_descartat: "Actualització descartada",
+        toast_log_net: "🗑️ Log netejat",
+        toast_error_guardar: "❌ Error en guardar",
+        toast_error_carregar: "⚠️ No s'han trobat les dades",
+        toast_primer_sessio: "⚠️ Primer selecciona una sessió",
+        // Confirmacions
+        confirm_nova_actuacio: "Vols guardar l'actuació actual a l'historial i començar una nova?",
+        confirm_netejar_log: "Segur que vols netejar el teu log personal?",
+        // Textos dinàmics
+        sessio_label: "Sessió",
+        activitats_completades: "activitats completades",
+        activitats_programades: "👁️ Activitats programades:",
+        data_sessio: "📅 Data:",
+        horari: "🕐 Horari:",
+        espai_previst: "📍 Espai previst:",
+        treball_previ: "📚 Treball previ:",
+        treball_comp: "📝 Treball complementari:",
+        tipus_teorica: "📖 Teòrica",
+        tipus_practica: "🎯 Pràctica",
+        tipus_evaluacio: "📝 Avaluació",
+        tipus_descans: "☕ Descans",
+        tipus_gestio: "⚙️ Gestió",
+        estat_feta: "✅ Feta",
+        estat_no_feta: "❌ No feta",
+        estat_pendent: "⏳ Pendent",
+        ph_observacions: "Observacions sobre aquesta activitat...",
+        sense_activitats: "No hi ha activitats per a aquesta sessió.",
+        // Log
+        log_aviso_rebut: "Avís d'actualització rebut per a la sessió",
+        log_activitats_visibles: "activitats visibles",
+        log_dades_carregades: "Dades de la sessió",
+        log_carregades_des_de: "carregades des del planificador de la professora",
+        log_actualitzacio_descartada: "Actualització de la professora descartada",
+        log_dades_personals: "Dades personals actualitzades:",
+        log_sense_nom: "(sense nom)",
+        log_fitxa_guardada: "Fitxa guardada manualment",
+        log_nova_actuacio: "Nova actuació registrada per a",
+        log_activitats: "activitats",
+        log_impressa: "Fitxa impresa o exportada a PDF",
+        log_enviada_a: "Fitxa enviada a la professora",
+        log_canvi_estat: "Activitat",
+        log_canviada_a: "canviada a:",
+        // Email
+        email_assumpte: "Fitxa treball -",
+        email_cos_titol: "FITXA DE TREBALL DE L'ALUMNE",
+        email_cos_assignatura: "Fisiologia Aplicada a la Dansa",
+        email_cos_alumne: "Alumne/a:",
+        email_cos_email: "Correu:",
+        email_cos_curs: "Curs:",
+        email_cos_sessio: "SESSIÓ:",
+        email_cos_data_sessio: "Data sessió:",
+        email_cos_data_actuacio: "Data actuació:",
+        email_cos_horari: "Horari:",
+        email_cos_activitats: "ACTIVITATS:",
+        email_cos_completades: "completades",
+        email_cos_treball_previ: "Treball previ:",
+        email_cos_treball_comp: "Treball complementari:",
+        email_cos_no_indicat: "No indicat",
+        email_cos_obs_treball: "Observacions treball:",
+        email_cos_reflexions: "Reflexions personals:",
+        // Espais
+        espai_text_ordinaria: "🏫 Aula ordinària",
+        espai_text_practiques: "🩰 Aula de pràctiques",
+        espai_text_ambdos: "🏫🩰 Ambdós"
+    },
+    es: {
+        titol_pagina: "📝 Ficha de Trabajo del Alumno",
+        subtitol_pagina: "Fisiología Aplicada a la Danza",
+        subtitol2_pagina: "Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+        btn_guardar: "💾 Guardar Ficha",
+        btn_imprimir: "🖨️ Imprimir / PDF",
+        btn_enviar: "📧 Enviar a la profesora",
+        btn_veure_historial: "📜 Ver Historial",
+        btn_nova_actuacio: "➕ Nueva Actuación",
+        sync_alert_titol: "🔄 🆕 ¡Nueva sesión disponible!",
+        sync_alert_text: "La profesora ha actualizado una sesión. ¿Quieres cargar los nuevos datos en tu ficha?",
+        btn_carregar_dades: "✅ Cargar nuevos datos",
+        btn_descartar: "❌ Descartar",
+        info_titol: "ℹ️ Instrucciones",
+        info_text1: "Rellena tus datos personales, selecciona la sesión y marca el estado de cada actividad. Puedes crear múltiples actuaciones si la sesión se desarrolla en varios días.",
+        info_text2: '<strong>💡 Consejo:</strong> Si la profesora actualiza una sesión, aparecerá un aviso amarillo. Las actividades que ves son las que la profesora ha seleccionado para ti.',
+        sec_dades_personals: "👤 Datos Personales",
+        lbl_nom: "Nombre completo:",
+        ph_nom: "Ej: María López García",
+        lbl_email: "Correo electrónico:",
+        ph_email: "tu.email@ejemplo.com",
+        lbl_curs: "Curso / Grupo:",
+        ph_curs: "Ej: 2º A",
+        lbl_email_prof: "Correo de la profesora:",
+        ph_email_prof: "celia.painous@ejemplo.com",
+        sec_sessio: "📅 Sesión de Trabajo",
+        lbl_seleccionar_sessio: "Selecciona la sesión:",
+        opt_seleccionar: "-- Selecciona --",
+        sec_actuacio: "🎯 Actuación Actual",
+        lbl_data_actuacio: "📅 Fecha de esta actuación:",
+        lbl_hora_inici: "🕐 Hora de inicio:",
+        lbl_hora_fi: "🕐 Hora de finalización:",
+        lbl_espai: "📍 Espacio de trabajo:",
+        espai_ordinaria: "Aula ordinaria",
+        espai_practiques: "Aula de prácticas",
+        espai_ambdos: "Ambos espacios",
+        sec_activitats: "📋 Estado de las Actividades",
+        act_buit: "Selecciona una sesión para ver las actividades.",
+        sec_treball_comp: "📚 Trabajo Complementario (fuera del horario presencial)",
+        lbl_treball_previ: "¿Has realizado el trabajo previo recomendado?",
+        lbl_treball_posterior: "¿Has realizado el trabajo complementario posterior?",
+        opt_si_complet: "✅ Sí, completo",
+        opt_si_parcial: "⚠️ Sí, parcialmente",
+        opt_no: "❌ No",
+        opt_pendent: "⏳ Pendiente",
+        lbl_obs_treball: "📝 Observaciones sobre el trabajo complementario:",
+        ph_obs_treball: "Dificultades encontradas, tiempo dedicado, dudas...",
+        sec_obs_generals: "💭 Observaciones Generales",
+        lbl_reflexions: "Reflexiones, dudas, comentarios sobre la sesión:",
+        ph_reflexions: "¿Qué has aprendido? ¿Qué te ha resultado más difícil? ¿Qué te gustaría profundizar?",
+        sec_resum: "📊 Resumen de esta Actuación",
+        res_fetes: "✅ Actividades hechas",
+        res_no_fetes: "❌ No hechas",
+        res_pendents: "⏳ Pendientes",
+        res_total: "📋 Total",
+        sec_historial: "📜 Historial de Actuaciones y Acciones",
+        sub_historial_act: "📚 Historial de Actuaciones",
+        hist_buit: 'Aún no hay actuaciones registradas. Haz clic en "➕ Nueva Actuación" al finalizar una sesión.',
+        sub_log_personal: "📋 Log de Acciones Personales",
+        log_buit: "Aún no hay acciones registradas.",
+        btn_netejar_log: "🗑️ Limpiar log personal",
+        footer_text: "🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+        toast_guardat: "💾 Ficha guardada",
+        toast_imprès: "Ficha impresa o exportada a PDF",
+        toast_enviat: "Ficha enviada a la profesora",
+        toast_error_email: "⚠️ Indica el correo de la profesora",
+        toast_error_sessio: "⚠️ Selecciona una sesión",
+        toast_error_data: "⚠️ Rellena al menos la fecha de la actuación",
+        toast_actuacio_guardada: "✅ Actuación guardada en el historial",
+        toast_dades_carregades: "✅ Datos actualizados cargados",
+        toast_descartat: "Actualización descartada",
+        toast_log_net: "🗑️ Log limpiado",
+        toast_error_guardar: "❌ Error al guardar",
+        toast_error_carregar: "⚠️ No se han encontrado los datos",
+        toast_primer_sessio: "⚠️ Primero selecciona una sesión",
+        confirm_nova_actuacio: "¿Guardar la actuación actual en el historial y empezar una nueva?",
+        confirm_netejar_log: "¿Seguro que quieres limpiar tu log personal?",
+        sessio_label: "Sesión",
+        activitats_completades: "actividades completadas",
+        activitats_programades: "👁️ Actividades programadas:",
+        data_sessio: "📅 Fecha:",
+        horari: "🕐 Horario:",
+        espai_previst: "📍 Espacio previsto:",
+        treball_previ: "📚 Trabajo previo:",
+        treball_comp: "📝 Trabajo complementario:",
+        tipus_teorica: "📖 Teórica",
+        tipus_practica: "🎯 Práctica",
+        tipus_evaluacio: "📝 Evaluación",
+        tipus_descans: "☕ Descanso",
+        tipus_gestio: "⚙️ Gestión",
+        estat_feta: "✅ Hecha",
+        estat_no_feta: "❌ No hecha",
+        estat_pendent: "⏳ Pendiente",
+        ph_observacions: "Observaciones sobre esta actividad...",
+        sense_activitats: "No hay actividades para esta sesión.",
+        log_aviso_rebut: "Aviso de actualización recibido para la sesión",
+        log_activitats_visibles: "actividades visibles",
+        log_dades_carregades: "Datos de la sesión",
+        log_carregades_des_de: "cargados desde el planificador de la profesora",
+        log_actualitzacio_descartada: "Actualización de la profesora descartada",
+        log_dades_personals: "Datos personales actualizados:",
+        log_sense_nom: "(sin nombre)",
+        log_fitxa_guardada: "Ficha guardada manualmente",
+        log_nova_actuacio: "Nueva actuación registrada para",
+        log_activitats: "actividades",
+        log_impressa: "Ficha impresa o exportada a PDF",
+        log_enviada_a: "Ficha enviada a la profesora",
+        log_canvi_estat: "Actividad",
+        log_canviada_a: "cambiada a:",
+        email_assumpte: "Ficha trabajo -",
+        email_cos_titol: "FICHA DE TRABAJO DEL ALUMNO",
+        email_cos_assignatura: "Fisiología Aplicada a la Danza",
+        email_cos_alumne: "Alumno/a:",
+        email_cos_email: "Email:",
+        email_cos_curs: "Curso:",
+        email_cos_sessio: "SESIÓN:",
+        email_cos_data_sessio: "Fecha sesión:",
+        email_cos_data_actuacio: "Fecha actuación:",
+        email_cos_horari: "Horario:",
+        email_cos_activitats: "ACTIVIDADES:",
+        email_cos_completades: "completadas",
+        email_cos_treball_previ: "Trabajo previo:",
+        email_cos_treball_comp: "Trabajo complementario:",
+        email_cos_no_indicat: "No indicado",
+        email_cos_obs_treball: "Observaciones trabajo:",
+        email_cos_reflexions: "Reflexiones personales:",
+        espai_text_ordinaria: "🏫 Aula ordinaria",
+        espai_text_practiques: "🩰 Aula de prácticas",
+        espai_text_ambdos: "🏫🩰 Ambos"
+    },
+    en: {
+        titol_pagina: "📝 Student Work Sheet",
+        subtitol_pagina: "Physiology Applied to Dance",
+        subtitol2_pagina: "Course 2026-2027 · Dr. Cèlia Painous, MD, PhD",
+        btn_guardar: "💾 Save Sheet",
+        btn_imprimir: "🖨️ Print / PDF",
+        btn_enviar: "📧 Send to teacher",
+        btn_veure_historial: "📜 View History",
+        btn_nova_actuacio: "➕ New Performance",
+        sync_alert_titol: "🔄 🆕 New session available!",
+        sync_alert_text: "The teacher has updated a session. Do you want to load the new data into your sheet?",
+        btn_carregar_dades: "✅ Load new data",
+        btn_descartar: "❌ Discard",
+        info_titol: "ℹ️ Instructions",
+        info_text1: "Fill in your personal data, select the session and mark the status of each activity. You can create multiple performances if the session takes place over several days.",
+        info_text2: '<strong>💡 Tip:</strong> If the teacher updates a session, a yellow notice will appear. The activities you see are the ones the teacher has selected for you.',
+        sec_dades_personals: "👤 Personal Data",
+        lbl_nom: "Full name:",
+        ph_nom: "Ex: Mary López García",
+        lbl_email: "Email:",
+        ph_email: "your.email@example.com",
+        lbl_curs: "Course / Group:",
+        ph_curs: "Ex: 2nd A",
+        lbl_email_prof: "Teacher's email:",
+        ph_email_prof: "celia.painous@example.com",
+        sec_sessio: "📅 Work Session",
+        lbl_seleccionar_sessio: "Select the session:",
+        opt_seleccionar: "-- Select --",
+        sec_actuacio: "🎯 Current Performance",
+        lbl_data_actuacio: "📅 Date of this performance:",
+        lbl_hora_inici: "🕐 Start time:",
+        lbl_hora_fi: "🕐 End time:",
+        lbl_espai: "📍 Workspace:",
+        espai_ordinaria: "Regular classroom",
+        espai_practiques: "Practice classroom",
+        espai_ambdos: "Both spaces",
+        sec_activitats: "📋 Activity Status",
+        act_buit: "Select a session to see the activities.",
+        sec_treball_comp: "📚 Complementary Work (outside class hours)",
+        lbl_treball_previ: "Have you done the recommended prior work?",
+        lbl_treball_posterior: "Have you done the subsequent complementary work?",
+        opt_si_complet: "✅ Yes, complete",
+        opt_si_parcial: "⚠️ Yes, partially",
+        opt_no: "❌ No",
+        opt_pendent: "⏳ Pending",
+        lbl_obs_treball: "📝 Observations on complementary work:",
+        ph_obs_treball: "Difficulties found, time spent, questions...",
+        sec_obs_generals: "💭 General Observations",
+        lbl_reflexions: "Reflections, questions, comments about the session:",
+        ph_reflexions: "What have you learned? What was most difficult? What would you like to explore further?",
+        sec_resum: "📊 Summary of this Performance",
+        res_fetes: "✅ Activities done",
+        res_no_fetes: "❌ Not done",
+        res_pendents: "⏳ Pending",
+        res_total: "📋 Total",
+        sec_historial: "📜 Performance and Actions History",
+        sub_historial_act: "📚 Performances History",
+        hist_buit: 'No performances registered yet. Click "➕ New Performance" when finishing a session.',
+        sub_log_personal: "📋 Personal Actions Log",
+        log_buit: "No actions recorded yet.",
+        btn_netejar_log: "🗑️ Clear personal log",
+        footer_text: "🩰 Physiology Applied to Dance · Course 2026-2027 · Dr. Cèlia Painous, MD, PhD",
+        toast_guardat: "💾 Sheet saved",
+        toast_imprès: "Sheet printed or exported to PDF",
+        toast_enviat: "Sheet sent to teacher",
+        toast_error_email: "⚠️ Enter the teacher's email",
+        toast_error_sessio: "⚠️ Select a session",
+        toast_error_data: "⚠️ Fill in at least the performance date",
+        toast_actuacio_guardada: "✅ Performance saved to history",
+        toast_dades_carregades: "✅ Updated data loaded",
+        toast_descartat: "Update discarded",
+        toast_log_net: "🗑️ Log cleared",
+        toast_error_guardar: "❌ Error saving",
+        toast_error_carregar: "⚠️ Data not found",
+        toast_primer_sessio: "⚠️ First select a session",
+        confirm_nova_actuacio: "Save current performance to history and start a new one?",
+        confirm_netejar_log: "Are you sure you want to clear your personal log?",
+        sessio_label: "Session",
+        activitats_completades: "activities completed",
+        activitats_programades: "👁️ Scheduled activities:",
+        data_sessio: "📅 Date:",
+        horari: "🕐 Schedule:",
+        espai_previst: "📍 Expected space:",
+        treball_previ: "📚 Prior work:",
+        treball_comp: "📝 Complementary work:",
+        tipus_teorica: "📖 Theory",
+        tipus_practica: "🎯 Practice",
+        tipus_evaluacio: "📝 Evaluation",
+        tipus_descans: "☕ Break",
+        tipus_gestio: "⚙️ Management",
+        estat_feta: "✅ Done",
+        estat_no_feta: "❌ Not done",
+        estat_pendent: "⏳ Pending",
+        ph_observacions: "Observations on this activity...",
+        sense_activitats: "No activities for this session.",
+        log_aviso_rebut: "Update notice received for session",
+        log_activitats_visibles: "visible activities",
+        log_dades_carregades: "Data from session",
+        log_carregades_des_de: "loaded from teacher's planner",
+        log_actualitzacio_descartada: "Teacher's update discarded",
+        log_dades_personals: "Personal data updated:",
+        log_sense_nom: "(no name)",
+        log_fitxa_guardada: "Sheet manually saved",
+        log_nova_actuacio: "New performance registered for",
+        log_activitats: "activities",
+        log_impressa: "Sheet printed or exported to PDF",
+        log_enviada_a: "Sheet sent to teacher",
+        log_canvi_estat: "Activity",
+        log_canviada_a: "changed to:",
+        email_assumpte: "Work sheet -",
+        email_cos_titol: "STUDENT WORK SHEET",
+        email_cos_assignatura: "Physiology Applied to Dance",
+        email_cos_alumne: "Student:",
+        email_cos_email: "Email:",
+        email_cos_curs: "Course:",
+        email_cos_sessio: "SESSION:",
+        email_cos_data_sessio: "Session date:",
+        email_cos_data_actuacio: "Performance date:",
+        email_cos_horari: "Schedule:",
+        email_cos_activitats: "ACTIVITIES:",
+        email_cos_completades: "completed",
+        email_cos_treball_previ: "Prior work:",
+        email_cos_treball_comp: "Complementary work:",
+        email_cos_no_indicat: "Not indicated",
+        email_cos_obs_treball: "Work observations:",
+        email_cos_reflexions: "Personal reflections:",
+        espai_text_ordinaria: "🏫 Regular classroom",
+        espai_text_practiques: "🩰 Practice classroom",
+        espai_text_ambdos: "🏫🩰 Both"
+    }
+};
+
+// MOTOR DE TRADUCCIÓ
+function aplicarIdioma(lang) {
+    localStorage.setItem('idioma_preferit', lang);
+    document.documentElement.lang = lang;
+    const selector = document.getElementById('selectorIdioma');
+    if (selector) selector.value = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clau = el.getAttribute('data-i18n');
+        if (diccionario[lang] && diccionario[lang][clau]) {
+            el.innerHTML = diccionario[lang][clau];
+        }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clau = el.getAttribute('data-i18n-placeholder');
+        if (diccionario[lang] && diccionario[lang][clau]) {
+            el.placeholder = diccionario[lang][clau];
+        }
+    });
+    // Re-renderitzar per aplicar traduccions a contingut dinàmic
+    if (typeof renderitzarActivitats === 'function') renderitzarActivitats();
+    if (typeof renderitzarHistorial === 'function') renderitzarHistorial();
+    if (typeof renderizarLogAlumne === 'function') renderizarLogAlumne();
+}
+
+function t(key) {
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    return (diccionario[lang] && diccionario[lang][key]) || (diccionario.ca[key]) || key;
+}
+
+// ==========================================
+// CONFIGURACIÓ
 // ==========================================
 const STORAGE_KEY = 'fitxaAlumne';
 const SHARED_KEY = 'fisiologiaSharedData';
 const LOG_ALUMNE_KEY = 'logAlumne';
 
-// Sesiones disponibles (valores por defecto, se actualizan con sincronización)
+// Sessions disponibles (valors per defecte)
 let SESIONES_DISPONIBLES = [
-    { id: 'ses-1', fecha: '2026-10-09', titulo: 'Presentación. Homeostasis y Fisiología celular', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura y metodología', tipo: 'teorica' },
-        { tiempo: '12:30-13:30', descripcion: 'Niveles de organización. Líquidos corporales', tipo: 'teorica' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-14:30', descripcion: 'Homeostasis: rangos fisiológicos y sistemas de regulación', tipo: 'teorica' },
-        { tiempo: '14:30-15:00', descripcion: 'Actividad interactiva: retroalimentación y homeostasis en el movimiento', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Ninguno (primera sesión).',
-      trabajoComplementario: 'Explorar homeostasis_movimiento.html y resolver casos del Bloque 1.'
-    },
-    { id: 'ses-2', fecha: '2026-10-16', titulo: 'Sistema musculoesquelético I', horario: '12:00-15:00', espacio: 'ambos',
-      actividades: [
-        { tiempo: '12:00-12:15', descripcion: 'Repaso y resolución de dudas', tipo: 'teorica' },
-        { tiempo: '12:15-13:15', descripcion: 'Estructura muscular: fibra, sarcómero, miofilamentos', tipo: 'teorica' },
-        { tiempo: '13:15-13:30', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:30-14:15', descripcion: 'Unidad motora y mecanismo de contracción', tipo: 'teorica' },
-        { tiempo: '14:15-15:00', descripcion: 'Práctica: análisis de un plié y un relevé en el aula de prácticas', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar homeostasis_movimiento.html.',
-      trabajoComplementario: 'Resolver Bloques 2 y 3 de casos_practicos02_A.html.'
-    },
-    { id: 'ses-3', fecha: '2026-10-23', titulo: 'Sistema musculoesquelético II', horario: '12:00-15:00', espacio: 'ambos',
-      actividades: [
-        { tiempo: '12:00-12:15', descripcion: 'Repaso', tipo: 'teorica' },
-        { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: 5 componentes', tipo: 'teorica' },
-        { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y remodelación', tipo: 'teorica' },
-        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '14:00-14:30', descripcion: 'Articulaciones y cartílago', tipo: 'teorica' },
-        { tiempo: '14:30-15:00', descripcion: 'Práctica: identificar planos de movimiento en gestos de danza', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Completar Bloques 2 y 3 de casos_practicos02_A.html.',
-      trabajoComplementario: 'Resolver Bloque 5 de casos_practicos02_B.html.'
-    },
-    { id: 'ses-5', fecha: '2026-11-06', titulo: 'Sistema nervioso I', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso', tipo: 'teorica' },
-        { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis y unidad motora', tipo: 'teorica' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-15:00', descripcion: 'Control voluntario del movimiento', tipo: 'teorica' }
-      ],
-      trabajoPrevio: 'Repasar unidad motora.',
-      trabajoComplementario: 'Avanzar con casos_practicos02_B.html.'
-    },
-    { id: 'ses-6', fecha: '2026-11-13', titulo: 'Preparación trabajos orales', horario: '12:00-15:00', espacio: 'aula_practicas',
-      actividades: [
-        { tiempo: '12:00-12:30', descripcion: 'Explicación del trabajo oral: criterios y fecha de presentación', tipo: 'teorica' },
-        { tiempo: '12:30-13:30', descripcion: 'Formación de grupos y elección de la secuencia', tipo: 'practica' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos: análisis de la secuencia con los recursos HTML', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Completar casos prácticos Bloques 1-4.',
-      trabajoComplementario: 'Avanzar con el análisis del grupo.'
-    },
-    { id: 'ses-7', fecha: '2026-11-20', titulo: 'Sistema nervioso II / Sueño', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo', tipo: 'teorica' },
-        { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y recuperación', tipo: 'teorica' },
-        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza: rendimiento y prevención de lesiones', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar homeostasis.',
-      trabajoComplementario: 'Preparar presentaciones orales.'
-    },
-    { id: 'ses-8', fecha: '2026-11-27', titulo: 'Presentaciones orales / La sangre', horario: '12:00-15:00', espacio: 'ambos',
-      actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos', tipo: 'evaluacion' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre', tipo: 'teorica' }
-      ],
-      trabajoPrevio: 'Tener preparada la presentación oral.',
-      trabajoComplementario: 'Preparar evaluación parcial.'
-    },
-    { id: 'ses-9', fecha: '2026-12-04', titulo: 'Sistema Hormonal', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Sistema endocrino', tipo: 'teorica' },
-        { tiempo: '13:00-13:45', descripcion: 'Hormonas y ejercicio', tipo: 'teorica' },
-        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '14:00-15:00', descripcion: 'Relación entre hormonas, hueso y músculo', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar retroalimentación.',
-      trabajoComplementario: 'Preparar evaluación parcial.'
-    },
-    { id: 'ses-10', fecha: '2026-12-11', titulo: 'Nutrición', horario: '12:00-15:00', espacio: 'ambos',
-      actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista invitado/a', tipo: 'teorica' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-15:00', descripcion: 'Práctica: análisis de menús y su relación con la homeostasis', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Reflexionar sobre hábitos alimentarios.',
-      trabajoComplementario: 'Preparar evaluación parcial.'
-    },
-    { id: 'ses-11', fecha: '2026-12-18', titulo: 'EVALUACIÓN PARCIAL', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual', tipo: 'evaluacion' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y feedback', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar temas 1-10.',
-      trabajoComplementario: 'Descanso de Navidad.'
-    },
-    { id: 'ses-12', fecha: '2027-01-08', titulo: 'Aparato Cardiovascular', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Estructura del corazón', tipo: 'teorica' },
-        { tiempo: '13:00-13:45', descripcion: 'Circulación y transporte de gases', tipo: 'teorica' },
-        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '14:00-15:00', descripcion: 'Adaptaciones cardiovasculares al ejercicio y la danza', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar homeostasis.',
-      trabajoComplementario: 'Avanzar con aparato respiratorio.'
-    },
-    { id: 'ses-13', fecha: '2027-01-15', titulo: 'Aparato Respiratorio', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Mecánica ventilatoria', tipo: 'teorica' },
-        { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso y pH', tipo: 'teorica' },
-        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '14:00-15:00', descripcion: 'La respiración en la danza: control y conciencia corporal', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar aparato cardiovascular.',
-      trabajoComplementario: 'Preparar examen final.'
-    },
-    { id: 'ses-14', fecha: '2027-01-22', titulo: 'EXAMEN FINAL', horario: '12:00-15:00', espacio: 'aula_ordinaria',
-      actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Examen final integrador', tipo: 'evaluacion' },
-        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
-        { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y despedida del curso', tipo: 'practica' }
-      ],
-      trabajoPrevio: 'Repasar todo el curso.',
-      trabajoComplementario: '¡Curso completado!'
-    }
+    { id: 'ses-1', fecha: '2026-10-09', titulo: 'Presentación. Homeostasis y Fisiología celular', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura y metodología', tipo: 'teorica' }, { tiempo: '12:30-13:30', descripcion: 'Niveles de organización. Líquidos corporales', tipo: 'teorica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-14:30', descripcion: 'Homeostasis: rangos fisiológicos y sistemas de regulación', tipo: 'teorica' }, { tiempo: '14:30-15:00', descripcion: 'Actividad interactiva: retroalimentación y homeostasis en el movimiento', tipo: 'practica' }], trabajoPrevio: 'Ninguno (primera sesión).', trabajoComplementario: 'Explorar homeostasis_movimiento.html y resolver casos del Bloque 1.' },
+    { id: 'ses-2', fecha: '2026-10-16', titulo: 'Sistema musculoesquelético I', horario: '12:00-15:00', espacio: 'ambos', actividades: [{ tiempo: '12:00-12:15', descripcion: 'Repaso y resolución de dudas', tipo: 'teorica' }, { tiempo: '12:15-13:15', descripcion: 'Estructura muscular: fibra, sarcómero, miofilamentos', tipo: 'teorica' }, { tiempo: '13:15-13:30', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:30-14:15', descripcion: 'Unidad motora y mecanismo de contracción', tipo: 'teorica' }, { tiempo: '14:15-15:00', descripcion: 'Práctica: análisis de un plié y un relevé en el aula de prácticas', tipo: 'practica' }], trabajoPrevio: 'Repasar homeostasis_movimiento.html.', trabajoComplementario: 'Resolver Bloques 2 y 3 de casos_practicos02_A.html.' },
+    { id: 'ses-3', fecha: '2026-10-23', titulo: 'Sistema musculoesquelético II', horario: '12:00-15:00', espacio: 'ambos', actividades: [{ tiempo: '12:00-12:15', descripcion: 'Repaso', tipo: 'teorica' }, { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: 5 componentes', tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y remodelación', tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '14:00-14:30', descripcion: 'Articulaciones y cartílago', tipo: 'teorica' }, { tiempo: '14:30-15:00', descripcion: 'Práctica: identificar planos de movimiento en gestos de danza', tipo: 'practica' }], trabajoPrevio: 'Completar Bloques 2 y 3 de casos_practicos02_A.html.', trabajoComplementario: 'Resolver Bloque 5 de casos_practicos02_B.html.' },
+    { id: 'ses-5', fecha: '2026-11-06', titulo: 'Sistema nervioso I', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso', tipo: 'teorica' }, { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis y unidad motora', tipo: 'teorica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Control voluntario del movimiento', tipo: 'teorica' }], trabajoPrevio: 'Repasar unidad motora.', trabajoComplementario: 'Avanzar con casos_practicos02_B.html.' },
+    { id: 'ses-6', fecha: '2026-11-13', titulo: 'Preparación trabajos orales', horario: '12:00-15:00', espacio: 'aula_practicas', actividades: [{ tiempo: '12:00-12:30', descripcion: 'Explicación del trabajo oral: criterios y fecha de presentación', tipo: 'teorica' }, { tiempo: '12:30-13:30', descripcion: 'Formación de grupos y elección de la secuencia', tipo: 'practica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos: análisis de la secuencia con los recursos HTML', tipo: 'practica' }], trabajoPrevio: 'Completar casos prácticos Bloques 1-4.', trabajoComplementario: 'Avanzar con el análisis del grupo.' },
+    { id: 'ses-7', fecha: '2026-11-20', titulo: 'Sistema nervioso II / Sueño', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo', tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y recuperación', tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza: rendimiento y prevención de lesiones', tipo: 'practica' }], trabajoPrevio: 'Repasar homeostasis.', trabajoComplementario: 'Preparar presentaciones orales.' },
+    { id: 'ses-8', fecha: '2026-11-27', titulo: 'Presentaciones orales / La sangre', horario: '12:00-15:00', espacio: 'ambos', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos', tipo: 'evaluacion' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre', tipo: 'teorica' }], trabajoPrevio: 'Tener preparada la presentación oral.', trabajoComplementario: 'Preparar evaluación parcial.' },
+    { id: 'ses-9', fecha: '2026-12-04', titulo: 'Sistema Hormonal', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Sistema endocrino', tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Hormonas y ejercicio', tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Relación entre hormonas, hueso y músculo', tipo: 'practica' }], trabajoPrevio: 'Repasar retroalimentación.', trabajoComplementario: 'Preparar evaluación parcial.' },
+    { id: 'ses-10', fecha: '2026-12-11', titulo: 'Nutrición', horario: '12:00-15:00', espacio: 'ambos', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista invitado/a', tipo: 'teorica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Práctica: análisis de menús y su relación con la homeostasis', tipo: 'practica' }], trabajoPrevio: 'Reflexionar sobre hábitos alimentarios.', trabajoComplementario: 'Preparar evaluación parcial.' },
+    { id: 'ses-11', fecha: '2026-12-18', titulo: 'EVALUACIÓN PARCIAL', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual', tipo: 'evaluacion' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y feedback', tipo: 'practica' }], trabajoPrevio: 'Repasar temas 1-10.', trabajoComplementario: 'Descanso de Navidad.' },
+    { id: 'ses-12', fecha: '2027-01-08', titulo: 'Aparato Cardiovascular', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Estructura del corazón', tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Circulación y transporte de gases', tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Adaptaciones cardiovasculares al ejercicio y la danza', tipo: 'practica' }], trabajoPrevio: 'Repasar homeostasis.', trabajoComplementario: 'Avanzar con aparato respiratorio.' },
+    { id: 'ses-13', fecha: '2027-01-15', titulo: 'Aparato Respiratorio', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Mecánica ventilatoria', tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso y pH', tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'La respiración en la danza: control y conciencia corporal', tipo: 'practica' }], trabajoPrevio: 'Repasar aparato cardiovascular.', trabajoComplementario: 'Preparar examen final.' },
+    { id: 'ses-14', fecha: '2027-01-22', titulo: 'EXAMEN FINAL', horario: '12:00-15:00', espacio: 'aula_ordinaria', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Examen final integrador', tipo: 'evaluacion' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y despedida del curso', tipo: 'practica' }], trabajoPrevio: 'Repasar todo el curso.', trabajoComplementario: '¡Curso completado!' }
 ];
 
 let state = {
     datosAlumno: { nombre: '', email: '', curso: '', profEmail: '' },
     sesionActual: null,
-    actuacionActual: {
-        fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
-        actividades: [], trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
-    },
+    actuacionActual: { fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria', actividades: [], trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: '' },
     historial: []
 };
 
 // ==========================================
-// UTILIDADES
+// UTILITATS
 // ==========================================
 function mostrarToast(msg, tipo = 'info') {
-    const t = document.createElement('div');
-    t.className = `toast ${tipo}`;
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => {
-        t.style.transition = 'opacity 0.3s';
-        t.style.opacity = '0';
-        setTimeout(() => t.remove(), 300);
-    }, 3000);
+    const t_el = document.createElement('div');
+    t_el.className = `toast ${tipo}`;
+    t_el.textContent = msg;
+    document.body.appendChild(t_el);
+    setTimeout(() => { t_el.style.transition = 'opacity 0.3s'; t_el.style.opacity = '0'; setTimeout(() => t_el.remove(), 300); }, 3000);
 }
 
 function formatearFecha(f) {
@@ -736,84 +829,65 @@ function formatearFecha(f) {
     const partes = f.split('-');
     if (partes.length !== 3) return f;
     const [y, m, d] = partes;
-    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const meses_ca = ['gen','feb','mar','abr','mai','jun','jul','ago','set','oct','nov','des'];
+    const meses_es = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const meses_en = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    const meses = lang === 'es' ? meses_es : (lang === 'en' ? meses_en : meses_ca);
     return `${parseInt(d)}-${meses[parseInt(m)-1]}-${y}`;
 }
 
 function formatearFechaISO(iso) {
     const d = new Date(iso);
-    return d.toLocaleDateString('es-ES', { 
-        day: '2-digit', month: 'short', year: 'numeric', 
-        hour: '2-digit', minute: '2-digit' 
-    });
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    return d.toLocaleDateString(lang === 'es' ? 'es-ES' : (lang === 'en' ? 'en-US' : 'ca-ES'), { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
 function getEspacioTexto(e) {
-    return { 'aula_ordinaria': '🏫 Aula ordinaria', 'aula_practicas': '🩰 Aula de prácticas', 'ambos': '🏫🩰 Ambos' }[e] || e;
+    const map = { 'aula_ordinaria': t('espai_text_ordinaria'), 'aula_practicas': t('espai_text_practiques'), 'ambos': t('espai_text_ambdos') };
+    return map[e] || e;
 }
 
 function getTipoTexto(tipo) {
     const map = {
-        'teorica': { texto: '📖 Teórica', clase: 'tipo-teorica' },
-        'practica': { texto: '🎯 Práctica', clase: 'tipo-practica' },
-        'evaluacion': { texto: '📝 Evaluación', clase: 'tipo-evaluacion' },
-        'descanso': { texto: '☕ Descanso', clase: 'tipo-descanso' },
-        'gestion': { texto: '⚙️ Gestión', clase: 'tipo-gestion' }
+        'teorica': { texto: t('tipus_teorica'), clase: 'tipo-teorica' },
+        'practica': { texto: t('tipus_practica'), clase: 'tipo-practica' },
+        'evaluacion': { texto: t('tipus_evaluacio'), clase: 'tipo-evaluacion' },
+        'descanso': { texto: t('tipus_descans'), clase: 'tipo-descanso' },
+        'gestion': { texto: t('tipus_gestio'), clase: 'tipo-gestion' }
     };
     return map[tipo] || { texto: tipo || '', clase: '' };
 }
 
 // ==========================================
-// GESTIÓN DEL ESTADO
+// GESTIÓ DE L'ESTAT
 // ==========================================
 function guardarEstado() {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        return true;
-    } catch (e) {
-        mostrarToast('❌ Error al guardar', 'error');
-        return false;
-    }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); return true; }
+    catch (e) { mostrarToast(t('toast_error_guardar'), 'error'); return false; }
 }
 
 function cargarEstado() {
-    try {
-        const d = localStorage.getItem(STORAGE_KEY);
-        if (d) state = JSON.parse(d);
-    } catch (e) { console.error(e); }
+    try { const d = localStorage.getItem(STORAGE_KEY); if (d) state = JSON.parse(d); }
+    catch (e) { console.error(e); }
 }
 
 // ==========================================
-// SINCRONIZACIÓN Y LOG
+// SINCRONITZACIÓ I LOG
 // ==========================================
 function obtenerDatosCompartidos() {
-    try {
-        const datos = localStorage.getItem(SHARED_KEY);
-        if (datos) return JSON.parse(datos);
-    } catch (e) { console.error(e); }
+    try { const datos = localStorage.getItem(SHARED_KEY); if (datos) return JSON.parse(datos); } catch (e) {}
     return { sesiones: [], log: [], sesionActualizadaId: null };
 }
 
 function guardarDatosCompartidos(datos) {
-    try {
-        localStorage.setItem(SHARED_KEY, JSON.stringify(datos));
-        return true;
-    } catch (e) {
-        console.error(e);
-        return false;
-    }
+    try { localStorage.setItem(SHARED_KEY, JSON.stringify(datos)); return true; } catch (e) { return false; }
 }
 
 function registrarLogAlumne(accion, detalle) {
     try {
         let log = JSON.parse(localStorage.getItem(LOG_ALUMNE_KEY) || '[]');
-        log.unshift({
-            id: 'loga-' + Date.now(),
-            fecha: new Date().toISOString(),
-            accion: accion,
-            detalle: detalle,
-            alumno: state.datosAlumno.nombre || 'Alumno/a'
-        });
+        log.unshift({ id: 'loga-' + Date.now(), fecha: new Date().toISOString(), accion, detalle, alumno: state.datosAlumno.nombre || 'Alumno/a' });
         if (log.length > 100) log = log.slice(0, 100);
         localStorage.setItem(LOG_ALUMNE_KEY, JSON.stringify(log));
         renderizarLogAlumne();
@@ -823,47 +897,32 @@ function registrarLogAlumne(accion, detalle) {
 function comprobarActualizaciones() {
     const datos = obtenerDatosCompartidos();
     if (!datos.sesionActualizadaId) return;
-    
     const sesionPlanificador = datos.sesiones.find(s => s.id === datos.sesionActualizadaId);
     if (!sesionPlanificador) return;
     
-    // Mostrar aviso
     const alertBox = document.getElementById('syncAlert');
     const infoBox = document.getElementById('syncAlertInfo');
-    
-    // Calcular cuántas actividades son visibles
     const actividadesVisibles = (sesionPlanificador.actividades || []).filter(a => a.visibleAlumno !== false);
     
-    infoBox.innerHTML = `
-        <p><strong>📅 Fecha:</strong> ${formatearFecha(sesionPlanificador.fecha)}<br>
-        <strong>📌 Título:</strong> ${sesionPlanificador.titulo}<br>
-        <strong>🕐 Horario:</strong> ${sesionPlanificador.horario}<br>
-        <strong>👁️ Actividades visibles:</strong> ${actividadesVisibles.length}</p>
-    `;
+    infoBox.innerHTML = `<p><strong>${t('data_sessio')}</strong> ${formatearFecha(sesionPlanificador.fecha)}<br>
+        <strong>📌 ${t('sessio_label')}:</strong> ${sesionPlanificador.titulo}<br>
+        <strong>${t('horari')}</strong> ${sesionPlanificador.horario}<br>
+        <strong>${t('activitats_programades')}</strong> ${actividadesVisibles.length}</p>`;
     alertBox.classList.add('visible');
     
-    // Actualizar las sesiones disponibles con los datos del planificador
     if (datos.sesiones && datos.sesiones.length > 0) {
         datos.sesiones.forEach(s => {
             const idx = SESIONES_DISPONIBLES.findIndex(sd => sd.id === s.id);
             if (idx !== -1) {
-                // Filtrar solo las actividades visibles y prepararlas
-                const actividadesVisibles = (s.actividades || [])
-                    .filter(a => a.visibleAlumno !== false)
-                    .map(a => ({
-                        tiempo: a.tiempo,
-                        descripcion: a.descripcionAlumno && a.descripcionAlumno.trim().length > 0 
-                            ? a.descripcionAlumno 
-                            : a.descripcion,
-                        tipo: a.tipo || 'teorica'
-                    }));
-                
+                const actVis = (s.actividades || []).filter(a => a.visibleAlumno !== false).map(a => ({
+                    tiempo: a.tiempo,
+                    descripcion: a.descripcionAlumno && a.descripcionAlumno.trim().length > 0 ? a.descripcionAlumno : a.descripcion,
+                    tipo: a.tipo || 'teorica'
+                }));
                 SESIONES_DISPONIBLES[idx] = {
                     ...SESIONES_DISPONIBLES[idx],
-                    titulo: s.titulo,
-                    horario: s.horario,
-                    espacio: s.espacio,
-                    actividades: actividadesVisibles,
+                    titulo: s.titulo, horario: s.horario, espacio: s.espacio,
+                    actividades: actVis,
                     trabajoPrevio: s.trabajoPrevio || SESIONES_DISPONIBLES[idx].trabajoPrevio,
                     trabajoComplementario: s.trabajoComplementario || SESIONES_DISPONIBLES[idx].trabajoComplementario
                 };
@@ -871,46 +930,30 @@ function comprobarActualizaciones() {
         });
         inicializarSelectSesiones();
     }
-    
-    registrarLogAlumne('aviso_sync', `Aviso de actualización recibido para la sesión "${sesionPlanificador.titulo}" (${actividadesVisibles.length} actividades visibles)`);
+    registrarLogAlumne('aviso_sync', `${t('log_aviso_rebut')} "${sesionPlanificador.titulo}" (${actividadesVisibles.length} ${t('log_activitats_visibles')})`);
 }
 
 function cargarDatosActualizados() {
     const datos = obtenerDatosCompartidos();
     if (!datos.sesionActualizadaId) return;
-    
     const sesionActualizada = datos.sesiones.find(s => s.id === datos.sesionActualizadaId);
-    if (!sesionActualizada) {
-        mostrarToast('⚠️ No se han encontrado los datos', 'error');
-        return;
-    }
+    if (!sesionActualizada) { mostrarToast(t('toast_error_carregar'), 'error'); return; }
     
-    // Cargar la sesión actualizada
     document.getElementById('sesionSelect').value = sesionActualizada.id;
     mostrarInfoSesion(sesionActualizada.id);
-    
-    // Ocultar el aviso y limpiar el flag
     document.getElementById('syncAlert').classList.remove('visible');
     datos.sesionActualizadaId = null;
     guardarDatosCompartidos(datos);
     
-    // Registrar al log personal
-    const actividadesVisibles = (sesionActualizada.actividades || []).filter(a => a.visibleAlumno !== false).length;
-    registrarLogAlumne('sincronizacion', `Datos de la sesión "${sesionActualizada.titulo}" cargados (${actividadesVisibles} actividades visibles)`);
+    const actVis = (sesionActualizada.actividades || []).filter(a => a.visibleAlumno !== false).length;
+    registrarLogAlumne('sincronizacion', `${t('log_dades_carregades')} "${sesionActualizada.titulo}" (${actVis} ${t('log_activitats_visibles')})`);
     
-    // Registrar también al log compartido
     const nombreAlumno = state.datosAlumno.nombre || 'Alumno/a';
     const logCompartido = obtenerDatosCompartidos();
-    logCompartido.log.unshift({
-        id: 'log-' + Date.now(),
-        fecha: new Date().toISOString(),
-        accion: 'sincronizacion_alumno',
-        detalle: `${nombreAlumno} ha cargado los datos actualizados de la sesión "${sesionActualizada.titulo}"`,
-        usuario: nombreAlumno
-    });
+    logCompartido.log.unshift({ id: 'log-' + Date.now(), fecha: new Date().toISOString(), accion: 'sincronizacion_alumno', detalle: `${nombreAlumno} ha cargado los datos actualizados de la sesión "${sesionActualizada.titulo}"`, usuario: nombreAlumno });
     guardarDatosCompartidos(logCompartido);
     
-    mostrarToast('✅ Datos actualizados cargados', 'success');
+    mostrarToast(t('toast_dades_carregades'), 'success');
 }
 
 function descartarActualizacion() {
@@ -918,8 +961,8 @@ function descartarActualizacion() {
     datos.sesionActualizadaId = null;
     guardarDatosCompartidos(datos);
     document.getElementById('syncAlert').classList.remove('visible');
-    registrarLogAlumne('descartar', 'Actualización de la profesora descartada');
-    mostrarToast('Actualización descartada', 'info');
+    registrarLogAlumne('descartar', t('log_actualitzacio_descartada'));
+    mostrarToast(t('toast_descartat'), 'info');
 }
 
 function renderizarLogAlumne() {
@@ -927,46 +970,26 @@ function renderizarLogAlumne() {
     if (!container) return;
     try {
         const log = JSON.parse(localStorage.getItem(LOG_ALUMNE_KEY) || '[]');
-        if (log.length === 0) {
-            container.innerHTML = '<div class="empty-state">Aún no hay acciones registradas.</div>';
-            return;
-        }
-        container.innerHTML = log.map(l => {
-            const icono = {
-                'sincronizacion': '🔄',
-                'descartar': '❌',
-                'guardar': '💾',
-                'nueva_actuacion': '➕',
-                'cambio_estado': '📊',
-                'aviso_sync': '🔔',
-                'enviar': '📧'
-            }[l.accion] || '📝';
-            return `
-                <div class="log-item">
-                    <span class="log-fecha">${formatearFechaISO(l.fecha)}</span>
-                    <span class="log-contenido">${icono} ${l.detalle}</span>
-                </div>
-            `;
-        }).join('');
-    } catch (e) {
-        container.innerHTML = '<div class="empty-state">Error al cargar el log.</div>';
-    }
+        if (log.length === 0) { container.innerHTML = `<div class="empty-state">${t('log_buit')}</div>`; return; }
+        const icones = { sincronizacion: '🔄', descartar: '❌', guardar: '💾', nueva_actuacion: '➕', cambio_estado: '📊', aviso_sync: '🔔', enviar: '📧', imprimir: '🖨️' };
+        container.innerHTML = log.map(l => `<div class="log-item"><span class="log-fecha">${formatearFechaISO(l.fecha)}</span><span class="log-contenido">${icones[l.accion] || '📝'} ${l.detalle}</span></div>`).join('');
+    } catch (e) { container.innerHTML = `<div class="empty-state">${t('log_buit')}</div>`; }
 }
 
 function limpiarLogAlumne() {
-    if (!confirm('¿Seguro que quieres limpiar tu log personal?')) return;
+    if (!confirm(t('confirm_netejar_log'))) return;
     localStorage.removeItem(LOG_ALUMNE_KEY);
     renderizarLogAlumne();
-    mostrarToast('🗑️ Log limpiado', 'info');
+    mostrarToast(t('toast_log_net'), 'info');
 }
 
 // ==========================================
-// INICIALIZACIÓN DE SESIONES
+// INICIALITZACIÓ DE SESIONS
 // ==========================================
 function inicializarSelectSesiones() {
     const sel = document.getElementById('sesionSelect');
     const valorActual = sel.value;
-    sel.innerHTML = '<option value="">-- Selecciona una sesión --</option>';
+    sel.innerHTML = `<option value="">${t('opt_seleccionar')}</option>`;
     SESIONES_DISPONIBLES.forEach(s => {
         const opt = document.createElement('option');
         opt.value = s.id;
@@ -997,7 +1020,7 @@ function mostrarInfoSesion(id) {
     if (!id) {
         box.innerHTML = '';
         state.sesionActual = null;
-        document.getElementById('actividadesContainer').innerHTML = '<div class="empty-state">Selecciona una sesión para ver las actividades.</div>';
+        document.getElementById('actividadesContainer').innerHTML = `<div class="empty-state">${t('act_buit')}</div>`;
         state.actuacionActual.actividades = [];
         actualizarResumen();
         return;
@@ -1006,50 +1029,40 @@ function mostrarInfoSesion(id) {
     if (!sesion) return;
 
     state.sesionActual = sesion;
-    state.actuacionActual.actividades = sesion.actividades.map(a => ({
-        tiempo: a.tiempo,
-        descripcion: a.descripcion,
-        tipo: a.tipo || 'teorica',
-        estado: 'pendiente',
-        observaciones: ''
-    }));
+    state.actuacionActual.actividades = sesion.actividades.map(a => ({ tiempo: a.tiempo, descripcion: a.descripcion, tipo: a.tipo || 'teorica', estado: 'pendiente', observaciones: '' }));
 
-    box.innerHTML = `
-        <div class="sesion-info-box">
-            <h4>📌 ${sesion.titulo}</h4>
-            <p><strong>📅 Fecha:</strong> ${formatearFecha(sesion.fecha)} · <strong>🕐 Horario:</strong> ${sesion.horario}</p>
-            <p><strong>📍 Espacio previsto:</strong> ${getEspacioTexto(sesion.espacio)}</p>
-            <p><strong>👁️ Actividades programadas:</strong> ${sesion.actividades.length}</p>
-            ${sesion.trabajoPrevio ? `<p><strong>📚 Trabajo previo:</strong> ${sesion.trabajoPrevio}</p>` : ''}
-            ${sesion.trabajoComplementario ? `<p><strong>📝 Trabajo complementario:</strong> ${sesion.trabajoComplementario}</p>` : ''}
-        </div>
-    `;
-    renderizarActividades();
+    box.innerHTML = `<div class="sesion-info-box">
+        <h4>📌 ${sesion.titulo}</h4>
+        <p><strong>${t('data_sessio')}</strong> ${formatearFecha(sesion.fecha)} · <strong>${t('horari')}</strong> ${sesion.horario}</p>
+        <p><strong>${t('espai_previst')}</strong> ${getEspacioTexto(sesion.espacio)}</p>
+        <p><strong>${t('activitats_programades')}</strong> ${sesion.actividades.length}</p>
+        ${sesion.trabajoPrevio ? `<p><strong>${t('treball_previ')}</strong> ${sesion.trabajoPrevio}</p>` : ''}
+        ${sesion.trabajoComplementario ? `<p><strong>${t('treball_comp')}</strong> ${sesion.trabajoComplementario}</p>` : ''}
+    </div>`;
+    renderitzarActivitats();
 }
 
-function renderizarActividades() {
+function renderitzarActivitats() {
     const container = document.getElementById('actividadesContainer');
     if (!state.actuacionActual.actividades || state.actuacionActual.actividades.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay actividades para esta sesión.</div>';
+        container.innerHTML = `<div class="empty-state">${t('sense_activitats')}</div>`;
         return;
     }
     container.innerHTML = state.actuacionActual.actividades.map((a, i) => {
         const tipoInfo = getTipoTexto(a.tipo);
-        return `
-            <div class="actividad-item estado-${a.estado}" data-idx="${i}">
-                <div class="actividad-header">
-                    <span class="actividad-tiempo">${a.tiempo}</span>
-                    <span class="actividad-descripcion">${a.descripcion}</span>
-                    <span class="actividad-tipo-badge ${tipoInfo.clase}">${tipoInfo.texto}</span>
-                </div>
-                <div class="actividad-controls">
-                    <button class="estado-btn ${a.estado === 'hecha' ? 'active-hecha' : ''}" onclick="cambiarEstado(${i}, 'hecha')">✅ Hecha</button>
-                    <button class="estado-btn ${a.estado === 'no_hecha' ? 'active-no_hecha' : ''}" onclick="cambiarEstado(${i}, 'no_hecha')">❌ No hecha</button>
-                    <button class="estado-btn ${a.estado === 'pendiente' ? 'active-pendiente' : ''}" onclick="cambiarEstado(${i}, 'pendiente')">⏳ Pendiente</button>
-                </div>
-                <textarea class="observaciones-actividad" placeholder="Observaciones sobre esta actividad..." onchange="actualizarObs(${i}, this.value)">${a.observaciones || ''}</textarea>
+        return `<div class="actividad-item estado-${a.estado}" data-idx="${i}">
+            <div class="actividad-header">
+                <span class="actividad-tiempo">${a.tiempo}</span>
+                <span class="actividad-descripcion">${a.descripcion}</span>
+                <span class="actividad-tipo-badge ${tipoInfo.clase}">${tipoInfo.texto}</span>
             </div>
-        `;
+            <div class="actividad-controls">
+                <button class="estado-btn ${a.estado === 'hecha' ? 'active-hecha' : ''}" onclick="cambiarEstado(${i}, 'hecha')">${t('estat_feta')}</button>
+                <button class="estado-btn ${a.estado === 'no_hecha' ? 'active-no_hecha' : ''}" onclick="cambiarEstado(${i}, 'no_hecha')">${t('estat_no_feta')}</button>
+                <button class="estado-btn ${a.estado === 'pendiente' ? 'active-pendiente' : ''}" onclick="cambiarEstado(${i}, 'pendiente')">${t('estat_pendent')}</button>
+            </div>
+            <textarea class="observaciones-actividad" placeholder="${t('ph_observacions')}" onchange="actualizarObs(${i}, this.value)">${a.observaciones || ''}</textarea>
+        </div>`;
     }).join('');
     actualizarResumen();
 }
@@ -1058,14 +1071,12 @@ function cambiarEstado(idx, estado) {
     const estadoAnterior = state.actuacionActual.actividades[idx].estado;
     state.actuacionActual.actividades[idx].estado = estado;
     if (estadoAnterior !== estado) {
-        registrarLogAlumne('cambio_estado', `Actividad "${state.actuacionActual.actividades[idx].tiempo}" cambiada a: ${estado}`);
+        registrarLogAlumne('cambio_estado', `${t('log_canvi_estat')} "${state.actuacionActual.actividades[idx].tiempo}" ${t('log_canviada_a')} ${estado}`);
     }
-    renderizarActividades();
+    renderitzarActivitats();
 }
 
-function actualizarObs(idx, valor) {
-    state.actuacionActual.actividades[idx].observaciones = valor;
-}
+function actualizarObs(idx, valor) { state.actuacionActual.actividades[idx].observaciones = valor; }
 
 function actualizarResumen() {
     const acts = state.actuacionActual.actividades || [];
@@ -1097,223 +1108,120 @@ function guardarActuacionActual() {
     state.actuacionActual.obsGenerales = document.getElementById('obsGenerales').value;
 }
 
-function renderizarHistorial() {
+function renderitzarHistorial() {
     const container = document.getElementById('historialContainer');
     if (!state.historial || state.historial.length === 0) {
-        container.innerHTML = '<div class="empty-state">Aún no hay actuaciones registradas. Haz clic en "➕ Nueva Actuación" al finalizar una sesión.</div>';
+        container.innerHTML = `<div class="empty-state">${t('hist_buit')}</div>`;
         return;
     }
-    container.innerHTML = state.historial.map((h, i) => {
+    container.innerHTML = state.historial.map(h => {
         const hechas = h.actividades.filter(a => a.estado === 'hecha').length;
         const total = h.actividades.length;
-        return `
-            <div class="historial-item">
-                <div class="historial-fecha">📅 ${formatearFecha(h.fecha)} · 🕐 ${h.horaInicio || '?'} - ${h.horaFin || '?'}</div>
-                <div class="historial-contenido">
-                    <strong>${h.tituloSesion || 'Sesión'}</strong> · ${hechas}/${total} actividades completadas<br>
-                    ${h.obsGenerales ? `<em>"${h.obsGenerales}"</em>` : ''}
-                </div>
+        return `<div class="historial-item">
+            <div class="historial-fecha">📅 ${formatearFecha(h.fecha)} · 🕐 ${h.horaInicio || '?'} - ${h.horaFin || '?'}</div>
+            <div class="historial-contenido">
+                <strong>${h.tituloSesion || t('sessio_label')}</strong> · ${hechas}/${total} ${t('activitats_completades')}<br>
+                ${h.obsGenerales ? `<em>"${h.obsGenerales}"</em>` : ''}
             </div>
-        `;
+        </div>`;
     }).join('');
 }
 
 function nuevaActuacion() {
-    if (!state.sesionActual) {
-        mostrarToast('⚠️ Primero selecciona una sesión', 'error');
-        return;
-    }
-    if (!state.actuacionActual.fecha) {
-        mostrarToast('⚠️ Rellena al menos la fecha de la actuación', 'error');
-        return;
-    }
-    if (!confirm('¿Guardar la actuación actual en el historial y empezar una nueva?')) return;
+    if (!state.sesionActual) { mostrarToast(t('toast_primer_sessio'), 'error'); return; }
+    if (!state.actuacionActual.fecha) { mostrarToast(t('toast_error_data'), 'error'); return; }
+    if (!confirm(t('confirm_nova_actuacio'))) return;
 
     const acts = state.actuacionActual.actividades || [];
     const hechas = acts.filter(a => a.estado === 'hecha').length;
     const total = acts.length;
 
-    const nueva = {
-        ...JSON.parse(JSON.stringify(state.actuacionActual)),
-        tituloSesion: state.sesionActual.titulo,
-        fechaGuardado: new Date().toISOString()
-    };
-    state.historial.push(nueva);
+    state.historial.push({ ...JSON.parse(JSON.stringify(state.actuacionActual)), tituloSesion: state.sesionActual.titulo, fechaGuardado: new Date().toISOString() });
 
     state.actuacionActual = {
         fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
-        actividades: state.sesionActual.actividades.map(a => ({
-            tiempo: a.tiempo, descripcion: a.descripcion, tipo: a.tipo || 'teorica', estado: 'pendiente', observaciones: ''
-        })),
+        actividades: state.sesionActual.actividades.map(a => ({ tiempo: a.tiempo, descripcion: a.descripcion, tipo: a.tipo || 'teorica', estado: 'pendiente', observaciones: '' })),
         trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
     };
 
     guardarEstado();
     cargarActuacionActual();
-    renderizarActividades();
-    renderizarHistorial();
-    registrarLogAlumne('nueva_actuacion', `Nueva actuación registrada para "${state.sesionActual.titulo}" (${hechas}/${total} actividades)`);
-    mostrarToast('✅ Actuación guardada en el historial', 'success');
+    renderitzarActivitats();
+    renderitzarHistorial();
+    registrarLogAlumne('nueva_actuacion', `${t('log_nova_actuacio')} "${state.sesionActual.titulo}" (${hechas}/${total} ${t('log_activitats')})`);
+    mostrarToast(t('toast_actuacio_guardada'), 'success');
 }
 
 // ==========================================
 // IMPRIMIR / ENVIAR
 // ==========================================
-function imprimirPDF() { 
-    registrarLogAlumne('imprimir', 'Ficha impresa o exportada a PDF');
-    window.print(); 
+function imprimirPDF() {
+    registrarLogAlumne('imprimir', t('log_impressa'));
+    window.print();
 }
 
 function enviarEmail() {
     const profEmail = document.getElementById('profEmail').value;
-    if (!profEmail) {
-        mostrarToast('⚠️ Indica el email de la profesora', 'error');
-        return;
-    }
+    if (!profEmail) { mostrarToast(t('toast_error_email'), 'error'); return; }
     const nombre = document.getElementById('aluNombre').value || 'Alumno/a';
     const sesion = state.sesionActual;
-    if (!sesion) {
-        mostrarToast('⚠️ Selecciona una sesión', 'error');
-        return;
-    }
+    if (!sesion) { mostrarToast(t('toast_error_sessio'), 'error'); return; }
 
     const acts = state.actuacionActual.actividades || [];
     const hechas = acts.filter(a => a.estado === 'hecha').length;
     const total = acts.length;
 
-    let body = `FICHA DE TRABAJO DEL ALUMNO\n`;
-    body += `Fisiología Aplicada a la Danza\n\n`;
-    body += `Alumno/a: ${nombre}\n`;
-    body += `Email: ${document.getElementById('aluEmail').value}\n`;
-    body += `Curso: ${document.getElementById('aluCurso').value}\n\n`;
-    body += `SESIÓN: ${sesion.titulo}\n`;
-    body += `Fecha sesión: ${formatearFecha(sesion.fecha)}\n`;
-    body += `Fecha actuación: ${formatearFecha(state.actuacionActual.fecha)}\n`;
-    body += `Horario: ${state.actuacionActual.horaInicio} - ${state.actuacionActual.horaFin}\n\n`;
-    body += `ACTIVIDADES: ${hechas}/${total} completadas\n\n`;
+    let body = `${t('email_cos_titol')}\n${t('email_cos_assignatura')}\n\n`;
+    body += `${t('email_cos_alumne')} ${nombre}\n`;
+    body += `${t('email_cos_email')} ${document.getElementById('aluEmail').value}\n`;
+    body += `${t('email_cos_curs')} ${document.getElementById('aluCurso').value}\n\n`;
+    body += `${t('email_cos_sessio')} ${sesion.titulo}\n`;
+    body += `${t('email_cos_data_sessio')} ${formatearFecha(sesion.fecha)}\n`;
+    body += `${t('email_cos_data_actuacio')} ${formatearFecha(state.actuacionActual.fecha)}\n`;
+    body += `${t('email_cos_horari')} ${state.actuacionActual.horaInicio} - ${state.actuacionActual.horaFin}\n\n`;
+    body += `${t('email_cos_activitats')} ${hechas}/${total} ${t('email_cos_completades')}\n\n`;
     acts.forEach(a => {
         const est = { 'hecha': '✅', 'no_hecha': '❌', 'pendiente': '⏳' }[a.estado];
         const tipoInfo = getTipoTexto(a.tipo);
         body += `${est} [${tipoInfo.texto}] ${a.tiempo} - ${a.descripcion}\n`;
         if (a.observaciones) body += `   → ${a.observaciones}\n`;
     });
-    body += `\nTrabajo previo: ${state.actuacionActual.trabajoPrevio || 'No indicado'}\n`;
-    body += `Trabajo complementario: ${state.actuacionActual.trabajoComp || 'No indicado'}\n`;
-    if (state.actuacionActual.obsTrabajo) body += `Observaciones trabajo: ${state.actuacionActual.obsTrabajo}\n`;
-    if (state.actuacionActual.obsGenerales) body += `\nReflexiones personales:\n${state.actuacionActual.obsGenerales}\n`;
+    body += `\n${t('email_cos_treball_previ')} ${state.actuacionActual.trabajoPrevio || t('email_cos_no_indicat')}\n`;
+    body += `${t('email_cos_treball_comp')} ${state.actuacionActual.trabajoComp || t('email_cos_no_indicat')}\n`;
+    if (state.actuacionActual.obsTrabajo) body += `${t('email_cos_obs_treball')} ${state.actuacionActual.obsTrabajo}\n`;
+    if (state.actuacionActual.obsGenerales) body += `\n${t('email_cos_reflexions')}\n${state.actuacionActual.obsGenerales}\n`;
 
-    const subject = encodeURIComponent(`Ficha trabajo - ${nombre} - ${sesion.titulo}`);
+    const subject = encodeURIComponent(`${t('email_assumpte')} ${nombre} - ${sesion.titulo}`);
     window.location.href = `mailto:${profEmail}?subject=${subject}&body=${encodeURIComponent(body)}`;
-    registrarLogAlumne('enviar', `Ficha enviada a la profesora (${profEmail})`);
+    registrarLogAlumne('enviar', `${t('log_enviada_a')} (${profEmail})`);
 }
 
 // ==========================================
 // EVENT LISTENERS
 // ==========================================
-document.getElementById('sesionSelect').addEventListener('change', function() {
-    mostrarInfoSesion(this.value);
-});
+document.getElementById('sesionSelect').addEventListener('change', function() { mostrarInfoSesion(this.value); });
 
 ['aluNombre','aluEmail','aluCurso','profEmail'].forEach(id => {
-    document.getElementById(id).addEventListener('change', () => { 
-        guardarDatosAlumno(); 
-        guardarEstado(); 
-    });
+    document.getElementById(id).addEventListener('change', () => { guardarDatosAlumno(); guardarEstado(); });
 });
 
 ['actFecha','actHoraInicio','actHoraFin','actEspacio','trabajoPrevio','trabajoComp','obsTrabajo','obsGenerales'].forEach(id => {
-    document.getElementById(id).addEventListener('change', () => { 
-        guardarActuacionActual(); 
-        guardarEstado(); 
-    });
+    document.getElementById(id).addEventListener('change', () => { guardarActuacionActual(); guardarEstado(); });
 });
 
 document.getElementById('btnGuardar').addEventListener('click', () => {
-    guardarDatosAlumno();
-    guardarActuacionActual();
-    guardarEstado();
-    registrarLogAlumne('guardar', 'Ficha guardada manualmente');
-    mostrarToast('💾 Ficha guardada', 'success');
+    guardarDatosAlumno(); guardarActuacionActual(); guardarEstado();
+    registrarLogAlumne('guardar', t('log_fitxa_guardada'));
+    mostrarToast(t('toast_guardat'), 'success');
 });
 
 document.getElementById('btnImprimir').addEventListener('click', imprimirPDF);
 document.getElementById('btnEnviar').addEventListener('click', enviarEmail);
 document.getElementById('btnNuevaSesion').addEventListener('click', nuevaActuacion);
-document.getElementById('btnHistorial').addEventListener('click', () => {
-    document.getElementById('historialContainer').scrollIntoView({ behavior: 'smooth' });
-});
-
-function restablecerFicha() {
-    // 🔒 PAS 1: Preguntar si vol fer còpia de seguretat externa
-    const quiereBackup = confirm(
-        '🔒 COPIA DE SEGURETAT\n\n' +
-        'Abans d\'esborrar la teva fitxa, vols descarregar una còpia de seguretat?\n\n' +
-        '✅ Accepta = Es descarregarà un fitxer JSON amb totes les teves dades\n' +
-        '❌ Cancel·la = Es continuarà sense fer còpia\n\n' +
-        'Recomanació: Accepta per conservar el teu treball.'
-    );
-    
-    // 🔒 PAS 2: Si vol còpia, descarregar-la
-    if (quiereBackup) {
-        try {
-            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-            const nombre = (state.datosAlumno.nombre || 'alumno').replace(/\s+/g, '_');
-            a.download = `BACKUP_ficha_${nombre}_${fecha}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            mostrarToast('💾 Còpia de seguretat descarregada', 'success');
-        } catch (e) {
-            console.error('Error al fer còpia:', e);
-            mostrarToast('⚠️ Error al descarregar la còpia', 'error');
-        }
-    }
-    
-    // 🔒 PAS 3: Confirmar l'esborrat
-    const confirmaBorrado = confirm(
-        '⚠️ ESBORRAR FITXA\n\n' +
-        (quiereBackup ? '✅ S\'ha descarregat una còpia de seguretat.\n\n' : '⚠️ No s\'ha fet còpia de seguretat.\n\n') +
-        'Ara s\'esborraran totes les teves dades personals, actuacions i historial.\n' +
-        'Aquesta acció NO es pot desfer.\n\n' +
-        'Vols continuar?'
-    );
-    
-    if (confirmaBorrado) {
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(LOG_ALUMNE_KEY);
-        state = {
-            datosAlumno: { nombre: '', email: '', curso: '', profEmail: '' },
-            sesionActual: null,
-            actuacionActual: {
-                fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
-                actividades: [], trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
-            },
-            historial: []
-        };
-        // Resetar formularis
-        document.getElementById('aluNombre').value = '';
-        document.getElementById('aluEmail').value = '';
-        document.getElementById('aluCurso').value = '';
-        document.getElementById('profEmail').value = '';
-        document.getElementById('sesionSelect').value = '';
-        document.getElementById('sesionInfoBox').innerHTML = '';
-        document.getElementById('actividadesContainer').innerHTML = '<div class="empty-state">Selecciona una sessió per veure les activitats.</div>';
-        cargarActuacionActual();
-        renderizarHistorial();
-        renderizarLogAlumne();
-        mostrarToast('🗑️ Fitxa esborrada correctament', 'info');
-    } else {
-        mostrarToast('ℹ️ Esborrat cancel·lat', 'info');
-    }
-}
+document.getElementById('btnHistorial').addEventListener('click', () => { document.getElementById('historialContainer').scrollIntoView({ behavior: 'smooth' }); });
 
 // ==========================================
-// INICIALIZACIÓN
+// INICIALITZACIÓ
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
     inicializarSelectSesiones();
@@ -1324,10 +1232,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('sesionSelect').value = state.sesionActual.id;
         mostrarInfoSesion(state.sesionActual.id);
     }
-    renderizarHistorial();
+    renderitzarHistorial();
     renderizarLogAlumne();
+    aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
     comprobarActualizaciones();
-    console.log('✅ Ficha del alumno cargada');
+    console.log('✅ Fitxa de l\'alumne carregada');
 });
 </script>
 </body>

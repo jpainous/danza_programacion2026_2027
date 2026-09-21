@@ -1,38 +1,501 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programación Didáctica - Fisiología</title>
-    <link rel="stylesheet" href="programacio.css">
+    <title data-i18n="titol_pagina">Programació Didàctica</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); font-weight: 800; }
+        header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1em; opacity: 0.9; }
+
+        /* SELECTOR D'IDIOMA */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .language-selector label { color: white; font-size: 1.2em; }
+        .language-selector select {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-family: inherit;
+            cursor: pointer;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+        }
+        .language-selector select:focus { outline: 2px solid #fff; }
+
+        .controls {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-print { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
+        .btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4); }
+        .btn-edit { background: #ffc107; color: #333; padding: 8px 16px; font-size: 0.9em; }
+        .btn-edit:hover { background: #e0a800; }
+        .btn-delete { background: #dc3545; color: white; padding: 8px 16px; font-size: 0.9em; }
+        .btn-delete:hover { background: #c82333; }
+        .btn-small { padding: 6px 12px; font-size: 0.85em; }
+        .btn-restore { background: #28a745; color: white; padding: 6px 14px; font-size: 0.85em; }
+        .btn-restore:hover { background: #218838; }
+        .btn-delete-version { background: #dc3545; color: white; padding: 6px 14px; font-size: 0.85em; }
+        .btn-delete-version:hover { background: #c82333; }
+        .btn-add-tema-seccion {
+            margin-top: 15px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 12px 24px;
+        }
+        .btn-add-tema-seccion:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4); }
+
+        /* DROPDOWN */
+        .dropdown { position: relative; display: inline-block; margin-left: auto; }
+        .btn-dropdown {
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-dropdown:hover { background: linear-gradient(135deg, #343a40 0%, #212529 100%); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(52, 58, 64, 0.4); }
+        .btn-dropdown.active { background: linear-gradient(135deg, #343a40 0%, #212529 100%); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset; }
+        .dropdown-arrow { font-size: 0.8em; transition: transform 0.3s; }
+        .dropdown.open .dropdown-arrow { transform: rotate(180deg); }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 240px;
+            padding: 8px 0;
+            z-index: 100;
+            border: 1px solid #e9ecef;
+            animation: fadeInDown 0.2s ease-out;
+        }
+        .dropdown.open .dropdown-menu { display: block; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .dropdown-item:hover { background: #f8f9fa; color: #667eea; padding-left: 24px; }
+        .dropdown-item.danger { color: #dc3545; }
+        .dropdown-item.danger:hover { background: #fff5f5; color: #c82333; }
+        .dropdown-divider { height: 1px; background: #e9ecef; margin: 6px 0; }
+
+        .info-box {
+            margin: 20px 40px;
+            padding: 20px;
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            border-radius: 8px;
+        }
+        .info-box h3 { color: #1976D2; margin-bottom: 10px; }
+        .info-box p { margin-bottom: 8px; line-height: 1.6; }
+
+        .secciones-container { padding: 40px; }
+
+        .seccion {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .seccion:hover { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
+
+        .seccion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .seccion-titulo { font-size: 1.6em; color: #333; display: flex; align-items: center; gap: 10px; }
+        .seccion-icono { font-size: 1.2em; }
+        .seccion-actions { display: flex; gap: 8px; }
+
+        .seccion-contenido { color: #555; line-height: 1.8; font-size: 1.05em; margin-bottom: 20px; }
+        .seccion-contenido ul, .seccion-contenido ol { margin-left: 25px; margin-top: 10px; }
+        .seccion-contenido li { margin-bottom: 8px; }
+        .seccion-contenido strong { color: #667eea; }
+        .seccion-contenido table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .seccion-contenido th, .seccion-contenido td { padding: 10px; text-align: left; border: 1px solid #e9ecef; }
+
+        /* INDICADOR DE SINCRONITZACIÓ */
+        .indicador-sync {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 4px solid #28a745;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #155724;
+        }
+        .indicador-sync strong { color: #0f5132; }
+        .indicador-sync.sin_datos {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left-color: #6c757d;
+            color: #495057;
+        }
+
+        /* RESUM SINCRONITZACIÓ */
+        .sync-resumen { padding: 10px 0; }
+        .sync-resumen h3 { color: #667eea; margin: 20px 0 10px 0; font-size: 1.1em; border-bottom: 2px solid #e9ecef; padding-bottom: 8px; }
+        .sync-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 15px 0; }
+        .sync-stat-card { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 15px; text-align: center; }
+        .sync-stat-numero { font-size: 2em; font-weight: 800; color: #667eea; line-height: 1; }
+        .sync-stat-label { font-size: 0.85em; color: #666; margin-top: 5px; }
+        .sync-log-list { max-height: 300px; overflow-y: auto; background: #f8f9fa; border-radius: 8px; padding: 10px; }
+        .sync-log-item { background: white; border-left: 4px solid #667eea; border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 0.9em; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .sync-log-item.log-sync { border-left-color: #ffc107; }
+        .sync-log-item.log-alumno { border-left-color: #6f42c1; }
+        .sync-log-fecha { font-weight: 700; color: #667eea; font-size: 0.85em; white-space: nowrap; }
+        .sync-log-contenido { flex: 1; color: #333; }
+        .sync-log-usuario { font-size: 0.8em; color: #666; font-style: italic; }
+
+        .temas-lista { margin-top: 15px; }
+
+        .tema-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .tema-card:hover { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+        .tema-card.completo { border-left: 6px solid #28a745; background: #f0fdf4; }
+        .tema-card.parcial { border-left: 6px solid #ffc107; background: #fffbeb; }
+        .tema-card.pendiente { border-left: 6px solid #6c757d; background: #f8f9fa; }
+
+        .tema-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .tema-info { flex: 1; min-width: 250px; }
+        .tema-data {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+        }
+        .tema-titulo { font-size: 1.3em; color: #333; margin-bottom: 8px; }
+        .tema-estat { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.8em; font-weight: 600; margin-left: 10px; }
+        .estat-complet { background: #d4edda; color: #155724; }
+        .estat-parcial { background: #fff3cd; color: #856404; }
+        .estat-pendent { background: #e2e3e5; color: #383d41; }
+        .tema-descripcio { color: #666; line-height: 1.6; margin-bottom: 12px; }
+
+        .tema-observaciones {
+            background: #fffde7;
+            border: 1px solid #fff176;
+            border-left: 4px solid #fbc02d;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 0.95em;
+            color: #5d4037;
+            line-height: 1.6;
+        }
+        .tema-observaciones strong { color: #f57f17; display: block; margin-bottom: 4px; }
+
+        .tema-recursos {
+            margin-top: 12px;
+            background: #f0f4ff;
+            border: 1px solid #c7d2fe;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+            padding: 12px 16px;
+        }
+        .tema-recursos h4 { color: #667eea; margin-bottom: 8px; font-size: 1em; }
+        .recursos-lista { list-style: none; }
+        .recursos-lista li { margin-bottom: 6px; }
+        .recursos-lista a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            word-break: break-all;
+        }
+        .recursos-lista a:hover { color: #764ba2; text-decoration: underline; transform: translateX(3px); }
+        .recursos-lista a::after { content: "↗"; font-size: 0.8em; opacity: 0.7; }
+
+        .tema-actions { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e9ecef; flex-wrap: wrap; }
+
+        /* MODALS */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); overflow-y: auto; }
+        .modal.active { display: block; }
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-large { max-width: 800px; }
+        .modal-xl { max-width: 1000px; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; transition: color 0.2s; }
+        .close:hover { color: #333; }
+        .modal-content h2 { color: #667eea; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #e9ecef; }
+        .modal-subtitle { color: #666; font-size: 0.95em; margin-bottom: 20px; }
+
+        .historial-lista { max-height: 500px; overflow-y: auto; margin: 20px 0; }
+        .historial-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            transition: all 0.2s;
+        }
+        .historial-item:hover { border-color: #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15); }
+        .historial-item.current { background: #e7f3ff; border-color: #2196F3; }
+        .historial-info { flex: 1; min-width: 200px; }
+        .historial-fecha { font-weight: 700; color: #333; font-size: 1em; margin-bottom: 4px; }
+        .historial-detalle { font-size: 0.85em; color: #666; }
+        .historial-badge { display: inline-block; background: #28a745; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin-left: 8px; }
+        .historial-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .historial-vacio { text-align: center; padding: 40px; color: #999; font-style: italic; }
+
+        .editor-warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9em; color: #856404; }
+        .editor-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 15px;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.9em;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        .editor-textarea:focus { outline: none; border-color: #fd7e14; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input[type="text"], .form-group input[type="date"], .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group input[type="checkbox"] { margin-right: 8px; transform: scale(1.2); }
+        .form-actions { display: flex; gap: 10px; margin-top: 25px; padding-top: 20px; border-top: 2px solid #e9ecef; flex-wrap: wrap; }
+
+        footer { text-align: center; padding: 30px 20px; color: #64748b; font-size: 0.95em; border-top: 1px solid #e9ecef; background: #f8f9fa; }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; background: #333; color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); z-index: 2000; font-weight: 500; animation: slideIn 0.3s ease-out; }
+        .toast.success { background: #28a745; }
+        .toast.error { background: #dc3545; }
+        .toast.info { background: #17a2b8; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .empty-state { text-align: center; padding: 40px; color: #999; font-style: italic; }
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            header { padding: 30px 20px; }
+            header h1 { font-size: 1.8em; }
+            header h2 { font-size: 1.2em; }
+            .language-selector { position: static; margin: 15px auto 0; width: fit-content; }
+            .controls { padding: 15px 20px; }
+            .btn { padding: 10px 16px; font-size: 0.9em; flex: 1 1 auto; min-width: 120px; }
+            .info-box { margin: 15px 20px; }
+            .secciones-container { padding: 20px; }
+            .seccion { padding: 20px; }
+            .seccion-header { flex-direction: column; align-items: flex-start; }
+            .tema-header { flex-direction: column; }
+            .modal-content { padding: 25px; margin: 20px auto; }
+            .historial-item { flex-direction: column; align-items: flex-start; }
+            .dropdown { margin-left: 0; flex: 1 1 100%; margin-top: 5px; }
+            .btn-dropdown { width: 100%; justify-content: center; }
+            .dropdown-menu { right: 0; left: 0; min-width: 100%; }
+            .sync-stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media print {
+            body { background: white !important; padding: 0 !important; color: #000 !important; font-size: 11pt; }
+            .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; }
+            header { background: none !important; color: #000 !important; padding: 20px 0 !important; border-bottom: 3px solid #333; }
+            header h1 { font-size: 1.8em !important; text-shadow: none !important; color: #000 !important; }
+            header h2 { color: #333 !important; font-size: 1.3em !important; }
+            .subtitle { color: #555 !important; opacity: 1 !important; }
+            .language-selector { display: none !important; }
+            .no-print { display: none !important; }
+            .secciones-container { padding: 10px 0 !important; }
+            .seccion { border: 1px solid #ccc !important; border-radius: 6px !important; padding: 15px !important; margin-bottom: 15px !important; box-shadow: none !important; break-inside: avoid; page-break-inside: avoid; }
+            .seccion:hover { box-shadow: none !important; }
+            .seccion-titulo { font-size: 1.3em !important; color: #000 !important; }
+            .seccion-contenido { font-size: 10pt !important; color: #222 !important; }
+            .seccion-contenido strong { color: #000 !important; }
+            .seccion-actions { display: none !important; }
+            .tema-card { border: 1px solid #ddd !important; border-radius: 6px !important; padding: 12px !important; margin-bottom: 10px !important; box-shadow: none !important; break-inside: avoid; page-break-inside: avoid; }
+            .tema-card:hover { box-shadow: none !important; transform: none !important; }
+            .tema-card.completo { border-left: 4px solid #28a745 !important; background: #f0fdf4 !important; }
+            .tema-card.parcial { border-left: 4px solid #ffc107 !important; background: #fffbeb !important; }
+            .tema-card.pendiente { border-left: 4px solid #999 !important; background: #f8f9fa !important; }
+            .tema-data { background: #333 !important; color: white !important; font-size: 9pt !important; padding: 3px 8px !important; box-shadow: none !important; }
+            .tema-titulo { font-size: 1.1em !important; color: #000 !important; }
+            .tema-estat { font-size: 9pt !important; }
+            .tema-descripcio { font-size: 9.5pt !important; color: #333 !important; }
+            .tema-observaciones { background: #fffde7 !important; border: 1px solid #e0d68a !important; font-size: 9pt !important; padding: 8px 12px !important; }
+            .tema-recursos { background: #f0f4ff !important; border: 1px solid #c7d2fe !important; font-size: 9pt !important; padding: 8px 12px !important; }
+            .tema-actions { display: none !important; }
+            .btn-add-tema-seccion { display: none !important; }
+            .recursos-lista a { color: #333 !important; font-size: 9pt !important; }
+            .recursos-lista a::after { content: "" !important; }
+            .tema-recursos h4 { color: #333 !important; font-size: 10pt !important; }
+            footer { border-top: 2px solid #333 !important; color: #333 !important; font-size: 9pt !important; padding: 15px 0 !important; background: none !important; }
+            .seccion-contenido table th { background: #333 !important; color: white !important; }
+            .indicador-sync { break-inside: avoid; page-break-inside: avoid; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📚 Programación Didáctica</h1>
-            <h2>Fisiología Aplicada a la Danza</h2>
-            <p class="subtitle">Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+            <h1 data-i18n="titol_pagina">📚 Programació Didàctica</h1>
+            <h2 data-i18n="subtitol_pagina">Fisiologia Aplicada a la Dansa</h2>
+            <p class="subtitle" data-i18n="subtitol2_pagina">Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+            
+            <!-- SELECTOR D'IDIOMA -->
+            <div class="language-selector">
+                <label for="selectorIdioma">🌐</label>
+                <select id="selectorIdioma" onchange="aplicarIdioma(this.value)">
+                    <option value="ca">Català</option>
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
         </header>
 
         <div class="controls no-print">
-            <button id="btnAddTema" class="btn btn-primary">➕ Añadir Tema</button>
-            <button id="btnAddSeccion" class="btn btn-primary">📑 Añadir Sección</button>
-            <button id="btnPrint" class="btn btn-print">🖨️ Imprimir / PDF</button>
-            
+            <button id="btnAddTema" class="btn btn-primary" data-i18n="btn_afegir_tema">➕ Afegir Tema</button>
+            <button id="btnAddSeccion" class="btn btn-primary" data-i18n="btn_afegir_seccio">📑 Afegir Secció</button>
+            <button id="btnPrint" class="btn btn-print" data-i18n="btn_imprimir">🖨️ Imprimir / PDF</button>
+  	    <button class="btn btn-secondary" onclick="window.open('planificador.html', '_blank')" data-i18n="btn_planificador">📅 Planificador de Sessions</button>       
             <div class="dropdown">
                 <button id="btnDropdown" class="btn btn-dropdown">
-                    ⚙️ Más opciones <span class="dropdown-arrow">▾</span>
+                    <span data-i18n="btn_mes_opcions">⚙️ Més opcions</span> <span class="dropdown-arrow">▾</span>
                 </button>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <button class="dropdown-item" id="btnHistory">📜 Historial de versiones</button>
-                    <button class="dropdown-item" id="btnEditor">✏️ Editor JSON</button>
-                    <button class="dropdown-item" id="btnAutoBackup">💾 Copia Automática</button>
-                    <button class="dropdown-item" id="btnResumenSync">📊 Resumen sincronización</button>
+                    <button class="dropdown-item" id="btnHistory" data-i18n="btn_historial">📜 Historial de versions</button>
+                    <button class="dropdown-item" id="btnEditor" data-i18n="btn_editor">✏️ Editor JSON</button>
+                    <button class="dropdown-item" id="btnAutoBackup" data-i18n="btn_copia_auto">💾 Còpia Automàtica</button>
+                    <button class="dropdown-item" id="btnResumenSync" data-i18n="btn_resum_sync">📊 Resum sincronització</button>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" id="btnExport">📥 Exportar Datos</button>
-                    <button class="dropdown-item" id="btnImport">📤 Importar Datos</button>
+                    <button class="dropdown-item" id="btnExport" data-i18n="btn_exportar">📥 Exportar Dades</button>
+                    <button class="dropdown-item" id="btnImport" data-i18n="btn_importar">📤 Importar Dades</button>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item danger" id="btnReset">🔄 Restablecer</button>
+                    <button class="dropdown-item danger" id="btnReset" data-i18n="btn_restablir">🔄 Restablir</button>
                 </div>
             </div>
             
@@ -40,140 +503,1333 @@
         </div>
 
         <div class="info-box no-print">
-            <h3>ℹ️ Información</h3>
-            <p>Los cambios se guardan automáticamente en tu navegador. Cada modificación crea una <strong>copia de seguridad</strong> en el historial (hasta 20 versiones).</p>
-            <p><strong>💡 Consejo:</strong> Usa "⚙️ Más opciones → Editor JSON" para editar directamente el código o trabajar en un editor externo y luego importar los cambios.</p>
-            <p><strong>🔄 Sincronización:</strong> Esta programación está conectada con el <strong>Planificador de Sesiones</strong> y la <strong>Ficha del Alumno</strong>. Usa "📊 Resumen sincronización" para ver el estado de la integración.</p>
+            <h3 data-i18n="info_titol">ℹ️ Informació</h3>
+            <p data-i18n="info_text1">Els canvis es guarden automàticament al teu navegador. Cada modificació crea una <strong>còpia de seguretat</strong> a l'historial (fins a 20 versions).</p>
+            <p data-i18n="info_text2"><strong>💡 Consell:</strong> Fes servir "⚙️ Més opcions → Editor JSON" per editar directament el codi o treballar en un editor extern i després importar els canvis.</p>
+            <p data-i18n="info_text3"><strong>🔄 Sincronització:</strong> Aquesta programació està connectada amb el <strong>Planificador de Sessions</strong> i la <strong>Fitxa de l'Alumne</strong>. Fes servir "📊 Resum sincronització" per veure l'estat de la integració.</p>
         </div>
 
         <div id="seccionesContainer" class="secciones-container"></div>
     </div>
 
-    <!-- Modal para añadir/editar temas -->
+    <!-- MODAL AFEGIR/EDITAR TEMA -->
     <div id="modalTema" class="modal">
         <div class="modal-content">
             <span class="close" data-modal="modalTema">&times;</span>
-            <h2 id="modalTemaTitle">Añadir Tema</h2>
+            <h2 id="modalTemaTitle" data-i18n="modal_tema_afegir">Afegir Tema</h2>
             <form id="temaForm">
                 <div class="form-group">
-                    <label for="temaFecha">Fecha:</label>
+                    <label for="temaFecha" data-i18n="lbl_data">Data:</label>
                     <input type="date" id="temaFecha" required>
                 </div>
                 <div class="form-group">
-                    <label for="temaTitulo">Título del Tema:</label>
+                    <label for="temaTitulo" data-i18n="lbl_titol_tema">Títol del Tema:</label>
                     <input type="text" id="temaTitulo" required>
                 </div>
                 <div class="form-group">
-                    <label for="temaDescripcion">Descripción:</label>
+                    <label for="temaDescripcion" data-i18n="lbl_descripcio">Descripció:</label>
                     <textarea id="temaDescripcion" rows="4"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="temaRecursos">Recursos HTML (una URL por línea):</label>
-                    <textarea id="temaRecursos" rows="5" placeholder="https://jpainous.github.io/dansa_tema03/archivo1.html"></textarea>
+                    <label for="temaRecursos" data-i18n="lbl_recursos">Recursos HTML (una URL per línia):</label>
+                    <textarea id="temaRecursos" rows="5" data-i18n-placeholder="ph_recursos" placeholder="https://jpainous.github.io/dansa_tema03/arxiu1.html"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="temaObservaciones">📝 Observaciones:</label>
-                    <textarea id="temaObservaciones" rows="3" placeholder="Notas personales, ajustes pendientes..."></textarea>
+                    <label for="temaObservaciones" data-i18n="lbl_observacions">📝 Observacions:</label>
+                    <textarea id="temaObservaciones" rows="3" data-i18n-placeholder="ph_observacions" placeholder="Notes personals, ajustos pendents..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="temaEstado">Estado:</label>
+                    <label for="temaEstado" data-i18n="lbl_estat">Estat:</label>
                     <select id="temaEstado">
-                        <option value="completo">✅ Completo (con presentación y recursos)</option>
-                        <option value="parcial">⚠️ Parcial (en desarrollo)</option>
-                        <option value="pendiente">⏳ Pendiente (por crear)</option>
+                        <option value="completo" data-i18n="estat_complet">✅ Complet (amb presentació i recursos)</option>
+                        <option value="parcial" data-i18n="estat_parcial">⚠️ Parcial (en desenvolupament)</option>
+                        <option value="pendiente" data-i18n="estat_pendent">⏳ Pendent (per crear)</option>
                     </select>
                 </div>
                 <input type="hidden" id="temaId">
                 <input type="hidden" id="temaSeccionId">
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-modal="modalTema">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="btn_guardar">💾 Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-modal="modalTema" data-i18n="btn_cancelar">Cancel·lar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal para añadir/editar secciones -->
+    <!-- MODAL AFEGIR/EDITAR SECCIÓ -->
     <div id="modalSeccion" class="modal">
         <div class="modal-content">
             <span class="close" data-modal="modalSeccion">&times;</span>
-            <h2 id="modalSeccionTitle">Añadir Sección</h2>
+            <h2 id="modalSeccionTitle" data-i18n="modal_seccio_afegir">Afegir Secció</h2>
             <form id="seccionForm">
                 <div class="form-group">
-                    <label for="seccionTitulo">Título de la Sección:</label>
-                    <input type="text" id="seccionTitulo" required placeholder="Ej: Datos Identificativos, Objetivos...">
+                    <label for="seccionTitulo" data-i18n="lbl_titol_seccio">Títol de la Secció:</label>
+                    <input type="text" id="seccionTitulo" required data-i18n-placeholder="ph_titol_seccio" placeholder="Ex: Dades Identificatives, Objectius...">
                 </div>
                 <div class="form-group">
-                    <label for="seccionIcono">Icono (emoji):</label>
-                    <input type="text" id="seccionIcono" maxlength="2" placeholder="📋">
+                    <label for="seccionIcono" data-i18n="lbl_icona">Icona (emoji):</label>
+                    <input type="text" id="seccionIcono" maxlength="2" data-i18n-placeholder="ph_icona" placeholder="📋">
                 </div>
                 <div class="form-group">
-                    <label for="seccionContenido">Contenido (admite HTML básico):</label>
+                    <label for="seccionContenido" data-i18n="lbl_contingut">Contingut (admet HTML bàsic):</label>
                     <textarea id="seccionContenido" rows="8"></textarea>
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" id="seccionTieneTemas"> Esta sección contiene temas (cronograma)
+                        <input type="checkbox" id="seccionTieneTemas"> <span data-i18n="chk_tema_temes">Aquesta secció conté temes (cronograma)</span>
                     </label>
                 </div>
                 <input type="hidden" id="seccionId">
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-modal="modalSeccion">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="btn_guardar">💾 Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-modal="modalSeccion" data-i18n="btn_cancelar">Cancel·lar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal de Historial de versiones -->
+    <!-- MODAL HISTORIAL -->
     <div id="modalHistorial" class="modal">
         <div class="modal-content modal-large">
             <span class="close" data-modal="modalHistorial">&times;</span>
-            <h2>📜 Historial de Versiones</h2>
-            <p class="modal-subtitle">Cada cambio crea automáticamente una copia de seguridad. Puedes restaurar cualquier versión anterior.</p>
+            <h2 data-i18n="modal_historial_titol">📜 Historial de Versions</h2>
+            <p class="modal-subtitle" data-i18n="modal_historial_sub">Cada canvi crea automàticament una còpia de seguretat. Pots restaurar qualsevol versió anterior.</p>
             <div id="historialLista" class="historial-lista"></div>
             <div class="form-actions">
-                <button type="button" class="btn btn-secondary" data-modal="modalHistorial">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-modal="modalHistorial" data-i18n="btn_tancar">Tancar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Editor JSON -->
+    <!-- MODAL EDITOR JSON -->
     <div id="modalEditor" class="modal">
         <div class="modal-content modal-xl">
             <span class="close" data-modal="modalEditor">&times;</span>
-            <h2>✏️ Editor JSON</h2>
-            <p class="modal-subtitle">Edita directamente el código JSON de la programación. Útil para trabajar en un editor externo y luego importar los cambios.</p>
-            <div class="editor-warning">
-                ⚠️ <strong>Precaución:</strong> Modificar el JSON manualmente puede romper la aplicación si el formato no es válido. Se creará una copia de seguridad automáticamente antes de aplicar cambios.
-            </div>
+            <h2 data-i18n="modal_editor_titol">✏️ Editor JSON</h2>
+            <p class="modal-subtitle" data-i18n="modal_editor_sub">Edita directament el codi JSON de la programació. Útil per treballar en un editor extern i després importar els canvis.</p>
+            <div class="editor-warning" data-i18n="editor_aviso">⚠️ <strong>Precaució:</strong> Modificar el JSON manualment pot trencar l'aplicació si el format no és vàlid. Es crearà una còpia de seguretat automàticament abans d'aplicar canvis.</div>
             <textarea id="editorJSON" class="editor-textarea" spellcheck="false"></textarea>
             <div class="form-actions">
-                <button type="button" id="btnAplicarJSON" class="btn btn-primary">✅ Aplicar Cambios</button>
-                <button type="button" id="btnFormatearJSON" class="btn btn-secondary">🎨 Formatear</button>
-                <button type="button" id="btnCopiarJSON" class="btn btn-secondary">📋 Copiar al Portapapeles</button>
-                <button type="button" class="btn btn-secondary" data-modal="modalEditor">Cancelar</button>
+                <button type="button" id="btnAplicarJSON" class="btn btn-primary" data-i18n="btn_aplicar">✅ Aplicar Canvis</button>
+                <button type="button" id="btnFormatearJSON" class="btn btn-secondary" data-i18n="btn_formatar">🎨 Formatejar</button>
+                <button type="button" id="btnCopiarJSON" class="btn btn-secondary" data-i18n="btn_copiar">📋 Copiar al Portapapers</button>
+                <button type="button" class="btn btn-secondary" data-modal="modalEditor" data-i18n="btn_cancelar">Cancel·lar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Resumen de Sincronización -->
+    <!-- MODAL RESUM SINCRONITZACIÓ -->
     <div id="modalSync" class="modal">
         <div class="modal-content modal-large">
             <span class="close" data-modal="modalSync">&times;</span>
-            <h2>📊 Resumen de Sincronización</h2>
-            <p class="modal-subtitle">Estado de la integración entre Programación, Planificador y Ficha del Alumno.</p>
+            <h2 data-i18n="modal_sync_titol">📊 Resum de Sincronització</h2>
+            <p class="modal-subtitle" data-i18n="modal_sync_sub">Estat de la integració entre Programació, Planificador i Fitxa de l'Alumne.</p>
             <div id="syncResumenContenido"></div>
             <div class="form-actions">
-                <button type="button" class="btn btn-secondary" data-modal="modalSync">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-modal="modalSync" data-i18n="btn_tancar">Tancar</button>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
+        <p data-i18n="footer_text">🩰 Fisiologia aplicada a la Dansa · Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
     </footer>
 
-    <script src="programacio.js"></script>
+    <script>
+        // ==========================================
+        // MOTOR DE TRADUCCIÓ (CA/ES/EN)
+        // ==========================================
+        const diccionario = {
+            ca: {
+                titol_pagina: "📚 Programació Didàctica",
+                subtitol_pagina: "Fisiologia Aplicada a la Dansa",
+                subtitol2_pagina: "Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+                btn_afegir_tema: "➕ Afegir Tema",
+                btn_afegir_seccio: "📑 Afegir Secció",
+                btn_imprimir: "🖨️ Imprimir / PDF",
+                btn_mes_opcions: "⚙️ Més opcions",
+                btn_historial: "📜 Historial de versions",
+                btn_editor: "✏️ Editor JSON",
+                btn_copia_auto: "💾 Còpia Automàtica",
+                btn_resum_sync: "📊 Resum sincronització",
+                btn_exportar: "📥 Exportar Dades",
+                btn_importar: "📤 Importar Dades",
+                btn_restablir: "🔄 Restablir",
+		btn_planificador: "📅 Planificador de Sessions",
+                info_titol: "ℹ️ Informació",
+                info_text1: 'Els canvis es guarden automàticament al teu navegador. Cada modificació crea una <strong>còpia de seguretat</strong> a l\'historial (fins a 20 versions).',
+                info_text2: '<strong>💡 Consell:</strong> Fes servir "⚙️ Més opcions → Editor JSON" per editar directament el codi o treballar en un editor extern i després importar els canvis.',
+                info_text3: '<strong>🔄 Sincronització:</strong> Aquesta programació està connectada amb el <strong>Planificador de Sessions</strong> i la <strong>Fitxa de l\'Alumne</strong>. Fes servir "📊 Resum sincronització" per veure l\'estat de la integració.',
+                modal_tema_afegir: "Afegir Tema",
+                modal_tema_editar: "Editar Tema",
+                modal_seccio_afegir: "Afegir Secció",
+                modal_seccio_editar: "Editar Secció",
+                modal_historial_titol: "📜 Historial de Versions",
+                modal_historial_sub: "Cada canvi crea automàticament una còpia de seguretat. Pots restaurar qualsevol versió anterior.",
+                modal_editor_titol: "✏️ Editor JSON",
+                modal_editor_sub: "Edita directament el codi JSON de la programació. Útil per treballar en un editor extern i després importar els canvis.",
+                modal_sync_titol: "📊 Resum de Sincronització",
+                modal_sync_sub: "Estat de la integració entre Programació, Planificador i Fitxa de l'Alumne.",
+                editor_aviso: "⚠️ <strong>Precaució:</strong> Modificar el JSON manualment pot trencar l'aplicació si el format no és vàlid. Es crearà una còpia de seguretat automàticament abans d'aplicar canvis.",
+                lbl_data: "Data:",
+                lbl_titol_tema: "Títol del Tema:",
+                lbl_descripcio: "Descripció:",
+                lbl_recursos: "Recursos HTML (una URL per línia):",
+                ph_recursos: "https://jpainous.github.io/dansa_tema03/arxiu1.html",
+                lbl_observacions: "📝 Observacions:",
+                ph_observacions: "Notes personals, ajustos pendents...",
+                lbl_estat: "Estat:",
+                estat_complet: "✅ Complet (amb presentació i recursos)",
+                estat_parcial: "⚠️ Parcial (en desenvolupament)",
+                estat_pendent: "⏳ Pendent (per crear)",
+                lbl_titol_seccio: "Títol de la Secció:",
+                ph_titol_seccio: "Ex: Dades Identificatives, Objectius...",
+                lbl_icona: "Icona (emoji):",
+                ph_icona: "📋",
+                lbl_contingut: "Contingut (admet HTML bàsic):",
+                chk_tema_temes: "Aquesta secció conté temes (cronograma)",
+                btn_guardar: "💾 Guardar",
+                btn_cancelar: "Cancel·lar",
+                btn_tancar: "Tancar",
+                btn_aplicar: "✅ Aplicar Canvis",
+                btn_formatar: "🎨 Formatejar",
+                btn_copiar: "📋 Copiar al Portapapers",
+                btn_editar: "✏️ Editar",
+                btn_eliminar: "🗑️ Eliminar",
+                btn_afegir_tema_seccio: "➕ Afegir Tema a aquesta secció",
+                btn_restaurar: "♻️ Restaurar",
+                footer_text: "🩰 Fisiologia aplicada a la Dansa · Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+                // Missatges toast
+                toast_seccio_guardada: "💾 Secció guardada",
+                toast_seccio_eliminada: "🗑️ Secció eliminada",
+                toast_tema_guardat: "💾 Tema guardat",
+                toast_tema_eliminat: "🗑️ Tema eliminat",
+                toast_titol_obligatori: "⚠️ El títol és obligatori",
+                toast_error_seccio: "⚠️ Error: No s'ha seleccionat una secció",
+                toast_error_guardar: "❌ Error en guardar",
+                toast_dades_restablertes: "✅ Dades restablertes correctament",
+                toast_versio_restaurada: "✅ Versió restaurada correctament",
+                toast_error_versio: "❌ Error en restaurar la versió",
+                toast_versio_eliminada: "🗑️ Versió eliminada",
+                toast_json_aplicat: "✅ Canvis aplicats correctament",
+                toast_json_invalid: "❌ JSON invàlid",
+                toast_json_format: "❌ El JSON no té el format correcte",
+                toast_json_copiat: "📋 JSON copiat al portapapers",
+                toast_json_formatat: "🎨 JSON formatat",
+                toast_dades_exportades: "📥 Dades exportades",
+                toast_error_exportar: "❌ Error en exportar",
+                toast_copia_descarregada: "💾 Còpia de seguretat descarregada",
+                toast_error_copia: "❌ Error en crear còpia",
+                toast_dades_importades: "📤 Dades importades correctament",
+                toast_error_llegir: "❌ Error en llegir el fitxer",
+                toast_seccio_buida: "No hi ha seccions. Fes clic a \"Afegir Secció\" per començar.",
+                toast_tema_buit: "No hi ha temes en aquesta secció.",
+                // Confirmacions
+                confirm_restablir: "Estàs segur que vols restablir totes les dades als valors inicials? Es perdran tots els canvis.",
+                confirm_restablir_backup: "🔒 CÒPIA DE SEGURETAT\n\nAbans de restablir, vols descarregar una còpia de seguretat de la teva programació actual?\n\n✅ Accepta = Es descarregarà un fitxer JSON\n❌ Cancel·la = Es continuarà sense fer còpia\n\nRecomanació: Accepta per tenir una còpia de seguretat.",
+                confirm_restablir_amb: "⚠️ RESTABLIR DADES\n\n✅ S'ha descarregat una còpia de seguretat.\n\nAra es restabliran totes les dades als valors inicials.\nAquesta acció NO es pot desfer.\n\nVols continuar?",
+                confirm_restablir_sense: "⚠️ RESTABLIR DADES\n\n⚠️ No s'ha fet còpia de seguretat.\n\nAra es restabliran totes les dades als valors inicials.\nAquesta acció NO es pot desfer.\n\nVols continuar?",
+                confirm_eliminar_seccio: "Eliminar la secció",
+                confirm_eliminar_temas: "També s'eliminaran",
+                confirm_tema: "tema(es) associat(s).",
+                confirm_eliminar_tema: "Eliminar el tema",
+                confirm_aplicar_json: "Aplicar aquests canvis? Es crearà una còpia de seguretat de l'estat actual.",
+                confirm_importar: "Importar aquestes dades? Es crearà una còpia de seguretat de l'estat actual.",
+                confirm_seccio_buida: "Primer has de crear una secció amb temes",
+                // Textos dinàmics
+                sense_contingut: "Sense contingut",
+                actual: "ACTUAL",
+                seccions: "seccions",
+                temes: "temes",
+                sense_versions: "No hi ha versions a l'historial.",
+                sense_data: "Sense data",
+                // Observacions i recursos
+                observacions_titol: "📝 Observacions:",
+                recursos_titol: "🔗 Recursos HTML:",
+                // Sincronització
+                sync_ultima: "🔄 Última sincronització amb el Planificador:",
+                sync_sessions: "sessions sincronitzades",
+                sync_alumnes: "alumnes han carregat dades actualitzades",
+                sync_info: "ℹ️ Sincronització:",
+                sync_info_text: "Encara no s'ha sincronitzat amb el Planificador de Sessions.",
+                sync_info_usa: "Fes servir el Planificador per gestionar les sessions i sincronitzar amb les fitxes de l'alumnat.",
+                sync_estat: "🔗 Estat de la Integració",
+                sync_sessions_sincro: "Sessions sincronitzades",
+                sync_accions_prof: "Accions professora",
+                sync_carregues_alumnes: "Càrregues d'alumnes",
+                sync_total: "Total accions al log",
+                sync_ultima_act: "📅 Última actualització:",
+                sync_sense: "ℹ️ Sense sincronitzacions encara",
+                sync_sense_text: 'Obre el <strong>Planificador de Sessions</strong> i prem "🔄 Actualitzar sessió" en qualsevol sessió per iniciar la sincronització amb les fitxes de l\'alumnat.',
+                sync_log: "📜 Log d'Accions Compartit",
+                sync_sense_accions: "No hi ha accions registrades al log compartit.",
+                sync_mostrant: "Mostrant les 30 accions més recents de",
+                sync_totals: "totals. Consulta el log complet al Planificador.",
+                // Estats
+                estat_text_complet: "✅ Complet",
+                estat_text_parcial: "⚠️ Parcial",
+                estat_text_pendent: "⏳ Pendent",
+                // Backup
+                backup_prefix: "BACKUP_programacion_"
+            },
+            es: {
+                titol_pagina: "📚 Programación Didáctica",
+                subtitol_pagina: "Fisiología Aplicada a la Danza",
+                subtitol2_pagina: "Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+                btn_afegir_tema: "➕ Añadir Tema",
+                btn_afegir_seccio: "📑 Añadir Sección",
+                btn_imprimir: "🖨️ Imprimir / PDF",
+                btn_mes_opcions: "⚙️ Más opciones",
+                btn_historial: "📜 Historial de versiones",
+                btn_editor: "✏️ Editor JSON",
+                btn_copia_auto: "💾 Copia Automática",
+                btn_resum_sync: "📊 Resumen sincronización",
+                btn_exportar: "📥 Exportar Datos",
+                btn_importar: "📤 Importar Datos",
+                btn_restablir: "🔄 Restablecer",
+		btn_planificador: "📅 Planificador de Sesiones",
+                info_titol: "ℹ️ Información",
+                info_text1: 'Los cambios se guardan automáticamente en tu navegador. Cada modificación crea una <strong>copia de seguridad</strong> en el historial (hasta 20 versiones).',
+                info_text2: '<strong>💡 Consejo:</strong> Usa "⚙️ Más opciones → Editor JSON" para editar directamente el código o trabajar en un editor externo y luego importar los cambios.',
+                info_text3: '<strong>🔄 Sincronización:</strong> Esta programación está conectada con el <strong>Planificador de Sesiones</strong> y la <strong>Ficha del Alumno</strong>. Usa "📊 Resumen sincronización" para ver el estado de la integración.',
+                modal_tema_afegir: "Añadir Tema",
+                modal_tema_editar: "Editar Tema",
+                modal_seccio_afegir: "Añadir Sección",
+                modal_seccio_editar: "Editar Sección",
+                modal_historial_titol: "📜 Historial de Versiones",
+                modal_historial_sub: "Cada cambio crea automáticamente una copia de seguridad. Puedes restaurar cualquier versión anterior.",
+                modal_editor_titol: "✏️ Editor JSON",
+                modal_editor_sub: "Edita directamente el código JSON de la programación. Útil para trabajar en un editor externo y luego importar los cambios.",
+                modal_sync_titol: "📊 Resumen de Sincronización",
+                modal_sync_sub: "Estado de la integración entre Programación, Planificador y Ficha del Alumno.",
+                editor_aviso: "⚠️ <strong>Precaución:</strong> Modificar el JSON manualmente puede romper la aplicación si el formato no es válido. Se creará una copia de seguridad automáticamente antes de aplicar cambios.",
+                lbl_data: "Fecha:",
+                lbl_titol_tema: "Título del Tema:",
+                lbl_descripcio: "Descripción:",
+                lbl_recursos: "Recursos HTML (una URL por línea):",
+                ph_recursos: "https://jpainous.github.io/dansa_tema03/archivo1.html",
+                lbl_observacions: "📝 Observaciones:",
+                ph_observacions: "Notas personales, ajustes pendientes...",
+                lbl_estat: "Estado:",
+                estat_complet: "✅ Completo (con presentación y recursos)",
+                estat_parcial: "⚠️ Parcial (en desarrollo)",
+                estat_pendent: "⏳ Pendiente (por crear)",
+                lbl_titol_seccio: "Título de la Sección:",
+                ph_titol_seccio: "Ej: Datos Identificativos, Objetivos...",
+                lbl_icona: "Icono (emoji):",
+                ph_icona: "📋",
+                lbl_contingut: "Contenido (admite HTML básico):",
+                chk_tema_temes: "Esta sección contiene temas (cronograma)",
+                btn_guardar: "💾 Guardar",
+                btn_cancelar: "Cancelar",
+                btn_tancar: "Cerrar",
+                btn_aplicar: "✅ Aplicar Cambios",
+                btn_formatar: "🎨 Formatear",
+                btn_copiar: "📋 Copiar al Portapapeles",
+                btn_editar: "✏️ Editar",
+                btn_eliminar: "🗑️ Eliminar",
+                btn_afegir_tema_seccio: "➕ Añadir Tema a esta sección",
+                btn_restaurar: "♻️ Restaurar",
+                footer_text: "🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD",
+                toast_seccio_guardada: "💾 Sección guardada",
+                toast_seccio_eliminada: "🗑️ Sección eliminada",
+                toast_tema_guardat: "💾 Tema guardado",
+                toast_tema_eliminat: "🗑️ Tema eliminado",
+                toast_titol_obligatori: "⚠️ El título es obligatorio",
+                toast_error_seccio: "⚠️ Error: No se ha seleccionado una sección",
+                toast_error_guardar: "❌ Error al guardar",
+                toast_dades_restablertes: "✅ Datos restablecidos correctamente",
+                toast_versio_restaurada: "✅ Versión restaurada correctamente",
+                toast_error_versio: "❌ Error al restaurar la versión",
+                toast_versio_eliminada: "🗑️ Versión eliminada",
+                toast_json_aplicat: "✅ Cambios aplicados correctamente",
+                toast_json_invalid: "❌ JSON inválido",
+                toast_json_format: "❌ El JSON no tiene el formato correcto",
+                toast_json_copiat: "📋 JSON copiado al portapapeles",
+                toast_json_formatat: "🎨 JSON formateado",
+                toast_dades_exportades: "📥 Datos exportados",
+                toast_error_exportar: "❌ Error al exportar",
+                toast_copia_descarregada: "💾 Copia de seguridad descargada",
+                toast_error_copia: "❌ Error al crear copia",
+                toast_dades_importades: "📤 Datos importados correctamente",
+                toast_error_llegir: "❌ Error al leer el archivo",
+                toast_seccio_buida: 'No hay secciones. Haz clic en "Añadir Sección" para comenzar.',
+                toast_tema_buit: "No hay temas en esta sección.",
+                confirm_restablir: "¿Estás seguro de que quieres restablecer todos los datos a los valores iniciales? Se perderán todos los cambios.",
+                confirm_restablir_backup: "🔒 COPIA DE SEGURIDAD\n\nAntes de restablecer, ¿quieres descargar una copia de seguridad de tu programación actual?\n\n✅ Acepta = Se descargará un archivo JSON\n❌ Cancela = Se continuará sin hacer copia\n\nRecomendación: Acepta para tener una copia de seguridad.",
+                confirm_restablir_amb: "⚠️ RESTABLECER DATOS\n\n✅ Se ha descargado una copia de seguridad.\n\nAhora se restablecerán todos los datos a los valores iniciales.\nEsta acción NO se puede deshacer.\n\n¿Continuar?",
+                confirm_restablir_sense: "⚠️ RESTABLECER DATOS\n\n⚠️ No se ha hecho copia de seguridad.\n\nAhora se restablecerán todos los datos a los valores iniciales.\nEsta acción NO se puede deshacer.\n\n¿Continuar?",
+                confirm_eliminar_seccio: "¿Eliminar la sección",
+                confirm_eliminar_temas: "También se eliminarán",
+                confirm_tema: "tema(s) asociado(s).",
+                confirm_eliminar_tema: "¿Eliminar el tema",
+                confirm_aplicar_json: "¿Aplicar estos cambios? Se creará una copia de seguridad del estado actual.",
+                confirm_importar: "¿Importar estos datos? Se creará una copia de seguridad del estado actual.",
+                confirm_seccio_buida: "Primero debes crear una sección con temas",
+                sense_contingut: "Sin contenido",
+                actual: "ACTUAL",
+                seccions: "secciones",
+                temes: "temas",
+                sense_versions: "No hay versiones en el historial.",
+                sense_data: "Sin fecha",
+                observacions_titol: "📝 Observaciones:",
+                recursos_titol: "🔗 Recursos HTML:",
+                sync_ultima: "🔄 Última sincronización con el Planificador:",
+                sync_sessions: "sesiones sincronizadas",
+                sync_alumnes: "alumnos han cargado datos actualizados",
+                sync_info: "ℹ️ Sincronización:",
+                sync_info_text: "Aún no se ha sincronizado con el Planificador de Sesiones.",
+                sync_info_usa: "Usa el Planificador para gestionar las sesiones y sincronizar con las fichas del alumnado.",
+                sync_estat: "🔗 Estado de la Integración",
+                sync_sessions_sincro: "Sesiones sincronizadas",
+                sync_accions_prof: "Acciones profesora",
+                sync_carregues_alumnes: "Cargas de alumnos",
+                sync_total: "Total acciones en log",
+                sync_ultima_act: "📅 Última actualización:",
+                sync_sense: "ℹ️ Sin sincronizaciones aún",
+                sync_sense_text: 'Abre el <strong>Planificador de Sesiones</strong> y pulsa "🔄 Actualizar sesión" en cualquier sesión para iniciar la sincronización con las fichas del alumnado.',
+                sync_log: "📜 Log de Acciones Compartido",
+                sync_sense_accions: "No hay acciones registradas en el log compartido.",
+                sync_mostrant: "Mostrando las 30 acciones más recientes de",
+                sync_totals: "totales. Consulta el log completo en el Planificador.",
+                estat_text_complet: "✅ Completo",
+                estat_text_parcial: "⚠️ Parcial",
+                estat_text_pendent: "⏳ Pendiente",
+                backup_prefix: "BACKUP_programacion_"
+            },
+            en: {
+                titol_pagina: "📚 Didactic Programming",
+                subtitol_pagina: "Physiology Applied to Dance",
+                subtitol2_pagina: "Course 2026-2027 · Dr. Cèlia Painous, MD, PhD",
+                btn_afegir_tema: "➕ Add Topic",
+                btn_afegir_seccio: "📑 Add Section",
+                btn_imprimir: "🖨️ Print / PDF",
+                btn_mes_opcions: "⚙️ More options",
+                btn_historial: "📜 Version history",
+                btn_editor: "✏️ JSON Editor",
+                btn_copia_auto: "💾 Automatic Backup",
+                btn_resum_sync: "📊 Sync summary",
+                btn_exportar: "📥 Export Data",
+                btn_importar: "📤 Import Data",
+                btn_restablir: "🔄 Reset",
+		btn_planificador: "📅 Session Planner",
+                info_titol: "ℹ️ Information",
+                info_text1: 'Changes are automatically saved in your browser. Each modification creates a <strong>backup copy</strong> in the history (up to 20 versions).',
+                info_text2: '<strong>💡 Tip:</strong> Use "⚙️ More options → JSON Editor" to edit the code directly or work in an external editor and then import the changes.',
+                info_text3: '<strong>🔄 Synchronization:</strong> This programming is connected to the <strong>Session Planner</strong> and the <strong>Student Sheet</strong>. Use "📊 Sync summary" to see the integration status.',
+                modal_tema_afegir: "Add Topic",
+                modal_tema_editar: "Edit Topic",
+                modal_seccio_afegir: "Add Section",
+                modal_seccio_editar: "Edit Section",
+                modal_historial_titol: "📜 Version History",
+                modal_historial_sub: "Each change automatically creates a backup copy. You can restore any previous version.",
+                modal_editor_titol: "✏️ JSON Editor",
+                modal_editor_sub: "Edit the programming JSON code directly. Useful for working in an external editor and then importing the changes.",
+                modal_sync_titol: "📊 Synchronization Summary",
+                modal_sync_sub: "Integration status between Programming, Planner and Student Sheet.",
+                editor_aviso: "⚠️ <strong>Caution:</strong> Manually modifying the JSON may break the application if the format is invalid. A backup copy will be created automatically before applying changes.",
+                lbl_data: "Date:",
+                lbl_titol_tema: "Topic Title:",
+                lbl_descripcio: "Description:",
+                lbl_recursos: "HTML Resources (one URL per line):",
+                ph_recursos: "https://jpainous.github.io/dansa_tema03/file1.html",
+                lbl_observacions: "📝 Observations:",
+                ph_observacions: "Personal notes, pending adjustments...",
+                lbl_estat: "Status:",
+                estat_complet: "✅ Complete (with presentation and resources)",
+                estat_parcial: "⚠️ Partial (in development)",
+                estat_pendent: "⏳ Pending (to be created)",
+                lbl_titol_seccio: "Section Title:",
+                ph_titol_seccio: "Ex: Identifying Data, Objectives...",
+                lbl_icona: "Icon (emoji):",
+                ph_icona: "📋",
+                lbl_contingut: "Content (accepts basic HTML):",
+                chk_tema_temes: "This section contains topics (schedule)",
+                btn_guardar: "💾 Save",
+                btn_cancelar: "Cancel",
+                btn_tancar: "Close",
+                btn_aplicar: "✅ Apply Changes",
+                btn_formatar: "🎨 Format",
+                btn_copiar: "📋 Copy to Clipboard",
+                btn_editar: "✏️ Edit",
+                btn_eliminar: "🗑️ Delete",
+                btn_afegir_tema_seccio: "➕ Add Topic to this section",
+                btn_restaurar: "♻️ Restore",
+                footer_text: "🩰 Physiology Applied to Dance · Course 2026-2027 · Dr. Cèlia Painous, MD, PhD",
+                toast_seccio_guardada: "💾 Section saved",
+                toast_seccio_eliminada: "🗑️ Section deleted",
+                toast_tema_guardat: "💾 Topic saved",
+                toast_tema_eliminat: "🗑️ Topic deleted",
+                toast_titol_obligatori: "⚠️ Title is required",
+                toast_error_seccio: "⚠️ Error: No section selected",
+                toast_error_guardar: "❌ Error saving",
+                toast_dades_restablertes: "✅ Data reset successfully",
+                toast_versio_restaurada: "✅ Version restored successfully",
+                toast_error_versio: "❌ Error restoring version",
+                toast_versio_eliminada: "🗑️ Version deleted",
+                toast_json_aplicat: "✅ Changes applied successfully",
+                toast_json_invalid: "❌ Invalid JSON",
+                toast_json_format: "❌ JSON format is incorrect",
+                toast_json_copiat: "📋 JSON copied to clipboard",
+                toast_json_formatat: "🎨 JSON formatted",
+                toast_dades_exportades: "📥 Data exported",
+                toast_error_exportar: "❌ Error exporting",
+                toast_copia_descarregada: "💾 Backup downloaded",
+                toast_error_copia: "❌ Error creating backup",
+                toast_dades_importades: "📤 Data imported successfully",
+                toast_error_llegir: "❌ Error reading file",
+                toast_seccio_buida: 'No sections. Click "Add Section" to start.',
+                toast_tema_buit: "No topics in this section.",
+                confirm_restablir: "Are you sure you want to reset all data to initial values? All changes will be lost.",
+                confirm_restablir_backup: "🔒 BACKUP\n\nBefore resetting, do you want to download a backup of your current programming?\n\n✅ Accept = A JSON file will be downloaded\n❌ Cancel = Continue without backup\n\nRecommendation: Accept to have a backup.",
+                confirm_restablir_amb: "⚠️ RESET DATA\n\n✅ A backup has been downloaded.\n\nAll data will now be reset to initial values.\nThis action CANNOT be undone.\n\nContinue?",
+                confirm_restablir_sense: "⚠️ RESET DATA\n\n⚠️ No backup has been made.\n\nAll data will now be reset to initial values.\nThis action CANNOT be undone.\n\nContinue?",
+                confirm_eliminar_seccio: "Delete section",
+                confirm_eliminar_temas: "Will also be deleted",
+                confirm_tema: "associated topic(s).",
+                confirm_eliminar_tema: "Delete topic",
+                confirm_aplicar_json: "Apply these changes? A backup of the current state will be created.",
+                confirm_importar: "Import this data? A backup of the current state will be created.",
+                confirm_seccio_buida: "You must first create a section with topics",
+                sense_contingut: "No content",
+                actual: "CURRENT",
+                seccions: "sections",
+                temes: "topics",
+                sense_versions: "No versions in history.",
+                sense_data: "No date",
+                observacions_titol: "📝 Observations:",
+                recursos_titol: "🔗 HTML Resources:",
+                sync_ultima: "🔄 Last synchronization with Planner:",
+                sync_sessions: "synchronized sessions",
+                sync_alumnes: "students have loaded updated data",
+                sync_info: "ℹ️ Synchronization:",
+                sync_info_text: "Not yet synchronized with the Session Planner.",
+                sync_info_usa: "Use the Planner to manage sessions and synchronize with student sheets.",
+                sync_estat: "🔗 Integration Status",
+                sync_sessions_sincro: "Synchronized sessions",
+                sync_accions_prof: "Teacher actions",
+                sync_carregues_alumnes: "Student loads",
+                sync_total: "Total actions in log",
+                sync_ultima_act: "📅 Last update:",
+                sync_sense: "ℹ️ No synchronizations yet",
+                sync_sense_text: 'Open the <strong>Session Planner</strong> and click "🔄 Update session" on any session to start synchronization with student sheets.',
+                sync_log: "📜 Shared Actions Log",
+                sync_sense_accions: "No actions recorded in the shared log.",
+                sync_mostrant: "Showing the 30 most recent actions of",
+                sync_totals: "total. See the full log in the Planner.",
+                estat_text_complet: "✅ Complete",
+                estat_text_parcial: "⚠️ Partial",
+                estat_text_pendent: "⏳ Pending",
+                backup_prefix: "BACKUP_programming_"
+            }
+        };
+
+        // MOTOR DE TRADUCCIÓ
+        function aplicarIdioma(lang) {
+            localStorage.setItem('idioma_preferit', lang);
+            document.documentElement.lang = lang;
+            const selector = document.getElementById('selectorIdioma');
+            if (selector) selector.value = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const clau = el.getAttribute('data-i18n');
+                if (diccionario[lang] && diccionario[lang][clau]) {
+                    el.innerHTML = diccionario[lang][clau];
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const clau = el.getAttribute('data-i18n-placeholder');
+                if (diccionario[lang] && diccionario[lang][clau]) {
+                    el.placeholder = diccionario[lang][clau];
+                }
+            });
+            // Re-renderitzar per aplicar traduccions a contingut dinàmic
+            if (typeof renderitzar === 'function') {
+                renderitzar();
+                setTimeout(comprovarEstatSincronitzacio, 100);
+            }
+        }
+
+        function t(key) {
+            const lang = localStorage.getItem('idioma_preferit') || 'ca';
+            return (diccionario[lang] && diccionario[lang][key]) || (diccionario.ca[key]) || key;
+        }
+
+        // ==========================================
+        // CONFIGURACIÓ
+        // ==========================================
+        const STORAGE_KEY = 'programacioFisiologia';
+        const HISTORY_KEY = 'programacioHistorial';
+        const SHARED_KEY = 'fisiologiaSharedData';
+        const MAX_HISTORY = 20;
+
+        let state = { secciones: [], temas: [] };
+
+        // ==========================================
+        // DADES INICIALS
+        // ==========================================
+        const datosIniciales = {
+            secciones: [
+                { id: 'sec-1', icono: '📋', titulo: '1. Datos Identificativos',
+                  contenido: '<ul><li><strong>Asignatura:</strong> Fisiología del Sistema Musculoesquelético</li><li><strong>Nivel:</strong> Formación en Danza</li><li><strong>Curso académico:</strong> 2026-2027</li><li><strong>Profesora:</strong> Dra. Cèlia Painous, MD, PhD</li><li><strong>Carácter:</strong> Obligatoria</li><li><strong>Plan de estudios:</strong> <a href="https://jpainous.github.io/danza_t01/plaestudisFISIOLOGIA.pdf" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">📄 Ver documento PDF</a></li></ul><div id="indicadorSync"></div>',
+                  tieneTemas: false },
+                { id: 'sec-2', icono: '🎯', titulo: '2. Descripción y Justificación',
+                  contenido: '<p>Esta asignatura proporciona al alumnado de danza los fundamentos de <strong>anatomía, fisiología y biomecánica</strong> del cuerpo humano, ofreciendo una <strong>visión global e integradora</strong> de sus sistemas orgánicos y sus <strong>adaptaciones a la actividad física</strong>.</p><p>Se aleja del enfoque médico tradicional para adoptar una perspectiva aplicada y somática, utilizando la danza (<em>plié, relevé, grand jeté, turnout</em>) como eje vertebrador. El objetivo es que el bailarín comprenda su propio cuerpo como su principal <strong>vehículo de expresión artística</strong>, desarrollando la capacidad de síntesis para relacionar estos sistemas como un todo. Así, podrá <strong>optimizar su técnica, mejorar su rendimiento creativo, prevenir patologías frecuentes</strong> y fomentar una <strong>actitud positiva y de interés</strong> hacia el funcionamiento de su propio instrumento de trabajo.</p>',
+                  tieneTemas: false },
+                { id: 'sec-3', icono: '🏆', titulo: '3. Competencias y Objetivos',
+                  contenido: '<p><strong>Competencias Generales:</strong></p><ul><li><strong>CG3:</strong> Conocer los principios básicos, tanto teóricos como prácticos, del funcionamiento del cuerpo humano, con el objeto de proporcionar una visión global e integradora del mismo.</li></ul><p><strong>Competencias Específicas:</strong></p><ul><li><strong>CECI 3:</strong> Conocer la anatomía, fisiología y biomecánica del cuerpo humano, sus capacidades y limitaciones como vehículo de expresión artística, así como las patologías más frecuentes y su prevención, para poder optimizar la interpretación y la labor creativa.</li></ul><p><strong>Otras Competencias de la Asignatura:</strong></p><ul><li>Desarrollar la capacidad de síntesis y de visiones globales (seminarios).</li><li>Desarrollar la aplicación de los conocimientos a la práctica: habilidades y actitudes (práctica).</li></ul><p><strong>Resultados de Aprendizaje:</strong></p><p><em>Conocimientos:</em></p><ul><li><strong>C1:</strong> Conocer la estructura y las bases funcionales de los sistemas orgánicos del ser humano.</li><li><strong>C2:</strong> Conocer las adaptaciones de estos sistemas a la actividad física.</li></ul><p><em>Habilidades, procedimientos o destrezas:</em></p><ul><li><strong>H1:</strong> Relacionar los diferentes sistemas en el funcionamiento del organismo como un todo.</li><li><strong>H2:</strong> Aplicar los conocimientos adquiridos a su campo de trabajo.</li></ul><p><em>Actitudes:</em></p><ul><li><strong>A1:</strong> Interés por el funcionamiento del propio cuerpo.</li><li><strong>A2:</strong> Actitud positiva ante un campo de conocimiento que no siempre encaja con sus intereses artísticos.</li><li><strong>A3:</strong> Tomar conciencia de la importancia de estos conocimientos para una mejor ejecución de su trabajo.</li></ul>',
+                  tieneTemas: false },
+                { id: 'sec-4', icono: '📅', titulo: '4. Cronograma y Temporalización',
+                  contenido: '<p>La asignatura se estructura en sesiones semanales. A continuación se detallan los temas, fechas y recursos asociados.</p>',
+                  tieneTemas: true },
+                { id: 'sec-5', icono: '📚', titulo: '5. Metodología Docente',
+                  contenido: '<p>Se utilizará una metodología <strong>activo-participativa</strong>:</p><ul><li><strong>Clases magistrales interactivas:</strong> Uso de presentaciones con apoyos visuales y esquemas animados.</li><li><strong>Aprendizaje basado en recursos digitales:</strong> Uso guiado de los archivos HTML interactivos.</li><li><strong>Resolución de Casos Prácticos:</strong> Trabajo individual o en parejas con los 70 casos prácticos diseñados.</li><li><strong>Taller de análisis biomecánico aplicado a la danza:</strong> Ejercicios de movimiento donde el alumnado analiza la biomecánica de su propio cuerpo y de gestos técnicos (plié, relevé, grand jeté, arabesque).</li></ul>',
+                  tieneTemas: false },
+                { id: 'sec-6', icono: '📝', titulo: '6. Sistema de Evaluación',
+                  contenido: '<p>La evaluación será <strong>continua, formativa y sumativa</strong>, combinando diferentes instrumentos que permiten valorar tanto los conocimientos teóricos como su aplicación práctica y las actitudes desarrolladas.</p><h3 style="color:#667eea; margin-top:20px;">📊 Instrumentos de Evaluación</h3><table style="width:100%;border-collapse:collapse;margin-top:10px;"><thead><tr style="background:#667eea;color:white;"><th style="padding:10px;text-align:left;">Instrumento</th><th style="padding:10px;text-align:left;">Descripción</th><th style="padding:10px;text-align:center;">Ponderación</th><th style="padding:10px;text-align:left;">Competencias/Resultados que evalúa</th></tr></thead><tbody><tr style="background:#f8f9fa;"><td style="padding:10px;"><strong>Tests y Casos Prácticos</strong></td><td style="padding:10px;">Resolución de los módulos interactivos de casos prácticos aplicados a la danza (con justificación de respuestas).</td><td style="padding:10px;text-align:center;"><strong>30%</strong></td><td style="padding:10px;"><strong>C1, C2, H2</strong><br><small>Conocimientos teóricos y aplicación al campo de trabajo</small></td></tr><tr><td style="padding:10px;"><strong>Trabajo Oral</strong></td><td style="padding:10px;">Práctica somática de integración biomecánica: análisis fisiológico de una secuencia de danza en grupos (identificación de contracciones, planos de movimiento y roles musculares) + presentación oral.</td><td style="padding:10px;text-align:center;"><strong>40%</strong></td><td style="padding:10px;"><strong>CECI 3, H1, H2, A1, A3</strong><br><small>Visión integradora, aplicación práctica, interés por el propio cuerpo y consciencia de la importancia de los conocimientos</small></td></tr><tr style="background:#f8f9fa;"><td style="padding:10px;"><strong>Examen Final</strong></td><td style="padding:10px;">Prueba integradora global de toda la asignatura que combina preguntas teóricas y aplicadas.</td><td style="padding:10px;text-align:center;"><strong>30%</strong></td><td style="padding:10px;"><strong>CG3, CECI 3, C1, C2, H1, H2</strong><br><small>Evaluación global de todos los resultados de aprendizaje cognitivos y procedimentales</small></td></tr></tbody></table><h3 style="color:#667eea; margin-top:25px;">🌟 Evaluación de Actitudes (Transversal)</h3><p>Las actitudes se evaluarán de forma <strong>continua y observacional</strong> a lo largo de todo el curso, mediante la participación en clase, la actitud ante los contenidos y el interés demostrado:</p><ul><li><strong>A1 - Interés por el funcionamiento del propio cuerpo:</strong> Participación activa en las prácticas somáticas y preguntas sobre la propia experiencia corporal.</li><li><strong>A2 - Actitud positiva ante un campo de conocimiento que no siempre encaja con sus intereses artísticos:</strong> Disposición para abordar contenidos científicos con rigor y curiosidad, aunque no sean su ámbito principal.</li><li><strong>A3 - Consciencia de la importancia de estos conocimientos para una mejor ejecución de su trabajo:</strong> Capacidad de conectar los contenidos teóricos con la práctica artística cotidiana.</li></ul><p style="background:#e7f3ff;border-left:4px solid #2196F3;padding:10px 15px;border-radius:6px;margin-top:10px;"><strong>💡 Nota:</strong> Las actitudes no tienen una ponderación numérica específica, pero se tendrán en cuenta como <strong>criterio cualitativo</strong> en la evaluación final y pueden ser determinantes en casos límite.</p><h3 style="color:#667eea; margin-top:25px;">✅ Criterios de Aprobación</h3><ul><li>Es necesario obtener una <strong>calificación mínima de 5/10</strong> en la suma ponderada de los tres instrumentos principales.</li><li>Se recomienda obtener como mínimo un <strong>4/10 en cada uno de los tres instrumentos</strong> para garantizar una evaluación equilibrada.</li><li>La asistencia y participación activa en las prácticas es <strong>imprescindible</strong> para superar la asignatura.</li></ul><h3 style="color:#667eea; margin-top:25px;">🔄 Evaluación Continua</h3><p>La evaluación continua permite detectar dificultades de aprendizaje a lo largo del curso y ofrecer <strong>retroalimentación constante</strong> al alumnado. Las actividades formativas (como los casos prácticos interactivos) no siempre computan para la nota final, pero son <strong>herramientas esenciales</strong> para consolidar los aprendizajes y preparar las pruebas evaluables.</p>',
+                  tieneTemas: false }
+            ],
+            temas: [
+                { id: 'tema-1', seccionId: 'sec-4', fecha: '2026-10-09', titulo: 'Presentación. Homeostasis y Fisiología celular', descripcion: 'Niveles de organización, líquidos corporales, homeostasis, sistemas de regulación y retroalimentación.', recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html','https://jpainous.github.io/dansa_tema03/esqueleto_00_A.html'], observaciones: '', estado: 'completo' },
+                { id: 'tema-2', seccionId: 'sec-4', fecha: '2026-10-16', titulo: 'Sistema musculoesquelético I', descripcion: 'Estructura muscular, sarcómero, unidad motora, mecanismo de contracción (Ca²⁺/ATP), rigor mortis, rampas y tipos de contracción.', recursos: ['https://jpainous.github.io/dansa_tema03/actividades_sarcomero.html','https://jpainous.github.io/dansa_tema03/miosina_actina.html','https://jpainous.github.io/dansa_tema03/calcio_atp.html','https://jpainous.github.io/dansa_tema03/contraccion_muscular.html','https://jpainous.github.io/dansa_tema03/unidad_motora.html'], observaciones: '', estado: 'completo' },
+                { id: 'tema-3', seccionId: 'sec-4', fecha: '2026-10-23', titulo: 'Sistema musculoesquelético II', descripcion: 'Cadena biomecánica, clasificación ósea, partes del hueso, remodelación, articulaciones, planos de movimiento y propiocepción.', recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_01_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_02_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_03_D.html','https://jpainous.github.io/dansa_tema03/esqueleto_04_tendones.html','https://jpainous.github.io/dansa_tema03/esqueleto_05_articulaciones_A.html','https://jpainous.github.io/dansa_tema03/planos_movimiento.html'], observaciones: '', estado: 'completo' },
+                { id: 'tema-4', seccionId: 'sec-4', fecha: '2026-10-30', titulo: 'Festivo (Libre disposición CSD)', descripcion: 'Día festivo. Repaso autónomo con los casos prácticos.', recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_A.html'], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-5', seccionId: 'sec-4', fecha: '2026-11-06', titulo: 'Sistema nervioso I', descripcion: 'Tema en desarrollo. Se vinculará con la unidad motora ya estudiada.', recursos: [], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-6', seccionId: 'sec-4', fecha: '2026-11-13', titulo: 'Preparación y envío de trabajos orales', descripcion: 'Tutorización del trabajo grupal: "Análisis fisiológico de una secuencia de danza".', recursos: ['https://jpainous.github.io/dansa_tema03/musculos_tr_equipo.html','https://jpainous.github.io/dansa_tema03/trabajo_musculos.html'], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-7', seccionId: 'sec-4', fecha: '2026-11-20', titulo: 'Sistema nervioso II / Sueño', descripcion: 'Tema en desarrollo. Vinculable a la recuperación homeostática y sistema nervioso autónomo.', recursos: [], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-8', seccionId: 'sec-4', fecha: '2026-11-27', titulo: 'Presentaciones Trabajos Orales / La sangre', descripcion: 'Evaluación formativa: exposición grupal de la "Práctica somática de integración biomecánica".', recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_B.html'], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-9', seccionId: 'sec-4', fecha: '2026-12-04', titulo: 'Sistema Hormonal', descripcion: 'Tema en desarrollo. Vinculable a la retroalimentación y adaptación ósea/muscular.', recursos: [], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-10', seccionId: 'sec-4', fecha: '2026-12-11', titulo: 'Nutrición (nutricionista + práctica)', descripcion: 'Sesión con nutricionista. Vinculable a la homeostasis, glucosa y recuperación muscular.', recursos: [], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-11', seccionId: 'sec-4', fecha: '2026-12-18', titulo: 'EVALUACIÓN PARCIAL', descripcion: 'Prueba objetiva sobre Homeostasis, Sistema Muscular y Sistema Óseo/Articular.', recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_A.html','https://jpainous.github.io/dansa_tema03/casos_practicos02_B.html'], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-12', seccionId: 'sec-4', fecha: '2027-01-08', titulo: 'Aparato Cardiovascular', descripcion: 'Tema en desarrollo. Vinculable al transporte de O₂/CO₂ y homeostasis en el esfuerzo.', recursos: [], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-13', seccionId: 'sec-4', fecha: '2027-01-15', titulo: 'Aparato Respiratorio', descripcion: 'Tema en desarrollo. Vinculable al intercambio gaseoso y pH sanguíneo.', recursos: [], observaciones: '', estado: 'pendiente' },
+                { id: 'tema-14', seccionId: 'sec-4', fecha: '2027-01-22', titulo: 'EXAMEN FINAL', descripcion: 'Prueba integradora global de toda la asignatura.', recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_test_final.html'], observaciones: '', estado: 'pendiente' }
+            ]
+        };
+
+        // ==========================================
+        // NOTIFICACIONS TOAST
+        // ==========================================
+        function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipo}`;
+            toast.textContent = mensaje;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.3s';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, duracion);
+        }
+
+        // ==========================================
+        // GESTIÓ DE L'ESTAT
+        // ==========================================
+        function migrarDatos(datos) {
+            if (!datos || !datos.secciones || !datos.temas) return null;
+            datos.temas = datos.temas.map(t => ({
+                id: t.id || generarId('tema'),
+                seccionId: t.seccionId || '',
+                fecha: t.fecha || '',
+                titulo: t.titulo || '',
+                descripcion: t.descripcion || '',
+                recursos: Array.isArray(t.recursos) ? t.recursos : [],
+                observaciones: t.observaciones || '',
+                estado: t.estado || 'pendiente'
+            }));
+            datos.secciones = datos.secciones.map(s => ({
+                id: s.id || generarId('sec'),
+                icono: s.icono || '📄',
+                titulo: s.titulo || '',
+                contenido: s.contenido || '',
+                tieneTemas: s.tieneTemas || false
+            }));
+            return datos;
+        }
+
+        function guardarEstado(crearBackup = true) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                if (crearBackup) crearVersionHistorial();
+                return true;
+            } catch (e) {
+                console.error('Error:', e);
+                mostrarToast(t('toast_error_guardar'), 'error');
+                return false;
+            }
+        }
+
+        function cargarEstado() {
+            try {
+                const datosGuardados = localStorage.getItem(STORAGE_KEY);
+                if (datosGuardados) {
+                    const datosMigrados = migrarDatos(JSON.parse(datosGuardados));
+                    if (datosMigrados) state = datosMigrados;
+                    else state = JSON.parse(JSON.stringify(datosIniciales));
+                } else {
+                    state = JSON.parse(JSON.stringify(datosIniciales));
+                }
+                guardarEstado(false);
+            } catch (e) {
+                console.error('Error:', e);
+                state = JSON.parse(JSON.stringify(datosIniciales));
+                guardarEstado(false);
+            }
+        }
+
+        function restablecerEstado() {
+            const quiereBackup = confirm(t('confirm_restablir_backup'));
+            if (quiereBackup) {
+                try {
+                    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+                    a.download = `${t('backup_prefix')}${fecha}.json`;
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    mostrarToast(t('toast_copia_descarregada'), 'success');
+                } catch (e) { console.error(e); }
+            }
+            const confirma = confirm(quiereBackup ? t('confirm_restablir_amb') : t('confirm_restablir_sense'));
+            if (confirma) {
+                state = JSON.parse(JSON.stringify(datosIniciales));
+                guardarEstado();
+                renderizar();
+                mostrarToast(t('toast_dades_restablertes'), 'success');
+                closeDropdown();
+            }
+        }
+
+        // ==========================================
+        // HISTORIAL DE VERSIONS
+        // ==========================================
+        function crearVersionHistorial() {
+            try {
+                let historial = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+                const nuevaVersion = {
+                    id: 'v-' + Date.now(),
+                    fecha: new Date().toISOString(),
+                    datos: JSON.parse(JSON.stringify(state))
+                };
+                historial.unshift(nuevaVersion);
+                if (historial.length > MAX_HISTORY) historial = historial.slice(0, MAX_HISTORY);
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(historial));
+            } catch (e) { console.error('Error:', e); }
+        }
+
+        function obtenerHistorial() {
+            try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+
+        function restaurarVersion(versionId) {
+            const historial = obtenerHistorial();
+            const version = historial.find(v => v.id === versionId);
+            if (!version) return;
+            if (confirm(t('confirm_aplicar_json').replace('Aplicar', 'Restaurar'))) {
+                const datosMigrados = migrarDatos(JSON.parse(JSON.stringify(version.datos)));
+                if (datosMigrados) {
+                    state = datosMigrados;
+                    guardarEstado();
+                    renderizar();
+                    mostrarToast(t('toast_versio_restaurada'), 'success');
+                    cerrarModal('modalHistorial');
+                } else {
+                    mostrarToast(t('toast_error_versio'), 'error');
+                }
+            }
+        }
+
+        function eliminarVersion(versionId) {
+            if (!confirm(t('confirm_eliminar_tema').replace('tema', 'versión'))) return;
+            let historial = obtenerHistorial();
+            historial = historial.filter(v => v.id !== versionId);
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(historial));
+            renderizarHistorial();
+            mostrarToast(t('toast_versio_eliminada'), 'info');
+        }
+
+        function formatearFechaISO(isoString) {
+            const d = new Date(isoString);
+            const lang = localStorage.getItem('idioma_preferit') || 'ca';
+            return d.toLocaleDateString(lang === 'es' ? 'es-ES' : (lang === 'en' ? 'en-US' : 'ca-ES'), { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderizarHistorial() {
+            const lista = document.getElementById('historialLista');
+            const historial = obtenerHistorial();
+            if (historial.length === 0) {
+                lista.innerHTML = `<div class="historial-vacio">${t('sense_versions')}</div>`;
+                return;
+            }
+            lista.innerHTML = historial.map((v, idx) => {
+                const numTemas = v.datos.temas ? v.datos.temas.length : 0;
+                const numSecciones = v.datos.secciones ? v.datos.secciones.length : 0;
+                const esActual = idx === 0;
+                return `
+                    <div class="historial-item ${esActual ? 'current' : ''}">
+                        <div class="historial-info">
+                            <div class="historial-fecha">
+                                📅 ${formatearFechaISO(v.fecha)}
+                                ${esActual ? `<span class="historial-badge">${t('actual')}</span>` : ''}
+                            </div>
+                            <div class="historial-detalle">
+                                ${numSecciones} ${t('seccions')} · ${numTemas} ${t('temes')}
+                            </div>
+                        </div>
+                        <div class="historial-actions">
+                            ${!esActual ? `<button class="btn btn-restore" onclick="restaurarVersion('${v.id}')">${t('btn_restaurar')}</button>` : ''}
+                            <button class="btn btn-delete-version" onclick="eliminarVersion('${v.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function abrirHistorial() {
+            renderizarHistorial();
+            abrirModal('modalHistorial');
+            closeDropdown();
+        }
+
+        // ==========================================
+        // EDITOR JSON
+        // ==========================================
+        function abrirEditor() {
+            const editor = document.getElementById('editorJSON');
+            editor.value = JSON.stringify(state, null, 2);
+            abrirModal('modalEditor');
+            closeDropdown();
+        }
+
+        function aplicarCambiosJSON() {
+            const editor = document.getElementById('editorJSON');
+            try {
+                const nuevosDatos = JSON.parse(editor.value);
+                const datosMigrados = migrarDatos(nuevosDatos);
+                if (!datosMigrados) {
+                    mostrarToast(t('toast_json_format'), 'error');
+                    return;
+                }
+                if (confirm(t('confirm_aplicar_json'))) {
+                    state = datosMigrados;
+                    guardarEstado();
+                    renderizar();
+                    mostrarToast(t('toast_json_aplicat'), 'success');
+                    cerrarModal('modalEditor');
+                }
+            } catch (e) {
+                mostrarToast(`${t('toast_json_invalid')}: ${e.message}`, 'error', 5000);
+            }
+        }
+
+        function formatearJSON() {
+            const editor = document.getElementById('editorJSON');
+            try {
+                const datos = JSON.parse(editor.value);
+                editor.value = JSON.stringify(datos, null, 2);
+                mostrarToast(t('toast_json_formatat'), 'info');
+            } catch (e) {
+                mostrarToast(t('toast_json_invalid'), 'error');
+            }
+        }
+
+        function copiarJSON() {
+            const editor = document.getElementById('editorJSON');
+            editor.select();
+            document.execCommand('copy');
+            mostrarToast(t('toast_json_copiat'), 'success');
+        }
+
+        // ==========================================
+        // SINCRONITZACIÓ AMB PLANIFICADOR I FITXA
+        // ==========================================
+        function obtenerDatosCompartidos() {
+            try {
+                const datos = localStorage.getItem(SHARED_KEY);
+                if (datos) return JSON.parse(datos);
+            } catch (e) { console.error(e); }
+            return { sesiones: [], log: [], sesionActualizadaId: null, ultimaActualizacion: null };
+        }
+
+        function comprobarEstatSincronitzacio() {
+            try {
+                const datos = obtenerDatosCompartidos();
+                const indicador = document.getElementById('indicadorSync');
+                if (!indicador) return;
+                if (datos.ultimaActualizacion) {
+                    const fecha = new Date(datos.ultimaActualizacion);
+                    const fechaFormateada = fecha.toLocaleDateString(localStorage.getItem('idioma_preferit') || 'ca', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    const numSesiones = datos.sesiones ? datos.sesiones.length : 0;
+                    const numAccionesAlumnos = datos.log ? datos.log.filter(l => l.accion === 'sincronizacion_alumno').length : 0;
+                    indicador.className = 'indicador-sync';
+                    indicador.innerHTML = `<strong>${t('sync_ultima')}</strong> ${fechaFormateada}<br><small>📊 ${numSesiones} ${t('sync_sessions')} · 👨‍🎓 ${numAccionesAlumnos} ${t('sync_alumnes')}</small>`;
+                } else {
+                    indicador.className = 'indicador-sync sin_datos';
+                    indicador.innerHTML = `<strong>${t('sync_info')}</strong> ${t('sync_info_text')}<br><small>${t('sync_info_usa')}</small>`;
+                }
+            } catch (e) { console.error('Error:', e); }
+        }
+
+        function verResumenSincronizacion() {
+            const datos = obtenerDatosCompartidos();
+            const contenido = document.getElementById('syncResumenContenido');
+            let html = `<div class="sync-resumen"><h3>${t('sync_estat')}</h3>`;
+            if (datos.ultimaActualizacion) {
+                const fecha = new Date(datos.ultimaActualizacion).toLocaleDateString(localStorage.getItem('idioma_preferit') || 'ca', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const numSesiones = datos.sesiones ? datos.sesiones.length : 0;
+                const numAccionesProfesora = datos.log ? datos.log.filter(l => l.usuario === 'Profesora').length : 0;
+                const numAccionesAlumnos = datos.log ? datos.log.filter(l => l.accion === 'sincronizacion_alumno').length : 0;
+                const numTotal = datos.log ? datos.log.length : 0;
+                html += `
+                    <div class="sync-stats">
+                        <div class="sync-stat-card"><div class="sync-stat-numero">${numSesiones}</div><div class="sync-stat-label">${t('sync_sessions_sincro')}</div></div>
+                        <div class="sync-stat-card"><div class="sync-stat-numero">${numAccionesProfesora}</div><div class="sync-stat-label">${t('sync_accions_prof')}</div></div>
+                        <div class="sync-stat-card"><div class="sync-stat-numero">${numAccionesAlumnos}</div><div class="sync-stat-label">${t('sync_carregues_alumnes')}</div></div>
+                        <div class="sync-stat-card"><div class="sync-stat-numero">${numTotal}</div><div class="sync-stat-label">${t('sync_total')}</div></div>
+                    </div>
+                    <p style="margin-top:15px;"><strong>${t('sync_ultima_act')}</strong> ${fecha}</p>
+                `;
+            } else {
+                html += `<div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;border-radius:6px;"><strong>${t('sync_sense')}</strong><p style="margin-top:8px;">${t('sync_sense_text')}</p></div>`;
+            }
+            html += `<h3>${t('sync_log')}</h3>`;
+            if (datos.log && datos.log.length > 0) {
+                html += '<div class="sync-log-list">';
+                datos.log.slice(0, 30).forEach(l => {
+                    const clase = l.accion === 'sincronizacion_alumno' ? 'log-alumno' : (l.accion === 'sincronizacion' ? 'log-sync' : '');
+                    const icono = { sincronizacion: '🔄', sincronizacion_alumno: '👨‍🎓', cambio_estado: '📊', edicion: '✏️', creacion: '➕', eliminacion: '🗑️' }[l.accion] || '📝';
+                    html += `<div class="sync-log-item ${clase}"><span class="sync-log-fecha">${formatearFechaISO(l.fecha)}</span><span class="sync-log-contenido">${icono} ${l.detalle}</span><span class="sync-log-usuario">— ${l.usuario}</span></div>`;
+                });
+                html += '</div>';
+                if (datos.log.length > 30) html += `<p style="margin-top:10px;color:#666;font-size:0.9em;"><em>${t('sync_mostrant')} ${datos.log.length} ${t('sync_totals')}</em></p>`;
+            } else {
+                html += `<p style="color:#999;font-style:italic;">${t('sync_sense_accions')}</p>`;
+            }
+            html += '</div>';
+            contenido.innerHTML = html;
+            abrirModal('modalSync');
+            closeDropdown();
+        }
+
+        // ==========================================
+        // DROPDOWN
+        // ==========================================
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const btnDropdown = document.getElementById('btnDropdown');
+            dropdown.classList.toggle('open');
+            btnDropdown.classList.toggle('active');
+        }
+
+        function closeDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const btnDropdown = document.getElementById('btnDropdown');
+            if (dropdown) dropdown.classList.remove('open');
+            if (btnDropdown) btnDropdown.classList.remove('active');
+        }
+
+        // ==========================================
+        // RENDERITZAT
+        // ==========================================
+        function renderizar() {
+            const container = document.getElementById('seccionesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            if (state.secciones.length === 0) {
+                container.innerHTML = `<div class="empty-state">${t('toast_seccio_buida')}</div>`;
+                return;
+            }
+            state.secciones.forEach(seccion => {
+                try { container.appendChild(crearElementoSeccion(seccion)); }
+                catch (e) { console.error('Error:', seccion, e); }
+            });
+            setTimeout(comprovarEstatSincronitzacio, 100);
+        }
+
+        function crearElementoSeccion(seccion) {
+            const div = document.createElement('div');
+            div.className = 'seccion';
+            div.dataset.id = seccion.id;
+            const temasSeccion = seccion.tieneTemas
+                ? state.temas.filter(t => t.seccionId === seccion.id).sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''))
+                : [];
+            let html = `
+                <div class="seccion-header">
+                    <h2 class="seccion-titulo">
+                        <span class="seccion-icono">${seccion.icono || '📄'}</span>
+                        ${seccion.titulo}
+                    </h2>
+                    <div class="seccion-actions">
+                        <button class="btn btn-edit btn-small" onclick="editarSeccion('${seccion.id}')">${t('btn_editar')}</button>
+                        <button class="btn btn-delete btn-small" onclick="eliminarSeccion('${seccion.id}')">${t('btn_eliminar')}</button>
+                    </div>
+                </div>
+                <div class="seccion-contenido">${seccion.contenido || `<em>${t('sense_contingut')}</em>`}</div>
+            `;
+            if (seccion.tieneTemas) {
+                html += '<div class="temas-lista">';
+                if (temasSeccion.length === 0) {
+                    html += `<div class="empty-state">${t('toast_tema_buit')}</div>`;
+                } else {
+                    temasSeccion.forEach(tema => { html += crearHTMLTema(tema); });
+                }
+                html += `<button class="btn btn-add-tema-seccion" onclick="abrirModalTema(null, '${seccion.id}')">${t('btn_afegir_tema_seccio')}</button></div>`;
+            }
+            div.innerHTML = html;
+            return div;
+        }
+
+        function crearHTMLTema(tema) {
+            const fechaFormateada = formatearFecha(tema.fecha);
+            const estadoMap = {
+                'completo': `<span class="tema-estat estat-complet">${t('estat_text_complet')}</span>`,
+                'parcial': `<span class="tema-estat estat-parcial">${t('estat_text_parcial')}</span>`,
+                'pendiente': `<span class="tema-estat estat-pendent">${t('estat_text_pendent')}</span>`
+            };
+            let obsHTML = '';
+            if (tema.observaciones && tema.observaciones.trim().length > 0) {
+                obsHTML = `<div class="tema-observaciones"><strong>${t('observacions_titol')}</strong> ${tema.observaciones}</div>`;
+            }
+            let recHTML = '';
+            if (Array.isArray(tema.recursos) && tema.recursos.length > 0) {
+                const items = tema.recursos.filter(u => u && u.trim().length > 0)
+                    .map(u => `<li><a href="${u}" target="_blank" rel="noopener">${extraerNombre(u)}</a></li>`).join('');
+                if (items.length > 0) {
+                    recHTML = `<div class="tema-recursos"><h4>${t('recursos_titol')}</h4><ul class="recursos-lista">${items}</ul></div>`;
+                }
+            }
+            return `
+                <div class="tema-card ${tema.estado || 'pendiente'}" data-id="${tema.id}">
+                    <div class="tema-header">
+                        <div class="tema-info">
+                            <span class="tema-data">📅 ${fechaFormateada}</span>
+                            <h3 class="tema-titulo">${tema.titulo} ${estadoMap[tema.estado] || ''}</h3>
+                        </div>
+                    </div>
+                    ${tema.descripcion ? `<p class="tema-descripcio">${tema.descripcion}</p>` : ''}
+                    ${obsHTML}
+                    ${recHTML}
+                    <div class="tema-actions">
+                        <button class="btn btn-edit btn-small" onclick="editarTema('${tema.id}')">${t('btn_editar')}</button>
+                        <button class="btn btn-delete btn-small" onclick="eliminarTema('${tema.id}')">${t('btn_eliminar')}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // UTILITATS
+        // ==========================================
+        function generarId(prefijo) {
+            return prefijo + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function formatearFecha(f) {
+            if (!f) return t('sense_data');
+            const partes = f.split('-');
+            if (partes.length !== 3) return f;
+            const [y, m, d] = partes;
+            const meses_ca = ['gen','feb','mar','abr','mai','jun','jul','ago','set','oct','nov','des'];
+            const meses_es = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+            const meses_en = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const lang = localStorage.getItem('idioma_preferit') || 'ca';
+            const meses = lang === 'es' ? meses_es : (lang === 'en' ? meses_en : meses_ca);
+            const mesIdx = parseInt(m) - 1;
+            if (mesIdx < 0 || mesIdx > 11) return f;
+            return `${parseInt(d)}-${meses[mesIdx]}-${y}`;
+        }
+
+        function extraerNombre(url) {
+            if (!url) return 'Recurso';
+            const p = url.split('/');
+            return p[p.length - 1] || url;
+        }
+
+        function generarNombreArchivo() {
+            const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            return `${t('backup_prefix')}${fecha}.json`;
+        }
+
+        // ==========================================
+        // MODALS
+        // ==========================================
+        function abrirModal(id) { 
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.add('active');
+        }
+        function cerrarModal(id) { 
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.remove('active');
+        }
+
+        // ==========================================
+        // SECCIONS
+        // ==========================================
+        function abrirModalSeccion(id) {
+            const form = document.getElementById('seccionForm');
+            form.reset();
+            document.getElementById('seccionId').value = '';
+            if (id) {
+                const s = state.secciones.find(x => x.id === id);
+                if (s) {
+                    document.getElementById('modalSeccionTitle').textContent = t('modal_seccio_editar');
+                    document.getElementById('seccionId').value = s.id;
+                    document.getElementById('seccionTitulo').value = s.titulo;
+                    document.getElementById('seccionIcono').value = s.icono || '';
+                    document.getElementById('seccionContenido').value = s.contenido || '';
+                    document.getElementById('seccionTieneTemas').checked = s.tieneTemas || false;
+                }
+            } else {
+                document.getElementById('modalSeccionTitle').textContent = t('modal_seccio_afegir');
+            }
+            abrirModal('modalSeccion');
+        }
+
+        function editarSeccion(id) { abrirModalSeccion(id); }
+
+        function eliminarSeccion(id) {
+            const s = state.secciones.find(x => x.id === id);
+            if (!s) return;
+            const n = state.temas.filter(t => t.seccionId === id).length;
+            let msg = `${t('confirm_eliminar_seccio')} "${s.titulo}"?`;
+            if (n > 0) msg += `\n\n${t('confirm_eliminar_temas')} ${n} ${t('confirm_tema')}`;
+            if (confirm(msg)) {
+                state.secciones = state.secciones.filter(x => x.id !== id);
+                state.temas = state.temas.filter(t => t.seccionId !== id);
+                guardarEstado();
+                renderizar();
+                mostrarToast(t('toast_seccio_eliminada'), 'info');
+            }
+        }
+
+        document.getElementById('seccionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('seccionId').value;
+            const datos = {
+                titulo: document.getElementById('seccionTitulo').value.trim(),
+                icono: document.getElementById('seccionIcono').value.trim() || '📄',
+                contenido: document.getElementById('seccionContenido').value,
+                tieneTemas: document.getElementById('seccionTieneTemas').checked
+            };
+            if (id) {
+                const i = state.secciones.findIndex(x => x.id === id);
+                if (i !== -1) state.secciones[i] = { ...state.secciones[i], ...datos };
+            } else {
+                state.secciones.push({ id: generarId('sec'), ...datos });
+            }
+            guardarEstado();
+            renderizar();
+            cerrarModal('modalSeccion');
+            mostrarToast(t('toast_seccio_guardada'), 'success');
+        });
+
+        // ==========================================
+        // TEMES
+        // ==========================================
+        function abrirModalTema(id, seccionId) {
+            const form = document.getElementById('temaForm');
+            form.reset();
+            document.getElementById('temaId').value = '';
+            document.getElementById('temaSeccionId').value = seccionId || '';
+            if (id) {
+                const t_item = state.temas.find(x => x.id === id);
+                if (t_item) {
+                    document.getElementById('modalTemaTitle').textContent = t('modal_tema_editar');
+                    document.getElementById('temaId').value = t_item.id;
+                    document.getElementById('temaSeccionId').value = t_item.seccionId;
+                    document.getElementById('temaFecha').value = t_item.fecha || '';
+                    document.getElementById('temaTitulo').value = t_item.titulo || '';
+                    document.getElementById('temaDescripcion').value = t_item.descripcion || '';
+                    document.getElementById('temaRecursos').value = Array.isArray(t_item.recursos) ? t_item.recursos.join('\n') : '';
+                    document.getElementById('temaObservaciones').value = t_item.observaciones || '';
+                    document.getElementById('temaEstado').value = t_item.estado || 'pendiente';
+                }
+            } else {
+                document.getElementById('modalTemaTitle').textContent = t('modal_tema_afegir');
+            }
+            abrirModal('modalTema');
+        }
+
+        function editarTema(id) { abrirModalTema(id); }
+
+        function eliminarTema(id) {
+            const t_item = state.temas.find(x => x.id === id);
+            if (!t_item) return;
+            if (confirm(`${t('confirm_eliminar_tema')} "${t_item.titulo}"?`)) {
+                state.temas = state.temas.filter(x => x.id !== id);
+                guardarEstado();
+                renderizar();
+                mostrarToast(t('toast_tema_eliminat'), 'info');
+            }
+        }
+
+        document.getElementById('temaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            try {
+                const id = document.getElementById('temaId').value;
+                const seccionId = document.getElementById('temaSeccionId').value;
+                const titulo = document.getElementById('temaTitulo').value.trim();
+                if (!titulo) { mostrarToast(t('toast_titol_obligatori'), 'error'); return; }
+                if (!seccionId) { mostrarToast(t('toast_error_seccio'), 'error'); return; }
+                const recursosTexto = document.getElementById('temaRecursos').value;
+                const recursos = recursosTexto.split('\n').map(r => r.trim()).filter(r => r.length > 0);
+                const datos = {
+                    seccionId: seccionId,
+                    fecha: document.getElementById('temaFecha').value,
+                    titulo: titulo,
+                    descripcion: document.getElementById('temaDescripcion').value,
+                    recursos: recursos,
+                    observaciones: document.getElementById('temaObservaciones').value,
+                    estado: document.getElementById('temaEstado').value
+                };
+                if (id) {
+                    const i = state.temas.findIndex(x => x.id === id);
+                    if (i !== -1) state.temas[i] = { ...state.temas[i], ...datos };
+                } else {
+                    state.temas.push({ id: generarId('tema'), ...datos });
+                }
+                guardarEstado();
+                renderizar();
+                cerrarModal('modalTema');
+                mostrarToast(t('toast_tema_guardat'), 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarToast(`${t('toast_error_guardar')}: ${error.message}`, 'error');
+            }
+        });
+
+        // ==========================================
+        // IMPRIMIR / EXPORTAR / IMPORTAR / BACKUP
+        // ==========================================
+        function imprimirPDF() { 
+            closeDropdown();
+            setTimeout(() => window.print(), 100);
+        }
+
+        function exportarDatos() {
+            try {
+                const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = generarNombreArchivo();
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                mostrarToast(t('toast_dades_exportades'), 'success');
+            } catch (e) {
+                mostrarToast(t('toast_error_exportar'), 'error');
+            }
+            closeDropdown();
+        }
+
+        function copiaAutomatica() {
+            try {
+                const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = generarNombreArchivo();
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                mostrarToast(t('toast_copia_descarregada'), 'success');
+            } catch (e) {
+                mostrarToast(t('toast_error_copia'), 'error');
+            }
+            closeDropdown();
+        }
+
+        function importarDatos(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const datos = JSON.parse(e.target.result);
+                    const datosMigrados = migrarDatos(datos);
+                    if (datosMigrados) {
+                        if (confirm(t('confirm_importar'))) {
+                            state = datosMigrados;
+                            guardarEstado();
+                            renderizar();
+                            mostrarToast(t('toast_dades_importades'), 'success');
+                        }
+                    } else {
+                        mostrarToast(t('toast_json_format'), 'error');
+                    }
+                } catch (err) {
+                    mostrarToast(`${t('toast_error_llegir')}: ${err.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ==========================================
+        // EVENT LISTENERS
+        // ==========================================
+        document.getElementById('btnAddSeccion').addEventListener('click', () => abrirModalSeccion());
+        document.getElementById('btnAddTema').addEventListener('click', () => {
+            const secs = state.secciones.filter(s => s.tieneTemas);
+            if (secs.length === 0) {
+                mostrarToast(t('confirm_seccio_buida'), 'error');
+                return;
+            }
+            abrirModalTema(null, secs[0].id);
+        });
+        document.getElementById('btnPrint').addEventListener('click', imprimirPDF);
+        document.getElementById('btnHistory').addEventListener('click', abrirHistorial);
+        document.getElementById('btnEditor').addEventListener('click', abrirEditor);
+        document.getElementById('btnAutoBackup').addEventListener('click', copiaAutomatica);
+        document.getElementById('btnResumenSync').addEventListener('click', verResumenSincronizacion);
+        document.getElementById('btnExport').addEventListener('click', exportarDatos);
+        document.getElementById('btnImport').addEventListener('click', () => {
+            closeDropdown();
+            setTimeout(() => document.getElementById('fileInput').click(), 100);
+        });
+        document.getElementById('fileInput').addEventListener('change', importarDatos);
+        document.getElementById('btnReset').addEventListener('click', restablecerEstado);
+        document.getElementById('btnAplicarJSON').addEventListener('click', aplicarCambiosJSON);
+        document.getElementById('btnFormatearJSON').addEventListener('click', formatearJSON);
+        document.getElementById('btnCopiarJSON').addEventListener('click', copiarJSON);
+        document.getElementById('btnDropdown').addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+        document.addEventListener('click', function(e) {
+            const dropdown = document.querySelector('.dropdown');
+            if (dropdown && !dropdown.contains(e.target)) closeDropdown();
+        });
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() { setTimeout(closeDropdown, 100); });
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDropdown();
+                document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+            }
+        });
+        document.querySelectorAll('.close, [data-modal]').forEach(el => {
+            el.addEventListener('click', function() {
+                const modalId = this.dataset.modal || (this.closest('.modal') ? this.closest('.modal').id : null);
+                if (modalId) cerrarModal(modalId);
+            });
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) e.target.classList.remove('active');
+        });
+
+        // ==========================================
+        // INICIALITZACIÓ
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarEstado();
+            renderizar();
+            aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
+            console.log('✅ Programació Didàctica v5.0 carregada. Temes:', state.temas.length);
+        });
+    </script>
 </body>
 </html>

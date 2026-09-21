@@ -3,612 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eines per a l'Aula</title>
+    <title data-i18n="titol_pagina">Eines per a l'Aula</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { background: white; border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); text-align: center; position: relative; }
+        header h1 { color: #667eea; font-size: 2.5em; margin-bottom: 10px; }
+        header p { color: #666; font-size: 1.1em; }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+        .controls { background: white; border-radius: 15px; padding: 20px 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: 600; font-family: inherit; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-small { padding: 8px 16px; font-size: 0.9em; }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .eines-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-bottom: 30px; }
+        .eina-card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transition: all 0.3s; position: relative; overflow: hidden; }
+        .eina-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+        .eina-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .eina-header { display: flex; align-items: start; gap: 15px; margin-bottom: 15px; }
+        .eina-icon { font-size: 2.5em; line-height: 1; }
+        .eina-info { flex: 1; }
+        .eina-titol { color: #333; font-size: 1.3em; margin-bottom: 5px; font-weight: 700; }
+        .eina-descripcio { color: #666; font-size: 0.95em; line-height: 1.5; margin-bottom: 15px; }
+        .eina-url { background: #f8f9fa; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; color: #667eea; word-break: break-all; margin-bottom: 15px; font-family: 'Courier New', monospace; }
+        .eina-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-obrir { flex: 1; min-width: 120px; }
+        .btn-editar { background: #ffc107; color: #333; }
+        .btn-editar:hover { background: #e0a800; }
+        .btn-eliminar { background: #dc3545; color: white; }
+        .btn-eliminar:hover { background: #c82333; }
+
+        .language-selector { display: flex; align-items: center; gap: 8px; }
+        .language-selector select { padding: 8px 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 0.95em; font-family: inherit; cursor: pointer; background-color: white; }
+        .language-selector select:focus { outline: none; border-color: #667eea; }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); overflow-y: auto; }
+        .modal.active { display: block; }
+        .modal-content { background-color: white; margin: 50px auto; padding: 40px; border-radius: 16px; width: 90%; max-width: 600px; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; }
+        .close:hover { color: #333; }
+        .modal-content h2 { color: #667eea; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e9ecef; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #667eea; }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-actions { display: flex; gap: 10px; margin-top: 25px; }
         
-        header {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-        
-        header h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-        
-        .controls {
-            background: white;
-            border-radius: 15px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-family: inherit;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c82333;
-        }
-        
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 0.9em;
-        }
-        
-        .eines-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-        
-        .eina-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .eina-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .eina-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .eina-header {
-            display: flex;
-            align-items: start;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .eina-icon {
-            font-size: 2.5em;
-            line-height: 1;
-        }
-        
-        .eina-info {
-            flex: 1;
-        }
-        
-        .eina-titol {
-            color: #333;
-            font-size: 1.3em;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-        
-        .eina-descripcio {
-            color: #666;
-            font-size: 0.95em;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-        
-        .eina-url {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            color: #667eea;
-            word-break: break-all;
-            margin-bottom: 15px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .eina-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-obrir {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .btn-editar {
-            background: #ffc107;
-            color: #333;
-        }
-        
-        .btn-editar:hover {
-            background: #e0a800;
-        }
-        
-        .btn-eliminar {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .btn-eliminar:hover {
-            background: #c82333;
-        }
-        
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow-y: auto;
-        }
-        
-        .modal.active {
-            display: block;
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 50px auto;
-            padding: 40px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        
-        .close {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #aaa;
-            cursor: pointer;
-        }
-        
-        .close:hover {
-            color: #333;
-        }
-        
-        .modal-content h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1em;
-            font-family: inherit;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #333;
-            color: white;
-            padding: 14px 24px;
-            border-radius: 8px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            z-index: 2000;
-            font-weight: 500;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        .toast.success { background: #28a745; }
-        .toast.error { background: #dc3545; }
-        .toast.info { background: #17a2b8; }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 15px;
-            color: #999;
-        }
-        
-        .empty-state-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: white;
-            font-size: 0.9em;
-        }
-        
-        @media (max-width: 768px) {
-            .eines-grid {
-                grid-template-columns: 1fr;
-            }
-            .controls {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-            }
-        }
+        .toast { position: fixed; bottom: 30px; right: 30px; background: #333; color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); z-index: 2000; font-weight: 500; animation: slideIn 0.3s ease-out; }
+        .toast.success { background: #28a745; } .toast.error { background: #dc3545; } .toast.info { background: #17a2b8; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: 15px; color: #999; }
+        footer { text-align: center; padding: 20px; color: white; font-size: 0.9em; }
+        @media (max-width: 768px) { .eines-grid { grid-template-columns: 1fr; } .controls { flex-direction: column; } .btn { width: 100%; } }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🛠️ Eines per a l'Aula</h1>
-            <p>Recursos digitals per dinamitzar les teves classes</p>
+            <h1 data-i18n="titol_pagina">🛠️ Eines per a l'Aula</h1>
+            <p data-i18n="subtitol_pagina">Recursos digitals per dinamitzar les teves classes</p>
+            
+            <!-- SELECTOR D'IDIOMA -->
+            <div class="language-selector" style="position: absolute; top: 20px; right: 20px;">
+                <label for="selectorIdioma">🌐</label>
+                <select id="selectorIdioma" onchange="aplicarIdioma(this.value)">
+                    <option value="ca">Català</option>
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
         </header>
         
         <div class="controls">
-            <button class="btn btn-primary" onclick="obrirModalAfegir()">➕ Afegir Nova Eina</button>
-            <button class="btn btn-secondary" onclick="exportarDades()">💾 Exportar Dades</button>
-            <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📤 Importar Dades</button>
+            <button class="btn btn-primary" onclick="obrirModalAfegir()" data-i18n="btn_afegir">➕ Afegir Nova Eina</button>
+            <button class="btn btn-secondary" onclick="exportarDades()" data-i18n="btn_exportar">💾 Exportar Dades</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()" data-i18n="btn_importar">📤 Importar Dades</button>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="importarDades(event)">
-            <button class="btn btn-danger" onclick="restablirDades()">🔄 Restablir</button>
+            <button class="btn btn-danger" onclick="restablirDades()" data-i18n="btn_restablir">🔄 Restablir</button>
         </div>
         
         <div id="einesContainer" class="eines-grid"></div>
     </div>
     
-    <!-- MODAL AFEGIR/EDITAR -->
+    <!-- MODAL -->
     <div id="modalEina" class="modal">
         <div class="modal-content">
             <span class="close" onclick="tancarModal()">&times;</span>
-            <h2 id="modalTitle">Afegir Nova Eina</h2>
+            <h2 id="modalTitle" data-i18n="modal_titol_afegir">Afegir Nova Eina</h2>
             <form id="einaForm">
                 <div class="form-group">
-                    <label for="einaIcon">Icona (emoji):</label>
-                    <input type="text" id="einaIcon" maxlength="2" placeholder="🎯" required>
+                    <label for="einaIcon" data-i18n="lbl_icona">Icona (emoji):</label>
+                    <input type="text" id="einaIcon" maxlength="2" data-i18n-placeholder="ph_icona" placeholder="🎯" required>
                 </div>
                 <div class="form-group">
-                    <label for="einaTitol">Títol:</label>
-                    <input type="text" id="einaTitol" placeholder="Nom de l'eina" required>
+                    <label for="einaTitol" data-i18n="lbl_titol">Títol:</label>
+                    <input type="text" id="einaTitol" data-i18n-placeholder="ph_titol" placeholder="Nom de l'eina" required>
                 </div>
                 <div class="form-group">
-                    <label for="einaDescripcio">Descripció:</label>
-                    <textarea id="einaDescripcio" placeholder="Breu descripció de l'eina" required></textarea>
+                    <label for="einaDescripcio" data-i18n="lbl_descripcio">Descripció:</label>
+                    <textarea id="einaDescripcio" data-i18n-placeholder="ph_descripcio" placeholder="Breu descripció de l'eina" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="einaUrl">URL:</label>
-                    <input type="url" id="einaUrl" placeholder="https://..." required>
+                    <input type="url" id="einaUrl" data-i18n-placeholder="ph_url" placeholder="https://..." required>
                 </div>
                 <input type="hidden" id="einaId">
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
-                    <button type="button" class="btn btn-secondary" onclick="tancarModal()">Cancel·lar</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="btn_guardar">💾 Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="tancarModal()" data-i18n="btn_cancelar">Cancel·lar</button>
                 </div>
             </form>
         </div>
     </div>
     
     <footer>
-        <p>Eines per a l'Aula · Curs 2026-2027 · Dra. Cèlia Painous</p>
+        <p data-i18n="footer_text">Eines per a l'Aula · Curs 2026-2027 · Dra. Cèlia Painous</p>
     </footer>
     
     <script>
         // ==========================================
-        // DADES INICIALS
+        // 1. DICCIONARI DE TRADUCCIONS
+        // ==========================================
+        const diccionario = {
+            ca: {
+                titol_pagina: "🛠️ Eines per a l'Aula",
+                subtitol_pagina: "Recursos digitals per dinamitzar les teves classes",
+                btn_afegir: "➕ Afegir Nova Eina",
+                btn_exportar: "💾 Exportar Dades",
+                btn_importar: "📤 Importar Dades",
+                btn_restablir: "🔄 Restablir",
+                modal_titol_afegir: "Afegir Nova Eina",
+                modal_titol_editar: "Editar Eina",
+                lbl_icona: "Icona (emoji):",
+                ph_icona: "🎯",
+                lbl_titol: "Títol:",
+                ph_titol: "Nom de l'eina",
+                lbl_descripcio: "Descripció:",
+                ph_descripcio: "Breu descripció de l'eina",
+                ph_url: "https://...",
+                btn_guardar: "💾 Guardar",
+                btn_cancelar: "Cancel·lar",
+                btn_obrir: "Obrir Eina",
+                footer_text: "Eines per a l'Aula · Curs 2026-2027 · Dra. Cèlia Painous",
+                toast_export: "Dades exportades correctament",
+                toast_import: "Dades importades correctament",
+                toast_import_error: "Format de fitxer incorrecte",
+                toast_reset: "Dades restablertes",
+                toast_delete: "Eina eliminada",
+                toast_add: "Eina afegida correctament",
+                toast_update: "Eina actualitzada",
+                confirm_import: "Vols importar aquestes dades? Se sobreescriuran les actuals.",
+                confirm_reset: "Vols restablir totes les dades als valors inicials? Es perdran les modificacions.",
+                confirm_delete: "Vols eliminar aquesta eina?",
+                empty_title: "No hi ha eines registrades",
+                empty_desc: "Fes clic a \"Afegir Nova Eina\" per començar"
+            },
+            es: {
+                titol_pagina: "🛠️ Herramientas para el Aula",
+                subtitol_pagina: "Recursos digitales para dinamizar tus clases",
+                btn_afegir: "➕ Añadir Nueva Herramienta",
+                btn_exportar: "💾 Exportar Datos",
+                btn_importar: "📤 Importar Datos",
+                btn_restablir: "🔄 Restablecer",
+                modal_titol_afegir: "Añadir Nueva Herramienta",
+                modal_titol_editar: "Editar Herramienta",
+                lbl_icona: "Icono (emoji):",
+                ph_icona: "🎯",
+                lbl_titol: "Título:",
+                ph_titol: "Nombre de la herramienta",
+                lbl_descripcio: "Descripción:",
+                ph_descripcio: "Breve descripción de la herramienta",
+                ph_url: "https://...",
+                btn_guardar: "💾 Guardar",
+                btn_cancelar: "Cancelar",
+                btn_obrir: "Abrir Herramienta",
+                footer_text: "Herramientas para el Aula · Curso 2026-2027 · Dra. Cèlia Painous",
+                toast_export: "Datos exportados correctamente",
+                toast_import: "Datos importados correctamente",
+                toast_import_error: "Formato de archivo incorrecto",
+                toast_reset: "Datos restablecidos",
+                toast_delete: "Herramienta eliminada",
+                toast_add: "Herramienta añadida correctamente",
+                toast_update: "Herramienta actualizada",
+                confirm_import: "¿Quieres importar estos datos? Se sobrescribirán los actuales.",
+                confirm_reset: "¿Quieres restablecer todos los datos a los valores iniciales? Se perderán las modificaciones.",
+                confirm_delete: "¿Quieres eliminar esta herramienta?",
+                empty_title: "No hay herramientas registradas",
+                empty_desc: "Haz clic en \"Añadir Nueva Herramienta\" para comenzar"
+            },
+            en: {
+                titol_pagina: "🛠️ Classroom Tools",
+                subtitol_pagina: "Digital resources to energize your classes",
+                btn_afegir: "➕ Add New Tool",
+                btn_exportar: "💾 Export Data",
+                btn_importar: "📤 Import Data",
+                btn_restablir: "🔄 Reset",
+                modal_titol_afegir: "Add New Tool",
+                modal_titol_editar: "Edit Tool",
+                lbl_icona: "Icon (emoji):",
+                ph_icona: "🎯",
+                lbl_titol: "Title:",
+                ph_titol: "Tool name",
+                lbl_descripcio: "Description:",
+                ph_descripcio: "Brief description of the tool",
+                ph_url: "https://...",
+                btn_guardar: "💾 Save",
+                btn_cancelar: "Cancel",
+                btn_obrir: "Open Tool",
+                footer_text: "Classroom Tools · Course 2026-2027 · Dr. Cèlia Painous",
+                toast_export: "Data exported successfully",
+                toast_import: "Data imported successfully",
+                toast_import_error: "Incorrect file format",
+                toast_reset: "Data reset",
+                toast_delete: "Tool deleted",
+                toast_add: "Tool added successfully",
+                toast_update: "Tool updated",
+                confirm_import: "Do you want to import this data? Current data will be overwritten.",
+                confirm_reset: "Do you want to reset all data to initial values? Modifications will be lost.",
+                confirm_delete: "Do you want to delete this tool?",
+                empty_title: "No tools registered",
+                empty_desc: "Click \"Add New Tool\" to start"
+            }
+        };
+
+        // ==========================================
+        // 2. MOTOR DE TRADUCCIÓN
+        // ==========================================
+        function aplicarIdioma(lang) {
+            localStorage.setItem('idioma_preferit', lang);
+            document.documentElement.lang = lang;
+            const selector = document.getElementById('selectorIdioma');
+            if (selector) selector.value = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const clau = el.getAttribute('data-i18n');
+                if (diccionario[lang] && diccionario[lang][clau]) el.textContent = diccionario[lang][clau];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const clau = el.getAttribute('data-i18n-placeholder');
+                if (diccionario[lang] && diccionario[lang][clau]) el.placeholder = diccionario[lang][clau];
+            });
+        }
+
+        // ==========================================
+        // 3. LÓGICA DE LA APLICACIÓN
         // ==========================================
         const dadesInicials = [
-            {
-                id: 'eina-1',
-                icon: '️',
-                titol: 'Comptador cap enrere',
-                descripcio: 'Temporitzador visual per controlar el temps de les activitats',
-                url: 'https://bilateria.org/app/utils_clas/contador-regresivo.html'
-            },
-            {
-                id: 'eina-2',
-                icon: '🎲',
-                titol: 'Selector aleatori de noms',
-                descripcio: 'Selecciona estudiants de manera aleatòria per participar',
-                url: 'https://bilateria.org/app/utils_clas/selector_aleatorio_nombres.html'
-            },
-            {
-                id: 'eina-3',
-                icon: '👥',
-                titol: 'Parelles aleatòries',
-                descripcio: 'Crea parelles de treball de manera aleatòria',
-                url: 'https://bilateria.org/app/utils_clas/Parejas%20Aleatorias'
-            },
-            {
-                id: 'eina-4',
-                icon: '‍👩‍‍👦',
-                titol: 'Generador aleatori de grups',
-                descripcio: 'Organitza l\'alumnat en grups de treball aleatoris',
-                url: 'https://bilateria.org/app/utils_clas/generador_aleatorio_grupos.html'
-            },
-            {
-                id: 'eina-5',
-                icon: '🎤',
-                titol: 'Eines de participació',
-                descripcio: 'Plataforma per fomentar la participació de l\'alumnat',
-                url: 'https://jjdeharo.github.io/directo/'
-            },
-            {
-                id: 'eina-6',
-                icon: '📄',
-                titol: 'PDF a fitxes interactives',
-                descripcio: 'Converteix documents PDF en fitxes de treball interactives',
-                url: 'https://openworksheets.github.io/'
-            },
-            {
-                id: 'eina-7',
-                icon: '☁️',
-                titol: 'Núvol de paraules',
-                descripcio: 'Crea núvols de paraules per visualitzar conceptes clau',
-                url: 'https://bilateria.org/app/utils_text/nube-palabras.html'
-            },
-            {
-                id: 'eina-8',
-                icon: '🗺️',
-                titol: 'Mapa de distribució de l\'aula',
-                descripcio: 'Dissenya la disposició dels pupitres i l\'espai de l\'aula',
-                url: 'https://aulamap.github.io/'
-            }
+            { id: 'eina-1', icon: '⏱️', titol: 'Comptador cap enrere', descripcio: 'Temporitzador visual per controlar el temps de les activitats', url: 'https://bilateria.org/app/utils_clas/contador-regresivo.html' },
+            { id: 'eina-2', icon: '🎲', titol: 'Selector aleatori de noms', descripcio: 'Selecciona estudiants de manera aleatòria per participar', url: 'https://bilateria.org/app/utils_clas/selector_aleatorio_nombres.html' },
+            { id: 'eina-3', icon: '👥', titol: 'Parelles aleatòries', descripcio: 'Crea parelles de treball de manera aleatòria', url: 'https://bilateria.org/app/utils_clas/Parejas%20Aleatorias' },
+            { id: 'eina-4', icon: '👨‍👩‍👧‍👦', titol: 'Generador aleatori de grups', descripcio: 'Organitza l\'alumnat en grups de treball aleatoris', url: 'https://bilateria.org/app/utils_clas/generador_aleatorio_grupos.html' },
+            { id: 'eina-5', icon: '🎤', titol: 'Eines de participació', descripcio: 'Plataforma per fomentar la participació de l\'alumnat', url: 'https://jjdeharo.github.io/directo/' },
+            { id: 'eina-6', icon: '📄', titol: 'PDF a fitxes interactives', descripcio: 'Converteix documents PDF en fitxes de treball interactives', url: 'https://openworksheets.github.io/' },
+            { id: 'eina-7', icon: '☁️', titol: 'Núvol de paraules', descripcio: 'Crea núvols de paraules per visualitzar conceptes clau', url: 'https://bilateria.org/app/utils_text/nube-palabras.html' },
+            { id: 'eina-8', icon: '🗺️', titol: 'Mapa de distribució de l\'aula', descripcio: 'Dissenya la disposició dels pupitres i l\'espai de l\'aula', url: 'https://aulamap.github.io/' }
         ];
         
         let eina = [];
         
-        // ==========================================
-        // GESTIÓ DE DADES
-        // ==========================================
         function carregarDades() {
             const dadesGuardades = localStorage.getItem('einesAula');
-            if (dadesGuardades) {
-                eina = JSON.parse(dadesGuardades);
-            } else {
-                eina = [...dadesInicials];
-                guardarDades();
-            }
+            eina = dadesGuardades ? JSON.parse(dadesGuardades) : [...dadesInicials];
+            if (!dadesGuardades) guardarDades();
         }
         
-        function guardarDades() {
-            localStorage.setItem('einesAula', JSON.stringify(eina));
+        function guardarDades() { localStorage.setItem('einesAula', JSON.stringify(eina)); }
+        
+        function mostrarToast(missatge, tipus = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipus}`;
+            // Traducir el toast dinámicamente si es una clave conocida, sino usar el texto directo
+            const lang = localStorage.getItem('idioma_preferit') || 'ca';
+            toast.textContent = diccionario[lang][missatge] || missatge;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function renderitzar() {
+            const container = document.getElementById('einesContainer');
+            const lang = localStorage.getItem('idioma_preferit') || 'ca';
+            if (eina.length === 0) {
+                container.innerHTML = `<div class="empty-state"><div style="font-size:4em;margin-bottom:20px;">📭</div><h3 data-i18n="empty_title">${diccionario[lang].empty_title}</h3><p data-i18n="empty_desc">${diccionario[lang].empty_desc}</p></div>`;
+                // Re-aplicar traducción al nuevo HTML inyectado
+                aplicarIdioma(lang);
+                return;
+            }
+            container.innerHTML = eina.map(e => `
+                <div class="eina-card" data-id="${e.id}">
+                    <div class="eina-header">
+                        <div class="eina-icon">${e.icon}</div>
+                        <div class="eina-info"><h3 class="eina-titol">${e.titol}</h3></div>
+                    </div>
+                    <p class="eina-descripcio">${e.descripcio}</p>
+                    <div class="eina-url">${e.url}</div>
+                    <div class="eina-actions">
+                        <button class="btn btn-primary btn-obrir" onclick="window.open('${e.url}', '_blank')" data-i18n="btn_obrir">Obrir Eina</button>
+                        <button class="btn btn-editar btn-small" onclick="editarEina('${e.id}')">✏️</button>
+                        <button class="btn btn-eliminar btn-small" onclick="eliminarEina('${e.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+            aplicarIdioma(lang); // Re-aplicar para los botones inyectados
         }
         
         function exportarDades() {
             const blob = new Blob([JSON.stringify(eina, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `eines_aula_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            a.href = url; a.download = `eines_aula_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            mostrarToast('Dades exportades correctament', 'success');
+            mostrarToast('toast_export', 'success');
         }
         
         function importarDades(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
+            const file = event.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const dades = JSON.parse(e.target.result);
-                    if (Array.isArray(dades)) {
-                        if (confirm('Vols importar aquestes dades? Se sobreescriuran les actuals.')) {
-                            eina = dades;
-                            guardarDades();
-                            renderitzar();
-                            mostrarToast('Dades importades correctament', 'success');
-                        }
-                    } else {
-                        mostrarToast('Format de fitxer incorrecte', 'error');
-                    }
-                } catch (err) {
-                    mostrarToast('Error al llegir el fitxer', 'error');
-                }
+                    if (Array.isArray(dades) && confirm(diccionario[localStorage.getItem('idioma_preferit') || 'ca'].confirm_import)) {
+                        eina = dades; guardarDades(); renderitzar(); mostrarToast('toast_import', 'success');
+                    } else { mostrarToast('toast_import_error', 'error'); }
+                } catch (err) { mostrarToast('toast_import_error', 'error'); }
             };
-            reader.readAsText(file);
-            event.target.value = '';
+            reader.readAsText(file); event.target.value = '';
         }
         
         function restablirDades() {
-            if (confirm('Vols restablir totes les dades als valors inicials? Es perdran les modificacions.')) {
-                eina = [...dadesInicials];
-                guardarDades();
-                renderitzar();
-                mostrarToast('Dades restablertes', 'success');
+            if (confirm(diccionario[localStorage.getItem('idioma_preferit') || 'ca'].confirm_reset)) {
+                eina = [...dadesInicials]; guardarDades(); renderitzar(); mostrarToast('toast_reset', 'success');
             }
-        }
-        
-        // ==========================================
-        // RENDERITZAT
-        // ==========================================
-        function renderitzar() {
-            const container = document.getElementById('einesContainer');
-            
-            if (eina.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <h3>No hi ha eines registrades</h3>
-                        <p>Fes clic a "Afegir Nova Eina" per començar</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = eina.map(e => `
-                <div class="eina-card" data-id="${e.id}">
-                    <div class="eina-header">
-                        <div class="eina-icon">${e.icon}</div>
-                        <div class="eina-info">
-                            <h3 class="eina-titol">${e.titol}</h3>
-                        </div>
-                    </div>
-                    <p class="eina-descripcio">${e.descripcio}</p>
-                    <div class="eina-url">${e.url}</div>
-                    <div class="eina-actions">
-                        <button class="btn btn-primary btn-obrir" onclick="obrirEina('${e.url}')"> Obrir Eina</button>
-                        <button class="btn btn-editar btn-small" onclick="editarEina('${e.id}')">✏️</button>
-                        <button class="btn btn-eliminar btn-small" onclick="eliminarEina('${e.id}')">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // ==========================================
-        // ACCIONS
-        // ==========================================
-        function obrirEina(url) {
-            window.open(url, '_blank');
         }
         
         function eliminarEina(id) {
-            if (confirm('Vols eliminar aquesta eina?')) {
-                eina = eina.filter(e => e.id !== id);
-                guardarDades();
-                renderitzar();
-                mostrarToast('Eina eliminada', 'info');
+            if (confirm(diccionario[localStorage.getItem('idioma_preferit') || 'ca'].confirm_delete)) {
+                eina = eina.filter(e => e.id !== id); guardarDades(); renderitzar(); mostrarToast('toast_delete', 'info');
             }
         }
         
-        // ==========================================
-        // MODAL
-        // ==========================================
         function obrirModalAfegir() {
-            document.getElementById('modalTitle').textContent = 'Afegir Nova Eina';
+            document.getElementById('modalTitle').setAttribute('data-i18n', 'modal_titol_afegir');
             document.getElementById('einaForm').reset();
             document.getElementById('einaId').value = '';
             document.getElementById('modalEina').classList.add('active');
+            aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
         }
         
         function editarEina(id) {
-            const e = eina.find(x => x.id === id);
-            if (!e) return;
-            
-            document.getElementById('modalTitle').textContent = 'Editar Eina';
+            const e = eina.find(x => x.id === id); if (!e) return;
+            document.getElementById('modalTitle').setAttribute('data-i18n', 'modal_titol_editar');
             document.getElementById('einaId').value = e.id;
             document.getElementById('einaIcon').value = e.icon;
             document.getElementById('einaTitol').value = e.titol;
             document.getElementById('einaDescripcio').value = e.descripcio;
             document.getElementById('einaUrl').value = e.url;
             document.getElementById('modalEina').classList.add('active');
+            aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
         }
         
-        function tancarModal() {
-            document.getElementById('modalEina').classList.remove('active');
-        }
+        function tancarModal() { document.getElementById('modalEina').classList.remove('active'); }
         
-        // ==========================================
-        // FORMULARI
-        // ==========================================
         document.getElementById('einaForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const id = document.getElementById('einaId').value;
             const dades = {
                 icon: document.getElementById('einaIcon').value,
@@ -616,58 +380,23 @@
                 descripcio: document.getElementById('einaDescripcio').value.trim(),
                 url: document.getElementById('einaUrl').value.trim()
             };
-            
             if (id) {
-                // Editar
                 const index = eina.findIndex(x => x.id === id);
-                if (index !== -1) {
-                    eina[index] = { ...eina[index], ...dades };
-                    mostrarToast('Eina actualitzada', 'success');
-                }
+                if (index !== -1) { eina[index] = { ...eina[index], ...dades }; mostrarToast('toast_update', 'success'); }
             } else {
-                // Afegir
-                const novaEina = {
-                    id: 'eina-' + Date.now(),
-                    ...dades
-                };
-                eina.push(novaEina);
-                mostrarToast('Eina afegida correctament', 'success');
+                eina.push({ id: 'eina-' + Date.now(), ...dades });
+                mostrarToast('toast_add', 'success');
             }
-            
-            guardarDades();
-            renderitzar();
-            tancarModal();
+            guardarDades(); renderitzar(); tancarModal();
         });
         
-        // ==========================================
-        // UTILITATS
-        // ==========================================
-        function mostrarToast(missatge, tipus = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${tipus}`;
-            toast.textContent = missatge;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.3s';
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
+        window.onclick = function(event) { if (event.target === document.getElementById('modalEina')) tancarModal(); }
         
-        // Tancar modal fent clic fora
-        window.onclick = function(event) {
-            const modal = document.getElementById('modalEina');
-            if (event.target === modal) {
-                tancarModal();
-            }
-        }
-        
-        // ==========================================
-        // INICIALIZACIÓ
-        // ==========================================
         document.addEventListener('DOMContentLoaded', function() {
             carregarDades();
             renderitzar();
+            // Inicializar idioma por defecto (CA)
+            aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
         });
     </script>
 </body>
