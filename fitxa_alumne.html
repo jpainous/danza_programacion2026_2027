@@ -58,7 +58,6 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 .btn-danger { background: #dc3545; color: white; }
 .btn-small { padding: 6px 12px; font-size: 0.85em; }
 
-/* ALERTA DE SINCRONIZACIÓN */
 .sync-alert {
     background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
     border: 2px solid #ffc107;
@@ -84,14 +83,8 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     margin-top: 15px;
     flex-wrap: wrap;
 }
-.btn-sync-load {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
-}
-.btn-sync-dismiss {
-    background: #6c757d;
-    color: white;
-}
+.btn-sync-load { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+.btn-sync-dismiss { background: #6c757d; color: white; }
 
 @keyframes pulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
@@ -156,7 +149,6 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 }
 .form-group textarea { resize: vertical; min-height: 70px; }
 
-/* SESIÓN SELECCIONADA */
 .sesion-info-box {
     background: linear-gradient(135deg, #fff5f7 0%, #ffe0e6 100%);
     border: 2px solid #ff6b6b;
@@ -172,13 +164,14 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 .sesion-info-box p { line-height: 1.6; color: #555; margin-bottom: 8px; }
 .sesion-info-box strong { color: #333; }
 
-/* ACTIVIDADES */
+/* ACTIVITATS AMB TIPUS */
 .actividades-container {
     background: #f8f9fa;
     border-radius: 12px;
     padding: 20px;
     margin-top: 15px;
 }
+
 .actividad-item {
     background: white;
     border: 2px solid #e9ecef;
@@ -214,6 +207,19 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     color: #333;
     min-width: 200px;
 }
+.actividad-tipo-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.tipo-teorica { background: #cfe2ff; color: #084298; }
+.tipo-practica { background: #d1e7dd; color: #0f5132; }
+.tipo-evaluacion { background: #f8d7da; color: #842029; }
+.tipo-descanso { background: #fff3cd; color: #664d03; }
+.tipo-gestion { background: #e2e3e5; color: #41464b; }
+
 .actividad-controls {
     display: flex;
     gap: 8px;
@@ -252,7 +258,6 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     border-color: #ee5a6f;
 }
 
-/* HISTORIAL Y LOG */
 .historial-container,
 .log-alumne-container {
     background: #f8f9fa;
@@ -301,7 +306,6 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 }
 .log-contenido { flex: 1; color: #333; }
 
-/* RESUMEN */
 .resumen-box {
     background: linear-gradient(135deg, #e7f3ff 0%, #d1e7ff 100%);
     border: 2px solid #2196F3;
@@ -332,7 +336,6 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     margin-top: 5px;
 }
 
-/* TOAST */
 .toast {
     position: fixed;
     bottom: 30px;
@@ -398,7 +401,6 @@ footer {
         <button id="btnNuevaSesion" class="btn btn-secondary">➕ Nueva Actuación</button>
     </div>
 
-    <!-- ALERTA DE SINCRONIZACIÓN -->
     <div id="syncAlert" class="sync-alert no-print">
         <h3>🔄 🆕 ¡Nueva sesión disponible!</h3>
         <p>La profesora ha actualizado una sesión. ¿Quieres cargar los nuevos datos en tu ficha?</p>
@@ -411,11 +413,10 @@ footer {
 
     <div class="info-box no-print">
         <h3>ℹ️ Instrucciones</h3>
-        <p>Rellena tus datos personales, selecciona la sesión y marca el estado de cada actividad. Puedes guardar tu progreso y crear múltiples actuaciones si la sesión se desarrolla en varios días.</p>
-        <p><strong>💡 Consejo:</strong> Si la profesora actualiza una sesión, aparecerá un aviso amarillo en la parte superior. Puedes cargar los nuevos datos con un clic.</p>
+        <p>Rellena tus datos personales, selecciona la sesión y marca el estado de cada actividad. Puedes crear múltiples actuaciones si la sesión se desarrolla en varios días.</p>
+        <p><strong>💡 Consejo:</strong> Si la profesora actualiza una sesión, aparecerá un aviso amarillo. Las actividades que ves son las que la profesora ha seleccionado para ti.</p>
     </div>
 
-    <!-- DATOS PERSONALES -->
     <div class="section">
         <h3>👤 Datos Personales</h3>
         <div class="form-grid">
@@ -438,7 +439,6 @@ footer {
         </div>
     </div>
 
-    <!-- SELECCIÓN DE SESIÓN -->
     <div class="section">
         <h3>📅 Sesión de Trabajo</h3>
         <div class="form-group">
@@ -450,7 +450,6 @@ footer {
         <div id="sesionInfoBox"></div>
     </div>
 
-    <!-- ACTUACIÓN ACTUAL -->
     <div class="section">
         <h3>🎯 Actuación Actual</h3>
         <div class="form-grid">
@@ -477,7 +476,6 @@ footer {
         </div>
     </div>
 
-    <!-- ACTIVIDADES -->
     <div class="section">
         <h3>📋 Estado de las Actividades</h3>
         <div id="actividadesContainer" class="actividades-container">
@@ -485,7 +483,6 @@ footer {
         </div>
     </div>
 
-    <!-- TRABAJO COMPLEMENTARIO -->
     <div class="section">
         <h3>📚 Trabajo Complementario (fuera del horario presencial)</h3>
         <div class="form-group">
@@ -513,7 +510,6 @@ footer {
         </div>
     </div>
 
-    <!-- OBSERVACIONES GENERALES -->
     <div class="section">
         <h3>💭 Observaciones Generales</h3>
         <div class="form-group">
@@ -522,7 +518,6 @@ footer {
         </div>
     </div>
 
-    <!-- RESUMEN -->
     <div class="section">
         <h3>📊 Resumen de esta Actuación</h3>
         <div id="resumenBox" class="resumen-box">
@@ -547,12 +542,11 @@ footer {
         </div>
     </div>
 
-    <!-- HISTORIAL Y LOG -->
     <div class="section">
         <h3>📜 Historial de Actuaciones y Acciones</h3>
         <h4>📚 Historial de Actuaciones</h4>
         <div id="historialContainer" class="historial-container">
-            <div class="empty-state">Aún no hay actuaciones registradas. Haz clic en "➕ Nueva Actuación" al finalizar una sesión.</div>
+            <div class="empty-state">Aún no hay actuaciones registradas.</div>
         </div>
         
         <h4>📋 Log de Acciones Personales</h4>
@@ -581,116 +575,130 @@ const LOG_ALUMNE_KEY = 'logAlumne';
 let SESIONES_DISPONIBLES = [
     { id: 'ses-1', fecha: '2026-10-09', titulo: 'Presentación. Homeostasis y Fisiología celular', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura y metodología' },
-        { tiempo: '12:30-13:30', descripcion: 'Niveles de organización. Líquidos corporales' },
-        { tiempo: '13:45-14:30', descripcion: 'Homeostasis: rangos fisiológicos y sistemas de regulación' },
-        { tiempo: '14:30-15:00', descripcion: 'Retroalimentación y homeostasis en el movimiento' }
+        { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura y metodología', tipo: 'teorica' },
+        { tiempo: '12:30-13:30', descripcion: 'Niveles de organización. Líquidos corporales', tipo: 'teorica' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-14:30', descripcion: 'Homeostasis: rangos fisiológicos y sistemas de regulación', tipo: 'teorica' },
+        { tiempo: '14:30-15:00', descripcion: 'Actividad interactiva: retroalimentación y homeostasis en el movimiento', tipo: 'practica' }
       ],
       trabajoPrevio: 'Ninguno (primera sesión).',
       trabajoComplementario: 'Explorar homeostasis_movimiento.html y resolver casos del Bloque 1.'
     },
     { id: 'ses-2', fecha: '2026-10-16', titulo: 'Sistema musculoesquelético I', horario: '12:00-15:00', espacio: 'ambos',
       actividades: [
-        { tiempo: '12:00-12:15', descripcion: 'Repaso sesión anterior' },
-        { tiempo: '12:15-13:15', descripcion: 'Estructura muscular: fibra, sarcómero, miofilamentos' },
-        { tiempo: '13:30-14:15', descripcion: 'Unidad motora y mecanismo de contracción' },
-        { tiempo: '14:15-15:00', descripcion: 'Práctica: tipos de contracción en plié y relevé' }
+        { tiempo: '12:00-12:15', descripcion: 'Repaso y resolución de dudas', tipo: 'teorica' },
+        { tiempo: '12:15-13:15', descripcion: 'Estructura muscular: fibra, sarcómero, miofilamentos', tipo: 'teorica' },
+        { tiempo: '13:15-13:30', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:30-14:15', descripcion: 'Unidad motora y mecanismo de contracción', tipo: 'teorica' },
+        { tiempo: '14:15-15:00', descripcion: 'Práctica: análisis de un plié y un relevé en el aula de prácticas', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar homeostasis_movimiento.html.',
       trabajoComplementario: 'Resolver Bloques 2 y 3 de casos_practicos02_A.html.'
     },
     { id: 'ses-3', fecha: '2026-10-23', titulo: 'Sistema musculoesquelético II', horario: '12:00-15:00', espacio: 'ambos',
       actividades: [
-        { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: 5 componentes' },
-        { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y remodelación' },
-        { tiempo: '14:00-14:30', descripcion: 'Articulaciones y cartílago' },
-        { tiempo: '14:30-15:00', descripcion: 'Planos de movimiento y propiocepción' }
+        { tiempo: '12:00-12:15', descripcion: 'Repaso', tipo: 'teorica' },
+        { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: 5 componentes', tipo: 'teorica' },
+        { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y remodelación', tipo: 'teorica' },
+        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '14:00-14:30', descripcion: 'Articulaciones y cartílago', tipo: 'teorica' },
+        { tiempo: '14:30-15:00', descripcion: 'Práctica: identificar planos de movimiento en gestos de danza', tipo: 'practica' }
       ],
       trabajoPrevio: 'Completar Bloques 2 y 3 de casos_practicos02_A.html.',
       trabajoComplementario: 'Resolver Bloque 5 de casos_practicos02_B.html.'
     },
     { id: 'ses-5', fecha: '2026-11-06', titulo: 'Sistema nervioso I', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso' },
-        { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis y unidad motora' },
-        { tiempo: '13:45-15:00', descripcion: 'Control voluntario del movimiento' }
+        { tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso', tipo: 'teorica' },
+        { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis y unidad motora', tipo: 'teorica' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-15:00', descripcion: 'Control voluntario del movimiento', tipo: 'teorica' }
       ],
       trabajoPrevio: 'Repasar unidad motora.',
       trabajoComplementario: 'Avanzar con casos_practicos02_B.html.'
     },
     { id: 'ses-6', fecha: '2026-11-13', titulo: 'Preparación trabajos orales', horario: '12:00-15:00', espacio: 'aula_practicas',
       actividades: [
-        { tiempo: '12:00-12:30', descripcion: 'Explicación del trabajo oral' },
-        { tiempo: '12:30-13:30', descripcion: 'Formación de grupos' },
-        { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos con tutorización' }
+        { tiempo: '12:00-12:30', descripcion: 'Explicación del trabajo oral: criterios y fecha de presentación', tipo: 'teorica' },
+        { tiempo: '12:30-13:30', descripcion: 'Formación de grupos y elección de la secuencia', tipo: 'practica' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos: análisis de la secuencia con los recursos HTML', tipo: 'practica' }
       ],
       trabajoPrevio: 'Completar casos prácticos Bloques 1-4.',
       trabajoComplementario: 'Avanzar con el análisis del grupo.'
     },
     { id: 'ses-7', fecha: '2026-11-20', titulo: 'Sistema nervioso II / Sueño', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo' },
-        { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y recuperación' },
-        { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza' }
+        { tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo', tipo: 'teorica' },
+        { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y recuperación', tipo: 'teorica' },
+        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza: rendimiento y prevención de lesiones', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar homeostasis.',
       trabajoComplementario: 'Preparar presentaciones orales.'
     },
     { id: 'ses-8', fecha: '2026-11-27', titulo: 'Presentaciones orales / La sangre', horario: '12:00-15:00', espacio: 'ambos',
       actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos' },
-        { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre' }
+        { tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos', tipo: 'evaluacion' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre', tipo: 'teorica' }
       ],
       trabajoPrevio: 'Tener preparada la presentación oral.',
       trabajoComplementario: 'Preparar evaluación parcial.'
     },
     { id: 'ses-9', fecha: '2026-12-04', titulo: 'Sistema Hormonal', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Sistema endocrino' },
-        { tiempo: '13:00-13:45', descripcion: 'Hormonas y ejercicio' },
-        { tiempo: '14:00-15:00', descripcion: 'Remodelación ósea y hormonal' }
+        { tiempo: '12:00-13:00', descripcion: 'Sistema endocrino', tipo: 'teorica' },
+        { tiempo: '13:00-13:45', descripcion: 'Hormonas y ejercicio', tipo: 'teorica' },
+        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '14:00-15:00', descripcion: 'Relación entre hormonas, hueso y músculo', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar retroalimentación.',
       trabajoComplementario: 'Preparar evaluación parcial.'
     },
     { id: 'ses-10', fecha: '2026-12-11', titulo: 'Nutrición', horario: '12:00-15:00', espacio: 'ambos',
       actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista' },
-        { tiempo: '13:45-15:00', descripcion: 'Actividad práctica: análisis de menús' }
+        { tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista invitado/a', tipo: 'teorica' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-15:00', descripcion: 'Práctica: análisis de menús y su relación con la homeostasis', tipo: 'practica' }
       ],
       trabajoPrevio: 'Reflexionar sobre hábitos alimentarios.',
       trabajoComplementario: 'Preparar evaluación parcial.'
     },
     { id: 'ses-11', fecha: '2026-12-18', titulo: 'EVALUACIÓN PARCIAL', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual' },
-        { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y feedback' }
+        { tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual', tipo: 'evaluacion' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y feedback', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar temas 1-10.',
       trabajoComplementario: 'Descanso de Navidad.'
     },
     { id: 'ses-12', fecha: '2027-01-08', titulo: 'Aparato Cardiovascular', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Estructura del corazón' },
-        { tiempo: '13:00-13:45', descripcion: 'Circulación y transporte de gases' },
-        { tiempo: '14:00-15:00', descripcion: 'Adaptaciones al ejercicio' }
+        { tiempo: '12:00-13:00', descripcion: 'Estructura del corazón', tipo: 'teorica' },
+        { tiempo: '13:00-13:45', descripcion: 'Circulación y transporte de gases', tipo: 'teorica' },
+        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '14:00-15:00', descripcion: 'Adaptaciones cardiovasculares al ejercicio y la danza', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar homeostasis.',
       trabajoComplementario: 'Avanzar con aparato respiratorio.'
     },
     { id: 'ses-13', fecha: '2027-01-15', titulo: 'Aparato Respiratorio', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-13:00', descripcion: 'Mecánica ventilatoria' },
-        { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso y pH' },
-        { tiempo: '14:00-15:00', descripcion: 'Respiración en la danza' }
+        { tiempo: '12:00-13:00', descripcion: 'Mecánica ventilatoria', tipo: 'teorica' },
+        { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso y pH', tipo: 'teorica' },
+        { tiempo: '13:45-14:00', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '14:00-15:00', descripcion: 'La respiración en la danza: control y conciencia corporal', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar aparato cardiovascular.',
       trabajoComplementario: 'Preparar examen final.'
     },
     { id: 'ses-14', fecha: '2027-01-22', titulo: 'EXAMEN FINAL', horario: '12:00-15:00', espacio: 'aula_ordinaria',
       actividades: [
-        { tiempo: '12:00-13:30', descripcion: 'Examen integrador' },
-        { tiempo: '13:45-15:00', descripcion: 'Corrección y despedida' }
+        { tiempo: '12:00-13:30', descripcion: 'Examen final integrador', tipo: 'evaluacion' },
+        { tiempo: '13:30-13:45', descripcion: 'Descanso', tipo: 'descanso' },
+        { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta y despedida del curso', tipo: 'practica' }
       ],
       trabajoPrevio: 'Repasar todo el curso.',
       trabajoComplementario: '¡Curso completado!'
@@ -741,6 +749,17 @@ function formatearFechaISO(iso) {
 
 function getEspacioTexto(e) {
     return { 'aula_ordinaria': '🏫 Aula ordinaria', 'aula_practicas': '🩰 Aula de prácticas', 'ambos': '🏫🩰 Ambos' }[e] || e;
+}
+
+function getTipoTexto(tipo) {
+    const map = {
+        'teorica': { texto: '📖 Teórica', clase: 'tipo-teorica' },
+        'practica': { texto: '🎯 Práctica', clase: 'tipo-practica' },
+        'evaluacion': { texto: '📝 Evaluación', clase: 'tipo-evaluacion' },
+        'descanso': { texto: '☕ Descanso', clase: 'tipo-descanso' },
+        'gestion': { texto: '⚙️ Gestión', clase: 'tipo-gestion' }
+    };
+    return map[tipo] || { texto: tipo || '', clase: '' };
 }
 
 // ==========================================
@@ -804,16 +823,21 @@ function comprobarActualizaciones() {
     const datos = obtenerDatosCompartidos();
     if (!datos.sesionActualizadaId) return;
     
-    const sesion = SESIONES_DISPONIBLES.find(s => s.id === datos.sesionActualizadaId);
-    if (!sesion) return;
+    const sesionPlanificador = datos.sesiones.find(s => s.id === datos.sesionActualizadaId);
+    if (!sesionPlanificador) return;
     
     // Mostrar aviso
     const alertBox = document.getElementById('syncAlert');
     const infoBox = document.getElementById('syncAlertInfo');
+    
+    // Calcular cuántas actividades son visibles
+    const actividadesVisibles = (sesionPlanificador.actividades || []).filter(a => a.visibleAlumno !== false);
+    
     infoBox.innerHTML = `
-        <p><strong>📅 Fecha:</strong> ${formatearFecha(sesion.fecha)}<br>
-        <strong>📌 Título:</strong> ${sesion.titulo}<br>
-        <strong>🕐 Horario:</strong> ${sesion.horario}</p>
+        <p><strong>📅 Fecha:</strong> ${formatearFecha(sesionPlanificador.fecha)}<br>
+        <strong>📌 Título:</strong> ${sesionPlanificador.titulo}<br>
+        <strong>🕐 Horario:</strong> ${sesionPlanificador.horario}<br>
+        <strong>👁️ Actividades visibles:</strong> ${actividadesVisibles.length}</p>
     `;
     alertBox.classList.add('visible');
     
@@ -822,12 +846,23 @@ function comprobarActualizaciones() {
         datos.sesiones.forEach(s => {
             const idx = SESIONES_DISPONIBLES.findIndex(sd => sd.id === s.id);
             if (idx !== -1) {
+                // Filtrar solo las actividades visibles y prepararlas
+                const actividadesVisibles = (s.actividades || [])
+                    .filter(a => a.visibleAlumno !== false)
+                    .map(a => ({
+                        tiempo: a.tiempo,
+                        descripcion: a.descripcionAlumno && a.descripcionAlumno.trim().length > 0 
+                            ? a.descripcionAlumno 
+                            : a.descripcion,
+                        tipo: a.tipo || 'teorica'
+                    }));
+                
                 SESIONES_DISPONIBLES[idx] = {
                     ...SESIONES_DISPONIBLES[idx],
                     titulo: s.titulo,
                     horario: s.horario,
                     espacio: s.espacio,
-                    actividades: s.actividades || SESIONES_DISPONIBLES[idx].actividades,
+                    actividades: actividadesVisibles,
                     trabajoPrevio: s.trabajoPrevio || SESIONES_DISPONIBLES[idx].trabajoPrevio,
                     trabajoComplementario: s.trabajoComplementario || SESIONES_DISPONIBLES[idx].trabajoComplementario
                 };
@@ -836,7 +871,7 @@ function comprobarActualizaciones() {
         inicializarSelectSesiones();
     }
     
-    registrarLogAlumne('aviso_sync', `Aviso de actualización recibido para la sesión "${sesion.titulo}"`);
+    registrarLogAlumne('aviso_sync', `Aviso de actualización recibido para la sesión "${sesionPlanificador.titulo}" (${actividadesVisibles.length} actividades visibles)`);
 }
 
 function cargarDatosActualizados() {
@@ -859,7 +894,8 @@ function cargarDatosActualizados() {
     guardarDatosCompartidos(datos);
     
     // Registrar al log personal
-    registrarLogAlumne('sincronizacion', `Datos de la sesión "${sesionActualizada.titulo}" cargados desde el planificador de la profesora`);
+    const actividadesVisibles = (sesionActualizada.actividades || []).filter(a => a.visibleAlumno !== false).length;
+    registrarLogAlumne('sincronizacion', `Datos de la sesión "${sesionActualizada.titulo}" cargados (${actividadesVisibles} actividades visibles)`);
     
     // Registrar también al log compartido
     const nombreAlumno = state.datosAlumno.nombre || 'Alumno/a';
@@ -917,10 +953,10 @@ function renderizarLogAlumne() {
 }
 
 function limpiarLogAlumne() {
-    if (!confirm('¿Seguro que quieres limpiar tu log personal de acciones? Esta acción no se puede deshacer.')) return;
+    if (!confirm('¿Seguro que quieres limpiar tu log personal?')) return;
     localStorage.removeItem(LOG_ALUMNE_KEY);
     renderizarLogAlumne();
-    mostrarToast('🗑️ Log personal limpiado', 'info');
+    mostrarToast('🗑️ Log limpiado', 'info');
 }
 
 // ==========================================
@@ -972,6 +1008,7 @@ function mostrarInfoSesion(id) {
     state.actuacionActual.actividades = sesion.actividades.map(a => ({
         tiempo: a.tiempo,
         descripcion: a.descripcion,
+        tipo: a.tipo || 'teorica',
         estado: 'pendiente',
         observaciones: ''
     }));
@@ -981,6 +1018,7 @@ function mostrarInfoSesion(id) {
             <h4>📌 ${sesion.titulo}</h4>
             <p><strong>📅 Fecha:</strong> ${formatearFecha(sesion.fecha)} · <strong>🕐 Horario:</strong> ${sesion.horario}</p>
             <p><strong>📍 Espacio previsto:</strong> ${getEspacioTexto(sesion.espacio)}</p>
+            <p><strong>👁️ Actividades programadas:</strong> ${sesion.actividades.length}</p>
             ${sesion.trabajoPrevio ? `<p><strong>📚 Trabajo previo:</strong> ${sesion.trabajoPrevio}</p>` : ''}
             ${sesion.trabajoComplementario ? `<p><strong>📝 Trabajo complementario:</strong> ${sesion.trabajoComplementario}</p>` : ''}
         </div>
@@ -994,20 +1032,24 @@ function renderizarActividades() {
         container.innerHTML = '<div class="empty-state">No hay actividades para esta sesión.</div>';
         return;
     }
-    container.innerHTML = state.actuacionActual.actividades.map((a, i) => `
-        <div class="actividad-item estado-${a.estado}" data-idx="${i}">
-            <div class="actividad-header">
-                <span class="actividad-tiempo">${a.tiempo}</span>
-                <span class="actividad-descripcion">${a.descripcion}</span>
+    container.innerHTML = state.actuacionActual.actividades.map((a, i) => {
+        const tipoInfo = getTipoTexto(a.tipo);
+        return `
+            <div class="actividad-item estado-${a.estado}" data-idx="${i}">
+                <div class="actividad-header">
+                    <span class="actividad-tiempo">${a.tiempo}</span>
+                    <span class="actividad-descripcion">${a.descripcion}</span>
+                    <span class="actividad-tipo-badge ${tipoInfo.clase}">${tipoInfo.texto}</span>
+                </div>
+                <div class="actividad-controls">
+                    <button class="estado-btn ${a.estado === 'hecha' ? 'active-hecha' : ''}" onclick="cambiarEstado(${i}, 'hecha')">✅ Hecha</button>
+                    <button class="estado-btn ${a.estado === 'no_hecha' ? 'active-no_hecha' : ''}" onclick="cambiarEstado(${i}, 'no_hecha')">❌ No hecha</button>
+                    <button class="estado-btn ${a.estado === 'pendiente' ? 'active-pendiente' : ''}" onclick="cambiarEstado(${i}, 'pendiente')">⏳ Pendiente</button>
+                </div>
+                <textarea class="observaciones-actividad" placeholder="Observaciones sobre esta actividad..." onchange="actualizarObs(${i}, this.value)">${a.observaciones || ''}</textarea>
             </div>
-            <div class="actividad-controls">
-                <button class="estado-btn ${a.estado === 'hecha' ? 'active-hecha' : ''}" onclick="cambiarEstado(${i}, 'hecha')">✅ Hecha</button>
-                <button class="estado-btn ${a.estado === 'no_hecha' ? 'active-no_hecha' : ''}" onclick="cambiarEstado(${i}, 'no_hecha')">❌ No hecha</button>
-                <button class="estado-btn ${a.estado === 'pendiente' ? 'active-pendiente' : ''}" onclick="cambiarEstado(${i}, 'pendiente')">⏳ Pendiente</button>
-            </div>
-            <textarea class="observaciones-actividad" placeholder="Observaciones sobre esta actividad..." onchange="actualizarObs(${i}, this.value)">${a.observaciones || ''}</textarea>
-        </div>
-    `).join('');
+        `;
+    }).join('');
     actualizarResumen();
 }
 
@@ -1100,7 +1142,7 @@ function nuevaActuacion() {
     state.actuacionActual = {
         fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
         actividades: state.sesionActual.actividades.map(a => ({
-            tiempo: a.tiempo, descripcion: a.descripcion, estado: 'pendiente', observaciones: ''
+            tiempo: a.tiempo, descripcion: a.descripcion, tipo: a.tipo || 'teorica', estado: 'pendiente', observaciones: ''
         })),
         trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
     };
@@ -1150,7 +1192,8 @@ function enviarEmail() {
     body += `ACTIVIDADES: ${hechas}/${total} completadas\n\n`;
     acts.forEach(a => {
         const est = { 'hecha': '✅', 'no_hecha': '❌', 'pendiente': '⏳' }[a.estado];
-        body += `${est} ${a.tiempo} - ${a.descripcion}\n`;
+        const tipoInfo = getTipoTexto(a.tipo);
+        body += `${est} [${tipoInfo.texto}] ${a.tiempo} - ${a.descripcion}\n`;
         if (a.observaciones) body += `   → ${a.observaciones}\n`;
     });
     body += `\nTrabajo previo: ${state.actuacionActual.trabajoPrevio || 'No indicado'}\n`;
@@ -1174,7 +1217,6 @@ document.getElementById('sesionSelect').addEventListener('change', function() {
     document.getElementById(id).addEventListener('change', () => { 
         guardarDatosAlumno(); 
         guardarEstado(); 
-        registrarLogAlumne('guardar', `Datos personales actualizados: ${state.datosAlumno.nombre || '(sin nombre)'}`);
     });
 });
 

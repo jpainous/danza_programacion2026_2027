@@ -113,6 +113,7 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     border-radius: 8px;
 }
 .info-box h3 { color: #1976D2; margin-bottom: 10px; }
+.info-box p { margin-bottom: 8px; line-height: 1.6; }
 
 .filtros {
     padding: 15px 40px;
@@ -194,11 +195,7 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     color: #666;
 }
 .sesion-meta-item { display: flex; align-items: center; gap: 4px; }
-.sesion-toggle {
-    font-size: 1.5em;
-    color: #11998e;
-    transition: transform 0.3s;
-}
+.sesion-toggle { font-size: 1.5em; color: #11998e; transition: transform 0.3s; }
 .sesion-card.open .sesion-toggle { transform: rotate(180deg); }
 
 .sesion-body {
@@ -224,7 +221,9 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 }
 .sesion-section p { line-height: 1.6; color: #555; }
 
+/* ACTIVIDADES - NOU ESTIL AMB VISIBILITAT */
 .actividades-lista { list-style: none; }
+
 .actividad-item {
     background: white;
     border: 1px solid #e9ecef;
@@ -236,7 +235,25 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+    transition: all 0.2s;
 }
+.actividad-item:hover { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+
+/* Activitat visible per a l'alumne */
+.actividad-item.visible-alumno {
+    border-left: 4px solid #28a745;
+}
+/* Activitat NO visible (només professora) */
+.actividad-item.no-visible {
+    border-left: 4px solid #6c757d;
+    background: #f8f9fa;
+    opacity: 0.85;
+}
+.actividad-item.no-visible .actividad-descripcion {
+    color: #6c757d;
+    font-style: italic;
+}
+
 .actividad-tiempo {
     background: #11998e;
     color: white;
@@ -247,6 +264,45 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     white-space: nowrap;
 }
 .actividad-descripcion { flex: 1; min-width: 200px; }
+
+.actividad-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.badge-visibilidad {
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.badge-visible { background: #d4edda; color: #155724; }
+.badge-oculto { background: #e2e3e5; color: #383d41; }
+
+.badge-tipo {
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.tipo-teorica { background: #cfe2ff; color: #084298; }
+.tipo-practica { background: #d1e7dd; color: #0f5132; }
+.tipo-evaluacion { background: #f8d7da; color: #842029; }
+.tipo-descanso { background: #fff3cd; color: #664d03; }
+.tipo-gestion { background: #e2e3e5; color: #41464b; }
+
+.actividad-stats {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #0c5460;
+}
 
 .recursos-lista { list-style: none; }
 .recursos-lista li { margin-bottom: 6px; }
@@ -272,7 +328,6 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     background: #e7f3ff;
     color: #1976D2;
 }
-.tag.espacio { background: #fff3cd; color: #856404; }
 .tag.medio { background: #f3e5f5; color: #6a1b9a; }
 
 .observaciones-box {
@@ -293,6 +348,7 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     flex-wrap: wrap;
 }
 
+/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -378,6 +434,7 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 }
 .checkbox-item input { transform: scale(1.1); }
 
+/* EDITOR D'ACTIVITATS MILLORAT */
 .actividades-editor {
     background: #f8f9fa;
     padding: 15px;
@@ -386,17 +443,80 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 }
 .actividad-editor-item {
     background: white;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
 }
-.actividad-editor-row {
+.actividad-editor-item.visible { border-left: 4px solid #28a745; }
+.actividad-editor-item.oculta { border-left: 4px solid #6c757d; background: #f8f9fa; }
+
+.actividad-editor-header {
     display: grid;
     grid-template-columns: 120px 1fr auto;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
+.actividad-editor-header input,
+.actividad-editor-header select {
+    padding: 8px 10px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: inherit;
+}
+
+.actividad-editor-opciones {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.actividad-visibilidad-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+.actividad-visibilidad-row input[type="checkbox"] {
+    transform: scale(1.3);
+    margin-right: 5px;
+}
+.actividad-visibilidad-row label {
+    font-weight: 600;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.descripcion-alumno-wrapper {
+    margin-top: 8px;
+    padding: 10px;
+    background: #e7f3ff;
+    border-left: 3px solid #2196F3;
+    border-radius: 4px;
+    display: none;
+}
+.descripcion-alumno-wrapper.visible { display: block; }
+.descripcion-alumno-wrapper label {
+    font-size: 0.85em;
+    color: #0c5460;
+    margin-bottom: 4px;
+    display: block;
+}
+.descripcion-alumno-wrapper textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #c7d2fe;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: inherit;
+    min-height: 50px;
+    resize: vertical;
+}
+
 .btn-remove-actividad {
     background: #dc3545;
     color: white;
@@ -426,6 +546,7 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
     flex-wrap: wrap;
 }
 
+/* HISTORIAL I LOG */
 .historial-lista { max-height: 500px; overflow-y: auto; margin: 20px 0; }
 .historial-item {
     background: #f8f9fa;
@@ -514,25 +635,11 @@ header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
 .log-item.log-edit { border-left-color: #17a2b8; background: #ecfeff; }
 .log-item.log-delete { border-left-color: #dc3545; background: #fef2f2; }
 .log-item.log-alumno { border-left-color: #6f42c1; background: #f3e5f5; }
-.log-fecha {
-    font-weight: 700;
-    color: #11998e;
-    font-size: 0.85em;
-    white-space: nowrap;
-}
+.log-fecha { font-weight: 700; color: #11998e; font-size: 0.85em; white-space: nowrap; }
 .log-contenido { flex: 1; color: #333; }
-.log-usuario {
-    font-size: 0.8em;
-    color: #666;
-    font-style: italic;
-}
+.log-usuario { font-size: 0.8em; color: #666; font-style: italic; }
 .log-vacio { text-align: center; padding: 30px; color: #999; font-style: italic; }
-.log-actions {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+.log-actions { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
 
 .toast {
     position: fixed;
@@ -569,7 +676,7 @@ footer {
     .sesiones-container { padding: 20px; }
     .modal-content { padding: 25px; margin: 20px auto; }
     .form-row { grid-template-columns: 1fr; }
-    .actividad-editor-row { grid-template-columns: 1fr; }
+    .actividad-editor-header { grid-template-columns: 1fr; }
     .dropdown { margin-left: 0; flex: 1 1 100%; }
     .btn-dropdown { width: 100%; justify-content: center; }
     .log-section { padding: 20px; }
@@ -630,13 +737,13 @@ footer {
 
     <div class="info-box no-print">
         <h3>ℹ️ Información</h3>
-        <p>Este planificador te permite gestionar cada sesión con todo el detalle. Los cambios se guardan automáticamente y se pueden sincronizar con la ficha del alumno mediante el botón <strong>🔄 Actualizar sesión</strong>.</p>
-        <p><strong>💡 Consejo:</strong> Haz clic en cualquier sesión para expandirla. Todas las acciones quedan registradas en el log inferior.</p>
+        <p>Este planificador te permite gestionar cada sesión con todo el detalle. Cada actividad puede marcarse como <strong>visible u oculta para el alumnado</strong>, y puede tener una descripción adaptada.</p>
+        <p><strong>👁️ Iconos:</strong> <span style="color:#28a745;font-weight:600;">●</span> Visible para el alumnado · <span style="color:#6c757d;font-weight:600;">●</span> Solo profesora (🔒)</p>
+        <p><strong>💡 Consejo:</strong> Al sincronizar con la ficha del alumno, solo se enviarán las actividades marcadas como visibles.</p>
     </div>
 
     <div id="sesionesContainer" class="sesiones-container"></div>
 
-    <!-- SECCIÓN LOG -->
     <div class="log-section no-print">
         <h3>📜 Log de Acciones</h3>
         <div id="logContainer" class="log-container">
@@ -695,6 +802,9 @@ footer {
             </div>
             <div class="form-group">
                 <label>📋 Actividades planificadas:</label>
+                <p style="font-size:0.85em;color:#666;margin-bottom:10px;">
+                    👁️ Marca las actividades que serán visibles para el alumnado. Puedes añadir una descripción alternativa más sencilla si lo deseas.
+                </p>
                 <div class="actividades-editor" id="actividadesEditor"></div>
                 <button type="button" class="btn-add-actividad" onclick="addActividad()">➕ Añadir actividad</button>
             </div>
@@ -723,7 +833,7 @@ footer {
                 </div>
             </div>
             <div class="form-group">
-                <label>📝 Observaciones:</label>
+                <label>📝 Observaciones (solo profesora):</label>
                 <textarea id="sesionObservaciones" rows="3" placeholder="Notas personales, incidencias, ajustes..."></textarea>
             </div>
             <input type="hidden" id="sesionId">
@@ -781,7 +891,7 @@ let filtroActual = 'todas';
 let actividadesTemp = [];
 
 // ==========================================
-// DATOS INICIALES
+// DATOS INICIALES (14 sesiones con actividades con visibilidad)
 // ==========================================
 const datosIniciales = {
     sesiones: [
@@ -791,11 +901,11 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Comprender los niveles de organización del cuerpo humano, los líquidos corporales y los mecanismos de homeostasis durante el movimiento.',
             actividades: [
-                { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura, profesora y metodología. Entrega de la guía de recursos.' },
-                { tiempo: '12:30-13:30', descripcion: 'Niveles de organización del cuerpo humano. Líquidos intra y extracelular. Variables del medio interno.' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-14:30', descripcion: 'Homeostasis: definición, rangos fisiológicos, sistemas de regulación (nervioso y endocrino).' },
-                { tiempo: '14:30-15:00', descripcion: 'Retroalimentación negativa y positiva. Homeostasis en el movimiento. Actividad interactiva con recursos HTML.' }
+                { tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura, profesora y metodología. Entrega de la guía de recursos.', descripcionAlumno: 'Presentación de la asignatura y entrega de materiales', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '12:30-13:30', descripcion: 'Niveles de organización del cuerpo humano. Líquidos intra y extracelular. Variables del medio interno.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-14:30', descripcion: 'Homeostasis: definición, rangos fisiológicos, sistemas de regulación (nervioso y endocrino).', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '14:30-15:00', descripcion: 'Retroalimentación negativa y positiva. Homeostasis en el movimiento. Actividad interactiva con recursos HTML.', descripcionAlumno: 'Actividad interactiva: retroalimentación y homeostasis en el movimiento', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html','https://jpainous.github.io/dansa_tema03/esqueleto_00_A.html'],
             trabajoPrevio: 'Ninguno (primera sesión).',
@@ -809,11 +919,11 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'ambos',
             objetivos: 'Conocer la estructura muscular desde la fibra hasta el sarcómero, el mecanismo de contracción y los tipos de contracción aplicados a la danza.',
             actividades: [
-                { tiempo: '12:00-12:15', descripcion: 'Repaso de la sesión anterior y dudas.' },
-                { tiempo: '12:15-13:15', descripcion: 'Tipos de músculos. Estructura muscular: fibra, miofibrilla, sarcómero, miofilamentos (actina y miosina).' },
-                { tiempo: '13:15-13:30', descripcion: 'Descanso' },
-                { tiempo: '13:30-14:15', descripcion: 'Unidad motora. Mecanismo de contracción: papel del calcio y ATP. Ciclo de la miosina.' },
-                { tiempo: '14:15-15:00', descripcion: 'Tipos de contracción (concéntrica, excéntrica, isométrica). Práctica en aula de prácticas: análisis de un plié y un relevé.' }
+                { tiempo: '12:00-12:15', descripcion: 'Repaso de la sesión anterior y dudas.', descripcionAlumno: 'Repaso y resolución de dudas', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '12:15-13:15', descripcion: 'Tipos de músculos. Estructura muscular: fibra, miofibrilla, sarcómero, miofilamentos (actina y miosina).', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:15-13:30', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:30-14:15', descripcion: 'Unidad motora. Mecanismo de contracción: papel del calcio y ATP. Ciclo de la miosina.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '14:15-15:00', descripcion: 'Tipos de contracción (concéntrica, excéntrica, isométrica). Práctica en aula de prácticas: análisis de un plié y un relevé.', descripcionAlumno: 'Práctica: análisis de un plié y un relevé en el aula de prácticas', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/actividades_sarcomero.html','https://jpainous.github.io/dansa_tema03/miosina_actina.html','https://jpainous.github.io/dansa_tema03/calcio_atp.html','https://jpainous.github.io/dansa_tema03/contraccion_muscular.html','https://jpainous.github.io/dansa_tema03/unidad_motora.html'],
             trabajoPrevio: 'Repasar el recurso "homeostasis_movimiento.html" y completar los casos del Bloque 1.',
@@ -827,12 +937,12 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'ambos',
             objetivos: 'Identificar los componentes de la cadena biomecánica, clasificar los huesos, comprender la remodelación ósea y analizar los planos de movimiento.',
             actividades: [
-                { tiempo: '12:00-12:15', descripcion: 'Repaso rápido de la sesión anterior.' },
-                { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: músculo, tendón, hueso, articulación, ligamento.' },
-                { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y partes del hueso largo. Histología y remodelación ósea (Ley de Wolff).' },
-                { tiempo: '13:45-14:00', descripcion: 'Descanso' },
-                { tiempo: '14:00-14:30', descripcion: 'Articulaciones y fisiología del cartílago.' },
-                { tiempo: '14:30-15:00', descripcion: 'Planos de movimiento y propiocepción. Práctica: identificar planos en gestos de danza.' }
+                { tiempo: '12:00-12:15', descripcion: 'Repaso rápido de la sesión anterior.', descripcionAlumno: 'Repaso', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: músculo, tendón, hueso, articulación, ligamento.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y partes del hueso largo. Histología y remodelación ósea (Ley de Wolff).', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '14:00-14:30', descripcion: 'Articulaciones y fisiología del cartílago.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '14:30-15:00', descripcion: 'Planos de movimiento y propiocepción. Práctica: identificar planos en gestos de danza.', descripcionAlumno: 'Práctica: identificar planos de movimiento en gestos de danza', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_01_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_02_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_03_D.html','https://jpainous.github.io/dansa_tema03/esqueleto_04_tendones.html','https://jpainous.github.io/dansa_tema03/esqueleto_05_articulaciones_A.html','https://jpainous.github.io/dansa_tema03/planos_movimiento.html'],
             trabajoPrevio: 'Completar los Bloques 2 y 3 de casos_practicos02_A.html.',
@@ -858,10 +968,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Comprender la organización del sistema nervioso y su relación con la unidad motora y el control del movimiento.',
             actividades: [
-                { tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso: organización general.' },
-                { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis, neurotransmisores. Relación con la unidad motora ya estudiada.' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-15:00', descripcion: 'Sistema nervioso central y periférico. Control voluntario del movimiento.' }
+                { tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso: organización general.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis, neurotransmisores. Relación con la unidad motora ya estudiada.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-15:00', descripcion: 'Sistema nervioso central y periférico. Control voluntario del movimiento.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/unidad_motora.html'],
             trabajoPrevio: 'Repasar la unidad motora y el mecanismo de contracción.',
@@ -875,10 +985,11 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_practicas',
             objetivos: 'Tutorizar el trabajo grupal de análisis fisiológico de una secuencia de danza.',
             actividades: [
-                { tiempo: '12:00-12:30', descripcion: 'Explicación detallada del trabajo oral: criterios, rúbrica, fecha de presentación.' },
-                { tiempo: '12:30-13:30', descripcion: 'Formación de grupos. Elección de la secuencia de danza a analizar.' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos: análisis inicial de la secuencia con los recursos HTML disponibles. Tutorización individualizada.' }
+                { tiempo: '12:00-12:30', descripcion: 'Explicación detallada del trabajo oral: criterios, rúbrica, fecha de presentación.', descripcionAlumno: 'Explicación del trabajo oral: criterios y fecha de presentación', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '12:30-13:30', descripcion: 'Formación de grupos. Elección de la secuencia de danza a analizar.', descripcionAlumno: 'Formación de grupos y elección de la secuencia', visibleAlumno: true, tipo: 'practica' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos: análisis inicial de la secuencia con los recursos HTML disponibles. Tutorización individualizada.', descripcionAlumno: 'Trabajo en grupos: análisis de la secuencia con los recursos HTML', visibleAlumno: true, tipo: 'practica' },
+                { tiempo: '15:00-15:30', descripcion: 'Revisión interna de los grupos formados y ajustes (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/musculos_tr_equipo.html','https://jpainous.github.io/dansa_tema03/trabajo_musculos.html','https://jpainous.github.io/dansa_tema03/planos_movimiento.html'],
             trabajoPrevio: 'Haber completado los casos prácticos de los Bloques 1-4.',
@@ -892,10 +1003,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Comprender la recuperación homeostática y el papel del sueño en el rendimiento del bailarín.',
             actividades: [
-                { tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo: simpático y parasimpático. Respuesta al esfuerzo.' },
-                { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y su importancia en la recuperación muscular y el aprendizaje motor.' },
-                { tiempo: '13:45-14:00', descripcion: 'Descanso' },
-                { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza: rendimiento, prevención de lesiones, gestión del ensayo y la función.' }
+                { tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo: simpático y parasimpático. Respuesta al esfuerzo.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y su importancia en la recuperación muscular y el aprendizaje motor.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza: rendimiento, prevención de lesiones, gestión del ensayo y la función.', descripcionAlumno: 'Aplicación a la danza: rendimiento y prevención de lesiones', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'],
             trabajoPrevio: 'Repasar los conceptos de homeostasis y sistema nervioso.',
@@ -909,9 +1020,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'ambos',
             objetivos: 'Evaluar la capacidad de análisis fisiológico aplicado a la danza. Introducción al sistema cardiovascular.',
             actividades: [
-                { tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos (10-15 min por grupo + preguntas).' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre: composición, funciones, relación con el transporte de O₂ y CO₂ durante el esfuerzo.' }
+                { tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos (10-15 min por grupo + preguntas).', descripcionAlumno: 'Presentaciones orales de los grupos', visibleAlumno: true, tipo: 'evaluacion' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre: composición, funciones, relación con el transporte de O₂ y CO₂ durante el esfuerzo.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '15:00-15:30', descripcion: 'Rellenar rúbrica de evaluación de cada grupo (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_B.html'],
             trabajoPrevio: 'Tener preparada la presentación oral del grupo.',
@@ -925,10 +1037,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Comprender el papel de las hormonas en la adaptación al ejercicio y la remodelación ósea.',
             actividades: [
-                { tiempo: '12:00-13:00', descripcion: 'Introducción al sistema endocrino: hormonas principales y su regulación.' },
-                { tiempo: '13:00-13:45', descripcion: 'Hormonas relacionadas con el ejercicio: adrenalina, cortisol, hormona del crecimiento.' },
-                { tiempo: '13:45-14:00', descripcion: 'Descanso' },
-                { tiempo: '14:00-15:00', descripcion: 'Relación con la remodelación ósea y la adaptación muscular. Retroalimentación hormonal.' }
+                { tiempo: '12:00-13:00', descripcion: 'Introducción al sistema endocrino: hormonas principales y su regulación.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:00-13:45', descripcion: 'Hormonas relacionadas con el ejercicio: adrenalina, cortisol, hormona del crecimiento.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '14:00-15:00', descripcion: 'Relación con la remodelación ósea y la adaptación muscular. Retroalimentación hormonal.', descripcionAlumno: 'Relación entre hormonas, hueso y músculo', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_03_E.html'],
             trabajoPrevio: 'Repasar los conceptos de retroalimentación y remodelación ósea.',
@@ -942,9 +1054,9 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'ambos',
             objetivos: 'Comprender la importancia de la nutrición para el rendimiento del bailarín y la recuperación.',
             actividades: [
-                { tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista invitado/a: necesidades nutricionales del bailarín, hidratación, recuperación.' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-15:00', descripcion: 'Actividad práctica: análisis de menús, relación con la homeostasis de la glucosa y la recuperación muscular.' }
+                { tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista invitado/a: necesidades nutricionales del bailarín, hidratación, recuperación.', descripcionAlumno: 'Sesión con nutricionista invitado/a', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-15:00', descripcion: 'Actividad práctica: análisis de menús, relación con la homeostasis de la glucosa y la recuperación muscular.', descripcionAlumno: 'Práctica: análisis de menús y su relación con la homeostasis', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'],
             trabajoPrevio: 'Reflexionar sobre los propios hábitos alimentarios.',
@@ -958,9 +1070,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Evaluar los conocimientos adquiridos sobre homeostasis, sistema muscular y sistema óseo/articular.',
             actividades: [
-                { tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual: preguntas teóricas y casos prácticos aplicados a la danza.' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta de la prueba. Resolución de dudas. Feedback individualizado.' }
+                { tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual: preguntas teóricas y casos prácticos aplicados a la danza.', descripcionAlumno: 'Prueba escrita individual', visibleAlumno: true, tipo: 'evaluacion' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta de la prueba. Resolución de dudas. Feedback individualizado.', descripcionAlumno: 'Corrección conjunta y feedback', visibleAlumno: true, tipo: 'practica' },
+                { tiempo: '15:00-16:00', descripcion: 'Introducción de notas en el cuaderno de evaluación y revisión de rúbricas (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_A.html','https://jpainous.github.io/dansa_tema03/casos_practicos02_B.html'],
             trabajoPrevio: 'Repasar todos los temas vistos hasta ahora (1-10). Resolver los casos prácticos pendientes.',
@@ -974,10 +1087,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Comprender el transporte de O₂ y CO₂ durante el esfuerzo y su relación con la homeostasis.',
             actividades: [
-                { tiempo: '12:00-13:00', descripcion: 'Estructura del corazón y vasos sanguíneos. El corazón como bomba.' },
-                { tiempo: '13:00-13:45', descripcion: 'Circulación mayor y menor. Transporte de O₂ y CO₂.' },
-                { tiempo: '13:45-14:00', descripcion: 'Descanso' },
-                { tiempo: '14:00-15:00', descripcion: 'Adaptaciones cardiovasculares al ejercicio. Relación con la danza y el rendimiento.' }
+                { tiempo: '12:00-13:00', descripcion: 'Estructura del corazón y vasos sanguíneos. El corazón como bomba.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:00-13:45', descripcion: 'Circulación mayor y menor. Transporte de O₂ y CO₂.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '14:00-15:00', descripcion: 'Adaptaciones cardiovasculares al ejercicio. Relación con la danza y el rendimiento.', descripcionAlumno: 'Adaptaciones cardiovasculares al ejercicio y la danza', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'],
             trabajoPrevio: 'Repasar los conceptos de homeostasis y sistema hormonal.',
@@ -991,10 +1104,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Comprender el intercambio gaseoso y su relación con el pH sanguíneo y el rendimiento del bailarín.',
             actividades: [
-                { tiempo: '12:00-13:00', descripcion: 'Estructura del aparato respiratorio. Mecánica ventilatoria.' },
-                { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso: O₂ y CO₂. Relación con el pH sanguíneo.' },
-                { tiempo: '13:45-14:00', descripcion: 'Descanso' },
-                { tiempo: '14:00-15:00', descripcion: 'Adaptaciones respiratorias al ejercicio. La respiración en la danza: control y conciencia corporal.' }
+                { tiempo: '12:00-13:00', descripcion: 'Estructura del aparato respiratorio. Mecánica ventilatoria.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso: O₂ y CO₂. Relación con el pH sanguíneo.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' },
+                { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '14:00-15:00', descripcion: 'Adaptaciones respiratorias al ejercicio. La respiración en la danza: control y conciencia corporal.', descripcionAlumno: 'La respiración en la danza: control y conciencia corporal', visibleAlumno: true, tipo: 'practica' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'],
             trabajoPrevio: 'Repasar los conceptos de aparato cardiovascular.',
@@ -1008,9 +1121,10 @@ const datosIniciales = {
             estado: 'previsto', espacio: 'aula_ordinaria',
             objetivos: 'Evaluar de forma integradora todos los conocimientos de la asignatura.',
             actividades: [
-                { tiempo: '12:00-13:30', descripcion: 'Examen final integrador: preguntas teóricas, casos prácticos y aplicación a la danza.' },
-                { tiempo: '13:30-13:45', descripcion: 'Descanso' },
-                { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta. Valoración global del curso. Despedida.' }
+                { tiempo: '12:00-13:30', descripcion: 'Examen final integrador: preguntas teóricas, casos prácticos y aplicación a la danza.', descripcionAlumno: 'Examen final integrador', visibleAlumno: true, tipo: 'evaluacion' },
+                { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' },
+                { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta. Valoración global del curso. Despedida.', descripcionAlumno: 'Corrección conjunta y despedida del curso', visibleAlumno: true, tipo: 'practica' },
+                { tiempo: '15:00-17:00', descripcion: 'Corrección de exámenes, introducción de notas finales y cierre administrativo (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }
             ],
             recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_test_final.html'],
             trabajoPrevio: 'Repasar todos los temas del curso. Resolver los casos prácticos pendientes.',
@@ -1086,6 +1200,29 @@ function getEstadoTexto(estado) {
     return map[estado] || estado;
 }
 
+function getTipoTexto(tipo) {
+    const map = {
+        'teorica': { texto: '📖 Teórica', clase: 'tipo-teorica' },
+        'practica': { texto: '🎯 Práctica', clase: 'tipo-practica' },
+        'evaluacion': { texto: '📝 Evaluación', clase: 'tipo-evaluacion' },
+        'descanso': { texto: '☕ Descanso', clase: 'tipo-descanso' },
+        'gestion': { texto: '⚙️ Gestión', clase: 'tipo-gestion' }
+    };
+    return map[tipo] || { texto: tipo, clase: '' };
+}
+
+// Migración de datos antiguos (compatibilidad hacia atrás)
+function migrarActividad(a) {
+    if (!a) return { tiempo: '', descripcion: '', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' };
+    return {
+        tiempo: a.tiempo || '',
+        descripcion: a.descripcion || '',
+        descripcionAlumno: a.descripcionAlumno || '',
+        visibleAlumno: a.visibleAlumno !== undefined ? a.visibleAlumno : true,
+        tipo: a.tipo || 'teorica'
+    };
+}
+
 // ==========================================
 // GESTIÓN DEL ESTADO
 // ==========================================
@@ -1099,7 +1236,7 @@ function migrarDatos(datos) {
         estado: s.estado || 'previsto',
         espacio: s.espacio || 'aula_ordinaria',
         objetivos: s.objetivos || '',
-        actividades: Array.isArray(s.actividades) ? s.actividades : [],
+        actividades: Array.isArray(s.actividades) ? s.actividades.map(migrarActividad) : [],
         recursos: Array.isArray(s.recursos) ? s.recursos : [],
         trabajoPrevio: s.trabajoPrevio || '',
         trabajoComplementario: s.trabajoComplementario || '',
@@ -1252,15 +1389,33 @@ function registrarLog(accion, detalle, usuario = 'Profesora') {
     renderizarLog();
 }
 
+// Función clave: prepara las actividades para enviar a la ficha del alumno
+// Solo envía las actividades marcadas como visibles, y usa descripcionAlumno si existe
+function prepararActividadesParaAlumno(actividades) {
+    return actividades
+        .filter(a => a.visibleAlumno !== false)  // Solo las visibles
+        .map(a => ({
+            tiempo: a.tiempo,
+            descripcion: a.descripcionAlumno && a.descripcionAlumno.trim().length > 0 
+                ? a.descripcionAlumno 
+                : a.descripcion,
+            tipo: a.tipo || 'teorica'
+        }));
+}
+
 function sincronizarSesion(id) {
     const s = state.sesiones.find(x => x.id === id);
     if (!s) return;
+    
+    const actividadesVisibles = prepararActividadesParaAlumno(s.actividades);
+    const actividadesOcultas = s.actividades.length - actividadesVisibles.length;
     
     const confirmacion = confirm(
         `🔄 ¿Actualizar la sesión "${s.titulo}" a la ficha del alumno?\n\n` +
         `Esto hará:\n` +
         `• Cambiar el estado a "✅ Realizada" (si estaba prevista o en pausa)\n` +
-        `• Enviar los datos actualizados a la ficha del alumno\n` +
+        `• Enviar ${actividadesVisibles.length} actividades visibles a la ficha del alumno\n` +
+        (actividadesOcultas > 0 ? `• ${actividadesOcultas} actividad(es) interna(s) NO se enviarán 🔒\n` : '') +
         `• Registrar la acción en el log\n\n` +
         `¿Continuar?`
     );
@@ -1284,14 +1439,16 @@ function sincronizarSesion(id) {
     guardarEstado();
     renderizar();
     
-    let detalle = `Sesión "${s.titulo}" (${formatearFecha(s.fecha)}) actualizada y enviada a la ficha del alumno.`;
+    let detalle = `Sesión "${s.titulo}" (${formatearFecha(s.fecha)}) actualizada. Enviadas ${actividadesVisibles.length} actividades visibles`;
+    if (actividadesOcultas > 0) detalle += ` (${actividadesOcultas} oculta/s)`;
+    detalle += ` a la ficha del alumno.`;
     if (estadoAnterior !== s.estado) {
-        detalle += ` Estado cambiado: ${getEstadoTexto(estadoAnterior)} → ${getEstadoTexto(s.estado)}`;
+        detalle += ` Estado: ${getEstadoTexto(estadoAnterior)} → ${getEstadoTexto(s.estado)}`;
         registrarLog('cambio_estado', detalle);
     }
     registrarLog('sincronizacion', detalle);
     
-    mostrarToast('✅ Sesión actualizada y enviada a la ficha del alumno', 'success');
+    mostrarToast(`✅ Sesión actualizada. ${actividadesVisibles.length} actividades enviadas a la ficha`, 'success');
 }
 
 function renderizarLog() {
@@ -1339,7 +1496,7 @@ function renderizarLog() {
 }
 
 function netejarLog() {
-    if (!confirm('¿Seguro que quieres limpiar todo el log de acciones? Esta acción no se puede deshacer.')) return;
+    if (!confirm('¿Seguro que quieres limpiar todo el log de acciones?')) return;
     const datos = obtenerDatosCompartidos();
     datos.log = [];
     guardarDatosCompartidos(datos);
@@ -1390,14 +1547,44 @@ function crearSesionCard(s) {
     div.className = `sesion-card estado-${s.estado}`;
     div.dataset.id = s.id;
 
+    // Estadísticas de visibilidad
+    const totalAct = s.actividades.length;
+    const visibles = s.actividades.filter(a => a.visibleAlumno !== false).length;
+    const ocultas = totalAct - visibles;
+
     let actividadesHTML = '';
-    if (s.actividades.length > 0) {
-        actividadesHTML = '<ul class="actividades-lista">' + s.actividades.map(a => `
-            <li class="actividad-item">
-                <span class="actividad-tiempo">${a.tiempo}</span>
-                <span class="actividad-descripcion">${a.descripcion}</span>
-            </li>
-        `).join('') + '</ul>';
+    if (totalAct > 0) {
+        // Estadísticas
+        actividadesHTML += `
+            <div class="actividad-stats">
+                👁️ <strong>${visibles}</strong> de <strong>${totalAct}</strong> actividades visibles para el alumnado
+                ${ocultas > 0 ? ` · 🔒 ${ocultas} actividad(es) interna(s)` : ''}
+            </div>
+        `;
+        
+        actividadesHTML += '<ul class="actividades-lista">' + s.actividades.map(a => {
+            const esVisible = a.visibleAlumno !== false;
+            const tipoInfo = getTipoTexto(a.tipo);
+            const descripcionMostrada = a.descripcion;
+            
+            return `
+                <li class="actividad-item ${esVisible ? 'visible-alumno' : 'no-visible'}">
+                    <span class="actividad-tiempo">${a.tiempo}</span>
+                    <span class="actividad-descripcion">
+                        ${descripcionMostrada}
+                        ${a.descripcionAlumno && a.descripcionAlumno.trim().length > 0 && esVisible 
+                            ? `<br><small style="color:#0c5460;">👨‍🎓 <em>Para el alumno:</em> ${a.descripcionAlumno}</small>` 
+                            : ''}
+                    </span>
+                    <div class="actividad-badges">
+                        <span class="badge-tipo ${tipoInfo.clase}">${tipoInfo.texto}</span>
+                        ${esVisible 
+                            ? '<span class="badge-visibilidad badge-visible">👁️ Visible</span>' 
+                            : '<span class="badge-visibilidad badge-oculto">🔒 Solo profesora</span>'}
+                    </div>
+                </li>
+            `;
+        }).join('') + '</ul>';
     } else {
         actividadesHTML = '<p style="color:#999;font-style:italic;">Sin actividades planificadas.</p>';
     }
@@ -1431,7 +1618,8 @@ function crearSesionCard(s) {
                 <h3 class="sesion-titulo">${s.titulo} <span class="sesion-estado">${getEstadoTexto(s.estado)}</span></h3>
                 <div class="sesion-meta">
                     <span class="sesion-meta-item">📍 ${getEspacioTexto(s.espacio)}</span>
-                    <span class="sesion-meta-item">📋 ${s.actividades.length} actividades</span>
+                    <span class="sesion-meta-item">📋 ${totalAct} actividades</span>
+                    <span class="sesion-meta-item">👁️ ${visibles} visibles</span>
                     <span class="sesion-meta-item">🔗 ${s.recursos.length} recursos</span>
                 </div>
             </div>
@@ -1447,7 +1635,7 @@ function crearSesionCard(s) {
             ${observacionesHTML ? `<div class="sesion-section"><h4>📝 Observaciones</h4>${observacionesHTML}</div>` : ''}
             <div class="sesion-actions no-print">
                 <button class="btn btn-edit btn-small" onclick="editarSesion('${s.id}')">✏️ Editar</button>
-                <button class="btn btn-sync btn-small" onclick="sincronizarSesion('${s.id}')" title="Actualizar datos en la ficha del alumno">🔄 Actualizar sesión</button>
+                <button class="btn btn-sync btn-small" onclick="sincronizarSesion('${s.id}')" title="Enviar actividades visibles a la ficha del alumno">🔄 Actualizar sesión</button>
                 <button class="btn btn-delete btn-small" onclick="eliminarSesion('${s.id}')">🗑️ Eliminar</button>
             </div>
         </div>
@@ -1461,10 +1649,16 @@ function toggleSesion(id) {
 }
 
 // ==========================================
-// MODAL EDICIÓN
+// MODAL EDICIÓN - ACTIVIDADES MEJORADAS
 // ==========================================
 function addActividad() {
-    actividadesTemp.push({ tiempo: '', descripcion: '' });
+    actividadesTemp.push({ 
+        tiempo: '', 
+        descripcion: '', 
+        descripcionAlumno: '', 
+        visibleAlumno: true, 
+        tipo: 'teorica' 
+    });
     renderizarActividadesEditor();
 }
 
@@ -1473,25 +1667,55 @@ function removeActividad(idx) {
     renderizarActividadesEditor();
 }
 
+function actualizarActividad(idx, campo, valor) {
+    actividadesTemp[idx][campo] = valor;
+    // Si cambia visibilidad, redibujar para mostrar/ocultar descripcionAlumno
+    if (campo === 'visibleAlumno') {
+        renderizarActividadesEditor();
+    }
+}
+
 function renderizarActividadesEditor() {
     const editor = document.getElementById('actividadesEditor');
     if (actividadesTemp.length === 0) {
         editor.innerHTML = '<p style="color:#999;font-style:italic;">Sin actividades. Haz clic en "Añadir actividad".</p>';
         return;
     }
-    editor.innerHTML = actividadesTemp.map((a, i) => `
-        <div class="actividad-editor-item">
-            <div class="actividad-editor-row">
-                <input type="text" placeholder="Ej: 12:00-12:30" value="${a.tiempo}" onchange="actualizarActividad(${i}, 'tiempo', this.value)">
-                <input type="text" placeholder="Descripción de la actividad" value="${a.descripcion}" onchange="actualizarActividad(${i}, 'descripcion', this.value)">
-                <button type="button" class="btn-remove-actividad" onclick="removeActividad(${i})">🗑️</button>
+    editor.innerHTML = actividadesTemp.map((a, i) => {
+        const esVisible = a.visibleAlumno !== false;
+        const mostrarDescAlumno = esVisible;
+        
+        return `
+            <div class="actividad-editor-item ${esVisible ? 'visible' : 'oculta'}">
+                <div class="actividad-editor-header">
+                    <input type="text" placeholder="Horario (12:00-12:30)" value="${a.tiempo}" onchange="actualizarActividad(${i}, 'tiempo', this.value)">
+                    <select onchange="actualizarActividad(${i}, 'tipo', this.value)">
+                        <option value="teorica" ${a.tipo === 'teorica' ? 'selected' : ''}>📖 Teórica</option>
+                        <option value="practica" ${a.tipo === 'practica' ? 'selected' : ''}>🎯 Práctica</option>
+                        <option value="evaluacion" ${a.tipo === 'evaluacion' ? 'selected' : ''}>📝 Evaluación</option>
+                        <option value="descanso" ${a.tipo === 'descanso' ? 'selected' : ''}>☕ Descanso</option>
+                        <option value="gestion" ${a.tipo === 'gestion' ? 'selected' : ''}>⚙️ Gestión (solo profesora)</option>
+                    </select>
+                    <button type="button" class="btn-remove-actividad" onclick="removeActividad(${i})">🗑️</button>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label style="font-size:0.85em;color:#666;display:block;margin-bottom:4px;">Descripción completa (plan docent):</label>
+                    <textarea style="width:100%;padding:8px;border:1px solid #e9ecef;border-radius:6px;font-family:inherit;font-size:0.9em;min-height:50px;resize:vertical;" 
+                        placeholder="Descripción detallada de la actividad"
+                        onchange="actualizarActividad(${i}, 'descripcion', this.value)">${a.descripcion}</textarea>
+                </div>
+                <div class="actividad-visibilidad-row">
+                    <input type="checkbox" id="vis-${i}" ${esVisible ? 'checked' : ''} onchange="actualizarActividad(${i}, 'visibleAlumno', this.checked)">
+                    <label for="vis-${i}">👁️ Visible para el alumnado (se enviará a la ficha)</label>
+                </div>
+                <div class="descripcion-alumno-wrapper ${mostrarDescAlumno ? 'visible' : ''}">
+                    <label>👨‍🎓 Descripción alternativa para el alumnado (opcional, más sencilla):</label>
+                    <textarea placeholder="Si se deja vacío, se usará la descripción completa"
+                        onchange="actualizarActividad(${i}, 'descripcionAlumno', this.value)">${a.descripcionAlumno || ''}</textarea>
+                </div>
             </div>
-        </div>
-    `).join('');
-}
-
-function actualizarActividad(idx, campo, valor) {
-    actividadesTemp[idx][campo] = valor;
+        `;
+    }).join('');
 }
 
 function abrirModalSesion(id) {
@@ -1516,7 +1740,13 @@ function abrirModalSesion(id) {
             document.getElementById('sesionTrabajoPrevio').value = s.trabajoPrevio;
             document.getElementById('sesionTrabajoComp').value = s.trabajoComplementario;
             document.getElementById('sesionObservaciones').value = s.observaciones;
-            actividadesTemp = JSON.parse(JSON.stringify(s.actividades));
+            actividadesTemp = s.actividades.map(a => ({
+                tiempo: a.tiempo || '',
+                descripcion: a.descripcion || '',
+                descripcionAlumno: a.descripcionAlumno || '',
+                visibleAlumno: a.visibleAlumno !== false,
+                tipo: a.tipo || 'teorica'
+            }));
             document.querySelectorAll('.checkbox-group input').forEach(cb => {
                 if (s.medios.includes(cb.value)) cb.checked = true;
             });
@@ -1556,7 +1786,13 @@ document.getElementById('sesionForm').addEventListener('submit', function(e) {
             estado: document.getElementById('sesionEstado').value,
             espacio: document.getElementById('sesionEspacio').value,
             objetivos: document.getElementById('sesionObjetivos').value,
-            actividades: actividadesTemp.filter(a => a.tiempo || a.descripcion),
+            actividades: actividadesTemp.filter(a => a.tiempo || a.descripcion).map(a => ({
+                tiempo: a.tiempo,
+                descripcion: a.descripcion,
+                descripcionAlumno: a.descripcionAlumno,
+                visibleAlumno: a.visibleAlumno !== false,
+                tipo: a.tipo || 'teorica'
+            })),
             recursos: recursos,
             trabajoPrevio: document.getElementById('sesionTrabajoPrevio').value,
             trabajoComplementario: document.getElementById('sesionTrabajoComp').value,
@@ -1564,19 +1800,22 @@ document.getElementById('sesionForm').addEventListener('submit', function(e) {
             observaciones: document.getElementById('sesionObservaciones').value
         };
 
+        const visibles = datos.actividades.filter(a => a.visibleAlumno).length;
+        const ocultas = datos.actividades.length - visibles;
+
         if (id) {
             const i = state.sesiones.findIndex(x => x.id === id);
             if (i !== -1) state.sesiones[i] = { ...state.sesiones[i], ...datos };
-            registrarLog('edicion', `Sesión "${datos.titulo}" (${formatearFecha(datos.fecha)}) modificada. Estado: ${getEstadoTexto(datos.estado)}`);
+            registrarLog('edicion', `Sesión "${datos.titulo}" modificada. ${visibles} actividades visibles, ${ocultas} ocultas`);
         } else {
             state.sesiones.push({ id: generarId('ses'), ...datos });
-            registrarLog('creacion', `Sesión "${datos.titulo}" (${formatearFecha(datos.fecha)}) creada. Estado: ${getEstadoTexto(datos.estado)}`);
+            registrarLog('creacion', `Sesión "${datos.titulo}" creada. ${visibles} actividades visibles, ${ocultas} ocultas`);
         }
 
         guardarEstado();
         renderizar();
         cerrarModal('modalSesion');
-        mostrarToast('💾 Sesión guardada', 'success');
+        mostrarToast(`💾 Sesión guardada. ${visibles} actividades visibles para el alumnado`, 'success');
     } catch (err) {
         console.error(err);
         mostrarToast('❌ Error: ' + err.message, 'error');
@@ -1647,9 +1886,7 @@ function exportarDatos() {
     closeDropdown();
 }
 
-function copiaAutomatica() {
-    exportarDatos();
-}
+function copiaAutomatica() { exportarDatos(); }
 
 function importarDatos(event) {
     const file = event.target.files[0];
@@ -1737,7 +1974,6 @@ window.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal')) e.target.classList.remove('active');
 });
 
-// FILTROS
 document.querySelectorAll('.filtro-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
