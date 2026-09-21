@@ -126,15 +126,53 @@ function cargarEstado() {
 }
 
 function restablecerEstado() {
-    if (confirm('¿Estás seguro de que quieres restablecer todos los datos a los valores iniciales? Se perderán todos los cambios.')) {
+    // 🔒 PAS 1: Preguntar si vol fer còpia de seguretat externa
+    const quiereBackup = confirm(
+        '🔒 COPIA DE SEGURETAT\n\n' +
+        'Abans de restablir, vols descarregar una còpia de seguretat de la teva programació actual?\n\n' +
+        '✅ Accepta = Es descarregarà un fitxer JSON amb tot el contingut actual\n' +
+        '❌ Cancel·la = Es continuarà sense fer còpia\n\n' +
+        'Recomanació: Accepta per tenir una còpia de seguretat al teu ordinador.'
+    );
+    
+    // 🔒 PAS 2: Si vol còpia, descarregar-la automàticament
+    if (quiereBackup) {
+        try {
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            a.download = `BACKUP_programacion_${fecha}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            mostrarToast('💾 Còpia de seguretat descarregada', 'success');
+        } catch (e) {
+            console.error('Error al fer còpia:', e);
+            mostrarToast('⚠️ Error al descarregar la còpia', 'error');
+        }
+    }
+    
+    // 🔒 PAS 3: Confirmar el restabliment
+    const confirmaRestablecer = confirm(
+        '⚠️ RESTABLIR DADES\n\n' +
+        (quiereBackup ? '✅ S\'ha descarregat una còpia de seguretat.\n\n' : '⚠️ No s\'ha fet còpia de seguretat.\n\n') +
+        'Ara es restabliran totes les dades als valors inicials.\n' +
+        'Aquesta acció NO es pot desfer.\n\n' +
+        'Vols continuar?'
+    );
+    
+    if (confirmaRestablecer) {
         state = JSON.parse(JSON.stringify(datosIniciales));
         guardarEstado();
         renderizar();
-        mostrarToast('✅ Datos restablecidos correctamente', 'success');
-        closeDropdown();
+        mostrarToast('✅ Dades restablertes correctament', 'success');
+    } else {
+        mostrarToast('ℹ️ Restabliment cancel·lat', 'info');
     }
 }
-
 // ==========================================
 // HISTORIAL DE VERSIONES
 // ==========================================
@@ -820,6 +858,7 @@ document.getElementById('btnAutoBackup').addEventListener('click', copiaAutomati
 document.getElementById('btnResumenSync').addEventListener('click', verResumenSincronizacion);
 document.getElementById('btnExport').addEventListener('click', exportarDatos);
 document.getElementById('btnImport').addEventListener('click', () => {
+document.getElementById('btnBorrarFicha').addEventListener('click', restablecerFicha);
     closeDropdown();
     setTimeout(() => document.getElementById('fileInput').click(), 100);
 });

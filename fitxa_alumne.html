@@ -399,6 +399,7 @@ footer {
         <button id="btnEnviar" class="btn btn-send">📧 Enviar a la profesora</button>
         <button id="btnHistorial" class="btn btn-secondary">📜 Ver Historial</button>
         <button id="btnNuevaSesion" class="btn btn-secondary">➕ Nueva Actuación</button>
+	<button id="btnBorrarFicha" class="btn btn-danger">🗑️ Esborrar fitxa</button>
     </div>
 
     <div id="syncAlert" class="sync-alert no-print">
@@ -1241,6 +1242,75 @@ document.getElementById('btnNuevaSesion').addEventListener('click', nuevaActuaci
 document.getElementById('btnHistorial').addEventListener('click', () => {
     document.getElementById('historialContainer').scrollIntoView({ behavior: 'smooth' });
 });
+
+function restablecerFicha() {
+    // 🔒 PAS 1: Preguntar si vol fer còpia de seguretat externa
+    const quiereBackup = confirm(
+        '🔒 COPIA DE SEGURETAT\n\n' +
+        'Abans d\'esborrar la teva fitxa, vols descarregar una còpia de seguretat?\n\n' +
+        '✅ Accepta = Es descarregarà un fitxer JSON amb totes les teves dades\n' +
+        '❌ Cancel·la = Es continuarà sense fer còpia\n\n' +
+        'Recomanació: Accepta per conservar el teu treball.'
+    );
+    
+    // 🔒 PAS 2: Si vol còpia, descarregar-la
+    if (quiereBackup) {
+        try {
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            const nombre = (state.datosAlumno.nombre || 'alumno').replace(/\s+/g, '_');
+            a.download = `BACKUP_ficha_${nombre}_${fecha}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            mostrarToast('💾 Còpia de seguretat descarregada', 'success');
+        } catch (e) {
+            console.error('Error al fer còpia:', e);
+            mostrarToast('⚠️ Error al descarregar la còpia', 'error');
+        }
+    }
+    
+    // 🔒 PAS 3: Confirmar l'esborrat
+    const confirmaBorrado = confirm(
+        '⚠️ ESBORRAR FITXA\n\n' +
+        (quiereBackup ? '✅ S\'ha descarregat una còpia de seguretat.\n\n' : '⚠️ No s\'ha fet còpia de seguretat.\n\n') +
+        'Ara s\'esborraran totes les teves dades personals, actuacions i historial.\n' +
+        'Aquesta acció NO es pot desfer.\n\n' +
+        'Vols continuar?'
+    );
+    
+    if (confirmaBorrado) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(LOG_ALUMNE_KEY);
+        state = {
+            datosAlumno: { nombre: '', email: '', curso: '', profEmail: '' },
+            sesionActual: null,
+            actuacionActual: {
+                fecha: '', horaInicio: '', horaFin: '', espacio: 'aula_ordinaria',
+                actividades: [], trabajoPrevio: '', trabajoComp: '', obsTrabajo: '', obsGenerales: ''
+            },
+            historial: []
+        };
+        // Resetar formularis
+        document.getElementById('aluNombre').value = '';
+        document.getElementById('aluEmail').value = '';
+        document.getElementById('aluCurso').value = '';
+        document.getElementById('profEmail').value = '';
+        document.getElementById('sesionSelect').value = '';
+        document.getElementById('sesionInfoBox').innerHTML = '';
+        document.getElementById('actividadesContainer').innerHTML = '<div class="empty-state">Selecciona una sessió per veure les activitats.</div>';
+        cargarActuacionActual();
+        renderizarHistorial();
+        renderizarLogAlumne();
+        mostrarToast('🗑️ Fitxa esborrada correctament', 'info');
+    } else {
+        mostrarToast('ℹ️ Esborrat cancel·lat', 'info');
+    }
+}
 
 // ==========================================
 // INICIALIZACIÓN
