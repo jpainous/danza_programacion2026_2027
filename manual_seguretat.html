@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Seguretat i Protecció de Dades</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+    line-height: 1.7;
+}
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+header h1 { font-size: 2.3em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+header h2 { font-size: 1.3em; font-weight: 300; margin-bottom: 10px; }
+.subtitle { font-size: 1em; opacity: 0.9; }
+
+/* NAVEGACIÓ */
+.nav-container {
+    background: #f8f9fa;
+    padding: 20px 40px;
+    border-bottom: 2px solid #e9ecef;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-title { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 1.1em; }
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+}
+.nav-link {
+    color: #495057;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    display: block;
+}
+.nav-link:hover { background: #667eea; color: white; transform: translateX(3px); }
+
+/* SECCIONS */
+.content { padding: 40px; }
+section {
+    margin-bottom: 40px;
+    padding: 25px;
+    background: #fafbfc;
+    border-radius: 12px;
+    border-left: 5px solid #667eea;
+}
+section h2 {
+    color: #667eea;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+section h3 {
+    color: #764ba2;
+    font-size: 1.2em;
+    margin: 20px 0 10px 0;
+}
+section p { margin-bottom: 12px; }
+section ul, section ol { margin-left: 25px; margin-bottom: 12px; }
+section li { margin-bottom: 6px; }
+
+/* TAULES */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+td { padding: 10px 12px; border-bottom: 1px solid #e9ecef; }
+tr:hover { background: #f8f9fa; }
+
+/* ALERTES */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 5px solid;
+}
+.alert-info { background: #e7f3ff; border-color: #2196F3; color: #0c5460; }
+.alert-warning { background: #fff3cd; border-color: #ffc107; color: #856404; }
+.alert-danger { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+.alert-success { background: #d4edda; border-color: #28a745; color: #155724; }
+.alert strong { display: block; margin-bottom: 5px; }
+
+/* BADGES */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-right: 5px;
+}
+.badge-green { background: #d4edda; color: #155724; }
+.badge-yellow { background: #fff3cd; color: #856404; }
+.badge-red { background: #f8d7da; color: #721c24; }
+
+/* CHECKLIST */
+.checklist {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+}
+.checklist h4 { color: #667eea; margin-bottom: 12px; }
+.checklist-item {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item input[type="checkbox"] {
+    margin-top: 4px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+.checklist-item label { cursor: pointer; flex: 1; }
+
+/* CONSENTIMENT */
+.consentiment {
+    background: white;
+    border: 3px solid #667eea;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 20px 0;
+    page-break-inside: avoid;
+}
+.consentiment-header {
+    text-align: center;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+.consentiment-header h3 { color: #667eea; font-size: 1.4em; margin-bottom: 5px; }
+.consentiment-header p { color: #666; font-size: 0.9em; }
+.consentiment-section { margin-bottom: 20px; }
+.consentiment-section h4 { color: #764ba2; margin-bottom: 10px; font-size: 1.1em; }
+.consentiment-section p, .consentiment-section li { font-size: 0.95em; }
+.signatures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px dashed #e9ecef;
+}
+.signature-box { text-align: center; }
+.signature-line {
+    border-top: 1px solid #333;
+    margin-top: 50px;
+    padding-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+.date-line {
+    border-top: 1px solid #333;
+    margin-top: 50px;
+    padding-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* BOTONS */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+.btn-print { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
+
+.print-controls {
+    padding: 20px 40px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #64748b;
+    font-size: 0.9em;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    header { padding: 30px 20px; }
+    header h1 { font-size: 1.6em; }
+    .content { padding: 20px; }
+    section { padding: 15px; }
+    .nav-container { padding: 15px 20px; }
+    .nav-grid { grid-template-columns: 1fr; }
+    .signatures { grid-template-columns: 1fr; }
+    .consentiment { padding: 20px; }
+}
+/* FORMULARI DE CONSENTIMENT */
+.consentiment-form {
+    margin-top: 20px;
+}
+.consentiment-field {
+    width: 100%;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 1px solid #667eea;
+    background: transparent;
+    font-size: 1em;
+    font-family: inherit;
+    color: #333;
+    transition: border-color 0.2s;
+}
+.consentiment-field:focus {
+    outline: none;
+    border-bottom: 2px solid #764ba2;
+    background: #f8f9fa;
+}
+.consentiment-field::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+.consentiment-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+.consentiment-field-label {
+    display: block;
+    font-size: 0.85em;
+    color: #6c757d;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+.consentiment-actions {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.consentiment-actions .btn {
+    min-width: 180px;
+}
+
+/* Data de signatura editable */
+.signature-date {
+    display: inline-block;
+    min-width: 150px;
+    border-bottom: 1px solid #333;
+    padding: 2px 8px;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+@media print {
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border-radius: 0; max-width: 100%; }
+    header { background: none !important; color: #000 !important; padding: 20px 0; border-bottom: 3px solid #333; }
+    header h1, header h2, .subtitle { color: #000 !important; text-shadow: none !important; }
+    .nav-container, .print-controls, .consentiment-actions { display: none !important; }
+    .content { padding: 20px 0; }
+    section { border: 1px solid #ddd; break-inside: avoid; page-break-inside: avoid; }
+    .consentiment { border: 2px solid #333; break-inside: avoid; page-break-inside: avoid; }
+    
+    /* Estils específics per al formulari en imprimir */
+    .consentiment-field {
+        border: none !important;
+        border-bottom: 1px solid #333 !important;
+        background: transparent !important;
+        color: #000 !important;
+        padding: 4px 2px !important;
+        font-weight: 600 !important;
+    }
+    .consentiment-field:empty::before,
+    .consentiment-field[value=""]::after {
+        content: "_______________________________";
+        color: #ccc;
+    }
+    .consentiment-field-label { color: #333 !important; }
+    .signature-date { color: #000 !important; }
+    
+    footer { border-top: 2px solid #333; color: #333; }
+    a { color: #333 !important; text-decoration: none !important; }
+    
+    /* Forçar salt de pàgina abans del consentiment */
+    #consentiment-model { page-break-before: always; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🔒 Manual de Seguretat i Protecció de Dades</h1>
+        <h2>Generador de Programació Didàctica</h2>
+        <p class="subtitle">Guia completa per a professors · Versió 1.0 · 2026</p>
+    </header>
+
+    <div class="print-controls no-print">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir / PDF</button>
+        <button class="btn btn-primary" onclick="document.getElementById('consentiment-model').scrollIntoView({behavior:'smooth'})">📝 Veure model de consentiment</button>
+    </div>
+
+    <div class="nav-container no-print">
+        <div class="nav-title">📋 Índex</div>
+        <div class="nav-grid">
+            <a href="#intro" class="nav-link">1. Introducció</a>
+            <a href="#dades" class="nav-link">2. Dades sensibles</a>
+            <a href="#on-es-guarden" class="nav-link">3. On es guarden</a>
+            <a href="#riscos" class="nav-link">4. Anàlisi de riscos</a>
+            <a href="#legal" class="nav-link">5. Marc legal</a>
+            <a href="#mesures-legals" class="nav-link">6. Mesures legals</a>
+            <a href="#mesures-tecniques" class="nav-link">7. Mesures tècniques</a>
+            <a href="#mesures-org" class="nav-link">8. Mesures organitzatives</a>
+            <a href="#recomanacions" class="nav-link">9. Recomanacions per eina</a>
+            <a href="#esborrat" class="nav-link">10. Protocol d'esborrat</a>
+            <a href="#consentiment" class="nav-link">11. Model de consentiment</a>
+            <a href="#checklist" class="nav-link">12. Llista de verificació</a>
+            <a href="#recursos" class="nav-link">13. Recursos addicionals</a>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <section id="intro">
+            <h2>1. 📖 Introducció</h2>
+            <p>Aquest manual té com a objectiu informar els professors i professores sobre els aspectes de <strong>seguretat i protecció de dades</strong> relacionats amb l'ús del <strong>Generador de Programació Didàctica</strong> i les tres eines que genera:</p>
+            <ul>
+                <li>📚 <strong>Programació Didàctica</strong> (<code>programacio_X.html</code>)</li>
+                <li>📅 <strong>Planificador de Sessions</strong> (<code>planificador_X.html</code>)</li>
+                <li>📝 <strong>Fitxa de l'Alumne</strong> (<code>fitxa_alumne_X.html</code>)</li>
+            </ul>
+            <div class="alert alert-info">
+                <strong>💡 Idea clau</strong>
+                Aquestes eines funcionen <strong>100% al navegador de cada usuari</strong>. No hi ha cap servidor central que emmagatzemi dades dels alumnes. Això és un gran avantatge en termes de privacitat, però també implica responsabilitats.
+            </div>
+        </section>
+
+        <section id="dades">
+            <h2>2. 🔍 Dades sensibles identificades</h2>
+            <p>Abans de res, cal saber <strong>quines dades</strong> es tracten a cada eina:</p>
+
+            <h3>📝 Fitxa de l'Alumne (risc més alt)</h3>
+            <table>
+                <thead>
+                    <tr><th>Dada</tr><th>Sensibilitat</th><th>Qui la introdueix</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Nom complet</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Alumne</td></tr>
+                    <tr><td>Email personal</td><td><span class="badge badge-red">Alta</span></td><td>Alumne</td></tr>
+                    <tr><td>Curs / Grup</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Alumne</td></tr>
+                    <tr><td>Email de la professora</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Pre-configurat</td></tr>
+                    <tr><td>Observacions personals</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Alumne</td></tr>
+                    <tr><td>Reflexions sobre la sessió</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Alumne</td></tr>
+                    <tr><td>Historial d'actuacions</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Alumne</td></tr>
+                </tbody>
+            </table>
+
+            <h3>📅 Planificador (risc mitjà)</h3>
+            <table>
+                <thead>
+                    <tr><th>Dada</th><th>Sensibilitat</th><th>Qui la introdueix</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Nom de la professora</td><td><span class="badge badge-green">Baixa</span></td><td>Professora</td></tr>
+                    <tr><td>Observacions internes</td><td><span class="badge badge-yellow">Mitjana</span></td><td>Professora</td></tr>
+                    <tr><td>Log d'accions (amb noms d'alumnes)</td><td><span class="badge badge-red">Alta</span></td><td>Sistema</td></tr>
+                </tbody>
+            </table>
+
+            <h3>📚 Programació (risc baix)</h3>
+            <table>
+                <thead>
+                    <tr><th>Dada</th><th>Sensibilitat</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Nom i email de la professora</td><td><span class="badge badge-yellow">Mitjana</span></td></tr>
+                    <tr><td>Contingut pedagògic</td><td><span class="badge badge-green">Baixa</span></td></tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-danger">
+                <strong>⚠️ Important</strong>
+                Mai demanis als alumnes dades especialment protegides com: salut, religió, orientació sexual, ideologia política, afiliació sindical, dades bancàries, DNI, adreça particular, etc.
+            </div>
+        </section>
+
+        <section id="on-es-guarden">
+            <h2>3. 💾 On es guarden les dades</h2>
+            <p>Les dades es guarden en <strong>tres llocs diferents</strong>, cadascun amb les seves característiques:</p>
+
+            <h3>🏠 localStorage del navegador (principal)</h3>
+            <p>Cada usuari (professora i alumnes) té les seves dades guardades <strong>localment al seu propi navegador</strong>, en una memòria anomenada <code>localStorage</code>.</p>
+            <ul>
+                <li>✅ <strong>No surten del dispositiu</strong> de l'usuari</li>
+                <li>✅ <strong>No hi ha servidor</strong> que les emmagatzemi</li>
+                <li>✅ <strong>Són privades</strong>: cada usuari només veu les seves pròpies dades</li>
+                <li>⚠️ <strong>S'esborren</strong> si l'usuari neteja la memòria del navegador</li>
+                <li>⚠️ <strong>Són accessibles</strong> en ordinadors compartits si no es tanca la sessió</li>
+            </ul>
+
+            <h3>📧 Email (en enviar la fitxa)</h3>
+            <p>Quan un alumne prem "📧 Enviar", les dades viatgen per correu electrònic:</p>
+            <ul>
+                <li>⚠️ El contingut <strong>no està xifrat d'extrem a extrem</strong></li>
+                <li>⚠️ Depèn de la seguretat del proveïdor de correu (Gmail, Outlook, etc.)</li>
+                <li>✅ Si uses <strong>email institucional</strong> (ex: @xtec.cat), la seguretat és més alta</li>
+            </ul>
+
+            <h3>🌐 GitHub Pages (els fitxers HTML)</h3>
+            <p>Els fitxers HTML allotjats a GitHub Pages:</p>
+            <ul>
+                <li>✅ <strong>No contenen dades d'alumnes</strong>, només l'estructura de l'eina</li>
+                <li>✅ Són <strong>públics</strong> si el repositori és públic, però això no és un problema</li>
+                <li>✅ Utilitzen <strong>HTTPS</strong> automàticament</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <strong>✅ Avantatge clau</strong>
+                Com que no hi ha un servidor central amb dades d'alumnes, el risc de <strong>fuita massiva de dades</strong> és pràcticament inexistent. Cada alumne només té les seves pròpies dades al seu dispositiu.
+            </div>
+        </section>
+
+        <section id="riscos">
+            <h2>4. ⚠️ Anàlisi de riscos</h2>
+
+            <h3>🟢 Riscos baixos</h3>
+            <table>
+                <thead><tr><th>Risc</th><th>Per què és baix</th></tr></thead>
+                <tbody>
+                    <tr><td>Fallada del servidor</td><td>No hi ha servidor amb dades d'alumnes</td></tr>
+                    <tr><td>Accés no autoritzat al servidor</td><td>No hi ha servidor amb dades</td></tr>
+                    <tr><td>Fuita massiva de dades</td><td>Cada usuari només té les seves dades</td></tr>
+                    <tr><td>Atac SQL injection</td><td>No hi ha base de dades</td></tr>
+                </tbody>
+            </table>
+
+            <h3>🟡 Riscos mitjans</h3>
+            <table>
+                <thead><tr><th>Risc</th><th>Descripció</th></tr></thead>
+                <tbody>
+                    <tr><td>Dispositius compartits</td><td>Si un alumne usa un ordinador compartit, un altre podria veure les seves dades</td></tr>
+                    <tr><td>Email interceptat</td><td>L'email no està xifrat d'extrem a extrem</td></tr>
+                    <tr><td>Pèrdua de dades</td><td>Si l'usuari esborra el navegador, perd les dades</td></tr>
+                </tbody>
+            </table>
+
+            <h3>🔴 Riscos alts (en contextos específics)</h3>
+            <table>
+                <thead><tr><th>Risc</th><th>Quan es dona</th></tr></thead>
+                <tbody>
+                    <tr><td>Menors d'edat</td><td>Si els alumnes són menors de 14 anys</td></tr>
+                    <tr><td>Dades sensibles a observacions</td><td>Si un alumne escriu informació personal sensible</td></tr>
+                    <tr><td>Log compartit amb noms</td><td>Si el log de la professora conté noms d'alumnes</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="legal">
+            <h2>5. ⚖️ Marc legal aplicable</h2>
+
+            <h3>🇪🇺 RGPD (Reglament General de Protecció de Dades)</h3>
+            <p>Aplicable si els alumnes són a la Unió Europea:</p>
+            <ul>
+                <li><strong>Article 6</strong>: Base legal per al tractament</li>
+                <li><strong>Article 8</strong>: Consentiment per a menors (14-16 anys segons el país)</li>
+                <li><strong>Article 25</strong>: Protecció de dades des del disseny</li>
+                <li><strong>Article 32</strong>: Seguretat del tractament</li>
+            </ul>
+
+            <h3>🇪🇸 LOPDGDD (Llei Orgànica de Protecció de Dades)</h3>
+            <p>Específica d'Espanya:</p>
+            <ul>
+                <li><strong>Article 7</strong>: Edat mínima per consentir (14 anys)</li>
+                <li><strong>Article 84</strong>: Ús de dades en àmbit educatiu</li>
+            </ul>
+
+            <h3>🎓 Legislació educativa</h3>
+            <ul>
+                <li>Els centres educatius tenen <strong>responsabilitat</strong> sobre les dades dels alumnes</li>
+                <li>Cal <strong>informar</strong> els alumnes (i pares si són menors)</li>
+                <li>Cal <strong>consentiment</strong> per a certs tractaments</li>
+            </ul>
+
+            <div class="alert alert-warning">
+                <strong>📌 Edats clau a Espanya</strong>
+                <ul style="margin-top:8px;">
+                    <li><strong>Menors de 14 anys</strong>: Cal consentiment dels pares/tutors</li>
+                    <li><strong>14-17 anys</strong>: Poden consentir per si mateixos</li>
+                    <li><strong>18+ anys</strong>: Majors d'edat, consentiment propi</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="mesures-legals">
+            <h2>6. 📋 Mesures legals (imprescindibles)</h2>
+
+            <h3>1. Informació prèvia als alumnes</h3>
+            <p>Abans d'utilitzar la fitxa, cal informar els alumnes amb un text com aquest:</p>
+            <div class="alert alert-info">
+                <strong>📢 INFORMACIÓ SOBRE PROTECCIÓ DE DADES</strong>
+                <p>Aquesta fitxa de treball és una eina personal que:</p>
+                <ul>
+                    <li>✅ Es guarda NOMÉS al teu navegador (no al servidor)</li>
+                    <li>✅ No es comparteix amb ningú més que tu</li>
+                    <li>✅ Tu controles quan enviar-la per email a la professora</li>
+                    <li>✅ Pots esborrar les dades quan vulguis</li>
+                </ul>
+                <p>Si ets <strong>menor de 14 anys</strong>, demana autorització als teus pares/tutors.</p>
+            </div>
+
+            <h3>2. Consentiment informat</h3>
+            <p>Vegeu el <a href="#consentiment"><strong>model complet al punt 11</strong></a>.</p>
+
+            <h3>3. Registre d'activitats de tractament</h3>
+            <p>El centre educatiu hauria de tenir un registre que inclogui:</p>
+            <ul>
+                <li>Finalitat de l'eina</li>
+                <li>Tipus de dades tractades</li>
+                <li>Base legal</li>
+                <li>Mesures de seguretat</li>
+            </ul>
+        </section>
+
+        <section id="mesures-tecniques">
+            <h2>7. 🔧 Mesures tècniques (recomanades)</h2>
+
+            <h3>✅ Minimització de dades</h3>
+            <ul>
+                <li>Demana només les dades estrictament necessàries</li>
+                <li>No demanis DNI, adreça, telèfon, etc.</li>
+                <li>Utilitza pseudònims si és possible (ex: "Alumne 1")</li>
+            </ul>
+
+            <h3>✅ Seguretat del localStorage</h3>
+            <ul>
+                <li>Esborra les dades al final del curs</li>
+                <li>Fes còpies de seguretat regulars</li>
+                <li>Utilitza HTTPS (GitHub Pages ho fa automàticament)</li>
+            </ul>
+
+            <h3>✅ Seguretat de l'email</h3>
+            <ul>
+                <li>Utilitza un email institucional (ex: @xtec.cat, @educacion.gob.es)</li>
+                <li>Configura l'email amb verificació en dos passos</li>
+                <li>Esborra els emails rebuts al final del curs</li>
+            </ul>
+
+            <h3>❌ Evita</h3>
+            <ul>
+                <li>Deixar dades en ordinadors compartits sense esborrar</li>
+                <li>Compartir l'accés al dispositiu</li>
+                <li>Utilitzar email personal per a dades d'alumnes</li>
+                <li>Reenviar emails amb dades sensibles</li>
+            </ul>
+        </section>
+
+        <section id="mesures-org">
+            <h2>8. 🏫 Mesures organitzatives</h2>
+
+            <h3>📚 Formació del professorat</h3>
+            <ul>
+                <li>Formació sobre protecció de dades</li>
+                <li>Bones pràctiques en seguretat digital</li>
+                <li>Marc legal aplicable</li>
+            </ul>
+
+            <h3>📋 Protocol d'actuació</h3>
+            <ul>
+                <li>Què fer en cas de fuga de dades</li>
+                <li>A qui notificar (Responsable de Protecció de Dades del centre)</li>
+                <li>Terminis legals (72 hores per notificar)</li>
+            </ul>
+
+            <h3>🔍 Avaluació periòdica</h3>
+            <ul>
+                <li>Revisar les mesures cada curs</li>
+                <li>Avaluar l'ús de les eines</li>
+                <li>Actualitzar segons canvis legals</li>
+            </ul>
+        </section>
+
+        <section id="recomanacions">
+            <h2>9. 🎯 Recomanacions específiques per eina</h2>
+
+            <h3>📚 Programació (<span class="badge badge-green">Risc baix</span>)</h3>
+            <ul>
+                <li>No incloure dades d'alumnes</li>
+                <li>Utilitzar email institucional</li>
+                <li>No pujar dades personals al repositori</li>
+            </ul>
+
+            <h3>📅 Planificador (<span class="badge badge-yellow">Risc mitjà</span>)</h3>
+            <ul>
+                <li>Evita escriure noms d'alumnes a les observacions</li>
+                <li>Esborra el log regularment (botó "🗑️ Netejar log")</li>
+                <li>Fes còpies de seguretat</li>
+                <li>No comparteixis l'accés al planificador</li>
+            </ul>
+
+            <h3>📝 Fitxa de l'Alumne (<span class="badge badge-red">Risc alt amb menors</span>)</h3>
+            <ul>
+                <li>🔴 <strong>Si hi ha menors de 14 anys</strong>: consentiment dels pares</li>
+                <li>🔴 Informa clarament que les dades es guarden al navegador</li>
+                <li>🔴 Ensenya als alumnes a esborrar les dades al final del curs</li>
+                <li>No demanis dades innecessàries</li>
+                <li>Recomana no escriure dades molt personals a les observacions</li>
+                <li>Esborra les dades quan l'alumne acabi l'assignatura</li>
+            </ul>
+        </section>
+
+        <section id="esborrat">
+            <h2>10. 🧹 Protocol d'esborrat de dades</h2>
+
+            <h3>Al final del curs:</h3>
+
+            <h4>👨‍🎓 Per als alumnes:</h4>
+            <p>Opció 1: Utilitzar la <strong>pàgina d'esborrat</strong> (<code>esborrar_dades.html</code>)</p>
+            <p>Opció 2: Executar a la consola del navegador (F12):</p>
+            <pre style="background:#1e1e1e;color:#d4d4d4;padding:15px;border-radius:8px;overflow-x:auto;font-family:'Courier New',monospace;">localStorage.clear();
+location.reload();</pre>
+            <p>Opció 3: Esborrar les dades del navegador (configuració → privacitat → esborrar dades)</p>
+
+            <h4>👩‍🏫 Per a la professora:</h4>
+            <ol>
+                <li><strong>Planificador</strong>: Prem "⚙️ Més opcions → 🗑️ Netejar log" i després "🔄 Restablir"</li>
+                <li><strong>Emails rebuts</strong>: Esborra els emails amb fitxes dels alumnes o arxiva'ls en una carpeta segura</li>
+                <li><strong>Còpies de seguretat</strong>: Guarda-les en un lloc segur (USB xifrat, núvol privat) i esborra-les després del temps legalment requerit (normalment 1 any)</li>
+            </ol>
+
+            <div class="alert alert-info">
+                <strong>💡 Eina recomanada</strong>
+                Hem creat una pàgina específica per a l'esborrat segur de totes les dades: <code>esborrar_dades.html</code>. Vegeu el fitxer separat.
+            </div>
+        </section>
+
+        <section id="consentiment">
+            <h2>11. 📝 Model de consentiment informat</h2>
+            <p>A continuació tens un model de document de consentiment que pots imprimir i fer signar. Adapta'l a les necessitats del teu centre.</p>
+
+<div class="consentiment" id="consentiment-model">
+    <div class="consentiment-header">
+        <h3>📋 FULL DE CONSENTIMENT INFORMAT</h3>
+        <p>Ús de la Fitxa de Treball Digital</p>
+    </div>
+
+    <!-- BOTONS D'ACCIÓ (no es mostren en imprimir) -->
+    <div class="consentiment-actions no-print">
+        <button class="btn btn-primary" onclick="imprimirConsentiment()">🖨️ Imprimir / PDF</button>
+        <button class="btn btn-warning" onclick="esborrarConsentiment()">🗑️ Esborrar camps</button>
+        <button class="btn btn-secondary" onclick="omplirExemple()">📝 Omplir exemple</button>
+    </div>
+
+    <form class="consentiment-form" id="formConsentiment" onsubmit="return false;">
+        
+        <div class="consentiment-section">
+            <h4>1. Identificació del responsable del tractament</h4>
+            <div class="consentiment-row">
+                <div>
+                    <label class="consentiment-field-label">Centre educatiu:</label>
+                    <input type="text" class="consentiment-field" name="centre" placeholder="Ex: Institut Escola del Treball">
+                </div>
+                <div>
+                    <label class="consentiment-field-label">Adreça del centre:</label>
+                    <input type="text" class="consentiment-field" name="adreca" placeholder="Ex: Av. de les Corts Catalanes, 35">
+                </div>
+            </div>
+            <div class="consentiment-row">
+                <div>
+                    <label class="consentiment-field-label">Professor/a responsable:</label>
+                    <input type="text" class="consentiment-field" name="professor" placeholder="Ex: Dra. Cèlia Painous">
+                </div>
+                <div>
+                    <label class="consentiment-field-label">Contacte DPD del centre:</label>
+                    <input type="text" class="consentiment-field" name="dpd" placeholder="Ex: dpd@centre.cat">
+                </div>
+            </div>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>2. Dades de l'assignatura</h4>
+            <div class="consentiment-row">
+                <div>
+                    <label class="consentiment-field-label">Nom de l'assignatura:</label>
+                    <input type="text" class="consentiment-field" name="assignatura" placeholder="Ex: Matemàtiques 2n Batxillerat">
+                </div>
+                <div>
+                    <label class="consentiment-field-label">Curs acadèmic:</label>
+                    <input type="text" class="consentiment-field" name="curs" placeholder="Ex: 2026-2027">
+                </div>
+            </div>
+            <div class="consentiment-row">
+                <div>
+                    <label class="consentiment-field-label">Nivell / curs:</label>
+                    <input type="text" class="consentiment-field" name="nivell" placeholder="Ex: 2n de Batxillerat">
+                </div>
+                <div>
+                    <label class="consentiment-field-label">Grup/s:</label>
+                    <input type="text" class="consentiment-field" name="grups" placeholder="Ex: A, B">
+                </div>
+            </div>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>3. Finalitat del tractament</h4>
+            <p>Les dades personals recollides a la fitxa de treball digital s'utilitzaran exclusivament per a:</p>
+            <ul>
+                <li>Fer seguiment del treball individual de l'alumne/a durant l'assignatura</li>
+                <li>Avaluació continuada de les activitats realitzades</li>
+                <li>Comunicació entre l'alumne/a i el/la professor/a sobre el seu progrés</li>
+            </ul>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>4. Dades que es tracten</h4>
+            <p>Les dades que l'alumne/a introdueix a la fitxa són:</p>
+            <ul>
+                <li>Nom i cognoms</li>
+                <li>Correu electrònic</li>
+                <li>Curs i grup</li>
+                <li>Observacions i reflexions sobre les sessions (opcional)</li>
+            </ul>
+            <p><strong>No es recullen</strong> dades especialment protegides (salut, religió, ideologia, etc.).</p>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>5. Com es guarden les dades</h4>
+            <p>⚠️ <strong>Informació important:</strong> Les dades es guarden <strong>únicament al navegador</strong> del dispositiu de l'alumne/a (memòria <em>localStorage</em>). Això significa que:</p>
+            <ul>
+                <li>✅ <strong>No s'envien a cap servidor</strong> extern</li>
+                <li>✅ <strong>Només l'alumne/a</strong> pot veure les seves dades al seu dispositiu</li>
+                <li>✅ <strong>L'alumne/a controla</strong> quan enviar-les per email a la professora</li>
+                <li>⚠️ Les dades <strong>es perden</strong> si s'esborra la memòria del navegador</li>
+                <li>⚠️ En <strong>ordinadors compartits</strong>, altres usuaris podrien accedir-hi</li>
+            </ul>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>6. Enviament per email</h4>
+            <p>Quan l'alumne/a prem el botó "📧 Enviar", les dades s'envien per correu electrònic a la professora. Aquest email:</p>
+            <ul>
+                <li>Conté un resum de la feina feta</li>
+                <li>Viatja pels servidors de correu (sense xifratge d'extrem a extrem)</li>
+                <li>Es guarda al correu de la professora fins que l'esborri</li>
+            </ul>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>7. Base legal</h4>
+            <p>El tractament es basa en:</p>
+            <ul>
+                <li><strong>Interès legítim</strong> del centre educatiu per al seguiment acadèmic (RGPD art. 6.1.f)</li>
+                <li><strong>Consentiment</strong> de l'alumne/a o dels seus tutors legals (si és menor de 14 anys)</li>
+            </ul>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>8. Drets de l'alumne/a</h4>
+            <p>L'alumne/a (o els seus tutors legals, si és menor) té dret a:</p>
+            <ul>
+                <li>✅ <strong>Accedir</strong> a les seves dades</li>
+                <li>✅ <strong>Rectificar</strong> les dades incorrectes</li>
+                <li>✅ <strong>Esborrar</strong> les dades (dret a l'oblit)</li>
+                <li>✅ <strong>Oposar-se</strong> al tractament</li>
+                <li>✅ <strong>Retirar el consentiment</strong> en qualsevol moment</li>
+            </ul>
+            <p>Per exercir aquests drets, cal adreçar-se al/la professor/a responsable o al DPD del centre.</p>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>9. Conservació de les dades</h4>
+            <p>Les dades es conservaran durant el <strong>temps estrictament necessari</strong> per a la finalitat educativa, i en qualsevol cas s'esborraran al final del curs acadèmic.</p>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>10. Compromís de l'alumne/a</h4>
+            <p>L'alumne/a es compromet a:</p>
+            <ul>
+                <li>No introduir dades falses o de tercers</li>
+                <li>No escriure dades especialment sensibles a les observacions</li>
+                <li>Esborrar les seves dades al final del curs</li>
+                <li>No compartir el seu dispositiu sense tancar la sessió</li>
+            </ul>
+        </div>
+
+        <div class="consentiment-section">
+            <h4>11. Declaració de consentiment</h4>
+            <p>He llegit i entès la informació anterior. Comprenc que les dades es guarden al meu navegador i que sóc responsable de la seva custòdia. Dono el meu consentiment per al tractament de les meves dades personals amb la finalitat descrita.</p>
+        </div>
+
+        <div class="signatures">
+            <div class="signature-box">
+                <label class="consentiment-field-label">Signatura de l'alumne/a (o tutors legals si és menor de 14 anys):</label>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <label class="consentiment-field-label">Data:</label>
+                <input type="date" class="consentiment-field" name="dataAlumne" style="margin-top:40px;">
+            </div>
+        </div>
+
+        <div class="signatures" style="margin-top:30px;">
+            <div class="signature-box">
+                <label class="consentiment-field-label">Signatura del/la professor/a responsable:</label>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <label class="consentiment-field-label">Data:</label>
+                <input type="date" class="consentiment-field" name="dataProfessor" style="margin-top:40px;">
+            </div>
+        </div>
+
+        <p style="margin-top:30px;font-size:0.85em;color:#666;text-align:center;font-style:italic;">
+            Aquest document s'ha de conservar durant el curs acadèmic i, si escau, d'acord amb els terminis legals aplicables.
+        </p>
+    </form>
+</div>
+            <div class="alert alert-info">
+                <strong>💡 Consell</strong>
+                Pots imprimir aquesta pàgina sencera (botó 🖨️ a dalt) i el model de consentiment sortirà formatat correctament per signar.
+            </div>
+        </section>
+
+        <section id="checklist">
+            <h2>12. ✅ Llista de verificació</h2>
+            <p>Abans d'utilitzar les eines amb alumnes, verifica tots aquests punts:</p>
+
+            <div class="checklist">
+                <h4>📋 Documentació legal</h4>
+                <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">He informat els alumnes sobre l'ús de les dades</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">Tinc consentiment dels pares (si hi ha menors de 14 anys)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">He registrat l'activitat al centre</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Conec el protocol en cas de fuga de dades</label></div>
+            </div>
+
+            <div class="checklist">
+                <h4>🔧 Configuració tècnica</h4>
+                <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">Les eines funcionen amb HTTPS (GitHub Pages ho fa)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c6"><label for="c6">He configurat l'email institucional</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c7"><label for="c7">He esborrat el log del planificador (si conté dades antigues)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c8"><label for="c8">He fet còpia de seguretat de les dades importants</label></div>
+            </div>
+
+            <div class="checklist">
+                <h4>🎓 Preparació amb alumnes</h4>
+                <div class="checklist-item"><input type="checkbox" id="c9"><label for="c9">He explicat com funciona la fitxa</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c10"><label for="c10">He ensenyat a esborrar les dades</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c11"><label for="c11">He recomanat no escriure dades molt personals</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c12"><label for="c12">He establert un protocol per enviar les fitxes</label></div>
+            </div>
+
+            <div class="checklist">
+                <h4>🧹 Final del curs</h4>
+                <div class="checklist-item"><input type="checkbox" id="c13"><label for="c13">He recordat als alumnes que esborrin les seves dades</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c14"><label for="c14">He esborrat el log del planificador</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c15"><label for="c15">He esborrat els emails amb fitxes (o els he arxivat)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c16"><label for="c16">He guardat les còpies de seguretat en lloc segur</label></div>
+            </div>
+        </section>
+
+        <section id="recursos">
+            <h2>13. 📞 Recursos addicionals</h2>
+
+            <h3>🌐 Enllaços oficials</h3>
+            <ul>
+                <li><strong>Agència Espanyola de Protecció de Dades</strong>: <a href="https://www.aepd.es/" target="_blank">www.aepd.es</a></li>
+                <li><strong>Autoritat Catalana de Protecció de Dades</strong>: <a href="https://apd.cat/" target="_blank">apd.cat</a></li>
+                <li><strong>Guia RGPD per a centres educatius</strong>: <a href="https://www.aepd.es/guias" target="_blank">www.aepd.es/guias</a></li>
+            </ul>
+
+            <h3>📚 Documents recomanats</h3>
+            <ul>
+                <li>Guia per a centres educatius de l'AEPD</li>
+                <li>Model de document de consentiment del teu centre</li>
+                <li>Protocol de actuació en cas de bretxa de seguretat</li>
+            </ul>
+
+            <h3>🆘 Suport</h3>
+            <p>Si tens algun problema o pregunta:</p>
+            <ol>
+                <li>Revisa aquest manual (potser la resposta ja hi és)</li>
+                <li>Consulta amb el <strong>Responsable de Protecció de Dades (DPD)</strong> del teu centre</li>
+                <li>Contacta amb la direcció del centre per aspectes organitzatius</li>
+            </ol>
+
+            <div class="alert alert-success">
+                <strong>✅ Conclusió final</strong>
+                <p style="margin-top:8px;">El sistema del Generador de Programació Didàctica és <strong>prou segur per a ús educatiu</strong>, sempre que:</p>
+                <ol style="margin-top:8px;">
+                    <li>S'informi clarament als alumnes</li>
+                    <li>S'obtingui consentiment (especialment per a menors)</li>
+                    <li>Es minimitzin les dades recollides</li>
+                    <li>S'esborrin les dades al final del curs</li>
+                    <li>Es faci servir email institucional</li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>🔒 Manual de Seguretat i Protecció de Dades · Generador de Programació Didàctica</p>
+        <p style="margin-top:8px;font-size:0.85em;">Versió 1.0 · Setembre 2026 · Aquest document és orientatiu. Consulta sempre amb el DPD del teu centre.</p>
+    </footer>
+</div>
+
+<script>
+// Navegació suau per l'índex
+document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('.nav-link');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+    
+    // Carregar dades guardades del formulari (si n'hi ha)
+    carregarConsentiment();
+});
+
+// ==========================================
+// FUNCIONS DEL FORMULARI DE CONSENTIMENT
+// ==========================================
+
+// Guardar automàticament al localStorage
+function guardarConsentiment() {
+    const form = document.getElementById('formConsentiment');
+    if (!form) return;
+    const dades = {};
+    const inputs = form.querySelectorAll('input.consentiment-field');
+    inputs.forEach(input => {
+        if (input.name) dades[input.name] = input.value;
+    });
+    try {
+        localStorage.setItem('consentimentDades', JSON.stringify(dades));
+    } catch (e) {
+        console.error('Error guardant consentiment:', e);
+    }
+}
+
+// Carregar dades guardades
+function carregarConsentiment() {
+    try {
+        const dades = JSON.parse(localStorage.getItem('consentimentDades') || '{}');
+        const form = document.getElementById('formConsentiment');
+        if (!form) return;
+        const inputs = form.querySelectorAll('input.consentiment-field');
+        inputs.forEach(input => {
+            if (input.name && dades[input.name]) {
+                input.value = dades[input.name];
+            }
+        });
+    } catch (e) {
+        console.error('Error carregant consentiment:', e);
+    }
+}
+
+// Escoltar canvis per guardar automàticament
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('consentiment-field')) {
+        guardarConsentiment();
+    }
+});
+
+// Imprimir el consentiment
+function imprimirConsentiment() {
+    const consentiment = document.getElementById('consentiment-model');
+    if (!consentiment) return;
+    
+    // Crear una finestra nova només amb el consentiment
+    const finestra = window.open('', '_blank');
+    const contingut = `
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>Full de Consentiment Informat</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 40px;
+        color: #333;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 1.6em;
+        margin-bottom: 5px;
+    }
+    h2 {
+        text-align: center;
+        color: #666;
+        font-size: 1.1em;
+        font-weight: normal;
+        margin-bottom: 5px;
+    }
+    h3 {
+        text-align: center;
+        color: #666;
+        font-size: 0.95em;
+        font-weight: normal;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #333;
+    }
+    h4 {
+        color: #333;
+        font-size: 1.05em;
+        margin: 20px 0 10px 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+    p { margin-bottom: 10px; }
+    ul { margin: 10px 0 10px 25px; }
+    li { margin-bottom: 5px; }
+    strong { color: #000; }
+    .dades-camp {
+        display: inline-block;
+        min-width: 200px;
+        border-bottom: 1px solid #333;
+        padding: 2px 8px;
+        font-weight: 600;
+        color: #000;
+    }
+    .dades-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .dades-item {
+        flex: 1;
+        min-width: 300px;
+    }
+    .dades-label {
+        font-weight: 600;
+        color: #555;
+        font-size: 0.9em;
+    }
+    .signatures {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+    .signature-box {
+        flex: 1;
+        min-width: 250px;
+        text-align: center;
+    }
+    .signature-line {
+        border-top: 1px solid #333;
+        margin-top: 60px;
+        padding-top: 5px;
+        font-size: 0.9em;
+        color: #666;
+    }
+    .footer-doc {
+        margin-top: 40px;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;
+        text-align: center;
+        font-size: 0.8em;
+        color: #666;
+        font-style: italic;
+    }
+    @media print {
+        body { padding: 20px; }
+        @page { margin: 2cm; }
+    }
+</style>
+</head>
+<body>
+    ${generarHTMLConsentiment()}
+    <div class="footer-doc">
+        Document generat amb el Generador de Programació Didàctica · ${new Date().toLocaleDateString('ca-ES')}
+    </div>
+    <script>
+        window.onload = function() {
+            setTimeout(function() { window.print(); }, 300);
+        };
+    <\/script>
+</body>
+</html>`;
+    
+    finestra.document.write(contingut);
+    finestra.document.close();
+}
+
+// Generar HTML del consentiment amb les dades omplertes
+function generarHTMLConsentiment() {
+    const form = document.getElementById('formConsentiment');
+    const dades = {};
+    if (form) {
+        const inputs = form.querySelectorAll('input.consentiment-field');
+        inputs.forEach(input => {
+            if (input.name) dades[input.name] = input.value || '_______________________________';
+        });
+    }
+    
+    const camp = (valor) => valor || '_______________________________';
+    const dataFormat = (data) => {
+        if (!data) return '___/___/______';
+        const [y, m, d] = data.split('-');
+        return `${d}/${m}/${y}`;
+    };
+    
+    return `
+        <h1>📋 FULL DE CONSENTIMENT INFORMAT</h1>
+        <h2>Ús de la Fitxa de Treball Digital</h2>
+        <h3>${camp(dades.assignatura)} · Curs ${camp(dades.curs)}</h3>
+        
+        <h4>1. Identificació del responsable del tractament</h4>
+        <div class="dades-row">
+            <div class="dades-item"><span class="dades-label">Centre educatiu:</span> <span class="dades-camp">${camp(dades.centre)}</span></div>
+            <div class="dades-item"><span class="dades-label">Adreça:</span> <span class="dades-camp">${camp(dades.adreca)}</span></div>
+        </div>
+        <div class="dades-row">
+            <div class="dades-item"><span class="dades-label">Professor/a responsable:</span> <span class="dades-camp">${camp(dades.professor)}</span></div>
+            <div class="dades-item"><span class="dades-label">Contacte DPD:</span> <span class="dades-camp">${camp(dades.dpd)}</span></div>
+        </div>
+        
+        <h4>2. Dades de l'assignatura</h4>
+        <div class="dades-row">
+            <div class="dades-item"><span class="dades-label">Assignatura:</span> <span class="dades-camp">${camp(dades.assignatura)}</span></div>
+            <div class="dades-item"><span class="dades-label">Curs acadèmic:</span> <span class="dades-camp">${camp(dades.curs)}</span></div>
+        </div>
+        <div class="dades-row">
+            <div class="dades-item"><span class="dades-label">Nivell:</span> <span class="dades-camp">${camp(dades.nivell)}</span></div>
+            <div class="dades-item"><span class="dades-label">Grup/s:</span> <span class="dades-camp">${camp(dades.grups)}</span></div>
+        </div>
+        
+        <h4>3. Finalitat del tractament</h4>
+        <p>Les dades personals recollides a la fitxa de treball digital s'utilitzaran exclusivament per a:</p>
+        <ul>
+            <li>Fer seguiment del treball individual de l'alumne/a durant l'assignatura</li>
+            <li>Avaluació continuada de les activitats realitzades</li>
+            <li>Comunicació entre l'alumne/a i el/la professor/a sobre el seu progrés</li>
+        </ul>
+        
+        <h4>4. Dades que es tracten</h4>
+        <p>Les dades que l'alumne/a introdueix a la fitxa són:</p>
+        <ul>
+            <li>Nom i cognoms</li>
+            <li>Correu electrònic</li>
+            <li>Curs i grup</li>
+            <li>Observacions i reflexions sobre les sessions (opcional)</li>
+        </ul>
+        <p><strong>No es recullen</strong> dades especialment protegides (salut, religió, ideologia, etc.).</p>
+        
+        <h4>5. Com es guarden les dades</h4>
+        <p>⚠️ <strong>Informació important:</strong> Les dades es guarden <strong>únicament al navegador</strong> del dispositiu de l'alumne/a (memòria <em>localStorage</em>). Això significa que:</p>
+        <ul>
+            <li>✅ <strong>No s'envien a cap servidor</strong> extern</li>
+            <li>✅ <strong>Només l'alumne/a</strong> pot veure les seves dades al seu dispositiu</li>
+            <li>✅ <strong>L'alumne/a controla</strong> quan enviar-les per email a la professora</li>
+            <li>⚠️ Les dades <strong>es perden</strong> si s'esborra la memòria del navegador</li>
+            <li>⚠️ En <strong>ordinadors compartits</strong>, altres usuaris podrien accedir-hi</li>
+        </ul>
+        
+        <h4>6. Enviament per email</h4>
+        <p>Quan l'alumne/a prem el botó "📧 Enviar", les dades s'envien per correu electrònic a la professora. Aquest email:</p>
+        <ul>
+            <li>Conté un resum de la feina feta</li>
+            <li>Viatja pels servidors de correu (sense xifratge d'extrem a extrem)</li>
+            <li>Es guarda al correu de la professora fins que l'esborri</li>
+        </ul>
+        
+        <h4>7. Base legal</h4>
+        <p>El tractament es basa en:</p>
+        <ul>
+            <li><strong>Interès legítim</strong> del centre educatiu per al seguiment acadèmic (RGPD art. 6.1.f)</li>
+            <li><strong>Consentiment</strong> de l'alumne/a o dels seus tutors legals (si és menor de 14 anys)</li>
+        </ul>
+        
+        <h4>8. Drets de l'alumne/a</h4>
+        <p>L'alumne/a (o els seus tutors legals, si és menor) té dret a:</p>
+        <ul>
+            <li>✅ <strong>Accedir</strong> a les seves dades</li>
+            <li>✅ <strong>Rectificar</strong> les dades incorrectes</li>
+            <li>✅ <strong>Esborrar</strong> les dades (dret a l'oblit)</li>
+            <li>✅ <strong>Oposar-se</strong> al tractament</li>
+            <li>✅ <strong>Retirar el consentiment</strong> en qualsevol moment</li>
+        </ul>
+        <p>Per exercir aquests drets, cal adreçar-se al/la professor/a responsable o al DPD del centre.</p>
+        
+        <h4>9. Conservació de les dades</h4>
+        <p>Les dades es conservaran durant el <strong>temps estrictament necessari</strong> per a la finalitat educativa, i en qualsevol cas s'esborraran al final del curs acadèmic.</p>
+        
+        <h4>10. Compromís de l'alumne/a</h4>
+        <p>L'alumne/a es compromet a:</p>
+        <ul>
+            <li>No introduir dades falses o de tercers</li>
+            <li>No escriure dades especialment sensibles a les observacions</li>
+            <li>Esborrar les seves dades al final del curs</li>
+            <li>No compartir el seu dispositiu sense tancar la sessió</li>
+        </ul>
+        
+        <h4>11. Declaració de consentiment</h4>
+        <p>He llegit i entès la informació anterior. Comprenc que les dades es guarden al meu navegador i que sóc responsable de la seva custòdia. Dono el meu consentiment per al tractament de les meves dades personals amb la finalitat descrita.</p>
+        
+        <div class="signatures">
+            <div class="signature-box">
+                <div class="signature-line">Signatura de l'alumne/a<br>(o tutors legals si és menor de 14 anys)</div>
+                <p style="margin-top:10px;font-size:0.9em;">Data: <strong>${dataFormat(dades.dataAlumne)}</strong></p>
+            </div>
+            <div class="signature-box">
+                <div class="signature-line">Signatura del/la professor/a responsable</div>
+                <p style="margin-top:10px;font-size:0.9em;">Data: <strong>${dataFormat(dades.dataProfessor)}</strong></p>
+            </div>
+        </div>
+    `;
+}
+
+// Esborrar tots els camps del formulari
+function esborrarConsentiment() {
+    if (!confirm('⚠️ Vols esborrar tots els camps del formulari de consentiment?\n\nAquesta acció no es pot desfer.')) return;
+    
+    const form = document.getElementById('formConsentiment');
+    if (!form) return;
+    
+    const inputs = form.querySelectorAll('input.consentiment-field');
+    inputs.forEach(input => { input.value = ''; });
+    
+    // Esborrar també del localStorage
+    localStorage.removeItem('consentimentDades');
+    
+    mostrarToastConsentiment('🗑️ Formulari esborrat', 'info');
+}
+
+// Omplir amb dades d'exemple (per provar)
+function omplirExemple() {
+    if (!confirm('📝 Vols omplir el formulari amb dades d\'exemple?\n\nAixò substituirà les dades actuals.')) return;
+    
+    const exemple = {
+        centre: 'Institut Escola del Treball',
+        adreca: 'Av. de les Corts Catalanes, 35',
+        professor: 'Dra. Cèlia Painous, MD, PhD',
+        dpd: 'dpd@escolatreball.cat',
+        assignatura: 'Fisiologia del Sistema Musculoesquelètic',
+        curs: '2026-2027',
+        nivell: 'Formació en Dansa',
+        grups: 'A, B'
+    };
+    
+    const form = document.getElementById('formConsentiment');
+    if (!form) return;
+    
+    const inputs = form.querySelectorAll('input.consentiment-field');
+    inputs.forEach(input => {
+        if (input.name && exemple[input.name]) {
+            input.value = exemple[input.name];
+        }
+    });
+    
+    guardarConsentiment();
+    mostrarToastConsentiment('📝 Dades d\'exemple omplertes', 'success');
+}
+
+// Toast específic per al consentiment
+function mostrarToastConsentiment(msg, tipo = 'info') {
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:30px;right:30px;background:#333;color:white;padding:14px 24px;border-radius:8px;box-shadow:0 8px 25px rgba(0,0,0,0.3);z-index:2000;font-weight:500;';
+    if (tipo === 'success') toast.style.background = '#28a745';
+    else if (tipo === 'error') toast.style.background = '#dc3545';
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+</body>
+</html>

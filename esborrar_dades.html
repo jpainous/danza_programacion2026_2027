@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧹 Esborrar Dades - Final de Curs</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+header {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+header h1 { font-size: 2.3em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+header h2 { font-size: 1.3em; font-weight: 300; margin-bottom: 10px; }
+.subtitle { font-size: 1em; opacity: 0.9; }
+
+.content { padding: 40px; }
+
+.alert {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border-left: 5px solid;
+}
+.alert-danger {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+.alert-warning {
+    background: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+}
+.alert-info {
+    background: #e7f3ff;
+    border-color: #2196F3;
+    color: #0c5460;
+}
+.alert-success {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+.alert strong { display: block; margin-bottom: 8px; font-size: 1.1em; }
+.alert p { margin-bottom: 8px; line-height: 1.6; }
+
+.section {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+.section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-icon { font-size: 1.5em; }
+
+.data-list {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.data-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e9ecef;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.data-item:last-child { border-bottom: none; }
+.data-key {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #495057;
+    word-break: break-all;
+    flex: 1;
+    min-width: 200px;
+}
+.data-size {
+    background: #e7f3ff;
+    color: #0c5460;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.data-empty {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    font-family: inherit;
+    margin: 5px;
+}
+.btn-danger { background: #dc3545; color: white; }
+.btn-danger:hover { background: #c82333; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4); }
+.btn-warning { background: #ffc107; color: #333; }
+.btn-warning:hover { background: #e0a800; transform: translateY(-2px); }
+.btn-success { background: #28a745; color: white; }
+.btn-success:hover { background: #218838; transform: translateY(-2px); }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; }
+.btn-big {
+    padding: 18px 40px;
+    font-size: 1.2em;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.status-box {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+.status-icon { font-size: 3em; margin-bottom: 10px; }
+.status-text { font-size: 1.1em; color: #333; font-weight: 600; }
+.status-detail { font-size: 0.9em; color: #666; margin-top: 8px; }
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+}
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #17a2b8; }
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+footer {
+    text-align: center;
+    padding: 25px 20px;
+    color: #64748b;
+    font-size: 0.9em;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    header { padding: 30px 20px; }
+    header h1 { font-size: 1.6em; }
+    .content { padding: 20px; }
+    .section { padding: 15px; }
+    .btn { padding: 10px 16px; font-size: 0.9em; }
+    .btn-big { padding: 14px 20px; font-size: 1em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🧹 Esborrar Dades</h1>
+        <h2>Eina de neteja per al final de curs</h2>
+        <p class="subtitle">Esborra de manera segura totes les dades de les eines didàctiques</p>
+    </header>
+
+    <div class="content">
+
+        <div class="alert alert-danger">
+            <strong>⚠️ Atenció: Acció irreversible</strong>
+            <p>Aquesta pàgina permet <strong>esborrar permanentment</strong> totes les dades guardades al navegador per les eines didàctiques generades amb el Generador de Programació Didàctica.</p>
+            <p><strong>Un cop esborrades, les dades NO es poden recuperar.</strong> Assegura't d'haver fet una còpia de seguretat si necessites conservar alguna informació.</p>
+        </div>
+
+        <div class="section">
+            <h3><span class="section-icon">📊</span> Estat actual de les dades</h3>
+            <p>A continuació es mostren totes les dades detectades al teu navegador, agrupades per eina:</p>
+            <div id="dadesActuals" class="data-list"></div>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="actualitzarLlista()">🔄 Actualitzar llista</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3><span class="section-icon">📚</span> Esborrar per eina</h3>
+            <p>Si només vols esborrar les dades d'una eina concreta, utilitza aquests botons:</p>
+            <div class="actions">
+                <button class="btn btn-warning" onclick="esborrarPerEina('programacio')">📚 Programació</button>
+                <button class="btn btn-warning" onclick="esborrarPerEina('planificador')">📅 Planificador</button>
+                <button class="btn btn-warning" onclick="esborrarPerEina('fitxa')">📝 Fitxa Alumne</button>
+                <button class="btn btn-warning" onclick="esborrarPerEina('generador')">🎨 Generador</button>
+                <button class="btn btn-warning" onclick="esborrarCompartides()">🔗 Dades compartides</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3><span class="section-icon">💣</span> Esborrar TOT</h3>
+            <p>Aquest botó esborrarà <strong>totes les dades</strong> de totes les eines, incloent:</p>
+            <ul style="margin: 10px 0 10px 25px;">
+                <li>Totes les programacions, planificadors i fitxes</li>
+                <li>Tots els historials de versions</li>
+                <li>Tots els logs d'accions</li>
+                <li>Les dades compartides entre eines</li>
+                <li>La configuració del generador</li>
+                <li>La preferència d'idioma</li>
+            </ul>
+            <div class="alert alert-warning" style="margin-top:15px;">
+                <strong>⚠️ Última advertència</strong>
+                <p>Abans de continuar, assegura't que:</p>
+                <ul style="margin-top:8px;">
+                    <li>Has fet còpia de seguretat de les dades importants</li>
+                    <li>Els alumnes han esborrat les seves fitxes</li>
+                    <li>Has esborrat els emails amb fitxes rebudes</li>
+                </ul>
+            </div>
+            <button class="btn btn-danger btn-big" onclick="esborrarTot()">💣 ESBORRAR TOTES LES DADES</button>
+        </div>
+
+        <div class="section">
+            <h3><span class="section-icon">🍪</span> Galetes (cookies)</h3>
+            <p>Aquestes eines <strong>no utilitzen galetes</strong>. Totes les dades es guarden al <code>localStorage</code> del navegador.</p>
+            <p>Si vols, pots esborrar manualment les galetes d'aquest domini des de la configuració del teu navegador:</p>
+            <ul style="margin: 10px 0 10px 25px;">
+                <li><strong>Chrome</strong>: Configuració → Privadesa → Galetes</li>
+                <li><strong>Firefox</strong>: Preferències → Privadesa → Dades</li>
+                <li><strong>Safari</strong>: Preferències → Privadesa → Gestionar dades</li>
+                <li><strong>Edge</strong>: Configuració → Privadesa → Galetes</li>
+            </ul>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="esborrarCookies()">🍪 Esborrar galetes d'aquest domini</button>
+            </div>
+        </div>
+
+        <div id="statusBox" class="status-box" style="display:none;">
+            <div class="status-icon" id="statusIcon">✅</div>
+            <div class="status-text" id="statusText">Operació completada</div>
+            <div class="status-detail" id="statusDetail"></div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>💡 Consell</strong>
+            <p>Després d'esborrar les dades, tanca i torna a obrir el navegador per assegurar-te que tot s'ha esborrat correctament.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>🧹 Eina d'esborrat de dades · Generador de Programació Didàctica</p>
+        <p style="margin-top:8px;font-size:0.85em;">Utilitza aquesta eina al final de cada curs acadèmic per garantir la privacitat de tots els usuaris.</p>
+    </footer>
+</div>
+
+<script>
+// ==========================================
+// CLAU DE LOCALSTORAGE PER EINA
+// ==========================================
+const CLAU_PER_EINA = {
+    programacio: ['programacioFisiologia', 'programacioHistorial'],
+    planificador: ['planificadorSesiones', 'planificadorHistorial'],
+    fitxa: ['fitxaAlumne', 'logAlumne'],
+    generador: ['generadorConfig'],
+    compartides: ['fisiologiaSharedData'],
+    idioma: ['idioma_preferit']
+};
+
+// ==========================================
+// UTILITATS
+// ==========================================
+function mostrarToast(msg, tipo = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function midaBytes(str) {
+    return new Blob([str]).size;
+}
+
+function formatMida(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function mostrarStatus(icon, text, detail) {
+    const box = document.getElementById('statusBox');
+    document.getElementById('statusIcon').textContent = icon;
+    document.getElementById('statusText').textContent = text;
+    document.getElementById('statusDetail').textContent = detail || '';
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ==========================================
+// LLISTA DE DADES ACTUALS
+// ==========================================
+function actualitzarLlista() {
+    const container = document.getElementById('dadesActuals');
+    const totesClaus = Object.keys(localStorage);
+
+    if (totesClaus.length === 0) {
+        container.innerHTML = '<div class="data-empty">✅ No hi ha dades guardades al navegador</div>';
+        return;
+    }
+
+    // Agrupar per eina
+    let html = '';
+    const grups = [
+        { nom: '📚 Programació', claus: CLAU_PER_EINA.programacio },
+        { nom: '📅 Planificador', claus: CLAU_PER_EINA.planificador },
+        { nom: '📝 Fitxa Alumne', claus: CLAU_PER_EINA.fitxa },
+        { nom: '🎨 Generador', claus: CLAU_PER_EINA.generador },
+        { nom: '🔗 Dades compartides', claus: CLAU_PER_EINA.compartides },
+        { nom: '🌐 Idioma', claus: CLAU_PER_EINA.idioma }
+    ];
+
+    grups.forEach(grup => {
+        const clausExistents = grup.claus.filter(c => localStorage.getItem(c) !== null);
+        if (clausExistents.length > 0) {
+            html += `<div style="font-weight:700;color:#667eea;padding:8px 10px;background:#f0f4ff;border-radius:6px;margin-bottom:5px;">${grup.nom}</div>`;
+            clausExistents.forEach(clau => {
+                const valor = localStorage.getItem(clau);
+                const mida = formatMida(midaBytes(valor));
+                html += `<div class="data-item">
+                    <span class="data-key">${clau}</span>
+                    <span class="data-size">${mida}</span>
+                </div>`;
+            });
+        }
+    });
+
+    // Altres claus no classificades
+    const clausClassificades = Object.values(CLAU_PER_EINA).flat();
+    const altresClaus = totesClaus.filter(c => !clausClassificades.includes(c));
+    if (altresClaus.length > 0) {
+        html += `<div style="font-weight:700;color:#6c757d;padding:8px 10px;background:#e9ecef;border-radius:6px;margin-top:10px;margin-bottom:5px;">📦 Altres dades</div>`;
+        altresClaus.forEach(clau => {
+            const valor = localStorage.getItem(clau);
+            const mida = formatMida(midaBytes(valor));
+            html += `<div class="data-item">
+                <span class="data-key">${clau}</span>
+                <span class="data-size">${mida}</span>
+            </div>`;
+        });
+    }
+
+    if (html === '') {
+        html = '<div class="data-empty">✅ No hi ha dades guardades al navegador</div>';
+    }
+
+    container.innerHTML = html;
+}
+
+// ==========================================
+// ESBORRAR PER EINA
+// ==========================================
+function esborrarPerEina(eina) {
+    const claus = CLAU_PER_EINA[eina];
+    if (!claus) return;
+
+    const noms = {
+        programacio: 'PROGRAMACIÓ DIDÀCTICA',
+        planificador: 'PLANIFICADOR DE SESSIONS',
+        fitxa: 'FITXA DE L\'ALUMNE',
+        generador: 'GENERADOR'
+    };
+
+    if (!confirm(`⚠️ Vols esborrar TOTES les dades de la ${noms[eina]}?\n\nAquesta acció NO es pot desfer.`)) return;
+
+    let comptador = 0;
+    claus.forEach(clau => {
+        if (localStorage.getItem(clau) !== null) {
+            localStorage.removeItem(clau);
+            comptador++;
+        }
+    });
+
+    actualitzarLlista();
+    mostrarStatus('✅', `Dades de ${noms[eina]} esborrades`, `${comptador} clau(es) eliminada(es)`);
+    mostrarToast(`🗑️ ${noms[eina]} esborrada`, 'success');
+}
+
+function esborrarCompartides() {
+    if (!confirm('⚠️ Vols esborrar les DADES COMPARTIDES entre eines?\n\nAixò inclou el log d\'accions compartit i la sincronització.\n\nAquesta acció NO es pot desfer.')) return;
+
+    CLAU_PER_EINA.compartides.forEach(clau => {
+        localStorage.removeItem(clau);
+    });
+
+    actualitzarLlista();
+    mostrarStatus('✅', 'Dades compartides esborrades', 'Log i sincronització eliminats');
+    mostrarToast('🗑️ Dades compartides esborrades', 'success');
+}
+
+// ==========================================
+// ESBORRAR TOT
+// ==========================================
+function esborrarTot() {
+    const confirmacio1 = confirm('⚠️ ESTÀS A PUNT D\'ESBORRAR TOTES LES DADES\n\nAixò eliminarà:\n• Totes les programacions\n• Tots els planificadors\n• Totes les fitxes d\'alumnes\n• Tots els historials\n• Tots els logs\n• La configuració del generador\n• La preferència d\'idioma\n\nAquesta acció NO es pot desfer.\n\nVols continuar?');
+    if (!confirmacio1) return;
+
+    const confirmacio2 = confirm('🔴 ÚLTIMA OPORTUNITAT\n\nEstàs completament segur/a?\n\nEscriu mentalment "SÍ, ESTIC SEGUR/A" i prem Accepta.\n\nSi tens qualsevol dubte, prem Cancel·la ara.');
+    if (!confirmacio2) return;
+
+    try {
+        const total = Object.keys(localStorage).length;
+        localStorage.clear();
+        actualitzarLlista();
+        mostrarStatus('✅', 'TOTES LES DADES HAN ESTAT ESBORRADES', `${total} clau(s) eliminada(es) correctament`);
+        mostrarToast('💣 Totes les dades esborrades', 'success');
+    } catch (e) {
+        mostrarStatus('❌', 'Error en esborrar', e.message);
+        mostrarToast('❌ Error: ' + e.message, 'error');
+    }
+}
+
+// ==========================================
+// ESBORRAR COOKIES
+// ==========================================
+function esborrarCookies() {
+    const cookies = document.cookie.split(';');
+    let comptador = 0;
+    cookies.forEach(cookie => {
+        const eqAt = cookie.indexOf('=');
+        const name = eqAt > -1 ? cookie.substr(0, eqAt).trim() : cookie.trim();
+        if (name) {
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+            comptador++;
+        }
+    });
+    mostrarStatus('✅', 'Galetes esborrades', `${comptador} galeta(es) eliminada(es)`);
+    mostrarToast('🍪 Galetes esborrades', 'success');
+}
+
+// ==========================================
+// INICIALITZACIÓ
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    actualitzarLlista();
+    console.log('✅ Eina d\'esborrat carregada');
+});
+</script>
+</body>
+</html>
