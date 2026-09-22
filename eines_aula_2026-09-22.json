@@ -1,0 +1,65 @@
+[
+  {
+    "id": "eina-1",
+    "icon": "⏱️",
+    "titol": "Comptador cap enrere",
+    "descripcio": "Temporitzador visual per controlar el temps de les activitats",
+    "url": "https://bilateria.org/app/utils_clas/contador-regresivo.html"
+  },
+  {
+    "id": "eina-2",
+    "icon": "🎲",
+    "titol": "Selector aleatori de noms",
+    "descripcio": "Selecciona estudiants de manera aleatòria per participar",
+    "url": "https://bilateria.org/app/utils_clas/selector_aleatorio_nombres.html"
+  },
+  {
+    "id": "eina-3",
+    "icon": "👥",
+    "titol": "Parelles aleatòries",
+    "descripcio": "Crea parelles de treball de manera aleatòria",
+    "url": "https://bilateria.org/app/utils_clas/Parejas%20Aleatorias"
+  },
+  {
+    "id": "eina-4",
+    "icon": "👨‍👩‍👧‍👦",
+    "titol": "Generador aleatori de grups",
+    "descripcio": "Organitza l'alumnat en grups de treball aleatoris",
+    "url": "https://bilateria.org/app/utils_clas/generador_aleatorio_grupos.html"
+  },
+  {
+    "id": "eina-5",
+    "icon": "🎤",
+    "titol": "Eines de participació",
+    "descripcio": "Plataforma per fomentar la participació de l'alumnat",
+    "url": "https://jjdeharo.github.io/directo/"
+  },
+  {
+    "id": "eina-6",
+    "icon": "📄",
+    "titol": "PDF a fitxes interactives",
+    "descripcio": "Converteix documents PDF en fitxes de treball interactives",
+    "url": "https://openworksheets.github.io/"
+  },
+  {
+    "id": "eina-7",
+    "icon": "☁️",
+    "titol": "Núvol de paraules",
+    "descripcio": "Crea núvols de paraules per visualitzar conceptes clau",
+    "url": "https://bilateria.org/app/utils_text/nube-palabras.html"
+  },
+  {
+    "id": "eina-8",
+    "icon": "🗺️",
+    "titol": "Mapa de distribució de l'aula",
+    "descripcio": "Dissenya la disposició dels pupitres i l'espai de l'aula",
+    "url": "https://aulamap.github.io/"
+  },
+  {
+    "id": "eina-1790064865371",
+    "icon": "🔗",
+    "titol": "Escurçador URL",
+    "descripcio": "Serveix per a escurçar url llargues i difícils de copiar.",
+    "url": "https://ja.cat"
+  }
+]

@@ -1,0 +1,165 @@
+{
+  "sesiones": [
+    {
+      "id": "ses-1",
+      "fecha": "2026-10-05",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "AAAAAAA",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "AAAAAAA",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    },
+    {
+      "id": "ses-2",
+      "fecha": "2026-10-06",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "BBBBBBB",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "BBBBBBB",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    },
+    {
+      "id": "ses-3",
+      "fecha": "2026-10-09",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "Presentació i introducció",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "Presentació i introducció",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    },
+    {
+      "id": "ses-4",
+      "fecha": "2026-10-16",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "Tema 1: Conceptes bàsics",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "Tema 1: Conceptes bàsics",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    },
+    {
+      "id": "ses-5",
+      "fecha": "2026-10-23",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "Tema 2: Fonaments",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "Tema 2: Fonaments",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    },
+    {
+      "id": "ses-6",
+      "fecha": "2026-10-30",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "Tema 3: Aplicacions",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "Tema 3: Aplicacions",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    },
+    {
+      "id": "ses-7",
+      "fecha": "2026-11-06",
+      "horario": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+      "titulo": "Avaluació parcial",
+      "estado": "previsto",
+      "espacio": "aula_ordinaria",
+      "objetivos": "",
+      "actividades": [
+        {
+          "tiempo": "Dilluns de 9-10 / Dimarts de 11,30-12,30",
+          "descripcion": "Avaluació parcial",
+          "descripcionAlumno": "",
+          "visibleAlumno": true,
+          "tipo": "teorica"
+        }
+      ],
+      "recursos": [],
+      "trabajoPrevio": "",
+      "trabajoComplementario": "",
+      "medios": [],
+      "observaciones": ""
+    }
+  ]
+}
