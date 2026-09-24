@@ -3,1634 +3,318 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-i18n="titol_pagina">Planificador de Sessions</title>
+<title>Planificador de sessions · Fisiologia</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    min-height: 100vh;
-    padding: 20px;
-    color: #333;
-}
-.container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
-header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 40px; text-align: center; position: relative; }
-header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
-header h2 { font-size: 1.5em; font-weight: 300; margin-bottom: 10px; }
-.subtitle { font-size: 1.1em; opacity: 0.9; }
-
-/* SELECTOR D'IDIOMA */
-.language-selector {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 6px 12px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-}
-.language-selector label { color: white; font-size: 1.2em; }
-.language-selector select {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9em;
-    font-family: inherit;
-    cursor: pointer;
-    background: white;
-    color: #11998e;
-    font-weight: 600;
-}
-.language-selector select:focus { outline: 2px solid #fff; }
-
-.controls { padding: 20px 40px; background: #f8f9fa; border-bottom: 2px solid #e9ecef; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: 600; font-family: inherit; }
-.btn-primary { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4); }
-.btn-secondary { background: #6c757d; color: white; }
-.btn-secondary:hover { background: #5a6268; }
-.btn-print { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
-.btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4); }
-.btn-danger { background: #dc3545; color: white; }
-.btn-danger:hover { background: #c82333; }
-.btn-edit { background: #ffc107; color: #333; padding: 8px 16px; font-size: 0.9em; }
-.btn-delete { background: #dc3545; color: white; padding: 8px 16px; font-size: 0.9em; }
-.btn-small { padding: 6px 12px; font-size: 0.85em; }
-.btn-sync { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 8px 16px; font-size: 0.9em; }
-.btn-sync:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
-
-.dropdown { position: relative; display: inline-block; margin-left: auto; }
-.btn-dropdown { background: linear-gradient(135deg, #495057 0%, #343a40 100%); color: white; display: flex; align-items: center; gap: 8px; }
-.btn-dropdown:hover { background: linear-gradient(135deg, #343a40 0%, #212529 100%); }
-.dropdown-arrow { font-size: 0.8em; transition: transform 0.3s; }
-.dropdown.open .dropdown-arrow { transform: rotate(180deg); }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); min-width: 240px; padding: 8px 0; z-index: 100; border: 1px solid #e9ecef; }
-.dropdown.open .dropdown-menu { display: block; }
-.dropdown-item { display: block; width: 100%; padding: 12px 20px; background: none; border: none; text-align: left; font-size: 0.95em; font-weight: 500; color: #333; cursor: pointer; transition: all 0.2s; }
-.dropdown-item:hover { background: #f8f9fa; color: #11998e; }
-.dropdown-item.danger { color: #dc3545; }
-.dropdown-divider { height: 1px; background: #e9ecef; margin: 6px 0; }
-
-.info-box { margin: 20px 40px; padding: 20px; background: #e7f3ff; border-left: 4px solid #2196F3; border-radius: 8px; }
-.info-box h3 { color: #1976D2; margin-bottom: 10px; }
-.info-box p { margin-bottom: 8px; line-height: 1.6; }
-
-.filtros { padding: 15px 40px; background: #f8f9fa; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.filtro-label { margin-right: 10px; font-weight: 600; }
-.filtro-btn { padding: 8px 16px; border: 2px solid #e9ecef; border-radius: 20px; background: white; cursor: pointer; font-size: 0.9em; font-weight: 600; transition: all 0.2s; }
-.filtro-btn.active { background: #11998e; color: white; border-color: #11998e; }
-.filtro-btn:hover { border-color: #11998e; }
-
-.sesiones-container { padding: 40px; }
-.sesion-card { background: white; border: 2px solid #e9ecef; border-radius: 12px; margin-bottom: 20px; overflow: hidden; transition: all 0.3s; }
-.sesion-card:hover { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
-.sesion-card.estado-previsto { border-left: 6px solid #6c757d; }
-.sesion-card.estado-realizado { border-left: 6px solid #28a745; background: #f0fdf4; }
-.sesion-card.estado-pausa { border-left: 6px solid #ffc107; background: #fffbeb; }
-.sesion-card.estado-descartado { border-left: 6px solid #dc3545; background: #fef2f2; opacity: 0.7; }
-
-.sesion-header { padding: 20px 25px; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-.sesion-info { flex: 1; min-width: 250px; }
-.sesion-fecha { display: inline-block; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 600; margin-bottom: 8px; }
-.sesion-titulo { font-size: 1.4em; color: #333; margin-bottom: 8px; }
-.sesion-estado { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.8em; font-weight: 600; margin-left: 10px; }
-.estado-previsto .sesion-estado { background: #e2e3e5; color: #383d41; }
-.estado-realizado .sesion-estado { background: #d4edda; color: #155724; }
-.estado-pausa .sesion-estado { background: #fff3cd; color: #856404; }
-.estado-descartado .sesion-estado { background: #f8d7da; color: #721c24; }
-
-.sesion-meta { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 8px; font-size: 0.9em; color: #666; }
-.sesion-meta-item { display: flex; align-items: center; gap: 4px; }
-.sesion-toggle { font-size: 1.5em; color: #11998e; transition: transform 0.3s; }
-.sesion-card.open .sesion-toggle { transform: rotate(180deg); }
-
-.sesion-body { display: none; padding: 25px; border-top: 1px solid #e9ecef; }
-.sesion-card.open .sesion-body { display: block; }
-
-.sesion-section { margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; }
-.sesion-section h4 { color: #11998e; margin-bottom: 10px; font-size: 1.05em; display: flex; align-items: center; gap: 8px; }
-.sesion-section p { line-height: 1.6; color: #555; }
-
-.actividades-lista { list-style: none; }
-.actividad-item { background: white; border: 1px solid #e9ecef; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; transition: all 0.2s; }
-.actividad-item:hover { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
-.actividad-item.visible-alumno { border-left: 4px solid #28a745; }
-.actividad-item.no-visible { border-left: 4px solid #6c757d; background: #f8f9fa; opacity: 0.85; }
-.actividad-item.no-visible .actividad-descripcion { color: #6c757d; font-style: italic; }
-
-.actividad-tiempo { background: #11998e; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; white-space: nowrap; }
-.actividad-descripcion { flex: 1; min-width: 200px; }
-
-.actividad-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.badge-visibilidad { padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; white-space: nowrap; }
-.badge-visible { background: #d4edda; color: #155724; }
-.badge-oculto { background: #e2e3e5; color: #383d41; }
-
-.badge-tipo { padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; white-space: nowrap; }
-.tipo-teorica { background: #cfe2ff; color: #084298; }
-.tipo-practica { background: #d1e7dd; color: #0f5132; }
-.tipo-evaluacion { background: #f8d7da; color: #842029; }
-.tipo-descanso { background: #fff3cd; color: #664d03; }
-.tipo-gestion { background: #e2e3e5; color: #41464b; }
-
-.actividad-stats { background: #e7f3ff; border-left: 4px solid #2196F3; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9em; color: #0c5460; }
-
-.recursos-lista { list-style: none; }
-.recursos-lista li { margin-bottom: 6px; }
-.recursos-lista a { color: #11998e; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; word-break: break-all; }
-.recursos-lista a:hover { color: #0d7a6e; text-decoration: underline; }
-.recursos-lista a::after { content: "↗"; font-size: 0.8em; opacity: 0.7; }
-
-.tags-container { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; background: #e7f3ff; color: #1976D2; }
-.tag.medio { background: #f3e5f5; color: #6a1b9a; }
-
-.observaciones-box { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 16px; border-radius: 6px; font-style: italic; color: #5d4037; }
-
-.sesion-actions { display: flex; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef; flex-wrap: wrap; }
-
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); overflow-y: auto; }
-.modal.active { display: block; }
-.modal-content { background-color: white; margin: 30px auto; padding: 40px; border-radius: 16px; width: 90%; max-width: 800px; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
-.modal-xl { max-width: 1000px; }
-.close { position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; }
-.close:hover { color: #333; }
-.modal-content h2 { color: #11998e; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #e9ecef; }
-.modal-subtitle { color: #666; font-size: 0.95em; margin-bottom: 20px; }
-
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 0.95em; }
-.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 14px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em; font-family: inherit; }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #11998e; }
-.form-group textarea { resize: vertical; min-height: 70px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-.checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
-.checkbox-item { display: flex; align-items: center; gap: 6px; background: #f8f9fa; padding: 6px 12px; border-radius: 6px; font-size: 0.9em; }
-.checkbox-item input { transform: scale(1.1); }
-
-.actividades-editor { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px; }
-.actividad-editor-item { background: white; border: 2px solid #e9ecef; border-radius: 8px; padding: 15px; margin-bottom: 12px; transition: all 0.2s; }
-.actividad-editor-item.visible { border-left: 4px solid #28a745; }
-.actividad-editor-item.oculta { border-left: 4px solid #6c757d; background: #f8f9fa; }
-
-.actividad-editor-header { display: grid; grid-template-columns: 120px 1fr auto; gap: 10px; margin-bottom: 10px; }
-.actividad-editor-header input, .actividad-editor-header select { padding: 8px 10px; border: 1px solid #e9ecef; border-radius: 6px; font-size: 0.9em; font-family: inherit; }
-
-.actividad-visibilidad-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
-.actividad-visibilidad-row input[type="checkbox"] { transform: scale(1.3); margin-right: 5px; }
-.actividad-visibilidad-row label { font-weight: 600; font-size: 0.9em; margin: 0; }
-
-.descripcion-alumno-wrapper { margin-top: 8px; padding: 10px; background: #e7f3ff; border-left: 3px solid #2196F3; border-radius: 4px; display: none; }
-.descripcion-alumno-wrapper.visible { display: block; }
-.descripcion-alumno-wrapper label { font-size: 0.85em; color: #0c5460; margin-bottom: 4px; display: block; }
-.descripcion-alumno-wrapper textarea { width: 100%; padding: 8px; border: 1px solid #c7d2fe; border-radius: 6px; font-size: 0.9em; font-family: inherit; min-height: 50px; resize: vertical; }
-
-.btn-remove-actividad { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em; }
-.btn-add-actividad { background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9em; margin-top: 5px; }
-
-.form-actions { display: flex; gap: 10px; margin-top: 25px; padding-top: 20px; border-top: 2px solid #e9ecef; flex-wrap: wrap; }
-
-.historial-lista { max-height: 500px; overflow-y: auto; margin: 20px 0; }
-.historial-item { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 15px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
-.historial-item.current { background: #e7f3ff; border-color: #2196F3; }
-.historial-info { flex: 1; }
-.historial-fecha { font-weight: 700; color: #333; margin-bottom: 4px; }
-.historial-detalle { font-size: 0.85em; color: #666; }
-.historial-badge { display: inline-block; background: #28a745; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75em; margin-left: 8px; }
-.historial-actions { display: flex; gap: 8px; }
-.btn-restore { background: #28a745; color: white; padding: 6px 14px; font-size: 0.85em; border: none; border-radius: 6px; cursor: pointer; }
-.btn-delete-version { background: #dc3545; color: white; padding: 6px 14px; font-size: 0.85em; border: none; border-radius: 6px; cursor: pointer; }
-
-.editor-warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9em; color: #856404; }
-.editor-textarea { width: 100%; min-height: 400px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.9em; border: 2px solid #e9ecef; border-radius: 8px; background: #1e1e1e; color: #d4d4d4; resize: vertical; }
-
-.log-section { padding: 30px 40px; border-top: 2px solid #e9ecef; }
-.log-section h3 { color: #11998e; margin-bottom: 20px; font-size: 1.4em; border-left: 5px solid #38ef7d; padding-left: 15px; }
-.log-container { background: #f8f9fa; border-radius: 12px; padding: 20px; max-height: 400px; overflow-y: auto; }
-.log-item { background: white; border-left: 4px solid #11998e; border-radius: 6px; padding: 10px 15px; margin-bottom: 8px; font-size: 0.9em; display: flex; justify-content: space-between; align-items: start; gap: 10px; flex-wrap: wrap; }
-.log-item.log-sync { border-left-color: #ffc107; background: #fffbeb; }
-.log-item.log-state { border-left-color: #28a745; background: #f0fdf4; }
-.log-item.log-edit { border-left-color: #17a2b8; background: #ecfeff; }
-.log-item.log-delete { border-left-color: #dc3545; background: #fef2f2; }
-.log-item.log-alumno { border-left-color: #6f42c1; background: #f3e5f5; }
-.log-fecha { font-weight: 700; color: #11998e; font-size: 0.85em; white-space: nowrap; }
-.log-contenido { flex: 1; color: #333; }
-.log-usuario { font-size: 0.8em; color: #666; font-style: italic; }
-.log-vacio { text-align: center; padding: 30px; color: #999; font-style: italic; }
-.log-actions { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
-
-.toast { position: fixed; bottom: 30px; right: 30px; background: #333; color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); z-index: 2000; font-weight: 500; }
-.toast.success { background: #28a745; }
-.toast.error { background: #dc3545; }
-.toast.info { background: #17a2b8; }
-
-footer { text-align: center; padding: 30px 20px; color: #64748b; font-size: 0.95em; border-top: 1px solid #e9ecef; background: #f8f9fa; }
-
-.empty-state { text-align: center; padding: 40px; color: #999; font-style: italic; }
-
-@media (max-width: 768px) {
-    body { padding: 10px; }
-    header { padding: 30px 20px; }
-    header h1 { font-size: 1.8em; }
-    .language-selector { position: static; margin: 15px auto 0; width: fit-content; }
-    .controls, .filtros { padding: 15px 20px; }
-    .sesiones-container { padding: 20px; }
-    .modal-content { padding: 25px; margin: 20px auto; }
-    .form-row { grid-template-columns: 1fr; }
-    .actividad-editor-header { grid-template-columns: 1fr; }
-    .dropdown { margin-left: 0; flex: 1 1 100%; }
-    .btn-dropdown { width: 100%; justify-content: center; }
-    .log-section { padding: 20px; }
-}
-
-@media print {
-    body { background: white; padding: 0; }
-    .container { box-shadow: none; border-radius: 0; max-width: 100%; }
-    header { background: none; color: #000; padding: 20px 0; border-bottom: 3px solid #333; }
-    header h1, header h2, .subtitle { color: #000 !important; text-shadow: none; }
-    .language-selector { display: none !important; }
-    .no-print { display: none !important; }
-    .sesion-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc; margin-bottom: 15px; }
-    .sesion-body { display: block !important; }
-    .sesion-toggle { display: none; }
-    .sesion-actions { display: none; }
-    .sesion-header { cursor: default; }
-    footer { border-top: 2px solid #333; color: #333; }
-}
+  :root{--pri:#4b2e6f;--pri2:#5f3d8a;--oro:#b8912f;--crema:#faf8fc;--tinta:#2a2530;--gris:#6b6570;
+    --bord:#e0d8ea;--card:#fff;--verd:#2e7d4f;--blau:#1f5f8b;--taronja:#c05621;--vermell:#a52834;--grisc:#7a8288}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.5}
+  .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .brand{font-family:Georgia,serif;font-size:1rem;font-weight:bold}
+  .brand small{opacity:.85;font-weight:normal;display:block;font-size:.7rem}
+  .lang{display:flex;gap:.25rem}
+  .lang button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.25rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.8rem}
+  .lang button.on{background:#fff;color:var(--pri)}
+  .tools{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
+  .tools button,.tools a,.tools select{border:none;border-radius:8px;padding:.4rem .7rem;cursor:pointer;font-weight:600;font-size:.8rem;background:rgba(255,255,255,.92);color:var(--pri);text-decoration:none}
+  .tools .primary{background:var(--oro);color:#fff}
+  .tools select{padding:.35rem .4rem}
+  #savestate{font-size:.72rem;opacity:.9}
+  main{max-width:1100px;margin:1.2rem auto;padding:0 1rem}
+  .card{background:var(--card);border:1px solid var(--bord);border-radius:14px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden}
+  .card.nl{background:#f4f4f5}
+  .chead{display:flex;gap:.7rem;align-items:center;padding:.7rem .9rem;cursor:pointer;flex-wrap:wrap}
+  .chead:hover{background:#f7f3fc}
+  .tw{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--pri);width:1.4rem}
+  .cmeta{flex:1;min-width:220px}
+  .cmeta b{color:var(--pri);margin-right:.5rem}
+  .cmeta .topic{font-family:Georgia,serif;font-size:.98rem}
+  .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;vertical-align:middle}
+  .nlb{background:var(--grisc);color:#fff;margin-left:.5rem}
+  .ccounts{font-size:.72rem;color:var(--gris);background:#f4eefb;border-radius:10px;padding:.25rem .6rem}
+  .del{background:none;border:none;cursor:pointer;opacity:.45;font-size:.9rem}
+  .del:hover{opacity:1}
+  .del.ses:hover{color:var(--vermell)}
+  .sbody{padding:.4rem 1.1rem 1.2rem;border-top:1px dashed var(--bord)}
+  .grid2{display:grid;grid-template-columns:170px 1fr;gap:.8rem;margin:.8rem 0}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri2);margin-bottom:.2rem}
+  input[type=text],input[type=date],textarea,select.st{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;background:#fffdf7}
+  textarea{resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--pri2)}
+  .sect{margin:.9rem 0;border:1px solid var(--bord);border-radius:10px;padding:.7rem .8rem;background:#fdfbf8}
+  .secth{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.4rem}
+  .secth h3{margin:0;font-size:.92rem;color:var(--pri);flex:1;min-width:180px}
+  .secth .mini{color:var(--gris);font-weight:normal;font-size:.78rem}
+  .chk{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;color:var(--gris);cursor:pointer;white-space:nowrap}
+  .add{background:var(--pri2);color:#fff;border:none;border-radius:8px;padding:.3rem .65rem;font-size:.78rem;font-weight:600;cursor:pointer}
+  .rows{display:flex;flex-direction:column;gap:.35rem}
+  .row{display:grid;grid-template-columns:1fr 130px auto 130px auto;gap:.4rem;align-items:center}
+  .row.mini-row{grid-template-columns:1fr auto auto}
+  @media(max-width:700px){.row,.row.mini-row{grid-template-columns:1fr}.row .time{max-width:150px}}
+  .row.act input[type=text].time{font-variant-numeric:tabular-nums}
+  .row.st-done .rowdesc{text-decoration:line-through;color:var(--gris)}
+  select.st{font-size:.78rem;padding:.35rem}
+  .hint{font-size:.75rem;color:var(--gris);margin:.3rem 0}
+  .st-plan{border-left:3px solid var(--blau)}
+  .st-done{border-left:3px solid var(--verd)}
+  .st-pause{border-left:3px solid var(--taronja)}
+  .st-drop{border-left:3px solid var(--grisc);opacity:.55}
+  #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  #toast.show{opacity:1}
+  @media print{
+    .topbar,#toast,.add,.del,.tw,.chk,.hint{display:none!important}
+    .card{border:none;box-shadow:none;page-break-inside:avoid}
+    .sbody{display:block!important;border-top:1px solid #ccc}
+    input,textarea,select{border:none!important;background:none!important}
+    body{background:#fff}
+  }
 </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1 data-i18n="titol_pagina">📅 Planificador de Sessions</h1>
-        <h2 data-i18n="subtitol_pagina">Fisiologia Aplicada a la Dansa</h2>
-        <p class="subtitle" data-i18n="subtitol2_pagina">Curs 2026-2027 · Eina per a la professora</p>
-        
-        <!-- SELECTOR D'IDIOMA -->
-        <div class="language-selector">
-            <label for="selectorIdioma">🌐</label>
-            <select id="selectorIdioma" onchange="aplicarIdioma(this.value)">
-                <option value="ca">Català</option>
-                <option value="es">Español</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-    </header>
-
-    <div class="controls no-print">
-        <button id="btnAddSesion" class="btn btn-primary" data-i18n="btn_afegir_sessio">➕ Afegir Sessió</button>
-        <button id="btnPrint" class="btn btn-print" data-i18n="btn_imprimir">🖨️ Imprimir / PDF</button>
-        <div class="dropdown">
-            <button id="btnDropdown" class="btn btn-dropdown">
-                <span data-i18n="btn_mes_opcions">⚙️ Més opcions</span> <span class="dropdown-arrow">▾</span>
-            </button>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <button class="dropdown-item" id="btnHistory" data-i18n="btn_historial">📜 Historial</button>
-                <button class="dropdown-item" id="btnEditor" data-i18n="btn_editor">✏️ Editor JSON</button>
-                <button class="dropdown-item" id="btnAutoBackup" data-i18n="btn_copia_auto">💾 Còpia Automàtica</button>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item" id="btnExport" data-i18n="btn_exportar">📥 Exportar</button>
-                <button class="dropdown-item" id="btnImport" data-i18n="btn_importar">📤 Importar</button>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item danger" id="btnReset" data-i18n="btn_restablir">🔄 Restablir</button>
-            </div>
-        </div>
-        <input type="file" id="fileInput" accept=".json" style="display: none;">
-    </div>
-
-    <div class="filtros no-print">
-        <strong class="filtro-label" data-i18n="filtro_label">Filtrar per estat:</strong>
-        <button class="filtro-btn active" data-filtro="todas" data-i18n="filtro_totes">Totes</button>
-        <button class="filtro-btn" data-filtro="previsto" data-i18n="filtro_previstes">⏳ Previstes</button>
-        <button class="filtro-btn" data-filtro="realizado" data-i18n="filtro_realitzades">✅ Realitzades</button>
-        <button class="filtro-btn" data-filtro="pausa" data-i18n="filtro_pausa">⏸️ En pausa</button>
-        <button class="filtro-btn" data-filtro="descartado" data-i18n="filtro_descartades">❌ Descartades</button>
-    </div>
-
-    <div class="info-box no-print">
-        <h3 data-i18n="info_titol">ℹ️ Informació</h3>
-        <p data-i18n="info_text1">Aquest planificador et permet gestionar cada sessió amb tot el detall. Cada activitat pot marcar-se com a <strong>visible u oculta per a l'alumnat</strong>, i pot tenir una descripció adaptada.</p>
-        <p><span data-i18n="info_text2_icons">👁️ Icones:</span> <span style="color:#28a745;font-weight:600;">●</span> <span data-i18n="info_visible">Visible per a l'alumnat</span> · <span style="color:#6c757d;font-weight:600;">●</span> <span data-i18n="info_ocult">Només professora (🔒)</span></p>
-        <p data-i18n="info_text3"><strong>💡 Consell:</strong> En sincronitzar amb la fitxa de l'alumne, només s'enviaran les activitats marcades com a visibles.</p>
-    </div>
-
-    <div id="sesionesContainer" class="sesiones-container"></div>
-
-    <div class="log-section no-print">
-        <h3 data-i18n="log_titol">📜 Log d'Accions</h3>
-        <div id="logContainer" class="log-container">
-            <div class="log-vacio" data-i18n="log_buit">Encara no hi ha accions registrades.</div>
-        </div>
-        <div class="log-actions">
-            <button class="btn btn-secondary btn-small" onclick="renderizarLog()" data-i18n="log_btn_actualitzar">🔄 Actualitzar log</button>
-            <button class="btn btn-danger btn-small" onclick="netejarLog()" data-i18n="log_btn_netejar">🗑️ Netejar log</button>
-            <button class="btn btn-secondary btn-small" onclick="exportarLog()" data-i18n="log_btn_exportar">📥 Exportar log</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL EDICIÓ SESSIÓ -->
-<div id="modalSesion" class="modal">
-    <div class="modal-content modal-xl">
-        <span class="close" data-modal="modalSesion">&times;</span>
-        <h2 id="modalSesionTitle" data-i18n="modal_titol_afegir">Afegir Sessió</h2>
-        <form id="sesionForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label data-i18n="lbl_data">📅 Data:</label>
-                    <input type="date" id="sesionFecha" required>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="lbl_horari">🕐 Horari:</label>
-                    <input type="text" id="sesionHorario" data-i18n-placeholder="ph_horari" placeholder="Ex: 12:00 - 15:00 (3h)">
-                </div>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_titol_sessio">📌 Títol de la sessió:</label>
-                <input type="text" id="sesionTitulo" required>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label data-i18n="lbl_estat">🎯 Estat:</label>
-                    <select id="sesionEstado">
-                        <option value="previsto" data-i18n="estat_previst">⏳ Prevista</option>
-                        <option value="realizado" data-i18n="estat_realitzat">✅ Realitzada</option>
-                        <option value="pausa" data-i18n="estat_pausa">⏸️ En pausa</option>
-                        <option value="descartado" data-i18n="estat_descartat">❌ Descartada</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="lbl_espai">📍 Espai de treball:</label>
-                    <select id="sesionEspacio">
-                        <option value="aula_ordinaria" data-i18n="espai_ordinaria">Aula ordinària</option>
-                        <option value="aula_practicas" data-i18n="espai_practiques">Aula de pràctiques</option>
-                        <option value="ambos" data-i18n="espai_ambdos">Ambdós espais</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_objectius">🎯 Objectius de la sessió:</label>
-                <textarea id="sesionObjetivos" rows="3" data-i18n-placeholder="ph_objectius" placeholder="Què ha d'haver après l'alumnat al final de la sessió?"></textarea>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_activitats">📋 Activitats planificades:</label>
-                <p style="font-size:0.85em;color:#666;margin-bottom:10px;" data-i18n="help_activitats">
-                    👁️ Marca les activitats que seran visibles per a l'alumnat. Pots afegir una descripció alternativa més senzilla si ho desitges.
-                </p>
-                <div class="actividades-editor" id="actividadesEditor"></div>
-                <button type="button" class="btn-add-actividad" onclick="addActividad()" data-i18n="btn_afegir_act">➕ Afegir activitat</button>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_recursos">🔗 Recursos HTML a utilitzar (una URL per línia):</label>
-                <textarea id="sesionRecursos" rows="4" data-i18n-placeholder="ph_recursos" placeholder="https://jpainous.github.io/dansa_tema03/..."></textarea>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_treball_previ">📚 Treball previ recomanat:</label>
-                <textarea id="sesionTrabajoPrevio" rows="2" data-i18n-placeholder="ph_treball_previ" placeholder="Lectura, vídeo, repàs..."></textarea>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_treball_comp">📝 Treball complementari:</label>
-                <textarea id="sesionTrabajoComp" rows="2" data-i18n-placeholder="ph_treball_comp" placeholder="Exercicis, casos pràctics, lectura..."></textarea>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_mitjans">🎥 Mitjans audiovisuals:</label>
-                <div class="checkbox-group" id="checkboxMedios">
-                    <label class="checkbox-item"><input type="checkbox" value="Proyector"> <span data-i18n="medio_proyector">Projector</span></label>
-                    <label class="checkbox-item"><input type="checkbox" value="Ordenador"> <span data-i18n="medio_ordinador">Ordinador</span></label>
-                    <label class="checkbox-item"><input type="checkbox" value="Altavoces"> <span data-i18n="medio_altaveus">Altaveus</span></label>
-                    <label class="checkbox-item"><input type="checkbox" value="Pizarra digital"> <span data-i18n="medio_pissarra">Pissarra digital</span></label>
-                    <label class="checkbox-item"><input type="checkbox" value="Vídeos"> <span data-i18n="medio_videos">Vídeos</span></label>
-                    <label class="checkbox-item"><input type="checkbox" value="Material anatómico"> <span data-i18n="medio_material">Material anatòmic</span></label>
-                    <label class="checkbox-item"><input type="checkbox" value="Modelos 3D"> <span data-i18n="medio_3d">Models 3D</span></label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label data-i18n="lbl_observacions">📝 Observacions (només professora):</label>
-                <textarea id="sesionObservaciones" rows="3" data-i18n-placeholder="ph_observacions" placeholder="Notes personals, incidències, ajustos..."></textarea>
-            </div>
-            <input type="hidden" id="sesionId">
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary" data-i18n="btn_guardar">💾 Guardar</button>
-                <button type="button" class="btn btn-secondary" data-modal="modalSesion" data-i18n="btn_cancelar">Cancel·lar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- MODAL HISTORIAL -->
-<div id="modalHistorial" class="modal">
-    <div class="modal-content">
-        <span class="close" data-modal="modalHistorial">&times;</span>
-        <h2 data-i18n="modal_historial_titol">📜 Historial de Versions</h2>
-        <div id="historialLista" class="historial-lista"></div>
-        <div class="form-actions">
-            <button type="button" class="btn btn-secondary" data-modal="modalHistorial" data-i18n="btn_tancar">Tancar</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL EDITOR JSON -->
-<div id="modalEditor" class="modal">
-    <div class="modal-content modal-xl">
-        <span class="close" data-modal="modalEditor">&times;</span>
-        <h2 data-i18n="modal_editor_titol">✏️ Editor JSON</h2>
-        <div class="editor-warning" data-i18n="editor_aviso">⚠️ <strong>Precaució:</strong> Modificar el JSON manualment pot trencar l'aplicació.</div>
-        <textarea id="editorJSON" class="editor-textarea" spellcheck="false"></textarea>
-        <div class="form-actions">
-            <button type="button" id="btnAplicarJSON" class="btn btn-primary" data-i18n="btn_aplicar">✅ Aplicar</button>
-            <button type="button" id="btnFormatearJSON" class="btn btn-secondary" data-i18n="btn_formatar">🎨 Format</button>
-            <button type="button" id="btnCopiarJSON" class="btn btn-secondary" data-i18n="btn_copiar">📋 Copiar</button>
-            <button type="button" class="btn btn-secondary" data-modal="modalEditor" data-i18n="btn_cancelar">Cancel·lar</button>
-        </div>
-    </div>
-</div>
-
-<footer>
-    <p data-i18n="footer_text">🩰 Fisiologia aplicada a la Dansa · Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD</p>
-</footer>
+<header class="topbar">
+  <div class="brand">🗂 <span id="t1"></span><small id="t2"></small></div>
+  <div class="lang" id="langBox">
+    <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
+  </div>
+  <div class="tools">
+    <a id="lnkStu" href="fitxa-alumne.html" target="_blank" rel="noopener"></a>
+    <button id="bNew"></button>
+    <button id="bExpStu" class="primary"></button>
+    <button id="bExp"></button>
+    <button id="bImp"></button>
+    <button id="bPrint"></button>
+    <select id="flt"></select>
+    <span id="savestate"></span>
+  </div>
+</header>
+<main id="main"></main>
+<div id="toast"></div>
+<input type="file" id="fImp" accept=".json" hidden>
 
 <script>
-// ==========================================
-// MOTOR DE TRADUCCIÓ (CA/ES/EN)
-// ==========================================
-const diccionario = {
-    ca: {
-        titol_pagina: "📅 Planificador de Sessions",
-        subtitol_pagina: "Fisiologia Aplicada a la Dansa",
-        subtitol2_pagina: "Curs 2026-2027 · Eina per a la professora",
-        btn_afegir_sessio: "➕ Afegir Sessió",
-        btn_imprimir: "🖨️ Imprimir / PDF",
-        btn_mes_opcions: "⚙️ Més opcions",
-        btn_historial: "📜 Historial",
-        btn_editor: "✏️ Editor JSON",
-        btn_copia_auto: "💾 Còpia Automàtica",
-        btn_exportar: "📥 Exportar",
-        btn_importar: "📤 Importar",
-        btn_restablir: "🔄 Restablir",
-        filtro_label: "Filtrar per estat:",
-        filtro_totes: "Totes",
-        filtro_previstes: "⏳ Previstes",
-        filtro_realitzades: "✅ Realitzades",
-        filtro_pausa: "⏸️ En pausa",
-        filtro_descartades: "❌ Descartades",
-        info_titol: "ℹ️ Informació",
-        info_text1: 'Aquest planificador et permet gestionar cada sessió amb tot el detall. Cada activitat pot marcar-se com a <strong>visible u oculta per a l\'alumnat</strong>, i pot tenir una descripció adaptada.',
-        info_text2_icons: "👁️ Icones:",
-        info_visible: "Visible per a l'alumnat",
-        info_ocult: "Només professora (🔒)",
-        info_text3: '<strong>💡 Consell:</strong> En sincronitzar amb la fitxa de l\'alumne, només s\'enviaran les activitats marcades com a visibles.',
-        log_titol: "📜 Log d'Accions",
-        log_buit: "Encara no hi ha accions registrades.",
-        log_btn_actualitzar: "🔄 Actualitzar log",
-        log_btn_netejar: "🗑️ Netejar log",
-        log_btn_exportar: "📥 Exportar log",
-        modal_titol_afegir: "Afegir Sessió",
-        modal_titol_editar: "Editar Sessió",
-        lbl_data: "📅 Data:",
-        lbl_horari: "🕐 Horari:",
-        ph_horari: "Ex: 12:00 - 15:00 (3h)",
-        lbl_titol_sessio: "📌 Títol de la sessió:",
-        lbl_estat: "🎯 Estat:",
-        estat_previst: "⏳ Prevista",
-        estat_realitzat: "✅ Realitzada",
-        estat_pausa: "⏸️ En pausa",
-        estat_descartat: "❌ Descartada",
-        lbl_espai: "📍 Espai de treball:",
-        espai_ordinaria: "Aula ordinària",
-        espai_practiques: "Aula de pràctiques",
-        espai_ambdos: "Ambdós espais",
-        lbl_objectius: "🎯 Objectius de la sessió:",
-        ph_objectius: "Què ha d'haver après l'alumnat al final de la sessió?",
-        lbl_activitats: "📋 Activitats planificades:",
-        help_activitats: "👁️ Marca les activitats que seran visibles per a l'alumnat. Pots afegir una descripció alternativa més senzilla si ho desitges.",
-        btn_afegir_act: "➕ Afegir activitat",
-        lbl_recursos: "🔗 Recursos HTML a utilitzar (una URL per línia):",
-        ph_recursos: "https://jpainous.github.io/dansa_tema03/...",
-        lbl_treball_previ: "📚 Treball previ recomanat:",
-        ph_treball_previ: "Lectura, vídeo, repàs...",
-        lbl_treball_comp: "📝 Treball complementari:",
-        ph_treball_comp: "Exercicis, casos pràctics, lectura...",
-        lbl_mitjans: "🎥 Mitjans audiovisuals:",
-        medio_proyector: "Projector",
-        medio_ordinador: "Ordinador",
-        medio_altaveus: "Altaveus",
-        medio_pissarra: "Pissarra digital",
-        medio_videos: "Vídeos",
-        medio_material: "Material anatòmic",
-        medio_3d: "Models 3D",
-        lbl_observacions: "📝 Observacions (només professora):",
-        ph_observacions: "Notes personals, incidències, ajustos...",
-        btn_guardar: "💾 Guardar",
-        btn_cancelar: "Cancel·lar",
-        btn_tancar: "Tancar",
-        btn_aplicar: "✅ Aplicar",
-        btn_formatar: "🎨 Format",
-        btn_copiar: "📋 Copiar",
-        btn_editar: "✏️ Editar",
-        btn_actualitzar_sessio: "🔄 Actualitzar sessió",
-        btn_eliminar: "🗑️ Eliminar",
-        modal_historial_titol: "📜 Historial de Versions",
-        modal_editor_titol: "✏️ Editor JSON",
-        editor_aviso: "⚠️ <strong>Precaució:</strong> Modificar el JSON manualment pot trencar l'aplicació.",
-        footer_text: "🩰 Fisiologia aplicada a la Dansa · Curs 2026-2027 · Dra. Cèlia Painous, MD, PhD",
-        // Missatges dinàmics
-        toast_guardat: "💾 Sessió guardada",
-        toast_guardat_detall: "activitats visibles per a l'alumnat",
-        toast_eliminar: "🗑️ Sessió eliminada",
-        toast_exportat: "📥 Exportat",
-        toast_importat: "📤 Importat",
-        toast_copia: "💾 Còpia de seguretat descarregada",
-        toast_restablert: "✅ Dades restablertes",
-        toast_error: "❌ Error",
-        toast_error_format: "❌ Format incorrecte",
-        toast_json_aplicat: "✅ Canvis aplicats",
-        toast_json_invalid: "❌ JSON invàlid",
-        toast_json_copiat: "📋 JSON copiat",
-        toast_json_formatat: "🎨 JSON formatat",
-        toast_versio_restaurada: "✅ Versió restaurada",
-        toast_versio_eliminada: "🗑️ Versió eliminada",
-        toast_log_net: "🗑️ Log netejat",
-        toast_log_exportat: "📥 Log exportat",
-        toast_sincronitzat: "✅ Sessió actualitzada",
-        toast_sincronitzat_detall: "activitats enviades a la fitxa",
-        // Confirmacions
-        confirm_eliminar_sessio: "Vols eliminar la sessió",
-        confirm_importar: "Vols importar les dades? Se substituiran les actuals.",
-        confirm_restablir_backup: "🔒 CÒPIA DE SEGURETAT\n\nAbans de restablir, vols descarregar una còpia de seguretat de les teves dades actuals?\n\n✅ Accepta = Es descarregarà un fitxer JSON\n❌ Cancel·la = Es continuarà sense fer còpia\n\nRecomanació: Accepta per tenir una còpia de seguretat.",
-        confirm_restablir: "⚠️ RESTABLIR DADES\n\n✅ S'ha descarregat una còpia de seguretat.\n\nAra es restabliran totes les dades als valors inicials.\nAquesta acció NO es pot desfer.\n\nVols continuar?",
-        confirm_restablir_sense_backup: "⚠️ RESTABLIR DADES\n\n⚠️ No s'ha fet còpia de seguretat.\n\nAra es restabliran totes les dades als valors inicials.\nAquesta acció NO es pot desfer.\n\nVols continuar?",
-        confirm_sincronitzar: "🔄 Vols actualitzar la sessió",
-        confirm_sincronitzar_detall: "Això farà:\n• Canviar l'estat a \"✅ Realitzada\" (si estava prevista o en pausa)\n• Enviar",
-        confirm_sincronitzar_visibles: "activitats visibles a la fitxa de l'alumne",
-        confirm_sincronitzar_ocultes: "activitat(s) interna(es) NO s'enviaran 🔒",
-        confirm_aplicar_json: "Vols aplicar els canvis?",
-        confirm_eliminar_versio: "Vols eliminar aquesta versió?",
-        confirm_restaurar_versio: "Vols restaurar aquesta versió?",
-        confirm_netejar_log: "Segur que vols netejar tot el log d'accions?",
-        // Textos dinàmics
-        sesions_amb_filtre: "No hi ha sessions amb aquest filtre.",
-        sense_activitats: "Sense activitats planificades.",
-        sense_recursos: "Sense recursos assignats.",
-        sense_mitjans: "Sense mitjans específics.",
-        activitats_visibles_de: "activitats visibles per a l'alumnat",
-        activitats_internes: "activitat(s) interna(es)",
-        per_alumne: "Per a l'alumne:",
-        visible: "👁️ Visible",
-        ocult_professora: "🔒 Només professora",
-        tipus_teorica: "📖 Teòrica",
-        tipus_practica: "🎯 Pràctica",
-        tipus_evaluacio: "📝 Avaluació",
-        tipus_descans: "☕ Descans",
-        tipus_gestio: "⚙️ Gestió",
-        ph_activitat_temps: "Horari (12:00-12:30)",
-        ph_activitat_desc: "Descripció completa de l'activitat",
-        lbl_desc_completa: "Descripció completa (pla docent):",
-        lbl_visibilitat: "👁️ Visible per a l'alumnat (s'enviarà a la fitxa)",
-        lbl_desc_alumne: "👨‍🎓 Descripció alternativa per a l'alumnat (opcional, més senzilla):",
-        ph_desc_alumne: "Si es deixa buit, s'usarà la descripció completa",
-        sense_activitats_editor: 'Sense activitats. Fes clic a "Afegir activitat".',
-        actual: "ACTUAL",
-        sessions: "sessions",
-        sense_versions: "No hi ha versions a l'historial.",
-        btn_restaurar: "♻️ Restaurar",
-        // Estats i espais
-        estat_text_previst: "⏳ Prevista",
-        estat_text_realitzat: "✅ Realitzada",
-        estat_text_pausa: "⏸️ En pausa",
-        estat_text_descartat: "❌ Descartada",
-        espai_text_ordinaria: "🏫 Aula ordinària",
-        espai_text_practiques: "🩰 Aula de pràctiques",
-        espai_text_ambdos: "🏫🩰 Ambdós espais",
-        // Log
-        log_restablert: "Dades restablertes a valors inicials",
-        log_amb_copia: "(amb còpia de seguretat prèvia)",
-        log_versio_restaurada: "Versió",
-        log_restaurada: "restaurada",
-        log_sessio_eliminada: "Sessió",
-        log_eliminada: "eliminada",
-        log_sessio_modificada: "Sessió",
-        log_modificada: "modificada",
-        log_creada: "creada",
-        log_activitats_visibles: "activitats visibles",
-        log_activitats_ocultes: "ocultes",
-        log_modificat_json: "Dades modificades mitjançant editor JSON",
-        log_exportat: "Dades exportades a fitxer JSON",
-        log_importat: "Dades importades des de fitxer JSON",
-        log_sincronitzat: "Sessió",
-        log_actualitzada: "actualitzada",
-        log_enviades: "Enviades",
-        log_activitats_visibles_txt: "activitats visibles",
-        log_oculta: "oculta/s",
-        log_fitxa_alumne: "a la fitxa de l'alumne",
-        log_estat_canviat: "Estat canviat",
-        // Sincronització
-        sync_titol: "📊 Resum de Sincronització",
-        sync_subtitol: "Estat de la integració entre Programació, Planificador i Fitxa de l'Alumne.",
-        sync_estat_integracio: "🔗 Estat de la Integració",
-        sync_sessions_sincro: "Sessions sincronitzades",
-        sync_accions_prof: "Accions professora",
-        sync_carregues_alumnes: "Càrregues d'alumnes",
-        sync_total_accions: "Total accions al log",
-        sync_ultima_act: "📅 Última actualització:",
-        sync_sense: "ℹ️ Sense sincronitzacions encara",
-        sync_sense_text: "Obre el <strong>Planificador de Sessions</strong> i prem \"🔄 Actualitzar sessió\" en qualsevol sessió per iniciar la sincronització amb les fitxes de l'alumnat.",
-        sync_log_compartit: "📜 Log d'Accions Compartit",
-        sync_sense_accions: "No hi ha accions registrades al log compartit.",
-        sync_mostrant: "Mostrant les 30 accions més recents de",
-        sync_totals: "total. Consulta el log complet al Planificador.",
-        // Backup
-        backup_fitxer_prefix: "BACKUP_planificador_"
-    },
-    es: {
-        titol_pagina: "📅 Planificador de Sesiones",
-        subtitol_pagina: "Fisiología Aplicada a la Danza",
-        subtitol2_pagina: "Curso 2026-2027 · Herramienta para la profesora",
-        btn_afegir_sessio: "➕ Añadir Sesión",
-        btn_imprimir: "🖨️ Imprimir / PDF",
-        btn_mes_opcions: "⚙️ Más opciones",
-        btn_historial: "📜 Historial",
-        btn_editor: "✏️ Editor JSON",
-        btn_copia_auto: "💾 Copia Automática",
-        btn_exportar: "📥 Exportar",
-        btn_importar: "📤 Importar",
-        btn_restablir: "🔄 Restablecer",
-        filtro_label: "Filtrar por estado:",
-        filtro_totes: "Todas",
-        filtro_previstes: "⏳ Previstas",
-        filtro_realitzades: "✅ Realizadas",
-        filtro_pausa: "⏸️ En pausa",
-        filtro_descartades: "❌ Descartadas",
-        info_titol: "ℹ️ Información",
-        info_text1: 'Este planificador te permite gestionar cada sesión con todo el detalle. Cada actividad puede marcarse como <strong>visible u oculta para el alumnado</strong>, y puede tener una descripción adaptada.',
-        info_text2_icons: "👁️ Iconos:",
-        info_visible: "Visible para el alumnado",
-        info_ocult: "Solo profesora (🔒)",
-        info_text3: '<strong>💡 Consejo:</strong> Al sincronizar con la ficha del alumno, solo se enviarán las actividades marcadas como visibles.',
-        log_titol: "📜 Log de Acciones",
-        log_buit: "Aún no hay acciones registradas.",
-        log_btn_actualitzar: "🔄 Actualizar log",
-        log_btn_netejar: "🗑️ Limpiar log",
-        log_btn_exportar: "📥 Exportar log",
-        modal_titol_afegir: "Añadir Sesión",
-        modal_titol_editar: "Editar Sesión",
-        lbl_data: "📅 Fecha:",
-        lbl_horari: "🕐 Horario:",
-        ph_horari: "Ej: 12:00 - 15:00 (3h)",
-        lbl_titol_sessio: "📌 Título de la sesión:",
-        lbl_estat: "🎯 Estado:",
-        estat_previst: "⏳ Prevista",
-        estat_realitzat: "✅ Realizada",
-        estat_pausa: "⏸️ En pausa",
-        estat_descartat: "❌ Descartada",
-        lbl_espai: "📍 Espacio de trabajo:",
-        espai_ordinaria: "Aula ordinaria",
-        espai_practiques: "Aula de prácticas",
-        espai_ambdos: "Ambos espacios",
-        lbl_objectius: "🎯 Objetivos de la sesión:",
-        ph_objectius: "¿Qué debe haber aprendido el alumnado al final de la sesión?",
-        lbl_activitats: "📋 Actividades planificadas:",
-        help_activitats: "👁️ Marca las actividades que serán visibles para el alumnado. Puedes añadir una descripción alternativa más sencilla si lo deseas.",
-        btn_afegir_act: "➕ Añadir actividad",
-        lbl_recursos: "🔗 Recursos HTML a utilizar (una URL por línea):",
-        ph_recursos: "https://jpainous.github.io/dansa_tema03/...",
-        lbl_treball_previ: "📚 Trabajo previo recomendado:",
-        ph_treball_previ: "Lectura, vídeo, repaso...",
-        lbl_treball_comp: "📝 Trabajo complementario:",
-        ph_treball_comp: "Ejercicios, casos prácticos, lectura...",
-        lbl_mitjans: "🎥 Medios audiovisuales:",
-        medio_proyector: "Proyector",
-        medio_ordinador: "Ordenador",
-        medio_altaveus: "Altavoces",
-        medio_pissarra: "Pizarra digital",
-        medio_videos: "Vídeos",
-        medio_material: "Material anatómico",
-        medio_3d: "Modelos 3D",
-        lbl_observacions: "📝 Observaciones (solo profesora):",
-        ph_observacions: "Notas personales, incidencias, ajustes...",
-        btn_guardar: "💾 Guardar",
-        btn_cancelar: "Cancelar",
-        btn_tancar: "Cerrar",
-        btn_aplicar: "✅ Aplicar",
-        btn_formatar: "🎨 Formatear",
-        btn_copiar: "📋 Copiar",
-        btn_editar: "✏️ Editar",
-        btn_actualitzar_sessio: "🔄 Actualizar sesión",
-        btn_eliminar: "🗑️ Eliminar",
-        modal_historial_titol: "📜 Historial de Versiones",
-        modal_editor_titol: "✏️ Editor JSON",
-        editor_aviso: "⚠️ <strong>Precaución:</strong> Modificar el JSON manualmente puede romper la aplicación.",
-        footer_text: "🩰 Fisiología aplicada a la Danza · Curso 2026-2027 · Dra. Cèlia Painous, MD, PhD",
-        toast_guardat: "💾 Sesión guardada",
-        toast_guardat_detall: "actividades visibles para el alumnado",
-        toast_eliminar: "🗑️ Sesión eliminada",
-        toast_exportat: "📥 Exportado",
-        toast_importat: "📤 Importado",
-        toast_copia: "💾 Copia de seguridad descargada",
-        toast_restablert: "✅ Datos restablecidos",
-        toast_error: "❌ Error",
-        toast_error_format: "❌ Formato incorrecto",
-        toast_json_aplicat: "✅ Cambios aplicados",
-        toast_json_invalid: "❌ JSON inválido",
-        toast_json_copiat: "📋 JSON copiado",
-        toast_json_formatat: "🎨 JSON formateado",
-        toast_versio_restaurada: "✅ Versión restaurada",
-        toast_versio_eliminada: "🗑️ Versión eliminada",
-        toast_log_net: "🗑️ Log limpiado",
-        toast_log_exportat: "📥 Log exportado",
-        toast_sincronitzat: "✅ Sesión actualizada",
-        toast_sincronitzat_detall: "actividades enviadas a la ficha",
-        confirm_eliminar_sessio: "¿Eliminar la sesión",
-        confirm_importar: "¿Importar datos? Se reemplazarán los actuales.",
-        confirm_restablir_backup: "🔒 COPIA DE SEGURIDAD\n\nAntes de restablecer, ¿quieres descargar una copia de seguridad de tus datos actuales?\n\n✅ Acepta = Se descargará un archivo JSON\n❌ Cancela = Se continuará sin hacer copia\n\nRecomendación: Acepta para tener una copia de seguridad.",
-        confirm_restablir: "⚠️ RESTABLECER DATOS\n\n✅ Se ha descargado una copia de seguridad.\n\nAhora se restablecerán todos los datos a los valores iniciales.\nEsta acción NO se puede deshacer.\n\n¿Continuar?",
-        confirm_restablir_sense_backup: "⚠️ RESTABLECER DATOS\n\n⚠️ No se ha hecho copia de seguridad.\n\nAhora se restablecerán todos los datos a los valores iniciales.\nEsta acción NO se puede deshacer.\n\n¿Continuar?",
-        confirm_sincronitzar: "🔄 ¿Actualizar la sesión",
-        confirm_sincronitzar_detall: "Esto hará:\n• Cambiar el estado a \"✅ Realizada\" (si estaba prevista o en pausa)\n• Enviar",
-        confirm_sincronitzar_visibles: "actividades visibles a la ficha del alumno",
-        confirm_sincronitzar_ocultes: "actividad(es) interna(s) NO se enviarán 🔒",
-        confirm_aplicar_json: "¿Aplicar cambios?",
-        confirm_eliminar_versio: "¿Eliminar esta versión?",
-        confirm_restaurar_versio: "¿Restaurar esta versión?",
-        confirm_netejar_log: "¿Seguro que quieres limpiar todo el log de acciones?",
-        sesions_amb_filtre: "No hay sesiones con este filtro.",
-        sense_activitats: "Sin actividades planificadas.",
-        sense_recursos: "Sin recursos asignados.",
-        sense_mitjans: "Sin medios específicos.",
-        activitats_visibles_de: "actividades visibles para el alumnado",
-        activitats_internes: "actividad(es) interna(s)",
-        per_alumne: "Para el alumno:",
-        visible: "👁️ Visible",
-        ocult_professora: "🔒 Solo profesora",
-        tipus_teorica: "📖 Teórica",
-        tipus_practica: "🎯 Práctica",
-        tipus_evaluacio: "📝 Evaluación",
-        tipus_descans: "☕ Descanso",
-        tipus_gestio: "⚙️ Gestión",
-        ph_activitat_temps: "Horario (12:00-12:30)",
-        ph_activitat_desc: "Descripción completa de la actividad",
-        lbl_desc_completa: "Descripción completa (plan docente):",
-        lbl_visibilitat: "👁️ Visible para el alumnado (se enviará a la ficha)",
-        lbl_desc_alumne: "👨‍🎓 Descripción alternativa para el alumnado (opcional, más sencilla):",
-        ph_desc_alumne: "Si se deja vacío, se usará la descripción completa",
-        sense_activitats_editor: 'Sin actividades. Haz clic en "Añadir actividad".',
-        actual: "ACTUAL",
-        sessions: "sesiones",
-        sense_versions: "No hay versiones en el historial.",
-        btn_restaurar: "♻️ Restaurar",
-        estat_text_previst: "⏳ Prevista",
-        estat_text_realitzat: "✅ Realizada",
-        estat_text_pausa: "⏸️ En pausa",
-        estat_text_descartat: "❌ Descartada",
-        espai_text_ordinaria: "🏫 Aula ordinaria",
-        espai_text_practiques: "🩰 Aula de prácticas",
-        espai_text_ambdos: "🏫🩰 Ambos espacios",
-        log_restablert: "Datos restablecidos a valores iniciales",
-        log_amb_copia: "(con copia de seguridad previa)",
-        log_versio_restaurada: "Versión",
-        log_restaurada: "restaurada",
-        log_sessio_eliminada: "Sesión",
-        log_eliminada: "eliminada",
-        log_sessio_modificada: "Sesión",
-        log_modificada: "modificada",
-        log_creada: "creada",
-        log_activitats_visibles: "actividades visibles",
-        log_activitats_ocultes: "ocultas",
-        log_modificat_json: "Datos modificados mediante editor JSON",
-        log_exportat: "Datos exportados a archivo JSON",
-        log_importat: "Datos importados desde archivo JSON",
-        log_sincronitzat: "Sesión",
-        log_actualitzada: "actualizada",
-        log_enviades: "Enviadas",
-        log_activitats_visibles_txt: "actividades visibles",
-        log_oculta: "oculta/s",
-        log_fitxa_alumne: "a la ficha del alumno",
-        log_estat_canviat: "Estado cambiado",
-        sync_titol: "📊 Resumen de Sincronización",
-        sync_subtitol: "Estado de la integración entre Programación, Planificador y Ficha del Alumno.",
-        sync_estat_integracio: "🔗 Estado de la Integración",
-        sync_sessions_sincro: "Sesiones sincronizadas",
-        sync_accions_prof: "Acciones profesora",
-        sync_carregues_alumnes: "Cargas de alumnos",
-        sync_total_accions: "Total acciones en log",
-        sync_ultima_act: "📅 Última actualización:",
-        sync_sense: "ℹ️ Sin sincronizaciones aún",
-        sync_sense_text: "Abre el <strong>Planificador de Sesiones</strong> y pulsa \"🔄 Actualizar sesión\" en cualquier sesión para iniciar la sincronización con las fichas del alumnado.",
-        sync_log_compartit: "📜 Log de Acciones Compartido",
-        sync_sense_accions: "No hay acciones registradas en el log compartido.",
-        sync_mostrant: "Mostrando las 30 acciones más recientes de",
-        sync_totals: "totales. Consulta el log completo en el Planificador.",
-        backup_fitxer_prefix: "BACKUP_planificador_"
-    },
-    en: {
-        titol_pagina: "📅 Session Planner",
-        subtitol_pagina: "Physiology Applied to Dance",
-        subtitol2_pagina: "Course 2026-2027 · Tool for the teacher",
-        btn_afegir_sessio: "➕ Add Session",
-        btn_imprimir: "🖨️ Print / PDF",
-        btn_mes_opcions: "⚙️ More options",
-        btn_historial: "📜 History",
-        btn_editor: "✏️ JSON Editor",
-        btn_copia_auto: "💾 Automatic Backup",
-        btn_exportar: "📥 Export",
-        btn_importar: "📤 Import",
-        btn_restablir: "🔄 Reset",
-        filtro_label: "Filter by status:",
-        filtro_totes: "All",
-        filtro_previstes: "⏳ Planned",
-        filtro_realitzades: "✅ Completed",
-        filtro_pausa: "⏸️ On pause",
-        filtro_descartades: "❌ Discarded",
-        info_titol: "ℹ️ Information",
-        info_text1: 'This planner allows you to manage each session in detail. Each activity can be marked as <strong>visible or hidden for students</strong>, and can have an adapted description.',
-        info_text2_icons: "👁️ Icons:",
-        info_visible: "Visible for students",
-        info_ocult: "Teacher only (🔒)",
-        info_text3: '<strong>💡 Tip:</strong> When syncing with the student\'s sheet, only activities marked as visible will be sent.',
-        log_titol: "📜 Actions Log",
-        log_buit: "No actions recorded yet.",
-        log_btn_actualitzar: "🔄 Update log",
-        log_btn_netejar: "🗑️ Clear log",
-        log_btn_exportar: "📥 Export log",
-        modal_titol_afegir: "Add Session",
-        modal_titol_editar: "Edit Session",
-        lbl_data: "📅 Date:",
-        lbl_horari: "🕐 Schedule:",
-        ph_horari: "Ex: 12:00 - 15:00 (3h)",
-        lbl_titol_sessio: "📌 Session title:",
-        lbl_estat: "🎯 Status:",
-        estat_previst: "⏳ Planned",
-        estat_realitzat: "✅ Completed",
-        estat_pausa: "⏸️ On pause",
-        estat_descartat: "❌ Discarded",
-        lbl_espai: "📍 Workspace:",
-        espai_ordinaria: "Regular classroom",
-        espai_practiques: "Practice classroom",
-        espai_ambdos: "Both spaces",
-        lbl_objectius: "🎯 Session objectives:",
-        ph_objectius: "What should students have learned by the end of the session?",
-        lbl_activitats: "📋 Planned activities:",
-        help_activitats: "👁️ Mark the activities that will be visible to students. You can add a simpler alternative description if you wish.",
-        btn_afegir_act: "➕ Add activity",
-        lbl_recursos: "🔗 HTML resources to use (one URL per line):",
-        ph_recursos: "https://jpainous.github.io/dansa_tema03/...",
-        lbl_treball_previ: "📚 Recommended prior work:",
-        ph_treball_previ: "Reading, video, review...",
-        lbl_treball_comp: "📝 Complementary work:",
-        ph_treball_comp: "Exercises, case studies, reading...",
-        lbl_mitjans: "🎥 Audiovisual media:",
-        medio_proyector: "Projector",
-        medio_ordinador: "Computer",
-        medio_altaveus: "Speakers",
-        medio_pissarra: "Digital whiteboard",
-        medio_videos: "Videos",
-        medio_material: "Anatomical material",
-        medio_3d: "3D Models",
-        lbl_observacions: "📝 Observations (teacher only):",
-        ph_observacions: "Personal notes, incidents, adjustments...",
-        btn_guardar: "💾 Save",
-        btn_cancelar: "Cancel",
-        btn_tancar: "Close",
-        btn_aplicar: "✅ Apply",
-        btn_formatar: "🎨 Format",
-        btn_copiar: "📋 Copy",
-        btn_editar: "✏️ Edit",
-        btn_actualitzar_sessio: "🔄 Update session",
-        btn_eliminar: "🗑️ Delete",
-        modal_historial_titol: "📜 Version History",
-        modal_editor_titol: "✏️ JSON Editor",
-        editor_aviso: "⚠️ <strong>Caution:</strong> Manually modifying the JSON may break the application.",
-        footer_text: "🩰 Physiology Applied to Dance · Course 2026-2027 · Dr. Cèlia Painous, MD, PhD",
-        toast_guardat: "💾 Session saved",
-        toast_guardat_detall: "visible activities for students",
-        toast_eliminar: "🗑️ Session deleted",
-        toast_exportat: "📥 Exported",
-        toast_importat: "📤 Imported",
-        toast_copia: "💾 Backup downloaded",
-        toast_restablert: "✅ Data reset",
-        toast_error: "❌ Error",
-        toast_error_format: "❌ Incorrect format",
-        toast_json_aplicat: "✅ Changes applied",
-        toast_json_invalid: "❌ Invalid JSON",
-        toast_json_copiat: "📋 JSON copied",
-        toast_json_formatat: "🎨 JSON formatted",
-        toast_versio_restaurada: "✅ Version restored",
-        toast_versio_eliminada: "🗑️ Version deleted",
-        toast_log_net: "🗑️ Log cleared",
-        toast_log_exportat: "📥 Log exported",
-        toast_sincronitzat: "✅ Session updated",
-        toast_sincronitzat_detall: "activities sent to the sheet",
-        confirm_eliminar_sessio: "Delete session",
-        confirm_importar: "Import data? Current data will be replaced.",
-        confirm_restablir_backup: "🔒 BACKUP\n\nBefore resetting, do you want to download a backup of your current data?\n\n✅ Accept = A JSON file will be downloaded\n❌ Cancel = Continue without backup\n\nRecommendation: Accept to have a backup.",
-        confirm_restablir: "⚠️ RESET DATA\n\n✅ A backup has been downloaded.\n\nAll data will now be reset to initial values.\nThis action CANNOT be undone.\n\nContinue?",
-        confirm_restablir_sense_backup: "⚠️ RESET DATA\n\n⚠️ No backup has been made.\n\nAll data will now be reset to initial values.\nThis action CANNOT be undone.\n\nContinue?",
-        confirm_sincronitzar: "🔄 Update session",
-        confirm_sincronitzar_detall: "This will:\n• Change status to \"✅ Completed\" (if it was planned or on pause)\n• Send",
-        confirm_sincronitzar_visibles: "visible activities to the student's sheet",
-        confirm_sincronitzar_ocultes: "internal activity(ies) will NOT be sent 🔒",
-        confirm_aplicar_json: "Apply changes?",
-        confirm_eliminar_versio: "Delete this version?",
-        confirm_restaurar_versio: "Restore this version?",
-        confirm_netejar_log: "Are you sure you want to clear the entire actions log?",
-        sesions_amb_filtre: "No sessions with this filter.",
-        sense_activitats: "No planned activities.",
-        sense_recursos: "No resources assigned.",
-        sense_mitjans: "No specific media.",
-        activitats_visibles_de: "visible activities for students",
-        activitats_internes: "internal activity(ies)",
-        per_alumne: "For the student:",
-        visible: "👁️ Visible",
-        ocult_professora: "🔒 Teacher only",
-        tipus_teorica: "📖 Theory",
-        tipus_practica: "🎯 Practice",
-        tipus_evaluacio: "📝 Evaluation",
-        tipus_descans: "☕ Break",
-        tipus_gestio: "⚙️ Management",
-        ph_activitat_temps: "Schedule (12:00-12:30)",
-        ph_activitat_desc: "Full description of the activity",
-        lbl_desc_completa: "Full description (teaching plan):",
-        lbl_visibilitat: "👁️ Visible for students (will be sent to the sheet)",
-        lbl_desc_alumne: "👨‍🎓 Alternative description for students (optional, simpler):",
-        ph_desc_alumne: "If left blank, the full description will be used",
-        sense_activitats_editor: 'No activities. Click "Add activity".',
-        actual: "CURRENT",
-        sessions: "sessions",
-        sense_versions: "No versions in history.",
-        btn_restaurar: "♻️ Restore",
-        estat_text_previst: "⏳ Planned",
-        estat_text_realitzat: "✅ Completed",
-        estat_text_pausa: "⏸️ On pause",
-        estat_text_descartat: "❌ Discarded",
-        espai_text_ordinaria: "🏫 Regular classroom",
-        espai_text_practiques: "🩰 Practice classroom",
-        espai_text_ambdos: "🏫🩰 Both spaces",
-        log_restablert: "Data reset to initial values",
-        log_amb_copia: "(with previous backup)",
-        log_versio_restaurada: "Version",
-        log_restaurada: "restored",
-        log_sessio_eliminada: "Session",
-        log_eliminada: "deleted",
-        log_sessio_modificada: "Session",
-        log_modificada: "modified",
-        log_creada: "created",
-        log_activitats_visibles: "visible activities",
-        log_activitats_ocultes: "hidden",
-        log_modificat_json: "Data modified via JSON editor",
-        log_exportat: "Data exported to JSON file",
-        log_importat: "Data imported from JSON file",
-        log_sincronitzat: "Session",
-        log_actualitzada: "updated",
-        log_enviades: "Sent",
-        log_activitats_visibles_txt: "visible activities",
-        log_oculta: "hidden",
-        log_fitxa_alumne: "to the student's sheet",
-        log_estat_canviat: "Status changed",
-        sync_titol: "📊 Synchronization Summary",
-        sync_subtitol: "Integration status between Programming, Planner and Student Sheet.",
-        sync_estat_integracio: "🔗 Integration Status",
-        sync_sessions_sincro: "Synchronized sessions",
-        sync_accions_prof: "Teacher actions",
-        sync_carregues_alumnes: "Student loads",
-        sync_total_accions: "Total actions in log",
-        sync_ultima_act: "📅 Last update:",
-        sync_sense: "ℹ️ No synchronizations yet",
-        sync_sense_text: "Open the <strong>Session Planner</strong> and click \"🔄 Update session\" on any session to start synchronization with student sheets.",
-        sync_log_compartit: "📜 Shared Actions Log",
-        sync_sense_accions: "No actions recorded in the shared log.",
-        sync_mostrant: "Showing the 30 most recent actions of",
-        sync_totals: "total. See the full log in the Planner.",
-        backup_fitxer_prefix: "BACKUP_planner_"
-    }
+const KEY='planificador_celia_v1';
+const I18N={
+ca:{t1:"Planificador de sessions · Fisiologia",t2:"Cèlia Painous Martí · Fisiologia aplicada a la dansa · 2026-27",
+openStu:"👩‍🎓 Fitxa de l'alumne",bNew:"＋ Afegeix sessió",bExpStu:"⬇ Exporta per a l'alumnat",bExp:"💾 Exporta còpia",bImp:"📂 Importa còpia",bPrint:"🖨 Imprimeix",
+saved:"Desat",fltAll:"Totes les activitats",stPlan:"Prevista",stDone:"Feta",stPause:"En pausa",stDrop:"Descartada",
+fDate:"Data",fTopic:"Tema de la sessió",objTitle:"Objectius de la sessió",actTitle:"Activitats a desenvolupar",resTitle:"Recursos online (1 per línia)",avTitle:"Mitjans audiovisuals",compTitle:"Treball complementari",evTitle:"Evidències de la sessió",
+visStudent:"👁 Visible per l'alumnat",addAct:"Afegeix activitat",addLine:"Afegeix línia",del:"Esborra",delSes:"Esborra la sessió",
+noLectiva:"No lectiu",noTopic:"(sense títol)",noActs:"Encara no hi ha activitats.",noItems:"Encara no hi ha elements.",
+phAct:"Descripció de l'activitat",phTime:"Horari (ex. 10:00–11:30)",phObj:"Un objectiu per línia o text lliure…",phComp:"Què ha de treballar l'alumnat fora de l'aula…",phEv:"Quadern, registre, producte…",phRes:"Títol + enllaç (https://…)",phAv:"Vídeo, presentació, àudio… (+ enllaç si n'hi ha)",
+cActs:"Activitats",cVis:"visibles",cRes:"Recursos",cLinks:"Enllaços",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+confirmDelSes:"Esborrar aquesta sessió i tot el seu contingut?",confirmImp:"Importar substituirà el pla actual. Continuar?",
+studentNote:"Fitxer per a l'alumnat generat. Envia'l perquè l'importin a la seva Fitxa de l'alumne.",
+filterHint:"Estat: prevista / feta / en pausa / descartada. El filtre superior amaga o mostra les activitats segons l'estat."},
+es:{t1:"Planificador de sesiones · Fisiología",t2:"Cèlia Painous Martí · Fisiología aplicada a la danza · 2026-27",
+openStu:"👩‍🎓 Ficha del alumnado",bNew:"＋ Añadir sesión",bExpStu:"⬇ Exportar para el alumnado",bExp:"💾 Exportar copia",bImp:"📂 Importar copia",bPrint:"🖨 Imprimir",
+saved:"Guardado",fltAll:"Todas las actividades",stPlan:"Prevista",stDone:"Hecha",stPause:"En pausa",stDrop:"Descartada",
+fDate:"Fecha",fTopic:"Tema de la sesión",objTitle:"Objetivos de la sesión",actTitle:"Actividades a desarrollar",resTitle:"Recursos online (1 por línea)",avTitle:"Medios audiovisuales",compTitle:"Trabajo complementario",evTitle:"Evidencias de la sesión",
+visStudent:"👁 Visible para el alumnado",addAct:"Añadir actividad",addLine:"Añadir línea",del:"Borrar",delSes:"Borrar la sesión",
+noLectiva:"No lectivo",noTopic:"(sin título)",noActs:"Todavía no hay actividades.",noItems:"Todavía no hay elementos.",
+phAct:"Descripción de la actividad",phTime:"Horario (ej. 10:00–11:30)",phObj:"Un objetivo por línea o texto libre…",phComp:"Qué debe trabajar el alumnado fuera del aula…",phEv:"Cuaderno, registro, producto…",phRes:"Título + enlace (https://…)",phAv:"Vídeo, presentación, audio… (+ enlace si lo hay)",
+cActs:"Actividades",cVis:"visibles",cRes:"Recursos",cLinks:"Enlaces",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+confirmDelSes:"¿Borrar esta sesión y todo su contenido?",confirmImp:"Importar sustituirá el plan actual. ¿Continuar?",
+studentNote:"Archivo para el alumnado generado. Envíalo para que lo importen en su Ficha.",
+filterHint:"Estado: prevista / hecha / en pausa / descartada. El filtro superior oculta o muestra las actividades según el estado."},
+en:{t1:"Session planner · Physiology",t2:"Cèlia Painous Martí · Physiology Applied to Dance · 2026-27",
+openStu:"👩‍🎓 Student sheet",bNew:"＋ Add session",bExpStu:"⬇ Export for students",bExp:"💾 Export backup",bImp:"📂 Import backup",bPrint:"🖨 Print",
+saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
+fDate:"Date",fTopic:"Session topic",objTitle:"Session objectives",actTitle:"Activities to carry out",resTitle:"Online resources (1 per line)",avTitle:"Audiovisual media",compTitle:"Complementary work",evTitle:"Session evidence",
+visStudent:"👁 Visible to students",addAct:"Add activity",addLine:"Add line",del:"Delete",delSes:"Delete session",
+noLectiva:"Non-teaching",noTopic:"(untitled)",noActs:"No activities yet.",noItems:"No items yet.",
+phAct:"Activity description",phTime:"Time slot (e.g. 10:00–11:30)",phObj:"One objective per line or free text…",phComp:"What students must work on outside class…",phEv:"Notebook, record, product…",phRes:"Title + link (https://…)",phAv:"Video, slides, audio… (+ link if any)",
+cActs:"Activities",cVis:"visible",cRes:"Resources",cLinks:"Links",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+confirmDelSes:"Delete this session and all its content?",confirmImp:"Importing will replace the current plan. Continue?",
+studentNote:"Student file generated. Send it so they can import it into their Student Sheet.",
+filterHint:"Status: planned / done / on hold / discarded. The top filter shows or hides activities by status."}};
+
+let lang=localStorage.getItem(KEY+'L')||'ca';
+let filter='all';
+let plan=loadPlan();
+const EXP=new Set();
+
+const $=s=>document.querySelector(s);
+const t=k=>I18N[lang][k]||k;
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function S(date,topic,nl){return{id:uid(),date:date,topic:topic,noLectiva:!!nl,objVis:true,obj:'',acts:[],res:[],av:[],compVis:true,comp:'',evVis:true,ev:''};}
+function seed(){return{v:1,sessions:[
+ S('2026-10-09','Presentació. Homeòstasi i fisiologia cel·lular'),
+ S('2026-10-16','Sistema musculoesquelètic I'),
+ S('2026-10-23','Sistema musculoesquelètic II'),
+ S('2026-10-30','Festiu de lliure disposició CSD',true),
+ S('2026-11-06','Sistema nerviós I'),
+ S('2026-11-13','Preparació i enviament de treballs orals'),
+ S('2026-11-20','Sistema nerviós II / Son'),
+ S('2026-11-27','Presentacions de treballs orals / La sang'),
+ S('2026-12-04','Sistema hormonal'),
+ S('2026-12-11','Nutrició (nutricionista + pràctica)'),
+ S('2026-12-18','Avaluació parcial'),
+ S('2027-01-08','Aparell cardiovascular'),
+ S('2027-01-15','Aparell respiratori'),
+ S('2027-01-22','Examen final')
+]};}
+function norm(Sx){
+ Sx.acts=(Sx.acts||[]).map(a=>({id:a.id||uid(),txt:a.txt||'',time:a.time||'',vis:a.vis!==false,st:a.st||'plan'}));
+ Sx.res=(Sx.res||[]).map(r=>({id:r.id||uid(),txt:r.txt||'',vis:r.vis!==false}));
+ Sx.av=(Sx.av||[]).map(v=>({id:v.id||uid(),txt:v.txt||'',vis:v.vis!==false}));
+ Sx.objVis=Sx.objVis!==false;Sx.compVis=Sx.compVis!==false;Sx.evVis=Sx.evVis!==false;
+ return Sx;
+}
+function loadPlan(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.sessions){d.sessions=d.sessions.map(norm);return d;}}catch(e){}return seed();}
+function save(){localStorage.setItem(KEY,JSON.stringify(plan));$('#savestate').textContent=t('saved')+' · '+new Date().toLocaleTimeString();}
+let tm;function scheduleSave(){clearTimeout(tm);tm=setTimeout(save,500);}
+window.addEventListener('beforeunload',save);
+
+function fmt(iso){if(!iso)return'—';try{return new Date(iso+'T12:00:00').toLocaleDateString(lang==='ca'?'ca-ES':lang==='es'?'es-ES':'en-GB',{day:'2-digit',month:'short',year:'2-digit'});}catch(e){return iso;}}
+function toast(m){const x=$('#toast');x.textContent=m;x.classList.add('show');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('show'),2600);}
+
+function counts(Sx){
+ return{at:Sx.acts.length,av:Sx.acts.filter(a=>a.vis).length,
+  rt:Sx.res.length,rv:Sx.res.filter(r=>r.vis).length,
+  vt:Sx.av.length,vv:Sx.av.filter(v=>v.vis).length,
+  links:[...Sx.res,...Sx.av].filter(x=>/https?:\/\//i.test(x.txt)).length,
+  comp:Sx.comp.trim()?1:0,ev:Sx.ev.trim()?1:0};
+}
+function countsHTML(c){return `${t('cActs')} ${c.at} · ${t('cVis')} ${c.av} · ${t('cRes')} ${c.rt} · ${t('cLinks')} ${c.links} · ${t('cAv')} ${c.vt} · ${t('cComp')} ${c.comp?'✔':'—'} · ${t('cEv')} ${c.ev?'✔':'—'}`;}
+function metaHTML(Sx){return `<b>${fmt(Sx.date)}</b><span class="topic">${esc(Sx.topic)||t('noTopic')}</span>${Sx.noLectiva?`<span class="badge nlb">${t('noLectiva')}</span>`:''}`;}
+
+function actRow(a){return `<div class="row act st-${a.st}" data-st="${a.st}">
+<input type="text" data-aid="${a.id}" data-k="txt" value="${esc(a.txt)}" placeholder="${t('phAct')}">
+<input type="text" class="time" data-aid="${a.id}" data-k="time" value="${esc(a.time)}" placeholder="${t('phTime')}">
+<label class="chk" title="${t('visStudent')}"><input type="checkbox" data-aid="${a.id}" data-k="vis" ${a.vis?'checked':''}>👁</label>
+<select class="st" data-aid="${a.id}" data-k="st">
+ <option value="plan"${a.st==='plan'?' selected':''}>${t('stPlan')}</option>
+ <option value="done"${a.st==='done'?' selected':''}>${t('stDone')}</option>
+ <option value="pause"${a.st==='pause'?' selected':''}>${t('stPause')}</option>
+ <option value="drop"${a.st==='drop'?' selected':''}>${t('stDrop')}</option>
+</select>
+<button class="del" data-del-act="${a.id}" title="${t('del')}">✕</button></div>`;}
+function resRow(r){return `<div class="row mini-row">
+<input type="text" data-rid="${r.id}" data-k="txt" value="${esc(r.txt)}" placeholder="${t('phRes')}">
+<label class="chk"><input type="checkbox" data-rid="${r.id}" data-k="vis" ${r.vis?'checked':''}>👁</label>
+<button class="del" data-del-res="${r.id}" title="${t('del')}">✕</button></div>`;}
+function avRow(v){return `<div class="row mini-row">
+<input type="text" data-vid="${v.id}" data-k="txt" value="${esc(v.txt)}" placeholder="${t('phAv')}">
+<label class="chk"><input type="checkbox" data-vid="${v.id}" data-k="vis" ${v.vis?'checked':''}>👁</label>
+<button class="del" data-del-av="${v.id}" title="${t('del')}">✕</button></div>`;}
+function block(title,visKey,visVal,inner){return `<div class="sect"><div class="secth"><h3>${title}</h3>
+<label class="chk"><input type="checkbox" data-f="${visKey}" ${visVal?'checked':''}>${t('visStudent')}</label></div>${inner}</div>`;}
+
+function cardHTML(Sx){
+ const c=counts(Sx),open=EXP.has(Sx.id);
+ return `<section class="card ${Sx.noLectiva?'nl':''}" id="c-${Sx.id}" data-sid="${Sx.id}">
+ <div class="chead" data-toggle="${Sx.id}">
+   <button class="tw" tabindex="-1">${open?'▾':'▸'}</button>
+   <div class="cmeta">${metaHTML(Sx)}</div>
+   <div class="ccounts" id="k-${Sx.id}">${countsHTML(c)}</div>
+   <button class="del ses" data-del-ses="${Sx.id}" title="${t('delSes')}">🗑</button>
+ </div>
+ ${open?`<div class="sbody">
+  <div class="grid2">
+   <label class="fld"><span>${t('fDate')}</span><input type="date" data-f="date" value="${Sx.date||''}"></label>
+   <label class="fld"><span>${t('fTopic')}</span><input type="text" data-f="topic" value="${esc(Sx.topic)}"></label>
+  </div>
+  ${block(t('objTitle'),'objVis',Sx.objVis,`<textarea rows="3" data-f="obj" placeholder="${t('phObj')}">${esc(Sx.obj)}</textarea>`)}
+  <div class="sect"><div class="secth"><h3>${t('actTitle')}</h3>
+   <button class="add" data-add="acts">＋ ${t('addAct')}</button></div>
+   <div class="rows" data-list="acts">${Sx.acts.map(actRow).join('')||`<p class="hint">${t('noActs')}</p>`}</div>
+   <p class="hint">${t('filterHint')}</p></div>
+  <div class="sect"><div class="secth"><h3>${t('resTitle')}</h3><button class="add" data-add="res">＋ ${t('addLine')}</button></div>
+   <div class="rows">${Sx.res.map(resRow).join('')||`<p class="hint">${t('noItems')}</p>`}</div></div>
+  <div class="sect"><div class="secth"><h3>${t('avTitle')}</h3><button class="add" data-add="av">＋ ${t('addLine')}</button></div>
+   <div class="rows">${Sx.av.map(avRow).join('')||`<p class="hint">${t('noItems')}</p>`}</div></div>
+  ${block(t('compTitle'),'compVis',Sx.compVis,`<textarea rows="2" data-f="comp" placeholder="${t('phComp')}">${esc(Sx.comp)}</textarea>`)}
+  ${block(t('evTitle'),'evVis',Sx.evVis,`<textarea rows="2" data-f="ev" placeholder="${t('phEv')}">${esc(Sx.ev)}</textarea>`)}
+ </div>`:''}</section>`;
+}
+
+function render(){
+ const y=window.scrollY;
+ $('#main').innerHTML=plan.sessions.map(cardHTML).join('');
+ document.querySelectorAll('.row.act').forEach(applyRowFilter);
+ window.scrollTo(0,y);
+ applyStatic();
+}
+function renderCard(Sx){const el=document.getElementById('c-'+Sx.id);if(el)el.outerHTML=cardHTML(Sx);document.querySelectorAll(`#c-${Sx.id} .row.act`).forEach(applyRowFilter);applyStatic();}
+function applyRowFilter(row){row.style.display=(filter==='all'||row.dataset.st===filter)?'':'none';}
+function updateCounts(Sx){const k=document.getElementById('k-'+Sx.id);if(k)k.textContent=countsHTML(counts(Sx));}
+
+function applyStatic(){
+ const d=I18N[lang];
+ $('#t1').textContent='🗂 '+d.t1;$('#t2').textContent=d.t2;
+ $('#lnkStu').textContent=d.openStu;$('#bNew').textContent=d.bNew;
+ $('#bExpStu').textContent=d.bExpStu;$('#bExp').textContent=d.bExp;$('#bImp').textContent=d.bImp;$('#bPrint').textContent=d.bPrint;
+ $('#flt').innerHTML=`<option value="all">${d.fltAll}</option><option value="plan">${d.stPlan}</option><option value="done">${d.stDone}</option><option value="pause">${d.stPause}</option><option value="drop">${d.stDrop}</option>`;
+ $('#flt').value=filter;
+ document.querySelectorAll('#langBox button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+}
+
+/* ---- edició (delegació) ---- */
+function onEdit(e){
+ const el=e.target,card=el.closest('.card');if(!card)return;
+ const Sx=plan.sessions.find(x=>x.id===card.dataset.sid);if(!Sx)return;
+ if(el.dataset.f!==undefined){
+   const f=el.dataset.f;
+   if(['date','topic','obj','comp','ev'].includes(f))Sx[f]=el.value;
+   if(['objVis','compVis','evVis'].includes(f))Sx[f]=el.checked;
+   if(f==='date'||f==='topic')card.querySelector('.cmeta').innerHTML=metaHTML(Sx);
+ }else if(el.dataset.aid){
+   const a=Sx.acts.find(x=>x.id===el.dataset.aid);if(!a)return;const k=el.dataset.k;
+   if(k==='txt')a.txt=el.value;if(k==='time')a.time=el.value;if(k==='vis')a.vis=el.checked;
+   if(k==='st'){a.st=el.value;const row=el.closest('.row');row.dataset.st=a.st;row.className='row act st-'+a.st;applyRowFilter(row);}
+ }else if(el.dataset.rid){const r=Sx.res.find(x=>x.id===el.dataset.rid);if(!r)return;if(el.dataset.k==='txt')r.txt=el.value;else r.vis=el.checked;
+ }else if(el.dataset.vid){const v=Sx.av.find(x=>x.id===el.dataset.vid);if(!v)return;if(el.dataset.k==='txt')v.txt=el.value;else v.vis=el.checked;}
+ updateCounts(Sx);scheduleSave();
+}
+ $('#main').addEventListener('input',onEdit);
+ $('#main').addEventListener('change',onEdit);
+
+ $('#main').addEventListener('click',e=>{
+ const b=e.target.closest('button,[data-toggle]');if(!b)return;
+ if(b.dataset.toggle){const id=b.dataset.toggle;EXP.has(id)?EXP.delete(id):EXP.add(id);render();return;}
+ const card=e.target.closest('.card');if(!card)return;
+ const Sx=plan.sessions.find(x=>x.id===card.dataset.sid);if(!Sx)return;
+ if(b.dataset.add){
+   const k=b.dataset.add;
+   if(k==='acts')Sx.acts.push({id:uid(),txt:'',time:'',vis:true,st:'plan'});
+   if(k==='res')Sx.res.push({id:uid(),txt:'',vis:true});
+   if(k==='av')Sx.av.push({id:uid(),txt:'',vis:true});
+   renderCard(Sx);scheduleSave();
+ }else if(b.dataset.delAct){Sx.acts=Sx.acts.filter(x=>x.id!==b.dataset.delAct);renderCard(Sx);scheduleSave();}
+ else if(b.dataset.delRes){Sx.res=Sx.res.filter(x=>x.id!==b.dataset.delRes);renderCard(Sx);scheduleSave();}
+ else if(b.dataset.delAv){Sx.av=Sx.av.filter(x=>x.id!==b.dataset.delAv);renderCard(Sx);scheduleSave();}
+ else if(b.dataset.delSes){if(confirm(t('confirmDelSes'))){plan.sessions=plan.sessions.filter(x=>x.id!==b.dataset.delSes);render();scheduleSave();}}
+});
+
+/* ---- barra ---- */
+ $('#langBox').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;lang=b.dataset.lang;localStorage.setItem(KEY+'L',lang);render();});
+ $('#flt').addEventListener('change',e=>{filter=e.target.value;document.querySelectorAll('.row.act').forEach(applyRowFilter);});
+ $('#bNew').onclick=()=>{const s=S('','');plan.sessions.push(s);EXP.add(s.id);render();scheduleSave();document.getElementById('c-'+s.id).scrollIntoView({behavior:'smooth'});};
+ $('#bPrint').onclick=()=>{plan.sessions.forEach(s=>EXP.add(s.id));render();setTimeout(()=>window.print(),150);};
+function download(name,txt){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.download=name;a.click();}
+ $('#bExp').onclick=()=>download('planificador-copia.json',JSON.stringify(plan,null,1));
+ $('#bExpStu').onclick=()=>{
+ const data={app:'fitxa-alumne',generated:new Date().toISOString(),sessions:plan.sessions.map(Sx=>({
+  date:Sx.date,topic:Sx.topic,noLectiva:Sx.noLectiva,
+  obj:Sx.objVis?Sx.obj:'',
+  acts:Sx.acts.filter(a=>a.vis&&a.st!=='drop').map(a=>({txt:a.txt,time:a.time})),
+  res:Sx.res.filter(r=>r.vis).map(r=>({txt:r.txt})),
+  av:Sx.av.filter(v=>v.vis).map(v=>({txt:v.txt})),
+  comp:Sx.compVis?Sx.comp:'',ev:Sx.evVis?Sx.ev:''}))};
+ download('fitxa-alumne-dades.json',JSON.stringify(data,null,1));
+ toast(t('studentNote'));
 };
+ $('#bImp').onclick=()=>$('#fImp').click();
+ $('#fImp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+ r.onload=ev=>{try{const j=JSON.parse(ev.target.result);
+   if(j.sessions){if(confirm(t('confirmImp'))){plan={v:1,sessions:j.sessions.map(norm)};render();save();}}
+   else toast('JSON no vàlid');
+ }catch(x){toast('JSON no vàlid');}};
+ r.readAsText(f);e.target.value='';};
 
-// MOTOR DE TRADUCCIÓ
-function aplicarIdioma(lang) {
-    localStorage.setItem('idioma_preferit', lang);
-    document.documentElement.lang = lang;
-    const selector = document.getElementById('selectorIdioma');
-    if (selector) selector.value = lang;
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const clau = el.getAttribute('data-i18n');
-        if (diccionario[lang] && diccionario[lang][clau]) {
-            el.innerHTML = diccionario[lang][clau];
-        }
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const clau = el.getAttribute('data-i18n-placeholder');
-        if (diccionario[lang] && diccionario[lang][clau]) {
-            el.placeholder = diccionario[lang][clau];
-        }
-    });
-    // Re-renderitzar per aplicar traduccions a contingut dinàmic
-    if (typeof renderitzar === 'function' && document.getElementById('sesionesContainer')) {
-        renderitzar();
-        renderizarLog();
-    }
-}
-
-function t(key) {
-    const lang = localStorage.getItem('idioma_preferit') || 'ca';
-    return (diccionario[lang] && diccionario[lang][key]) || (diccionario.ca[key]) || key;
-}
-
-// ==========================================
-// CONFIGURACIÓ
-// ==========================================
-const STORAGE_KEY = 'planificadorSesiones';
-const HISTORY_KEY = 'planificadorHistorial';
-const SHARED_KEY = 'fisiologiaSharedData';
-const MAX_HISTORY = 20;
-
-let state = { sesiones: [] };
-let filtroActual = 'todas';
-let actividadesTemp = [];
-
-// ==========================================
-// DADES INICIALS (14 sessions)
-// ==========================================
-const datosIniciales = {
-    sesiones: [
-        { id: 'ses-1', fecha: '2026-10-09', horario: '12:00 - 15:00 (3h)', titulo: 'Presentación. Homeostasis y Fisiología celular', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Comprender los niveles de organización del cuerpo humano, los líquidos corporales y los mecanismos de homeostasis durante el movimiento.', actividades: [{ tiempo: '12:00-12:30', descripcion: 'Presentación de la asignatura, profesora y metodología. Entrega de la guía de recursos.', descripcionAlumno: 'Presentación de la asignatura y entrega de materiales', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '12:30-13:30', descripcion: 'Niveles de organización del cuerpo humano. Líquidos intra y extracelular. Variables del medio interno.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-14:30', descripcion: 'Homeostasis: definición, rangos fisiológicos, sistemas de regulación (nervioso y endocrino).', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '14:30-15:00', descripcion: 'Retroalimentación negativa y positiva. Homeostasis en el movimiento. Actividad interactiva con recursos HTML.', descripcionAlumno: 'Actividad interactiva: retroalimentación y homeostasis en el movimiento', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html','https://jpainous.github.io/dansa_tema03/esqueleto_00_A.html'], trabajoPrevio: 'Ninguno (primera sesión).', trabajoComplementario: 'Explorar el recurso "homeostasis_movimiento.html" y resolver los 10 casos prácticos del Bloque 1 en casos_practicos02_A.html.', medios: ['Proyector', 'Ordenador', 'Pizarra digital'], observaciones: '' },
-        { id: 'ses-2', fecha: '2026-10-16', horario: '12:00 - 15:00 (3h)', titulo: 'Sistema musculoesquelético I', estado: 'previsto', espacio: 'ambos', objetivos: 'Conocer la estructura muscular desde la fibra hasta el sarcómero, el mecanismo de contracción y los tipos de contracción aplicados a la danza.', actividades: [{ tiempo: '12:00-12:15', descripcion: 'Repaso de la sesión anterior y dudas.', descripcionAlumno: 'Repaso y resolución de dudas', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '12:15-13:15', descripcion: 'Tipos de músculos. Estructura muscular: fibra, miofibrilla, sarcómero, miofilamentos (actina y miosina).', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:15-13:30', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:30-14:15', descripcion: 'Unidad motora. Mecanismo de contracción: papel del calcio y ATP. Ciclo de la miosina.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '14:15-15:00', descripcion: 'Tipos de contracción (concéntrica, excéntrica, isométrica). Práctica en aula de prácticas: análisis de un plié y un relevé.', descripcionAlumno: 'Práctica: análisis de un plié y un relevé en el aula de prácticas', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/actividades_sarcomero.html','https://jpainous.github.io/dansa_tema03/miosina_actina.html','https://jpainous.github.io/dansa_tema03/calcio_atp.html','https://jpainous.github.io/dansa_tema03/contraccion_muscular.html','https://jpainous.github.io/dansa_tema03/unidad_motora.html'], trabajoPrevio: 'Repasar el recurso "homeostasis_movimiento.html" y completar los casos del Bloque 1.', trabajoComplementario: 'Resolver los Bloques 2 y 3 de casos_practicos02_A.html.', medios: ['Proyector', 'Ordenador', 'Pizarra digital', 'Altavoces', 'Vídeos'], observaciones: '' },
-        { id: 'ses-3', fecha: '2026-10-23', horario: '12:00 - 15:00 (3h)', titulo: 'Sistema musculoesquelético II', estado: 'previsto', espacio: 'ambos', objetivos: 'Identificar los componentes de la cadena biomecánica, clasificar los huesos, comprender la remodelación ósea y analizar los planos de movimiento.', actividades: [{ tiempo: '12:00-12:15', descripcion: 'Repaso rápido de la sesión anterior.', descripcionAlumno: 'Repaso', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '12:15-13:00', descripcion: 'Cadena biomecánica: músculo, tendón, hueso, articulación, ligamento.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Clasificación ósea y partes del hueso largo. Histología y remodelación ósea (Ley de Wolff).', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '14:00-14:30', descripcion: 'Articulaciones y fisiología del cartílago.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '14:30-15:00', descripcion: 'Planos de movimiento y propiocepción. Práctica: identificar planos en gestos de danza.', descripcionAlumno: 'Práctica: identificar planos de movimiento en gestos de danza', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_01_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_02_A.html','https://jpainous.github.io/dansa_tema03/esqueleto_03_D.html','https://jpainous.github.io/dansa_tema03/esqueleto_04_tendones.html','https://jpainous.github.io/dansa_tema03/esqueleto_05_articulaciones_A.html','https://jpainous.github.io/dansa_tema03/planos_movimiento.html'], trabajoPrevio: 'Completar los Bloques 2 y 3 de casos_practicos02_A.html.', trabajoComplementario: 'Resolver el Bloque 5 de casos_practicos02_B.html (huesos). Empezar a pensar en el trabajo oral.', medios: ['Proyector', 'Ordenador', 'Pizarra digital', 'Material anatómico'], observaciones: '' },
-        { id: 'ses-4', fecha: '2026-10-30', horario: 'Festivo CSD', titulo: 'Festivo (Libre disposición CSD)', estado: 'descartado', espacio: 'aula_ordinaria', objetivos: '', actividades: [], recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_A.html'], trabajoPrevio: '', trabajoComplementario: 'Aprovechar para avanzar con los casos prácticos y repasar los temas 1-3.', medios: [], observaciones: 'Día festivo. No hay clase presencial.' },
-        { id: 'ses-5', fecha: '2026-11-06', horario: '12:00 - 15:00 (3h)', titulo: 'Sistema nervioso I', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Comprender la organización del sistema nervioso y su relación con la unidad motora y el control del movimiento.', actividades: [{ tiempo: '12:00-12:30', descripcion: 'Introducción al sistema nervioso: organización general.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '12:30-13:30', descripcion: 'Neurona, sinapsis, neurotransmisores. Relación con la unidad motora ya estudiada.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Sistema nervioso central y periférico. Control voluntario del movimiento.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }], recursos: ['https://jpainous.github.io/dansa_tema03/unidad_motora.html'], trabajoPrevio: 'Repasar la unidad motora y el mecanismo de contracción.', trabajoComplementario: 'Preparar preguntas para la siguiente sesión. Avanzar con casos_practicos02_B.html.', medios: ['Proyector', 'Ordenador', 'Pizarra digital'], observaciones: 'Tema en desarrollo. Pendiente de crear recursos HTML específicos.' },
-        { id: 'ses-6', fecha: '2026-11-13', horario: '12:00 - 15:00 (3h)', titulo: 'Preparación y envío de trabajos orales', estado: 'previsto', espacio: 'aula_practicas', objetivos: 'Tutorizar el trabajo grupal de análisis fisiológico de una secuencia de danza.', actividades: [{ tiempo: '12:00-12:30', descripcion: 'Explicación detallada del trabajo oral: criterios, rúbrica, fecha de presentación.', descripcionAlumno: 'Explicación del trabajo oral: criterios y fecha de presentación', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '12:30-13:30', descripcion: 'Formación de grupos. Elección de la secuencia de danza a analizar.', descripcionAlumno: 'Formación de grupos y elección de la secuencia', visibleAlumno: true, tipo: 'practica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Trabajo en grupos: análisis inicial de la secuencia con los recursos HTML disponibles. Tutorización individualizada.', descripcionAlumno: 'Trabajo en grupos: análisis de la secuencia con los recursos HTML', visibleAlumno: true, tipo: 'practica' }, { tiempo: '15:00-15:30', descripcion: 'Revisión interna de los grupos formados y ajustes (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }], recursos: ['https://jpainous.github.io/dansa_tema03/musculos_tr_equipo.html','https://jpainous.github.io/dansa_tema03/trabajo_musculos.html','https://jpainous.github.io/dansa_tema03/planos_movimiento.html'], trabajoPrevio: 'Haber completado los casos prácticos de los Bloques 1-4.', trabajoComplementario: 'Cada grupo debe avanzar con su análisis durante la semana. Preparar un borrador de la presentación.', medios: ['Proyector', 'Ordenador', 'Pizarra digital', 'Altavoces'], observaciones: 'Sesión muy práctica. Importante dedicar tiempo a la tutorización de cada grupo.' },
-        { id: 'ses-7', fecha: '2026-11-20', horario: '12:00 - 15:00 (3h)', titulo: 'Sistema nervioso II / Sueño', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Comprender la recuperación homeostática y el papel del sueño en el rendimiento del bailarín.', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Sistema nervioso autónomo: simpático y parasimpático. Respuesta al esfuerzo.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Fases del sueño y su importancia en la recuperación muscular y el aprendizaje motor.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Aplicación a la danza: rendimiento, prevención de lesiones, gestión del ensayo y la función.', descripcionAlumno: 'Aplicación a la danza: rendimiento y prevención de lesiones', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'], trabajoPrevio: 'Repasar los conceptos de homeostasis y sistema nervioso.', trabajoComplementario: 'Reflexionar sobre los propios hábitos de sueño y recuperación. Preparar las presentaciones orales.', medios: ['Proyector', 'Ordenador', 'Pizarra digital'], observaciones: 'Tema en desarrollo. Pendiente de crear recursos HTML específicos.' },
-        { id: 'ses-8', fecha: '2026-11-27', horario: '12:00 - 15:00 (3h)', titulo: 'Presentaciones Trabajos Orales / La sangre', estado: 'previsto', espacio: 'ambos', objetivos: 'Evaluar la capacidad de análisis fisiológico aplicado a la danza. Introducción al sistema cardiovascular.', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Presentaciones orales de los grupos (10-15 min por grupo + preguntas).', descripcionAlumno: 'Presentaciones orales de los grupos', visibleAlumno: true, tipo: 'evaluacion' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Introducción a la sangre: composición, funciones, relación con el transporte de O₂ y CO₂ durante el esfuerzo.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '15:00-15:30', descripcion: 'Rellenar rúbrica de evaluación de cada grupo (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }], recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_B.html'], trabajoPrevio: 'Tener preparada la presentación oral del grupo.', trabajoComplementario: 'Preparar la evaluación parcial del 18 de diciembre. Repasar los temas 1-3.', medios: ['Proyector', 'Ordenador', 'Altavoces'], observaciones: 'Sesión de evaluación. Importante crear un ambiente de respeto y escucha activa.' },
-        { id: 'ses-9', fecha: '2026-12-04', horario: '12:00 - 15:00 (3h)', titulo: 'Sistema Hormonal', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Comprender el papel de las hormonas en la adaptación al ejercicio y la remodelación ósea.', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Introducción al sistema endocrino: hormonas principales y su regulación.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Hormonas relacionadas con el ejercicio: adrenalina, cortisol, hormona del crecimiento.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Relación con la remodelación ósea y la adaptación muscular. Retroalimentación hormonal.', descripcionAlumno: 'Relación entre hormonas, hueso y músculo', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_03_E.html'], trabajoPrevio: 'Repasar los conceptos de retroalimentación y remodelación ósea.', trabajoComplementario: 'Seguir preparando la evaluación parcial.', medios: ['Proyector', 'Ordenador', 'Pizarra digital'], observaciones: 'Tema en desarrollo. Pendiente de crear recursos HTML específicos.' },
-        { id: 'ses-10', fecha: '2026-12-11', horario: '12:00 - 15:00 (3h)', titulo: 'Nutrición (nutricionista + práctica)', estado: 'previsto', espacio: 'ambos', objetivos: 'Comprender la importancia de la nutrición para el rendimiento del bailarín y la recuperación.', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Sesión con nutricionista invitado/a: necesidades nutricionales del bailarín, hidratación, recuperación.', descripcionAlumno: 'Sesión con nutricionista invitado/a', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Actividad práctica: análisis de menús, relación con la homeostasis de la glucosa y la recuperación muscular.', descripcionAlumno: 'Práctica: análisis de menús y su relación con la homeostasis', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'], trabajoPrevio: 'Reflexionar sobre los propios hábitos alimentarios.', trabajoComplementario: 'Preparar la evaluación parcial del 18 de diciembre.', medios: ['Proyector', 'Ordenador', 'Altavoces'], observaciones: 'Confirmar asistencia del nutricionista invitado.' },
-        { id: 'ses-11', fecha: '2026-12-18', horario: '12:00 - 15:00 (3h)', titulo: 'EVALUACIÓN PARCIAL', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Evaluar los conocimientos adquiridos sobre homeostasis, sistema muscular y sistema óseo/articular.', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Prueba escrita individual: preguntas teóricas y casos prácticos aplicados a la danza.', descripcionAlumno: 'Prueba escrita individual', visibleAlumno: true, tipo: 'evaluacion' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta de la prueba. Resolución de dudas. Feedback individualizado.', descripcionAlumno: 'Corrección conjunta y feedback', visibleAlumno: true, tipo: 'practica' }, { tiempo: '15:00-16:00', descripcion: 'Introducción de notas en el cuaderno de evaluación y revisión de rúbricas (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }], recursos: ['https://jpainous.github.io/dansa_tema03/casos_practicos02_A.html','https://jpainous.github.io/dansa_tema03/casos_practicos02_B.html'], trabajoPrevio: 'Repasar todos los temas vistos hasta ahora (1-10). Resolver los casos prácticos pendientes.', trabajoComplementario: 'Disfrutar de las vacaciones de Navidad. Descanso merecido.', medios: ['Proyector', 'Ordenador'], observaciones: 'Preparar la prueba con antelación. Incluir preguntas de los Bloques 1-7 de los casos prácticos.' },
-        { id: 'ses-12', fecha: '2027-01-08', horario: '12:00 - 15:00 (3h)', titulo: 'Aparato Cardiovascular', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Comprender el transporte de O₂ y CO₂ durante el esfuerzo y su relación con la homeostasis.', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Estructura del corazón y vasos sanguíneos. El corazón como bomba.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Circulación mayor y menor. Transporte de O₂ y CO₂.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Adaptaciones cardiovasculares al ejercicio. Relación con la danza y el rendimiento.', descripcionAlumno: 'Adaptaciones cardiovasculares al ejercicio y la danza', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'], trabajoPrevio: 'Repasar los conceptos de homeostasis y sistema hormonal.', trabajoComplementario: 'Avanzar con la lectura del tema de aparato respiratorio.', medios: ['Proyector', 'Ordenador', 'Pizarra digital'], observaciones: 'Tema en desarrollo. Pendiente de crear recursos HTML específicos.' },
-        { id: 'ses-13', fecha: '2027-01-15', horario: '12:00 - 15:00 (3h)', titulo: 'Aparato Respiratorio', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Comprender el intercambio gaseoso y su relación con el pH sanguíneo y el rendimiento del bailarín.', actividades: [{ tiempo: '12:00-13:00', descripcion: 'Estructura del aparato respiratorio. Mecánica ventilatoria.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:00-13:45', descripcion: 'Intercambio gaseoso: O₂ y CO₂. Relación con el pH sanguíneo.', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }, { tiempo: '13:45-14:00', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '14:00-15:00', descripcion: 'Adaptaciones respiratorias al ejercicio. La respiración en la danza: control y conciencia corporal.', descripcionAlumno: 'La respiración en la danza: control y conciencia corporal', visibleAlumno: true, tipo: 'practica' }], recursos: ['https://jpainous.github.io/dansa_tema03/homeostasis_movimiento.html'], trabajoPrevio: 'Repasar los conceptos de aparato cardiovascular.', trabajoComplementario: 'Preparar el examen final del 22 de enero. Repasar todos los temas del curso.', medios: ['Proyector', 'Ordenador', 'Pizarra digital'], observaciones: 'Tema en desarrollo. Pendiente de crear recursos HTML específicos.' },
-        { id: 'ses-14', fecha: '2027-01-22', horario: '12:00 - 15:00 (3h)', titulo: 'EXAMEN FINAL', estado: 'previsto', espacio: 'aula_ordinaria', objetivos: 'Evaluar de forma integradora todos los conocimientos de la asignatura.', actividades: [{ tiempo: '12:00-13:30', descripcion: 'Examen final integrador: preguntas teóricas, casos prácticos y aplicación a la danza.', descripcionAlumno: 'Examen final integrador', visibleAlumno: true, tipo: 'evaluacion' }, { tiempo: '13:30-13:45', descripcion: 'Descanso', descripcionAlumno: 'Descanso', visibleAlumno: true, tipo: 'descanso' }, { tiempo: '13:45-15:00', descripcion: 'Corrección conjunta. Valoración global del curso. Despedida.', descripcionAlumno: 'Corrección conjunta y despedida del curso', visibleAlumno: true, tipo: 'practica' }, { tiempo: '15:00-17:00', descripcion: 'Corrección de exámenes, introducción de notas finales y cierre administrativo (solo profesora).', descripcionAlumno: '', visibleAlumno: false, tipo: 'gestion' }], recursos: ['https://jpainous.github.io/dansa_tema03/esqueleto_test_final.html'], trabajoPrevio: 'Repasar todos los temas del curso. Resolver los casos prácticos pendientes.', trabajoComplementario: '¡Disfrutar de haber completado el curso!', medios: ['Proyector', 'Ordenador'], observaciones: 'Examen integrador. Preparar con antelación usando el recurso esqueleto_test_final.html como referencia.' }
-    ]
-};
-
-// ==========================================
-// UTILITATS
-// ==========================================
-function generarId(prefijo) { return prefijo + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9); }
-
-function formatearFecha(f) {
-    if (!f) return t('sense_data') || 'Sense data';
-    const partes = f.split('-');
-    if (partes.length !== 3) return f;
-    const [y, m, d] = partes;
-    const meses_ca = ['gen','feb','mar','abr','mai','jun','jul','ago','set','oct','nov','des'];
-    const meses_es = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-    const meses_en = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const lang = localStorage.getItem('idioma_preferit') || 'ca';
-    const meses = lang === 'es' ? meses_es : (lang === 'en' ? meses_en : meses_ca);
-    const mesIdx = parseInt(m) - 1;
-    if (mesIdx < 0 || mesIdx > 11) return f;
-    return `${parseInt(d)}-${meses[mesIdx]}-${y}`;
-}
-
-function formatearFechaISO(iso) {
-    const d = new Date(iso);
-    const lang = localStorage.getItem('idioma_preferit') || 'ca';
-    return d.toLocaleDateString(lang === 'es' ? 'es-ES' : (lang === 'en' ? 'en-US' : 'ca-ES'), { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
-function extraerNombre(url) { if (!url) return 'Recurso'; const p = url.split('/'); return p[p.length - 1] || url; }
-
-function generarNombreArchivo() {
-    const fecha = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    return `${t('backup_fitxer_prefix')}${fecha}.json`;
-}
-
-function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
-    const toast = document.createElement('div');
-    toast.className = `toast ${tipo}`;
-    toast.textContent = mensaje;
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.transition = 'opacity 0.3s'; toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, duracion);
-}
-
-function getEspacioTexto(espacio) {
-    const map = { 'aula_ordinaria': t('espai_text_ordinaria'), 'aula_practicas': t('espai_text_practiques'), 'ambos': t('espai_text_ambdos') };
-    return map[espacio] || espacio;
-}
-
-function getEstadoTexto(estado) {
-    const map = { 'previsto': t('estat_text_previst'), 'realizado': t('estat_text_realitzat'), 'pausa': t('estat_text_pausa'), 'descartado': t('estat_text_descartat') };
-    return map[estado] || estado;
-}
-
-function getTipoTexto(tipo) {
-    const map = {
-        'teorica': { texto: t('tipus_teorica'), clase: 'tipo-teorica' },
-        'practica': { texto: t('tipus_practica'), clase: 'tipo-practica' },
-        'evaluacion': { texto: t('tipus_evaluacio'), clase: 'tipo-evaluacion' },
-        'descanso': { texto: t('tipus_descans'), clase: 'tipo-descanso' },
-        'gestion': { texto: t('tipus_gestio'), clase: 'tipo-gestion' }
-    };
-    return map[tipo] || { texto: tipo, clase: '' };
-}
-
-function migrarActividad(a) {
-    if (!a) return { tiempo: '', descripcion: '', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' };
-    return { tiempo: a.tiempo || '', descripcion: a.descripcion || '', descripcionAlumno: a.descripcionAlumno || '', visibleAlumno: a.visibleAlumno !== undefined ? a.visibleAlumno : true, tipo: a.tipo || 'teorica' };
-}
-
-// ==========================================
-// GESTIÓ DE L'ESTAT
-// ==========================================
-function migrarDatos(datos) {
-    if (!datos || !datos.sesiones) return null;
-    datos.sesiones = datos.sesiones.map(s => ({
-        id: s.id || generarId('ses'), fecha: s.fecha || '', horario: s.horario || '', titulo: s.titulo || '', estado: s.estado || 'previsto', espacio: s.espacio || 'aula_ordinaria', objetivos: s.objetivos || '',
-        actividades: Array.isArray(s.actividades) ? s.actividades.map(migrarActividad) : [],
-        recursos: Array.isArray(s.recursos) ? s.recursos : [], trabajoPrevio: s.trabajoPrevio || '', trabajoComplementario: s.trabajoComplementario || '', medios: Array.isArray(s.medios) ? s.medios : [], observaciones: s.observaciones || ''
-    }));
-    return datos;
-}
-
-function guardarEstado(crearBackup = true) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); if (crearBackup) crearVersionHistorial(); return true; }
-    catch (e) { console.error('Error:', e); mostrarToast(t('toast_error'), 'error'); return false; }
-}
-
-function cargarEstado() {
-    try {
-        const datos = localStorage.getItem(STORAGE_KEY);
-        if (datos) { const migrados = migrarDatos(JSON.parse(datos)); if (migrados) state = migrados; else state = JSON.parse(JSON.stringify(datosIniciales)); }
-        else { state = JSON.parse(JSON.stringify(datosIniciales)); }
-        guardarEstado(false);
-    } catch (e) { state = JSON.parse(JSON.stringify(datosIniciales)); guardarEstado(false); }
-}
-
-function restablecerEstado() {
-    const quiereBackup = confirm(t('confirm_restablir_backup'));
-    if (quiereBackup) {
-        try {
-            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = generarNombreArchivo();
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            mostrarToast(t('toast_copia'), 'success');
-        } catch (e) { console.error(e); }
-    }
-    const confirma = confirm(quiereBackup ? t('confirm_restablir') : t('confirm_restablir_sense_backup'));
-    if (confirma) {
-        state = JSON.parse(JSON.stringify(datosIniciales));
-        guardarEstado(); renderizar();
-        mostrarToast(t('toast_restablert'), 'success');
-        registrarLog('restablecer', t('log_restablert') + (quiereBackup ? ' ' + t('log_amb_copia') : ''));
-    }
-}
-
-// ==========================================
-// HISTORIAL
-// ==========================================
-function crearVersionHistorial() {
-    try {
-        let historial = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-        historial.unshift({ id: 'v-' + Date.now(), fecha: new Date().toISOString(), datos: JSON.parse(JSON.stringify(state)) });
-        if (historial.length > MAX_HISTORY) historial = historial.slice(0, MAX_HISTORY);
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(historial));
-    } catch (e) { console.error(e); }
-}
-
-function obtenerHistorial() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (e) { return []; } }
-
-function restaurarVersion(id) {
-    const h = obtenerHistorial(); const v = h.find(x => x.id === id); if (!v) return;
-    if (confirm(t('confirm_restaurar_versio'))) {
-        const m = migrarDatos(JSON.parse(JSON.stringify(v.datos)));
-        if (m) { state = m; guardarEstado(); renderizar(); mostrarToast(t('toast_versio_restaurada'), 'success'); cerrarModal('modalHistorial'); registrarLog('restaurar', `${t('log_versio_restaurada')} ${formatearFechaISO(v.fecha)} ${t('log_restaurada')}`); }
-    }
-}
-
-function eliminarVersion(id) {
-    if (!confirm(t('confirm_eliminar_versio'))) return;
-    let h = obtenerHistorial().filter(x => x.id !== id);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
-    renderizarHistorial(); mostrarToast(t('toast_versio_eliminada'), 'info');
-}
-
-function renderizarHistorial() {
-    const lista = document.getElementById('historialLista'); const h = obtenerHistorial();
-    if (h.length === 0) { lista.innerHTML = `<div class="empty-state">${t('sense_versions')}</div>`; return; }
-    lista.innerHTML = h.map((v, i) => `
-        <div class="historial-item ${i === 0 ? 'current' : ''}">
-            <div class="historial-info">
-                <div class="historial-fecha">📅 ${formatearFechaISO(v.fecha)} ${i === 0 ? `<span class="historial-badge">${t('actual')}</span>` : ''}</div>
-                <div class="historial-detalle">${v.datos.sesiones.length} ${t('sessions')}</div>
-            </div>
-            <div class="historial-actions">
-                ${i !== 0 ? `<button class="btn-restore" onclick="restaurarVersion('${v.id}')">${t('btn_restaurar')}</button>` : ''}
-                <button class="btn-delete-version" onclick="eliminarVersion('${v.id}')">🗑️</button>
-            </div>
-        </div>`).join('');
-}
-
-// ==========================================
-// SINCRONITZACIÓ I LOG
-// ==========================================
-function obtenerDatosCompartidos() { try { const d = localStorage.getItem(SHARED_KEY); if (d) return JSON.parse(d); } catch (e) {} return { sesiones: [], log: [], sesionActualizadaId: null }; }
-function guardarDatosCompartidos(d) { try { localStorage.setItem(SHARED_KEY, JSON.stringify(d)); return true; } catch (e) { return false; } }
-
-function registrarLog(accion, detalle, usuario = 'Profesora') {
-    const datos = obtenerDatosCompartidos();
-    datos.log.unshift({ id: 'log-' + Date.now(), fecha: new Date().toISOString(), accion, detalle, usuario });
-    if (datos.log.length > 200) datos.log = datos.log.slice(0, 200);
-    guardarDatosCompartidos(datos); renderizarLog();
-}
-
-function sincronizarSesion(id) {
-    const s = state.sesiones.find(x => x.id === id); if (!s) return;
-    const actVis = s.actividades.filter(a => a.visibleAlumno !== false).length;
-    const actOcultes = s.actividades.length - actVis;
-    const missatge = `${t('confirm_sincronitzar')} "${s.titulo}"?\n\n${t('confirm_sincronitzar_detall')} ${actVis} ${t('confirm_sincronitzar_visibles')}\n${actOcultes > 0 ? `• ${actOcultes} ${t('confirm_sincronitzar_ocultes')}\n` : ''}\n¿Continuar?`;
-    if (!confirm(missatge)) return;
-    const estAnt = s.estado;
-    if (s.estado === 'previsto' || s.estado === 'pausa') s.estado = 'realizado';
-    const datos = obtenerDatosCompartidos();
-    datos.sesiones = JSON.parse(JSON.stringify(state.sesiones));
-    datos.sesionActualizadaId = id;
-    datos.ultimaActualizacion = new Date().toISOString();
-    guardarDatosCompartidos(datos);
-    guardarEstado(); renderizar();
-    let det = `${t('log_sincronitzat')} "${s.titulo}" (${formatearFecha(s.fecha)}) ${t('log_actualitzada')}. ${t('log_enviades')} ${actVis} ${t('log_activitats_visibles_txt')}`;
-    if (actOcultes > 0) det += ` (${actOcultes} ${t('log_oculta')})`;
-    det += ` ${t('log_fitxa_alumne')}.`;
-    if (estAnt !== s.estado) { det += ` ${t('log_estat_canviat')}: ${getEstadoTexto(estAnt)} → ${getEstadoTexto(s.estado)}`; registrarLog('cambio_estado', det); }
-    registrarLog('sincronizacion', det);
-    mostrarToast(`${t('toast_sincronitzat')}. ${actVis} ${t('toast_sincronitzat_detall')}`, 'success');
-}
-
-function renderizarLog() {
-    const container = document.getElementById('logContainer'); if (!container) return;
-    const datos = obtenerDatosCompartidos(); const log = datos.log || [];
-    if (log.length === 0) { container.innerHTML = `<div class="log-vacio">${t('log_buit')}</div>`; return; }
-    const icones = { sincronizacion: '🔄', cambio_estado: '📊', edicion: '✏️', creacion: '➕', eliminacion: '🗑️', restablecer: '🔄', restaurar: '♻️', sincronizacion_alumno: '👨‍🎓', exportar: '📥', importar: '📤' };
-    const classes = { sincronizacion: 'log-sync', cambio_estado: 'log-state', edicion: 'log-edit', creacion: 'log-edit', eliminacion: 'log-delete', restablecer: 'log-delete', restaurar: 'log-edit', sincronizacion_alumno: 'log-alumno' };
-    container.innerHTML = log.map(l => `<div class="log-item ${classes[l.accion] || ''}"><span class="log-fecha">${formatearFechaISO(l.fecha)}</span><span class="log-contenido">${icones[l.accion] || '📝'} <strong>${l.detalle}</strong></span><span class="log-usuario">— ${l.usuario}</span></div>`).join('');
-}
-
-function netejarLog() {
-    if (!confirm(t('confirm_netejar_log'))) return;
-    const datos = obtenerDatosCompartidos(); datos.log = []; guardarDatosCompartidos(datos);
-    renderizarLog(); mostrarToast(t('toast_log_net'), 'info');
-}
-
-function exportarLog() {
-    const datos = obtenerDatosCompartidos(); const log = datos.log || [];
-    let text = 'LOG DE ACCIONES - Fisiología Aplicada a la Danza\n===========================================\n\n';
-    log.forEach(l => { text += `[${formatearFechaISO(l.fecha)}] ${l.usuario}: ${l.detalle}\n`; });
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `log_fisiologia_${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url); mostrarToast(t('toast_log_exportat'), 'success');
-}
-
-// ==========================================
-// RENDERITZAT
-// ==========================================
-function renderizar() {
-    const container = document.getElementById('sesionesContainer'); container.innerHTML = '';
-    let sesiones = state.sesiones.slice().sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
-    if (filtroActual !== 'todas') sesiones = sesiones.filter(s => s.estado === filtroActual);
-    if (sesiones.length === 0) { container.innerHTML = `<div class="empty-state">${t('sesions_amb_filtre')}</div>`; return; }
-    sesiones.forEach(s => container.appendChild(crearSesionCard(s)));
-}
-
-function crearSesionCard(s) {
-    const div = document.createElement('div');
-    div.className = `sesion-card estado-${s.estado}`;
-    div.dataset.id = s.id;
-    const totalAct = s.actividades.length;
-    const visibles = s.actividades.filter(a => a.visibleAlumno !== false).length;
-    const ocultas = totalAct - visibles;
-
-    let actHTML = '';
-    if (totalAct > 0) {
-        actHTML += `<div class="actividad-stats">👁️ <strong>${visibles}</strong> ${t('activitats_visibles_de')}${ocultas > 0 ? ` · 🔒 ${ocultas} ${t('activitats_internes')}` : ''}</div>`;
-        actHTML += '<ul class="actividades-lista">' + s.actividades.map(a => {
-            const esVis = a.visibleAlumno !== false;
-            const tipoInfo = getTipoTexto(a.tipo);
-            return `<li class="actividad-item ${esVis ? 'visible-alumno' : 'no-visible'}">
-                <span class="actividad-tiempo">${a.tiempo}</span>
-                <span class="actividad-descripcion">${a.descripcion}${a.descripcionAlumno && a.descripcionAlumno.trim().length > 0 && esVis ? `<br><small style="color:#0c5460;">👨‍🎓 <em>${t('per_alumne')}</em> ${a.descripcionAlumno}</small>` : ''}</span>
-                <div class="actividad-badges">
-                    <span class="badge-tipo ${tipoInfo.clase}">${tipoInfo.texto}</span>
-                    ${esVis ? `<span class="badge-visibilidad badge-visible">${t('visible')}</span>` : `<span class="badge-visibilidad badge-oculto">${t('ocult_professora')}</span>`}
-                </div></li>`;
-        }).join('') + '</ul>';
-    } else { actHTML = `<p style="color:#999;font-style:italic;">${t('sense_activitats')}</p>`; }
-
-    let recHTML = s.recursos.length > 0 ? '<ul class="recursos-lista">' + s.recursos.map(u => `<li><a href="${u}" target="_blank">${extraerNombre(u)}</a></li>`).join('') + '</ul>' : `<p style="color:#999;font-style:italic;">${t('sense_recursos')}</p>`;
-    let medHTML = s.medios.length > 0 ? '<div class="tags-container">' + s.medios.map(m => `<span class="tag medio">🎥 ${m}</span>`).join('') + '</div>' : `<p style="color:#999;font-style:italic;">${t('sense_mitjans')}</p>`;
-    let obsHTML = s.observaciones && s.observaciones.trim().length > 0 ? `<div class="observaciones-box"><strong>📝 ${t('lbl_observacions').replace('📝 ','')}</strong> ${s.observaciones}</div>` : '';
-
-    div.innerHTML = `
-        <div class="sesion-header" onclick="toggleSesion('${s.id}')">
-            <div class="sesion-info">
-                <span class="sesion-fecha">📅 ${formatearFecha(s.fecha)}</span>
-                ${s.horario ? `<span style="margin-left:10px;color:#666;font-size:0.9em;">🕐 ${s.horario}</span>` : ''}
-                <h3 class="sesion-titulo">${s.titulo} <span class="sesion-estado">${getEstadoTexto(s.estado)}</span></h3>
-                <div class="sesion-meta">
-                    <span class="sesion-meta-item">📍 ${getEspacioTexto(s.espacio)}</span>
-                    <span class="sesion-meta-item">📋 ${totalAct} ${t('filtro_totes').toLowerCase()}</span>
-                    <span class="sesion-meta-item">👁️ ${visibles} ${t('visible').replace('👁️ ','')}</span>
-                    <span class="sesion-meta-item">🔗 ${s.recursos.length}</span>
-                </div>
-            </div>
-            <span class="sesion-toggle">▼</span>
-        </div>
-        <div class="sesion-body">
-            ${s.objetivos ? `<div class="sesion-section"><h4>🎯 ${t('lbl_objectius').replace('🎯 ','')}</h4><p>${s.objetivos}</p></div>` : ''}
-            <div class="sesion-section"><h4>📋 ${t('lbl_activitats').replace('📋 ','')}</h4>${actHTML}</div>
-            <div class="sesion-section"><h4>🔗 ${t('lbl_recursos').replace('🔗 ','')}</h4>${recHTML}</div>
-            <div class="sesion-section"><h4>🎥 ${t('lbl_mitjans').replace('🎥 ','')}</h4>${medHTML}</div>
-            ${s.trabajoPrevio ? `<div class="sesion-section"><h4>📚 ${t('lbl_treball_previ').replace('📚 ','')}</h4><p>${s.trabajoPrevio}</p></div>` : ''}
-            ${s.trabajoComplementario ? `<div class="sesion-section"><h4>📝 ${t('lbl_treball_comp').replace('📝 ','')}</h4><p>${s.trabajoComplementario}</p></div>` : ''}
-            ${obsHTML ? `<div class="sesion-section"><h4>📝 ${t('lbl_observacions').replace('📝 ','')}</h4>${obsHTML}</div>` : ''}
-            <div class="sesion-actions no-print">
-                <button class="btn btn-edit btn-small" onclick="editarSesion('${s.id}')">${t('btn_editar')}</button>
-                <button class="btn btn-sync btn-small" onclick="sincronizarSesion('${s.id}')" title="${t('btn_actualitzar_sessio')}">${t('btn_actualitzar_sessio')}</button>
-                <button class="btn btn-delete btn-small" onclick="eliminarSesion('${s.id}')">${t('btn_eliminar')}</button>
-            </div>
-        </div>`;
-    return div;
-}
-
-function toggleSesion(id) { const c = document.querySelector(`.sesion-card[data-id="${id}"]`); if (c) c.classList.toggle('open'); }
-
-// ==========================================
-// MODAL EDICIÓ
-// ==========================================
-function addActividad() { actividadesTemp.push({ tiempo: '', descripcion: '', descripcionAlumno: '', visibleAlumno: true, tipo: 'teorica' }); renderizarActividadesEditor(); }
-function removeActividad(idx) { actividadesTemp.splice(idx, 1); renderizarActividadesEditor(); }
-function actualizarActividad(idx, campo, valor) { actividadesTemp[idx][campo] = valor; if (campo === 'visibleAlumno') renderizarActividadesEditor(); }
-
-function renderizarActividadesEditor() {
-    const editor = document.getElementById('actividadesEditor');
-    if (actividadesTemp.length === 0) { editor.innerHTML = `<p style="color:#999;font-style:italic;">${t('sense_activitats_editor')}</p>`; return; }
-    editor.innerHTML = actividadesTemp.map((a, i) => {
-        const esVis = a.visibleAlumno !== false;
-        return `<div class="actividad-editor-item ${esVis ? 'visible' : 'oculta'}">
-            <div class="actividad-editor-header">
-                <input type="text" placeholder="${t('ph_activitat_temps')}" value="${a.tiempo}" onchange="actualizarActividad(${i}, 'tiempo', this.value)">
-                <select onchange="actualizarActividad(${i}, 'tipo', this.value)">
-                    <option value="teorica" ${a.tipo === 'teorica' ? 'selected' : ''}>${t('tipus_teorica')}</option>
-                    <option value="practica" ${a.tipo === 'practica' ? 'selected' : ''}>${t('tipus_practica')}</option>
-                    <option value="evaluacion" ${a.tipo === 'evaluacion' ? 'selected' : ''}>${t('tipus_evaluacio')}</option>
-                    <option value="descanso" ${a.tipo === 'descanso' ? 'selected' : ''}>${t('tipus_descans')}</option>
-                    <option value="gestion" ${a.tipo === 'gestion' ? 'selected' : ''}>${t('tipus_gestio')}</option>
-                </select>
-                <button type="button" class="btn-remove-actividad" onclick="removeActividad(${i})">🗑️</button>
-            </div>
-            <div style="margin-bottom:10px;">
-                <label style="font-size:0.85em;color:#666;display:block;margin-bottom:4px;">${t('lbl_desc_completa')}</label>
-                <textarea style="width:100%;padding:8px;border:1px solid #e9ecef;border-radius:6px;font-family:inherit;font-size:0.9em;min-height:50px;resize:vertical;" placeholder="${t('ph_activitat_desc')}" onchange="actualizarActividad(${i}, 'descripcion', this.value)">${a.descripcion}</textarea>
-            </div>
-            <div class="actividad-visibilidad-row">
-                <input type="checkbox" id="vis-${i}" ${esVis ? 'checked' : ''} onchange="actualizarActividad(${i}, 'visibleAlumno', this.checked)">
-                <label for="vis-${i}">${t('lbl_visibilitat')}</label>
-            </div>
-            <div class="descripcion-alumno-wrapper ${esVis ? 'visible' : ''}">
-                <label>${t('lbl_desc_alumne')}</label>
-                <textarea placeholder="${t('ph_desc_alumne')}" onchange="actualizarActividad(${i}, 'descripcionAlumno', this.value)">${a.descripcionAlumno || ''}</textarea>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-function abrirModalSesion(id) {
-    const form = document.getElementById('sesionForm'); form.reset();
-    document.getElementById('sesionId').value = '';
-    document.querySelectorAll('#checkboxMedios input').forEach(cb => cb.checked = false);
-    actividadesTemp = [];
-    if (id) {
-        const s = state.sesiones.find(x => x.id === id);
-        if (s) {
-            document.getElementById('modalSesionTitle').setAttribute('data-i18n', 'modal_titol_editar');
-            document.getElementById('modalSesionTitle').textContent = t('modal_titol_editar');
-            document.getElementById('sesionId').value = s.id;
-            document.getElementById('sesionFecha').value = s.fecha;
-            document.getElementById('sesionHorario').value = s.horario;
-            document.getElementById('sesionTitulo').value = s.titulo;
-            document.getElementById('sesionEstado').value = s.estado;
-            document.getElementById('sesionEspacio').value = s.espacio;
-            document.getElementById('sesionObjetivos').value = s.objetivos;
-            document.getElementById('sesionRecursos').value = s.recursos.join('\n');
-            document.getElementById('sesionTrabajoPrevio').value = s.trabajoPrevio;
-            document.getElementById('sesionTrabajoComp').value = s.trabajoComplementario;
-            document.getElementById('sesionObservaciones').value = s.observaciones;
-            actividadesTemp = JSON.parse(JSON.stringify(s.actividades));
-            document.querySelectorAll('#checkboxMedios input').forEach(cb => { if (s.medios.includes(cb.value)) cb.checked = true; });
-        }
-    } else {
-        document.getElementById('modalSesionTitle').setAttribute('data-i18n', 'modal_titol_afegir');
-        document.getElementById('modalSesionTitle').textContent = t('modal_titol_afegir');
-    }
-    renderizarActividadesEditor(); abrirModal('modalSesion');
-}
-
-function editarSesion(id) { abrirModalSesion(id); }
-
-function eliminarSesion(id) {
-    const s = state.sesiones.find(x => x.id === id); if (!s) return;
-    if (confirm(`${t('confirm_eliminar_sessio')} "${s.titulo}"?`)) {
-        state.sesiones = state.sesiones.filter(x => x.id !== id);
-        guardarEstado(); renderizar();
-        mostrarToast(t('toast_eliminar'), 'info');
-        registrarLog('eliminacion', `${t('log_sessio_eliminada')} "${s.titulo}" (${formatearFecha(s.fecha)}) ${t('log_eliminada')}`);
-    }
-}
-
-document.getElementById('sesionForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    try {
-        const id = document.getElementById('sesionId').value;
-        const recursos = document.getElementById('sesionRecursos').value.split('\n').map(r => r.trim()).filter(r => r.length > 0);
-        const medios = Array.from(document.querySelectorAll('#checkboxMedios input:checked')).map(cb => cb.value);
-        const datos = {
-            fecha: document.getElementById('sesionFecha').value, horario: document.getElementById('sesionHorario').value,
-            titulo: document.getElementById('sesionTitulo').value.trim(), estado: document.getElementById('sesionEstado').value,
-            espacio: document.getElementById('sesionEspacio').value, objetivos: document.getElementById('sesionObjetivos').value,
-            actividades: actividadesTemp.filter(a => a.tiempo || a.descripcion).map(a => ({ tiempo: a.tiempo, descripcion: a.descripcion, descripcionAlumno: a.descripcionAlumno, visibleAlumno: a.visibleAlumno !== false, tipo: a.tipo || 'teorica' })),
-            recursos, trabajoPrevio: document.getElementById('sesionTrabajoPrevio').value, trabajoComplementario: document.getElementById('sesionTrabajoComp').value, medios, observaciones: document.getElementById('sesionObservaciones').value
-        };
-        const vis = datos.actividades.filter(a => a.visibleAlumno).length;
-        const ocu = datos.actividades.length - vis;
-        if (id) {
-            const i = state.sesiones.findIndex(x => x.id === id);
-            if (i !== -1) state.sesiones[i] = { ...state.sesiones[i], ...datos };
-            registrarLog('edicion', `${t('log_sessio_modificada')} "${datos.titulo}" (${formatearFecha(datos.fecha)}) ${t('log_modificada')}. ${vis} ${t('log_activitats_visibles')}, ${ocu} ${t('log_activitats_ocultes')}`);
-        } else {
-            state.sesiones.push({ id: generarId('ses'), ...datos });
-            registrarLog('creacion', `${t('log_sessio_modificada')} "${datos.titulo}" (${formatearFecha(datos.fecha)}) ${t('log_creada')}. ${vis} ${t('log_activitats_visibles')}, ${ocu} ${t('log_activitats_ocultes')}`);
-        }
-        guardarEstado(); renderizar(); cerrarModal('modalSesion');
-        mostrarToast(`${t('toast_guardat')}. ${vis} ${t('toast_guardat_detall')}`, 'success');
-    } catch (err) { console.error(err); mostrarToast(`${t('toast_error')}: ${err.message}`, 'error'); }
-});
-
-// ==========================================
-// MODALS
-// ==========================================
-function abrirModal(id) { const m = document.getElementById(id); if (m) m.classList.add('active'); }
-function cerrarModal(id) { const m = document.getElementById(id); if (m) m.classList.remove('active'); }
-
-function abrirHistorial() { renderizarHistorial(); abrirModal('modalHistorial'); closeDropdown(); }
-function abrirEditor() { document.getElementById('editorJSON').value = JSON.stringify(state, null, 2); abrirModal('modalEditor'); closeDropdown(); }
-
-function aplicarCambiosJSON() {
-    try {
-        const nuevos = JSON.parse(document.getElementById('editorJSON').value);
-        const m = migrarDatos(nuevos);
-        if (!m) { mostrarToast(t('toast_error_format'), 'error'); return; }
-        if (confirm(t('confirm_aplicar_json'))) { state = m; guardarEstado(); renderizar(); mostrarToast(t('toast_json_aplicat'), 'success'); cerrarModal('modalEditor'); registrarLog('edicion', t('log_modificat_json')); }
-    } catch (e) { mostrarToast(`${t('toast_json_invalid')}: ${e.message}`, 'error', 5000); }
-}
-
-function formatearJSON() {
-    try { const d = JSON.parse(document.getElementById('editorJSON').value); document.getElementById('editorJSON').value = JSON.stringify(d, null, 2); mostrarToast(t('toast_json_formatat'), 'info'); }
-    catch (e) { mostrarToast(t('toast_json_invalid'), 'error'); }
-}
-
-function copiarJSON() { const ed = document.getElementById('editorJSON'); ed.select(); document.execCommand('copy'); mostrarToast(t('toast_json_copiat'), 'success'); }
-
-function exportarDatos() {
-    try {
-        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = generarNombreArchivo();
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        URL.revokeObjectURL(url); mostrarToast(t('toast_exportat'), 'success');
-        registrarLog('exportar', t('log_exportat'));
-    } catch (e) { mostrarToast(t('toast_error'), 'error'); }
-    closeDropdown();
-}
-
-function copiaAutomatica() { exportarDatos(); }
-
-function importarDatos(event) {
-    const file = event.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const datos = JSON.parse(e.target.result);
-            const m = migrarDatos(datos);
-            if (m && confirm(t('confirm_importar'))) { state = m; guardarEstado(); renderizar(); mostrarToast(t('toast_importat'), 'success'); registrarLog('importar', t('log_importat')); }
-            else { mostrarToast(t('toast_error_format'), 'error'); }
-        } catch (err) { mostrarToast(`${t('toast_error')}: ${err.message}`, 'error'); }
-    };
-    reader.readAsText(file); event.target.value = '';
-}
-
-function imprimirPDF() { closeDropdown(); setTimeout(() => window.print(), 100); }
-
-// ==========================================
-// RESUM SINCRONITZACIÓ
-// ==========================================
-function verResumenSincronizacion() {
-    const datos = obtenerDatosCompartidos();
-    let html = `<h3>${t('sync_estat_integracio')}</h3>`;
-    if (datos.ultimaActualizacion) {
-        const fecha = new Date(datos.ultimaActualizacion).toLocaleDateString(localStorage.getItem('idioma_preferit') || 'ca', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-        const nSes = datos.sesiones ? datos.sesiones.length : 0;
-        const nAccProf = datos.log ? datos.log.filter(l => l.usuario === 'Profesora').length : 0;
-        const nAccAlu = datos.log ? datos.log.filter(l => l.accion === 'sincronizacion_alumno').length : 0;
-        const nTotal = datos.log ? datos.log.length : 0;
-        html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:15px 0;">
-            <div style="background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:15px;text-align:center;"><div style="font-size:2em;font-weight:800;color:#11998e;">${nSes}</div><div style="font-size:0.85em;color:#666;">${t('sync_sessions_sincro')}</div></div>
-            <div style="background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:15px;text-align:center;"><div style="font-size:2em;font-weight:800;color:#11998e;">${nAccProf}</div><div style="font-size:0.85em;color:#666;">${t('sync_accions_prof')}</div></div>
-            <div style="background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:15px;text-align:center;"><div style="font-size:2em;font-weight:800;color:#11998e;">${nAccAlu}</div><div style="font-size:0.85em;color:#666;">${t('sync_carregues_alumnes')}</div></div>
-            <div style="background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:15px;text-align:center;"><div style="font-size:2em;font-weight:800;color:#11998e;">${nTotal}</div><div style="font-size:0.85em;color:#666;">${t('sync_total_accions')}</div></div>
-        </div><p style="margin-top:15px;"><strong>${t('sync_ultima_act')}</strong> ${fecha}</p>`;
-    } else {
-        html += `<div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;border-radius:6px;"><strong>${t('sync_sense')}</strong><p style="margin-top:8px;">${t('sync_sense_text')}</p></div>`;
-    }
-    html += `<h3 style="margin-top:25px;">${t('sync_log_compartit')}</h3>`;
-    if (datos.log && datos.log.length > 0) {
-        html += '<div style="max-height:300px;overflow-y:auto;background:#f8f9fa;border-radius:8px;padding:10px;">';
-        const icones = { sincronizacion: '🔄', sincronizacion_alumno: '👨‍🎓', cambio_estado: '📊', edicion: '✏️', creacion: '➕', eliminacion: '🗑️' };
-        datos.log.slice(0, 30).forEach(l => {
-            html += `<div style="background:white;border-left:4px solid #11998e;border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:0.9em;">
-                <span style="font-weight:700;color:#11998e;font-size:0.85em;">${formatearFechaISO(l.fecha)}</span>
-                <span> ${icones[l.accion] || '📝'} ${l.detalle}</span>
-                <span style="font-size:0.8em;color:#666;font-style:italic;"> — ${l.usuario}</span>
-            </div>`;
-        });
-        html += '</div>';
-        if (datos.log.length > 30) html += `<p style="margin-top:10px;color:#666;font-size:0.9em;"><em>${t('sync_mostrant')} ${datos.log.length} ${t('sync_totals')}</em></p>`;
-    } else { html += `<p style="color:#999;font-style:italic;">${t('sync_sense_accions')}</p>`; }
-    
-    // Crear modal dinàmicament si no existeix
-    let modalSync = document.getElementById('modalSync');
-    if (!modalSync) {
-        modalSync = document.createElement('div');
-        modalSync.id = 'modalSync';
-        modalSync.className = 'modal';
-        modalSync.innerHTML = `<div class="modal-content modal-xl"><span class="close" onclick="cerrarModal('modalSync')">&times;</span><h2>${t('sync_titol')}</h2><p class="modal-subtitle">${t('sync_subtitol')}</p><div id="syncResumenContenido"></div><div class="form-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalSync')">${t('btn_tancar')}</button></div></div>`;
-        document.body.appendChild(modalSync);
-    } else {
-        modalSync.querySelector('h2').textContent = t('sync_titol');
-        modalSync.querySelector('.modal-subtitle').textContent = t('sync_subtitol');
-    }
-    document.getElementById('syncResumenContenido').innerHTML = html;
-    abrirModal('modalSync');
-    closeDropdown();
-}
-
-// ==========================================
-// DROPDOWN
-// ==========================================
-function toggleDropdown() { document.querySelector('.dropdown').classList.toggle('open'); }
-function closeDropdown() { const d = document.querySelector('.dropdown'); if (d) d.classList.remove('open'); }
-
-// ==========================================
-// EVENT LISTENERS
-// ==========================================
-document.getElementById('btnAddSesion').addEventListener('click', () => abrirModalSesion());
-document.getElementById('btnPrint').addEventListener('click', imprimirPDF);
-document.getElementById('btnHistory').addEventListener('click', abrirHistorial);
-document.getElementById('btnEditor').addEventListener('click', abrirEditor);
-document.getElementById('btnAutoBackup').addEventListener('click', copiaAutomatica);
-document.getElementById('btnExport').addEventListener('click', exportarDatos);
-document.getElementById('btnImport').addEventListener('click', () => { closeDropdown(); setTimeout(() => document.getElementById('fileInput').click(), 100); });
-document.getElementById('fileInput').addEventListener('change', importarDatos);
-document.getElementById('btnReset').addEventListener('click', restablecerEstado);
-document.getElementById('btnAplicarJSON').addEventListener('click', aplicarCambiosJSON);
-document.getElementById('btnFormatearJSON').addEventListener('click', formatearJSON);
-document.getElementById('btnCopiarJSON').addEventListener('click', copiarJSON);
-document.getElementById('btnDropdown').addEventListener('click', function(e) { e.stopPropagation(); toggleDropdown(); });
-document.addEventListener('click', function(e) { const d = document.querySelector('.dropdown'); if (d && !d.contains(e.target)) closeDropdown(); });
-document.querySelectorAll('.dropdown-item').forEach(item => { item.addEventListener('click', () => setTimeout(closeDropdown, 100)); });
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeDropdown(); document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active')); } });
-document.querySelectorAll('.close, [data-modal]').forEach(el => {
-    el.addEventListener('click', function() { const id = this.dataset.modal || (this.closest('.modal') ? this.closest('.modal').id : null); if (id) cerrarModal(id); });
-});
-window.addEventListener('click', function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
-document.querySelectorAll('.filtro-btn').forEach(btn => {
-    btn.addEventListener('click', function() { document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); filtroActual = this.dataset.filtro; renderizar(); });
-});
-
-// ==========================================
-// INICIALITZACIÓ
-// ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-    cargarEstado();
-    renderizar();
-    renderizarLog();
-    aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
-    console.log('✅ Planificador carregat. Sessions:', state.sesiones.length);
-});
+render();
 </script>
 </body>
 </html>
