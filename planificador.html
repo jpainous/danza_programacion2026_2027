@@ -3,317 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planificador de sessions · Fisiologia</title>
+<title>Fitxa de l'alumne · Fisiologia</title>
 <style>
-  :root{--pri:#4b2e6f;--pri2:#5f3d8a;--oro:#b8912f;--crema:#faf8fc;--tinta:#2a2530;--gris:#6b6570;
-    --bord:#e0d8ea;--card:#fff;--verd:#2e7d4f;--blau:#1f5f8b;--taronja:#c05621;--vermell:#a52834;--grisc:#7a8288}
+  :root{--pri:#1f5f8b;--pri2:#2a7aab;--crema:#f4f8fa;--tinta:#252a2e;--bord:#d8e2e7;--verd:#2e7d4f;--gris:#6b6570}
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.5}
-  .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.25)}
-  .brand{font-family:Georgia,serif;font-size:1rem;font-weight:bold}
-  .brand small{opacity:.85;font-weight:normal;display:block;font-size:.7rem}
-  .lang{display:flex;gap:.25rem}
-  .lang button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.25rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.8rem}
+  .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
+  .brand{font-family:Georgia,serif;font-weight:bold;font-size:1rem}
+  .brand small{display:block;font-weight:normal;font-size:.7rem;opacity:.85}
+  .lang{display:flex;gap:.25rem;margin-left:auto}
+  .lang button,.tools button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.3rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.8rem}
   .lang button.on{background:#fff;color:var(--pri)}
   .tools{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
-  .tools button,.tools a,.tools select{border:none;border-radius:8px;padding:.4rem .7rem;cursor:pointer;font-weight:600;font-size:.8rem;background:rgba(255,255,255,.92);color:var(--pri);text-decoration:none}
-  .tools .primary{background:var(--oro);color:#fff}
-  .tools select{padding:.35rem .4rem}
+  .tools button{border-radius:8px}
   #savestate{font-size:.72rem;opacity:.9}
-  main{max-width:1100px;margin:1.2rem auto;padding:0 1rem}
-  .card{background:var(--card);border:1px solid var(--bord);border-radius:14px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden}
-  .card.nl{background:#f4f4f5}
-  .chead{display:flex;gap:.7rem;align-items:center;padding:.7rem .9rem;cursor:pointer;flex-wrap:wrap}
-  .chead:hover{background:#f7f3fc}
-  .tw{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--pri);width:1.4rem}
-  .cmeta{flex:1;min-width:220px}
-  .cmeta b{color:var(--pri);margin-right:.5rem}
-  .cmeta .topic{font-family:Georgia,serif;font-size:.98rem}
-  .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;vertical-align:middle}
-  .nlb{background:var(--grisc);color:#fff;margin-left:.5rem}
-  .ccounts{font-size:.72rem;color:var(--gris);background:#f4eefb;border-radius:10px;padding:.25rem .6rem}
-  .del{background:none;border:none;cursor:pointer;opacity:.45;font-size:.9rem}
-  .del:hover{opacity:1}
-  .del.ses:hover{color:var(--vermell)}
-  .sbody{padding:.4rem 1.1rem 1.2rem;border-top:1px dashed var(--bord)}
-  .grid2{display:grid;grid-template-columns:170px 1fr;gap:.8rem;margin:.8rem 0}
-  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
-  .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri2);margin-bottom:.2rem}
-  input[type=text],input[type=date],textarea,select.st{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;background:#fffdf7}
-  textarea{resize:vertical}
-  input:focus,textarea:focus,select:focus{outline:2px solid var(--pri2)}
-  .sect{margin:.9rem 0;border:1px solid var(--bord);border-radius:10px;padding:.7rem .8rem;background:#fdfbf8}
-  .secth{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.4rem}
-  .secth h3{margin:0;font-size:.92rem;color:var(--pri);flex:1;min-width:180px}
-  .secth .mini{color:var(--gris);font-weight:normal;font-size:.78rem}
-  .chk{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;color:var(--gris);cursor:pointer;white-space:nowrap}
-  .add{background:var(--pri2);color:#fff;border:none;border-radius:8px;padding:.3rem .65rem;font-size:.78rem;font-weight:600;cursor:pointer}
-  .rows{display:flex;flex-direction:column;gap:.35rem}
-  .row{display:grid;grid-template-columns:1fr 130px auto 130px auto;gap:.4rem;align-items:center}
-  .row.mini-row{grid-template-columns:1fr auto auto}
-  @media(max-width:700px){.row,.row.mini-row{grid-template-columns:1fr}.row .time{max-width:150px}}
-  .row.act input[type=text].time{font-variant-numeric:tabular-nums}
-  .row.st-done .rowdesc{text-decoration:line-through;color:var(--gris)}
-  select.st{font-size:.78rem;padding:.35rem}
-  .hint{font-size:.75rem;color:var(--gris);margin:.3rem 0}
-  .st-plan{border-left:3px solid var(--blau)}
-  .st-done{border-left:3px solid var(--verd)}
-  .st-pause{border-left:3px solid var(--taronja)}
-  .st-drop{border-left:3px solid var(--grisc);opacity:.55}
-  #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  #memwarn{display:none;background:#fff3cd;color:#7a5b00;padding:.5rem 1rem;font-size:.8rem;border-bottom:1px solid #e6d9a2}
+  main{max-width:850px;margin:1.2rem auto;padding:0 1rem}
+  .card{background:#fff;border:1px solid var(--bord);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .card h2{margin:0 0 .6rem;color:var(--pri);font-size:1.1rem}
+  .card h2 small{color:var(--gris);font-weight:normal}
+  .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;background:var(--gris);color:#fff;vertical-align:middle;margin-left:.4rem}
+  h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.4px;color:var(--pri2);margin:1rem 0 .3rem}
+  .act{display:flex;gap:.5rem;align-items:baseline;padding:.3rem 0;border-bottom:1px dashed var(--bord)}
+  .act input[type=checkbox]{transform:translateY(2px)}
+  .act.done span{color:var(--gris);text-decoration:line-through}
+  .act .tm{font-variant-numeric:tabular-nums;color:var(--pri2);font-size:.8rem;min-width:105px}
+  ul.plain{list-style:none;margin:.2rem 0;padding:0}
+  ul.plain li{padding:.15rem 0;font-size:.9rem}
+  textarea{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem;font:inherit;font-size:.88rem;background:#fbfdfe;min-height:52px}
+  .fld{display:block;margin:.8rem 0}
+  .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri);margin-bottom:.2rem}
+  .hint{background:#fdf6e7;border-left:4px solid #b8912f;padding:.8rem 1rem;border-radius:0 8px 8px 0;font-size:.9rem}
+  #toast{position:fixed;bottom:18px;left:50%;margin-left:-120px;width:240px;text-align:center;background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
   #toast.show{opacity:1}
-  @media print{
-    .topbar,#toast,.add,.del,.tw,.chk,.hint{display:none!important}
-    .card{border:none;box-shadow:none;page-break-inside:avoid}
-    .sbody{display:block!important;border-top:1px solid #ccc}
-    input,textarea,select{border:none!important;background:none!important}
-    body{background:#fff}
-  }
+  @media print{.topbar,#toast,#errbox,#memwarn{display:none!important}body{background:#fff}.card{border:none;box-shadow:none;page-break-inside:avoid}}
 </style>
 </head>
 <body>
+<div id="errbox" style="display:none;background:#a52834;color:#fff;padding:.6rem 1rem;font:12px monospace;position:relative;z-index:100"></div>
+<div id="memwarn">⚠ <b>Mode memòria</b> · Les teves marques i notes no es desaran en tancar. Obre el fitxer directament al navegador (doble clic). · <b>Modo memoria</b>: abre el archivo directamente en el navegador. · <b>Memory mode</b>: open the file directly in a browser.</div>
+<script>
+window.onerror=function(m,s,l){var e=document.getElementById('errbox');if(e){e.style.display='block';e.innerHTML='<strong>Error JS (l\u00ednia '+l+'):</strong> '+m;}};
+
+/* Almacenament segur */
+var ST=(function(){
+  try{
+    localStorage.setItem('__test','1');
+    localStorage.removeItem('__test');
+    return localStorage;
+  }catch(e){
+    var mem={};
+    window.__memMode=true;
+    return {
+      getItem:function(k){return (k in mem)?mem[k]:null;},
+      setItem:function(k,v){mem[k]=String(v);},
+      removeItem:function(k){delete mem[k];}
+    };
+  }
+})();
+</script>
 <header class="topbar">
-  <div class="brand">🗂 <span id="t1"></span><small id="t2"></small></div>
-  <div class="lang" id="langBox">
-    <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
-  </div>
+  <div class="brand">🩰 <span id="t1"></span><small id="t2"></small></div>
+  <div class="lang" id="langBox"><button type="button" data-lang="ca">CA</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
   <div class="tools">
-    <a id="lnkStu" href="fitxa-alumne.html" target="_blank" rel="noopener"></a>
-    <button id="bNew"></button>
-    <button id="bExpStu" class="primary"></button>
-    <button id="bExp"></button>
-    <button id="bImp"></button>
-    <button id="bPrint"></button>
-    <select id="flt"></select>
+    <button type="button" id="bImp"></button>
+    <button type="button" id="bPrint"></button>
     <span id="savestate"></span>
   </div>
 </header>
 <main id="main"></main>
 <div id="toast"></div>
-<input type="file" id="fImp" accept=".json" hidden>
+<input type="file" id="fImp" accept=".json" style="display:none">
 
 <script>
-const KEY='planificador_celia_v1';
-const I18N={
-ca:{t1:"Planificador de sessions · Fisiologia",t2:"Cèlia Painous Martí · Fisiologia aplicada a la dansa · 2026-27",
-openStu:"👩‍🎓 Fitxa de l'alumne",bNew:"＋ Afegeix sessió",bExpStu:"⬇ Exporta per a l'alumnat",bExp:"💾 Exporta còpia",bImp:"📂 Importa còpia",bPrint:"🖨 Imprimeix",
-saved:"Desat",fltAll:"Totes les activitats",stPlan:"Prevista",stDone:"Feta",stPause:"En pausa",stDrop:"Descartada",
-fDate:"Data",fTopic:"Tema de la sessió",objTitle:"Objectius de la sessió",actTitle:"Activitats a desenvolupar",resTitle:"Recursos online (1 per línia)",avTitle:"Mitjans audiovisuals",compTitle:"Treball complementari",evTitle:"Evidències de la sessió",
-visStudent:"👁 Visible per l'alumnat",addAct:"Afegeix activitat",addLine:"Afegeix línia",del:"Esborra",delSes:"Esborra la sessió",
-noLectiva:"No lectiu",noTopic:"(sense títol)",noActs:"Encara no hi ha activitats.",noItems:"Encara no hi ha elements.",
-phAct:"Descripció de l'activitat",phTime:"Horari (ex. 10:00–11:30)",phObj:"Un objectiu per línia o text lliure…",phComp:"Què ha de treballar l'alumnat fora de l'aula…",phEv:"Quadern, registre, producte…",phRes:"Títol + enllaç (https://…)",phAv:"Vídeo, presentació, àudio… (+ enllaç si n'hi ha)",
-cActs:"Activitats",cVis:"visibles",cRes:"Recursos",cLinks:"Enllaços",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
-confirmDelSes:"Esborrar aquesta sessió i tot el seu contingut?",confirmImp:"Importar substituirà el pla actual. Continuar?",
-studentNote:"Fitxer per a l'alumnat generat. Envia'l perquè l'importin a la seva Fitxa de l'alumne.",
-filterHint:"Estat: prevista / feta / en pausa / descartada. El filtre superior amaga o mostra les activitats segons l'estat."},
-es:{t1:"Planificador de sesiones · Fisiología",t2:"Cèlia Painous Martí · Fisiología aplicada a la danza · 2026-27",
-openStu:"👩‍🎓 Ficha del alumnado",bNew:"＋ Añadir sesión",bExpStu:"⬇ Exportar para el alumnado",bExp:"💾 Exportar copia",bImp:"📂 Importar copia",bPrint:"🖨 Imprimir",
-saved:"Guardado",fltAll:"Todas las actividades",stPlan:"Prevista",stDone:"Hecha",stPause:"En pausa",stDrop:"Descartada",
-fDate:"Fecha",fTopic:"Tema de la sesión",objTitle:"Objetivos de la sesión",actTitle:"Actividades a desarrollar",resTitle:"Recursos online (1 por línea)",avTitle:"Medios audiovisuales",compTitle:"Trabajo complementario",evTitle:"Evidencias de la sesión",
-visStudent:"👁 Visible para el alumnado",addAct:"Añadir actividad",addLine:"Añadir línea",del:"Borrar",delSes:"Borrar la sesión",
-noLectiva:"No lectivo",noTopic:"(sin título)",noActs:"Todavía no hay actividades.",noItems:"Todavía no hay elementos.",
-phAct:"Descripción de la actividad",phTime:"Horario (ej. 10:00–11:30)",phObj:"Un objetivo por línea o texto libre…",phComp:"Qué debe trabajar el alumnado fuera del aula…",phEv:"Cuaderno, registro, producto…",phRes:"Título + enlace (https://…)",phAv:"Vídeo, presentación, audio… (+ enlace si lo hay)",
-cActs:"Actividades",cVis:"visibles",cRes:"Recursos",cLinks:"Enlaces",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
-confirmDelSes:"¿Borrar esta sesión y todo su contenido?",confirmImp:"Importar sustituirá el plan actual. ¿Continuar?",
-studentNote:"Archivo para el alumnado generado. Envíalo para que lo importen en su Ficha.",
-filterHint:"Estado: prevista / hecha / en pausa / descartada. El filtro superior oculta o muestra las actividades según el estado."},
-en:{t1:"Session planner · Physiology",t2:"Cèlia Painous Martí · Physiology Applied to Dance · 2026-27",
-openStu:"👩‍🎓 Student sheet",bNew:"＋ Add session",bExpStu:"⬇ Export for students",bExp:"💾 Export backup",bImp:"📂 Import backup",bPrint:"🖨 Print",
-saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
-fDate:"Date",fTopic:"Session topic",objTitle:"Session objectives",actTitle:"Activities to carry out",resTitle:"Online resources (1 per line)",avTitle:"Audiovisual media",compTitle:"Complementary work",evTitle:"Session evidence",
-visStudent:"👁 Visible to students",addAct:"Add activity",addLine:"Add line",del:"Delete",delSes:"Delete session",
-noLectiva:"Non-teaching",noTopic:"(untitled)",noActs:"No activities yet.",noItems:"No items yet.",
-phAct:"Activity description",phTime:"Time slot (e.g. 10:00–11:30)",phObj:"One objective per line or free text…",phComp:"What students must work on outside class…",phEv:"Notebook, record, product…",phRes:"Title + link (https://…)",phAv:"Video, slides, audio… (+ link if any)",
-cActs:"Activities",cVis:"visible",cRes:"Resources",cLinks:"Links",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
-confirmDelSes:"Delete this session and all its content?",confirmImp:"Importing will replace the current plan. Continue?",
-studentNote:"Student file generated. Send it so they can import it into their Student Sheet.",
-filterHint:"Status: planned / done / on hold / discarded. The top filter shows or hides activities by status."}};
+/* ================== DADES I IDIOMES ================== */
+var KP='fitxa_alumne_prog_v3', KM='fitxa_alumne_me_v3';
 
-let lang=localStorage.getItem(KEY+'L')||'ca';
-let filter='all';
-let plan=loadPlan();
-const EXP=new Set();
+var I18N={
+ca:{t1:"Fitxa de l'alumne",t2:"Fisiologia aplicada a la dansa · 2026-27",name:"El meu nom",spec:"Especialitat",imp:"📂 Importar programa del professorat",print:"🖨 Imprimir",
+objT:"Objectius",actT:"Activitats",resT:"Recursos online",avT:"Mitjans audiovisuals",compT:"Treball complementari",evT:"Evidències",notes:"Les meves notes",notesPh:"Escriu aquí les teves notes de la sessió (a mà al quadern i aquí si vols)...",
+noData:"<b>Encara no tens cap programa.</b><br>1. Demana el fitxer <i>fitxa-alumne-dades.json</i> al professorat.<br>2. Prem «Importar programa del professorat» i selecciona'l.<br>3. Marca les activitats que facis i escriu les teves notes: es guarden automàticament en aquest navegador.",
+saved:"Desat",impOk:"Programa importat. Les teves marques i notes s'han conservat."},
+es:{t1:"Ficha del alumnado",t2:"Fisiología aplicada a la danza · 2026-27",name:"Mi nombre",spec:"Especialidad",imp:"📂 Importar programa del profesorado",print:"🖨 Imprimir",
+objT:"Objetivos",actT:"Actividades",resT:"Recursos online",avT:"Medios audiovisuales",compT:"Trabajo complementario",evT:"Evidencias",notes:"Mis notas",notesPh:"Escribe aquí tus notas de la sesión (a mano en el cuaderno y aquí si quieres)...",
+noData:"<b>Todavía no tienes ningún programa.</b><br>1. Pide el archivo <i>fitxa-alumne-dades.json</i> al profesorado.<br>2. Pulsa «Importar programa del profesorado» y selecciónalo.<br>3. Marca las actividades que hagas y escribe tus notas: se guardan automáticamente en este navegador.",
+saved:"Guardado",impOk:"Programa importado. Tus marcas y notas se han conservado."},
+en:{t1:"Student sheet",t2:"Physiology Applied to Dance · 2026-27",name:"My name",spec:"Specialisation",imp:"📂 Import teacher's programme",print:"🖨 Print",
+objT:"Objectives",actT:"Activities",resT:"Online resources",avT:"Audiovisual media",compT:"Complementary work",evT:"Evidence",notes:"My notes",notesPh:"Write your session notes here (by hand in your notebook, and here if you wish)...",
+noData:"<b>No programme yet.</b><br>1. Ask your teacher for the file <i>fitxa-alumne-dades.json</i>.<br>2. Press \"Import teacher's programme\" and select it.<br>3. Tick the activities you complete and write your notes: everything saves automatically in this browser.",
+saved:"Saved",impOk:"Programme imported. Your ticks and notes have been kept."}};
 
-const $=s=>document.querySelector(s);
-const t=k=>I18N[lang][k]||k;
-const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
-const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-function S(date,topic,nl){return{id:uid(),date:date,topic:topic,noLectiva:!!nl,objVis:true,obj:'',acts:[],res:[],av:[],compVis:true,comp:'',evVis:true,ev:''};}
-function seed(){return{v:1,sessions:[
- S('2026-10-09','Presentació. Homeòstasi i fisiologia cel·lular'),
- S('2026-10-16','Sistema musculoesquelètic I'),
- S('2026-10-23','Sistema musculoesquelètic II'),
- S('2026-10-30','Festiu de lliure disposició CSD',true),
- S('2026-11-06','Sistema nerviós I'),
- S('2026-11-13','Preparació i enviament de treballs orals'),
- S('2026-11-20','Sistema nerviós II / Son'),
- S('2026-11-27','Presentacions de treballs orals / La sang'),
- S('2026-12-04','Sistema hormonal'),
- S('2026-12-11','Nutrició (nutricionista + pràctica)'),
- S('2026-12-18','Avaluació parcial'),
- S('2027-01-08','Aparell cardiovascular'),
- S('2027-01-15','Aparell respiratori'),
- S('2027-01-22','Examen final')
-]};}
-function norm(Sx){
- Sx.acts=(Sx.acts||[]).map(a=>({id:a.id||uid(),txt:a.txt||'',time:a.time||'',vis:a.vis!==false,st:a.st||'plan'}));
- Sx.res=(Sx.res||[]).map(r=>({id:r.id||uid(),txt:r.txt||'',vis:r.vis!==false}));
- Sx.av=(Sx.av||[]).map(v=>({id:v.id||uid(),txt:v.txt||'',vis:v.vis!==false}));
- Sx.objVis=Sx.objVis!==false;Sx.compVis=Sx.compVis!==false;Sx.evVis=Sx.evVis!==false;
- return Sx;
+var WD={
+ ca:['diumenge','dilluns','dimarts','dimecres','dijous','divendres','dissabte'],
+ es:['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
+ en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']};
+var MO={
+ ca:['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'],
+ es:['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],
+ en:['January','February','March','April','May','June','July','August','September','October','November','December']};
+
+/* ================== ESTAT ================== */
+var lang=ST.getItem('fa_lang')||'ca';
+var prog=null;
+try{prog=JSON.parse(ST.getItem(KP));}catch(e){prog=null;}
+var me=null;
+try{me=JSON.parse(ST.getItem(KM));}catch(e){me=null;}
+if(!me||typeof me!=='object')me={name:'',spec:'',done:{},notes:{}};
+if(!me.done)me.done={};
+if(!me.notes)me.notes={};
+var saveTimer=null;
+
+/* ================== UTILITATS ================== */
+function $(id){return document.getElementById(id);}
+function t(k){return (I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;}
+function esc(s){s=(s==null)?'':String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function linkify(s){return esc(s).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
+function fmtLong(iso){
+ if(!iso)return '—';
+ var p=String(iso).split('-');
+ if(p.length<3)return String(iso);
+ var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));
+ var i=(I18N[lang])?lang:'ca';
+ return WD[i][d.getDay()]+' '+p[2]+' '+MO[i][parseInt(p[1],10)-1]+' '+p[0];
 }
-function loadPlan(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.sessions){d.sessions=d.sessions.map(norm);return d;}}catch(e){}return seed();}
-function save(){localStorage.setItem(KEY,JSON.stringify(plan));$('#savestate').textContent=t('saved')+' · '+new Date().toLocaleTimeString();}
-let tm;function scheduleSave(){clearTimeout(tm);tm=setTimeout(save,500);}
-window.addEventListener('beforeunload',save);
-
-function fmt(iso){if(!iso)return'—';try{return new Date(iso+'T12:00:00').toLocaleDateString(lang==='ca'?'ca-ES':lang==='es'?'es-ES':'en-GB',{day:'2-digit',month:'short',year:'2-digit'});}catch(e){return iso;}}
-function toast(m){const x=$('#toast');x.textContent=m;x.classList.add('show');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('show'),2600);}
-
-function counts(Sx){
- return{at:Sx.acts.length,av:Sx.acts.filter(a=>a.vis).length,
-  rt:Sx.res.length,rv:Sx.res.filter(r=>r.vis).length,
-  vt:Sx.av.length,vv:Sx.av.filter(v=>v.vis).length,
-  links:[...Sx.res,...Sx.av].filter(x=>/https?:\/\//i.test(x.txt)).length,
-  comp:Sx.comp.trim()?1:0,ev:Sx.ev.trim()?1:0};
+function save(){
+ try{ST.setItem(KM,JSON.stringify(me));}catch(e){}
+ var el=$('savestate');
+ if(el)el.textContent=t('saved')+' · '+new Date().toLocaleTimeString();
 }
-function countsHTML(c){return `${t('cActs')} ${c.at} · ${t('cVis')} ${c.av} · ${t('cRes')} ${c.rt} · ${t('cLinks')} ${c.links} · ${t('cAv')} ${c.vt} · ${t('cComp')} ${c.comp?'✔':'—'} · ${t('cEv')} ${c.ev?'✔':'—'}`;}
-function metaHTML(Sx){return `<b>${fmt(Sx.date)}</b><span class="topic">${esc(Sx.topic)||t('noTopic')}</span>${Sx.noLectiva?`<span class="badge nlb">${t('noLectiva')}</span>`:''}`;}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(save,500);}
+window.onbeforeunload=save;
+function toast(m){var x=$('toast');x.textContent=m;x.className='show';clearTimeout(x._t);x._t=setTimeout(function(){x.className='';},3000);}
 
-function actRow(a){return `<div class="row act st-${a.st}" data-st="${a.st}">
-<input type="text" data-aid="${a.id}" data-k="txt" value="${esc(a.txt)}" placeholder="${t('phAct')}">
-<input type="text" class="time" data-aid="${a.id}" data-k="time" value="${esc(a.time)}" placeholder="${t('phTime')}">
-<label class="chk" title="${t('visStudent')}"><input type="checkbox" data-aid="${a.id}" data-k="vis" ${a.vis?'checked':''}>👁</label>
-<select class="st" data-aid="${a.id}" data-k="st">
- <option value="plan"${a.st==='plan'?' selected':''}>${t('stPlan')}</option>
- <option value="done"${a.st==='done'?' selected':''}>${t('stDone')}</option>
- <option value="pause"${a.st==='pause'?' selected':''}>${t('stPause')}</option>
- <option value="drop"${a.st==='drop'?' selected':''}>${t('stDrop')}</option>
-</select>
-<button class="del" data-del-act="${a.id}" title="${t('del')}">✕</button></div>`;}
-function resRow(r){return `<div class="row mini-row">
-<input type="text" data-rid="${r.id}" data-k="txt" value="${esc(r.txt)}" placeholder="${t('phRes')}">
-<label class="chk"><input type="checkbox" data-rid="${r.id}" data-k="vis" ${r.vis?'checked':''}>👁</label>
-<button class="del" data-del-res="${r.id}" title="${t('del')}">✕</button></div>`;}
-function avRow(v){return `<div class="row mini-row">
-<input type="text" data-vid="${v.id}" data-k="txt" value="${esc(v.txt)}" placeholder="${t('phAv')}">
-<label class="chk"><input type="checkbox" data-vid="${v.id}" data-k="vis" ${v.vis?'checked':''}>👁</label>
-<button class="del" data-del-av="${v.id}" title="${t('del')}">✕</button></div>`;}
-function block(title,visKey,visVal,inner){return `<div class="sect"><div class="secth"><h3>${title}</h3>
-<label class="chk"><input type="checkbox" data-f="${visKey}" ${visVal?'checked':''}>${t('visStudent')}</label></div>${inner}</div>`;}
-
-function cardHTML(Sx){
- const c=counts(Sx),open=EXP.has(Sx.id);
- return `<section class="card ${Sx.noLectiva?'nl':''}" id="c-${Sx.id}" data-sid="${Sx.id}">
- <div class="chead" data-toggle="${Sx.id}">
-   <button class="tw" tabindex="-1">${open?'▾':'▸'}</button>
-   <div class="cmeta">${metaHTML(Sx)}</div>
-   <div class="ccounts" id="k-${Sx.id}">${countsHTML(c)}</div>
-   <button class="del ses" data-del-ses="${Sx.id}" title="${t('delSes')}">🗑</button>
- </div>
- ${open?`<div class="sbody">
-  <div class="grid2">
-   <label class="fld"><span>${t('fDate')}</span><input type="date" data-f="date" value="${Sx.date||''}"></label>
-   <label class="fld"><span>${t('fTopic')}</span><input type="text" data-f="topic" value="${esc(Sx.topic)}"></label>
-  </div>
-  ${block(t('objTitle'),'objVis',Sx.objVis,`<textarea rows="3" data-f="obj" placeholder="${t('phObj')}">${esc(Sx.obj)}</textarea>`)}
-  <div class="sect"><div class="secth"><h3>${t('actTitle')}</h3>
-   <button class="add" data-add="acts">＋ ${t('addAct')}</button></div>
-   <div class="rows" data-list="acts">${Sx.acts.map(actRow).join('')||`<p class="hint">${t('noActs')}</p>`}</div>
-   <p class="hint">${t('filterHint')}</p></div>
-  <div class="sect"><div class="secth"><h3>${t('resTitle')}</h3><button class="add" data-add="res">＋ ${t('addLine')}</button></div>
-   <div class="rows">${Sx.res.map(resRow).join('')||`<p class="hint">${t('noItems')}</p>`}</div></div>
-  <div class="sect"><div class="secth"><h3>${t('avTitle')}</h3><button class="add" data-add="av">＋ ${t('addLine')}</button></div>
-   <div class="rows">${Sx.av.map(avRow).join('')||`<p class="hint">${t('noItems')}</p>`}</div></div>
-  ${block(t('compTitle'),'compVis',Sx.compVis,`<textarea rows="2" data-f="comp" placeholder="${t('phComp')}">${esc(Sx.comp)}</textarea>`)}
-  ${block(t('evTitle'),'evVis',Sx.evVis,`<textarea rows="2" data-f="ev" placeholder="${t('phEv')}">${esc(Sx.ev)}</textarea>`)}
- </div>`:''}</section>`;
+/* ================== RENDER ================== */
+function sec(title,body){return '<h3>'+title+'</h3>'+body;}
+function ptext(s){return '<p style="white-space:pre-wrap;font-size:.9rem">'+esc(s)+'</p>';}
+function lst(arr){
+ if(!arr||!arr.length)return '';
+ var s='<ul class="plain">',n;
+ for(n=0;n<arr.length;n++)s+='<li>'+linkify(arr[n].txt)+'</li>';
+ return s+'</ul>';
 }
-
+function sessHTML(x){
+ var h,i,a,k,on,acts='';
+ if(x.noLectiva){
+  return '<section class="card"><h2>'+fmtLong(x.date)+' <small>'+esc(x.topic||'')+'</small><span class="badge">—</span></h2></section>';
+ }
+ for(i=0;i<(x.acts||[]).length;i++){
+  a=x.acts[i];
+  k=(x.date||'')+'||'+(a.txt||('a'+i));
+  on=!!me.done[k];
+  acts+='<div class="act'+(on?' done':'')+'" data-k="'+esc(k)+'">'
+   +'<input type="checkbox"'+(on?' checked':'')+'>'
+   +'<span class="tm">'+esc(a.time||'')+'</span>'
+   +'<span>'+esc(a.txt)+'</span></div>';
+ }
+ h='<section class="card" data-date="'+esc(x.date||'')+'">'
+  +'<h2>'+fmtLong(x.date)+' <small>'+esc(x.topic||'')+'</small></h2>'
+  +(x.obj?sec(t('objT'),ptext(x.obj)):'')
+  +(acts?sec(t('actT'),acts):'')
+  +(x.res&&x.res.length?sec(t('resT'),lst(x.res)):'')
+  +(x.av&&x.av.length?sec(t('avT'),lst(x.av)):'')
+  +(x.comp?sec(t('compT'),ptext(x.comp)):'')
+  +(x.ev?sec(t('evT'),ptext(x.ev)):'')
+  +'<h3>'+t('notes')+'</h3>'
+  +'<textarea data-note="'+esc(x.date||'')+'" placeholder="'+esc(t('notesPh'))+'">'+esc(me.notes[x.date]||'')+'</textarea>'
+  +'</section>';
+ return h;
+}
 function render(){
- const y=window.scrollY;
- $('#main').innerHTML=plan.sessions.map(cardHTML).join('');
- document.querySelectorAll('.row.act').forEach(applyRowFilter);
- window.scrollTo(0,y);
- applyStatic();
+ var d=I18N[lang],i,bs;
+ $('t1').textContent=d.t1;$('t2').textContent=d.t2;
+ $('bImp').textContent=d.imp;$('bPrint').textContent=d.print;
+ bs=document.querySelectorAll('#langBox button');
+ for(i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute('data-lang')===lang)?'on':'';
+ if(window.__memMode)$('memwarn').style.display='block';
+ if(!prog||!prog.sessions||!prog.sessions.length){
+  $('main').innerHTML='<div class="hint">'+d.noData+'</div>';
+  return;
+ }
+ var ss=prog.sessions.slice(0);
+ ss.sort(function(a,b){return (a.date||'9999')<(b.date||'9999')?-1:1;});
+ var h='<section class="card">'
+  +'<label class="fld"><span>'+d.name+'</span><input type="text" id="meName" value="'+esc(me.name)+'"></label>'
+  +'<label class="fld"><span>'+d.spec+'</span><input type="text" id="meSpec" value="'+esc(me.spec)+'"></label>'
+  +'</section>';
+ for(i=0;i<ss.length;i++)h+=sessHTML(ss[i]);
+ $('main').innerHTML=h;
 }
-function renderCard(Sx){const el=document.getElementById('c-'+Sx.id);if(el)el.outerHTML=cardHTML(Sx);document.querySelectorAll(`#c-${Sx.id} .row.act`).forEach(applyRowFilter);applyStatic();}
-function applyRowFilter(row){row.style.display=(filter==='all'||row.dataset.st===filter)?'':'none';}
-function updateCounts(Sx){const k=document.getElementById('k-'+Sx.id);if(k)k.textContent=countsHTML(counts(Sx));}
 
-function applyStatic(){
- const d=I18N[lang];
- $('#t1').textContent='🗂 '+d.t1;$('#t2').textContent=d.t2;
- $('#lnkStu').textContent=d.openStu;$('#bNew').textContent=d.bNew;
- $('#bExpStu').textContent=d.bExpStu;$('#bExp').textContent=d.bExp;$('#bImp').textContent=d.bImp;$('#bPrint').textContent=d.bPrint;
- $('#flt').innerHTML=`<option value="all">${d.fltAll}</option><option value="plan">${d.stPlan}</option><option value="done">${d.stDone}</option><option value="pause">${d.stPause}</option><option value="drop">${d.stDrop}</option>`;
- $('#flt').value=filter;
- document.querySelectorAll('#langBox button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
-}
-
-/* ---- edició (delegació) ---- */
-function onEdit(e){
- const el=e.target,card=el.closest('.card');if(!card)return;
- const Sx=plan.sessions.find(x=>x.id===card.dataset.sid);if(!Sx)return;
- if(el.dataset.f!==undefined){
-   const f=el.dataset.f;
-   if(['date','topic','obj','comp','ev'].includes(f))Sx[f]=el.value;
-   if(['objVis','compVis','evVis'].includes(f))Sx[f]=el.checked;
-   if(f==='date'||f==='topic')card.querySelector('.cmeta').innerHTML=metaHTML(Sx);
- }else if(el.dataset.aid){
-   const a=Sx.acts.find(x=>x.id===el.dataset.aid);if(!a)return;const k=el.dataset.k;
-   if(k==='txt')a.txt=el.value;if(k==='time')a.time=el.value;if(k==='vis')a.vis=el.checked;
-   if(k==='st'){a.st=el.value;const row=el.closest('.row');row.dataset.st=a.st;row.className='row act st-'+a.st;applyRowFilter(row);}
- }else if(el.dataset.rid){const r=Sx.res.find(x=>x.id===el.dataset.rid);if(!r)return;if(el.dataset.k==='txt')r.txt=el.value;else r.vis=el.checked;
- }else if(el.dataset.vid){const v=Sx.av.find(x=>x.id===el.dataset.vid);if(!v)return;if(el.dataset.k==='txt')v.txt=el.value;else v.vis=el.checked;}
- updateCounts(Sx);scheduleSave();
-}
- $('#main').addEventListener('input',onEdit);
- $('#main').addEventListener('change',onEdit);
-
- $('#main').addEventListener('click',e=>{
- const b=e.target.closest('button,[data-toggle]');if(!b)return;
- if(b.dataset.toggle){const id=b.dataset.toggle;EXP.has(id)?EXP.delete(id):EXP.add(id);render();return;}
- const card=e.target.closest('.card');if(!card)return;
- const Sx=plan.sessions.find(x=>x.id===card.dataset.sid);if(!Sx)return;
- if(b.dataset.add){
-   const k=b.dataset.add;
-   if(k==='acts')Sx.acts.push({id:uid(),txt:'',time:'',vis:true,st:'plan'});
-   if(k==='res')Sx.res.push({id:uid(),txt:'',vis:true});
-   if(k==='av')Sx.av.push({id:uid(),txt:'',vis:true});
-   renderCard(Sx);scheduleSave();
- }else if(b.dataset.delAct){Sx.acts=Sx.acts.filter(x=>x.id!==b.dataset.delAct);renderCard(Sx);scheduleSave();}
- else if(b.dataset.delRes){Sx.res=Sx.res.filter(x=>x.id!==b.dataset.delRes);renderCard(Sx);scheduleSave();}
- else if(b.dataset.delAv){Sx.av=Sx.av.filter(x=>x.id!==b.dataset.delAv);renderCard(Sx);scheduleSave();}
- else if(b.dataset.delSes){if(confirm(t('confirmDelSes'))){plan.sessions=plan.sessions.filter(x=>x.id!==b.dataset.delSes);render();scheduleSave();}}
+/* ================== ESDEVENIMENTS ================== */
+var main=$('main');
+main.addEventListener('input',function(e){
+ var el=e.target;
+ if(el.id==='meName'){me.name=el.value;scheduleSave();return;}
+ if(el.id==='meSpec'){me.spec=el.value;scheduleSave();return;}
+ var nt=el.getAttribute?el.getAttribute('data-note'):null;
+ if(nt!==null&&nt!==undefined){me.notes[nt]=el.value;scheduleSave();return;}
+});
+main.addEventListener('change',function(e){
+ var el=e.target;
+ if(el.type==='checkbox'){
+  var row=el.parentNode;
+  while(row&&!(row.className&&row.className.indexOf('act')>=0))row=row.parentNode;
+  if(row){
+   var k=row.getAttribute('data-k');
+   if(el.checked){me.done[k]=true;row.className='act done';}
+   else{delete me.done[k];row.className='act';}
+   scheduleSave();
+  }
+ }
 });
 
-/* ---- barra ---- */
- $('#langBox').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;lang=b.dataset.lang;localStorage.setItem(KEY+'L',lang);render();});
- $('#flt').addEventListener('change',e=>{filter=e.target.value;document.querySelectorAll('.row.act').forEach(applyRowFilter);});
- $('#bNew').onclick=()=>{const s=S('','');plan.sessions.push(s);EXP.add(s.id);render();scheduleSave();document.getElementById('c-'+s.id).scrollIntoView({behavior:'smooth'});};
- $('#bPrint').onclick=()=>{plan.sessions.forEach(s=>EXP.add(s.id));render();setTimeout(()=>window.print(),150);};
-function download(name,txt){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.download=name;a.click();}
- $('#bExp').onclick=()=>download('planificador-copia.json',JSON.stringify(plan,null,1));
- $('#bExpStu').onclick=()=>{
- const data={app:'fitxa-alumne',generated:new Date().toISOString(),sessions:plan.sessions.map(Sx=>({
-  date:Sx.date,topic:Sx.topic,noLectiva:Sx.noLectiva,
-  obj:Sx.objVis?Sx.obj:'',
-  acts:Sx.acts.filter(a=>a.vis&&a.st!=='drop').map(a=>({txt:a.txt,time:a.time})),
-  res:Sx.res.filter(r=>r.vis).map(r=>({txt:r.txt})),
-  av:Sx.av.filter(v=>v.vis).map(v=>({txt:v.txt})),
-  comp:Sx.compVis?Sx.comp:'',ev:Sx.evVis?Sx.ev:''}))};
- download('fitxa-alumne-dades.json',JSON.stringify(data,null,1));
- toast(t('studentNote'));
+ $('langBox').addEventListener('click',function(e){
+ var b=e.target;
+ while(b&&b.tagName!=='BUTTON')b=b.parentNode;
+ if(!b||!b.getAttribute('data-lang'))return;
+ lang=b.getAttribute('data-lang');
+ ST.setItem('fa_lang',lang);
+ render();
+});
+ $('bPrint').onclick=function(){window.print();};
+ $('bImp').onclick=function(){$('fImp').click();};
+ $('fImp').onchange=function(e){
+ var f=e.target.files[0];
+ if(!f)return;
+ var r=new FileReader();
+ r.onload=function(ev){
+  try{
+   var j=JSON.parse(ev.target.result);
+   if(j&&j.sessions){
+    prog={sessions:j.sessions};
+    ST.setItem(KP,JSON.stringify(prog));
+    render();
+    toast(t('impOk'));
+   }else toast('JSON no vàlid');
+  }catch(x){toast('JSON no vàlid');}
+ };
+ r.readAsText(f);
+ e.target.value='';
 };
- $('#bImp').onclick=()=>$('#fImp').click();
- $('#fImp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
- r.onload=ev=>{try{const j=JSON.parse(ev.target.result);
-   if(j.sessions){if(confirm(t('confirmImp'))){plan={v:1,sessions:j.sessions.map(norm)};render();save();}}
-   else toast('JSON no vàlid');
- }catch(x){toast('JSON no vàlid');}};
- r.readAsText(f);e.target.value='';};
 
+/* ================== INICI ================== */
 render();
 </script>
 </body>
