@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programació · Fisiologia aplicada a la dansa</title>
+<style>
+  :root{
+    --granate:#6d1a36; --granate2:#8a2450; --oro:#b8912f; --crema:#faf7f2;
+    --tinta:#2b2730; --gris:#6b6570; --bord:#e9e2d6; --card:#ffffff;
+    --verd:#2e7d4f; --blau:#1f5f8b; --taronja:#c05621; --vermell:#a52834;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.55}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif}
+  /* ---- barra superior ---- */
+  .topbar{position:sticky;top:0;z-index:50;background:var(--granate);color:#fff;padding:.6rem 1rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .brand{font-family:Georgia,serif;font-size:1.05rem;font-weight:bold;letter-spacing:.3px}
+  .brand small{opacity:.85;font-weight:normal}
+  .lang{display:flex;gap:.3rem;margin-left:auto}
+  .lang button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.3rem .7rem;border-radius:20px;cursor:pointer;font-weight:600}
+  .lang button.on{background:#fff;color:var(--granate)}
+  .tools{display:flex;gap:.4rem;flex-wrap:wrap;width:100%}
+  .tools button{border:none;border-radius:8px;padding:.42rem .8rem;cursor:pointer;font-weight:600;font-size:.85rem;background:rgba(255,255,255,.92);color:var(--granate)}
+  .tools button:hover{background:#fff}
+  .tools button.danger{background:#f3d9de;color:var(--vermell)}
+  .tools button.primary{background:var(--oro);color:#fff}
+  .savestate{font-size:.8rem;opacity:.9;align-self:center}
+  /* ---- layout ---- */
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:1.2rem;max-width:1250px;margin:1.2rem auto;padding:0 1rem}
+  nav{position:sticky;top:110px;align-self:start;background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:.8rem;max-height:calc(100vh - 140px);overflow:auto}
+  nav a{display:block;padding:.4rem .5rem;color:var(--tinta);text-decoration:none;border-radius:8px;font-size:.9rem}
+  nav a:hover{background:#f4eee4}
+  nav a.on{background:var(--granate);color:#fff}
+  main{min-width:0}
+  section.card{background:var(--card);border:1px solid var(--bord);border-radius:14px;padding:1.4rem 1.6rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  section.card>h2{margin:.1rem 0 .9rem;color:var(--granate);font-size:1.45rem;border-bottom:2px solid var(--bord);padding-bottom:.45rem}
+  section.card h3{color:var(--granate2);font-size:1.12rem;margin:1.3rem 0 .5rem}
+  section.card h4{color:var(--tinta);font-size:1rem;margin:1.2rem 0 .4rem}
+  table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.88rem}
+  th{background:var(--granate);color:#fff;text-align:left;padding:.5rem .55rem;font-weight:600}
+  td{border:1px solid var(--bord);padding:.5rem .55rem;vertical-align:top}
+  tbody tr:nth-child(even){background:#fbf8f2}
+  table.info th{width:32%;background:#f4eee4;color:var(--granate)}
+  ul,ol{margin:.4rem 0 .8rem;padding-left:1.4rem}
+  li{margin:.25rem 0}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .5rem;border-radius:10px;vertical-align:middle}
+  .b-eval{background:var(--vermell);color:#fff}
+  .b-deliver{background:var(--verd);color:#fff}
+  .b-practice{background:var(--blau);color:#fff}
+  .b-free{background:var(--gris);color:#fff}
+  .b-sda{background:var(--oro);color:#fff}
+  .chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+  .chip{background:#f4eee4;border:1px solid var(--bord);border-radius:20px;padding:.35rem .8rem;font-size:.85rem}
+  .chip b{color:var(--granate)}
+  .note{background:#fdf6e7;border-left:4px solid var(--oro);padding:.6rem .8rem;border-radius:0 8px 8px 0;margin:.8rem 0;font-size:.9rem}
+  /* ---- edición ---- */
+  body.editing [contenteditable=true]{outline:1.5px dashed rgba(109,26,54,.35);outline-offset:2px;border-radius:4px;cursor:text}
+  body.editing [contenteditable=true]:hover{background:#fffbe8}
+  body.editing [contenteditable=true]:focus{outline:2px solid var(--granate);background:#fffdf2}
+  #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  #toast.show{opacity:1}
+  .edited-chip{background:#e7f0ea;color:var(--verd);font-size:.75rem;font-weight:700;padding:.15rem .6rem;border-radius:10px;margin-left:.6rem}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;max-height:none}}
+  @media print{
+    .topbar,nav,#toast{display:none!important}
+    .layout{display:block;max-width:none;margin:0;padding:0}
+    section.card{border:none;box-shadow:none;page-break-inside:avoid;padding:.5rem 0}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🩰 <span id="brandTitle"></span> <small id="brandSub"></small></div>
+  <div class="lang" id="langBox">
+    <button data-lang="es">ES</button><button data-lang="ca">CA</button><button data-lang="en">EN</button>
+  </div>
+  <div class="tools">
+    <button id="bEdit"></button>
+    <button id="bSave" class="primary"></button>
+    <button id="bExport"></button>
+    <button id="bImport"></button>
+    <button id="bReset" class="danger"></button>
+    <button id="bPrint"></button>
+    <span class="savestate" id="savestate"></span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div id="toast"></div>
+<input type="file" id="fileImp" accept=".json" hidden>
+
+<script>
+/* =========================================================
+   DATOS — contenido completo en castellano, catalán e inglés
+   Cada sección es HTML editable. Las ediciones se guardan por idioma.
+   ========================================================= */
+const KEY='fisiodanza_2027';
+
+const DATA={
+/* ================= CASTELLANO ================= */
+es:{
+ui:{brand:"Fisiología aplicada a la danza",brandSub:"Programación didáctica · Cursos profesionales de danza · 2026-27",
+ edit:"✏️ Editar",editing:"✅ Terminar edición",save:"💾 Guardar",export:"⬇ Exportar cambios",import:"⬆ Importar cambios",
+ reset:"↺ Restaurar original",print:"🖨 Imprimir / PDF",saved:"Guardado",nochanges:"No hay cambios nuevos",
+ resetMsg:"¿Restaurar el contenido ORIGINAL de este idioma? Se perderán tus ediciones en castellano.",
+ edited:"editado",navTitle:"Índice"},
+secs:[
+{id:"present",t:"Presentación",h:`
+<table class="info">
+<tr><th>Módulo</th><td>Fisiología aplicada a la danza</td></tr>
+<tr><th>Materia</th><td>Ciencias de la salud aplicadas a la danza</td></tr>
+<tr><th>Curso / especialidades</th><td>1.er curso · Coreografía e Interpretación / Pedagogía de la Danza</td></tr>
+<tr><th>Carga horaria</th><td>45 h presenciales (viernes, sesiones de 3 h) + 30 h no presenciales</td></tr>
+<tr><th>Calendario</th><td>9 de octubre de 2026 – 22 de enero de 2027 · 14 viernes</td></tr>
+<tr><th>Evaluaciones</th><td><span class="badge b-eval">Parcial</span> 18-dic · <span class="badge b-eval">Final + defensa del dossier</span> 22-ene</td></tr>
+</table>
+<h3>La asignatura de un vistazo</h3>
+<div class="chips">
+<span class="chip">🧭 <b>Eje global:</b> equipo de ciencias de la salud de una compañía</span>
+<span class="chip"><span class="badge b-sda">SdA 1</span> Anatomía de un paso <small>(oct)</small></span>
+<span class="chip"><span class="badge b-sda">SdA 2</span> El cerebro que baila <small>(nov)</small></span>
+<span class="chip"><span class="badge b-sda">SdA 3</span> Motor y combustible <small>(nov–ene)</small></span>
+<span class="chip">🥗 Nutricionista invitado/a <small>(11-dic)</small></span>
+<span class="chip">📁 Dossier final + defensa <small>(22-ene)</small></span>
+</div>
+<div class="note"><b>Leyenda:</b> <span class="badge b-eval">evaluación</span> <span class="badge b-deliver">entrega</span> <span class="badge b-practice">práctica</span> <span class="badge b-free">sin docencia</span> <span class="badge b-sda">SdA</span></div>`},
+
+{id:"justif",t:"1. Justificación",h:`
+<p>La fisiología es la base científica que permite al intérprete y al pedagogo comprender cómo funciona el cuerpo en acción: por qué se calienta, cómo se recupera, por qué se lesiona y cómo optimizar el rendimiento. Esta asignatura no se plantea como un repertorio de sistemas anatómicos para memorizar, sino como un <b>conjunto de herramientas para tomar decisiones profesionales</b>: ensayar mejor, prevenir lesiones, rendir en escena y enseñar con seguridad. Por eso toda la asignatura se articula en torno a una situación profesional real y continuada (el eje global), en la que el conocimiento fisiológico se construye <i>porque</i> es necesario para resolver el reto.</p>`},
+
+{id:"marc",t:"2. Marco normativo y contextualización",h:`
+<ul>
+<li>Real Decreto 754/1992, de título superior de Danza, y normativa autonómica de despliegue vigente <i>[adaptar según el plan de estudios del centro]</i>.</li>
+<li>LOMLOE y proyecto curricular del centro.</li>
+<li>Asignatura de <b>1.er curso</b>, común a las dos especialidades, dentro de la materia <i>Ciencias de la salud aplicadas a la danza</i>.</li>
+<li>Alumnado con alta competencia motriz y escénica (se aprovecha como recurso de aprendizaje) pero, en general, sin formación previa en ciencias de la salud.</li>
+<li>Calendario: 14 viernes de octubre de 2026 a enero de 2027 (incluida la jornada de libre disposición del 30-oct, que se aprovecha para tutorías de seguimiento).</li>
+</ul>`},
+
+{id:"objectius",t:"3. Contribución al perfil y objetivos",h:`
+<p>La asignatura contribuye a las competencias transversales (comunicación científica, trabajo cooperativo, autonomía del aprendizaje) y a las competencias específicas de cuidado del cuerpo, prevención y rendimiento <i>[mapear con el plan de estudios del centro]</i>.</p>
+<h3>Objetivos de aprendizaje</h3>
+<p>Al acabar el curso, el alumnado será capaz de:</p>
+<ol>
+<li>Explicar los mecanismos de homeostasis y regulación corporal aplicados a la práctica dancística.</li>
+<li>Describir la estructura y el funcionamiento de los sistemas musculoesquelético, nervioso, endocrino, sanguíneo, cardiovascular y respiratorio.</li>
+<li>Analizar elementos técnicos de danza desde la anatomía funcional e identificar factores de riesgo de lesión.</li>
+<li>Interpretar datos fisiológicos propios (FC, equilibrio, recuperación, hidratación) para autorregular la carga de trabajo.</li>
+<li>Aplicar conocimientos de nutrición, sueño y recuperación a una semana profesional real (funciones, giras, intensivos).</li>
+<li>Diseñar propuestas seguras y justificadas de calentamiento, enfriamiento y acondicionamiento.</li>
+<li>Comunicar conocimiento científico con rigor y adaptación al público (compañía, alumnos, familias).</li>
+<li>Desarrollar actitudes de cuidado de la salud y ética profesional, con sensibilidad especial hacia la imagen corporal y los TCA.</li>
+</ol>`},
+
+{id:"eix",t:"4. Eje global: «El equipo de ciencias de la salud de la compañía»",h:`
+<table>
+<thead><tr><th>Elemento</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td><b>Reto</b></td><td><i>Sois el equipo de ciencias de la salud de una compañía de danza. La compañía tiene que llegar a la temporada sin lesiones y con el máximo rendimiento: preparad su «dossier de salud».</i></td></tr>
+<tr><td><b>Agrupamiento</b></td><td>Grupos heterogéneos de 3-4. Cada grupo adopta un perfil de compañía (contemporánea en creación, flamenca de gira, compañía júnior… o una compañía real del centro) y lo documenta en la <b>Ficha de compañía</b> inicial.</td></tr>
+<tr><td><b>Roles cooperativos</b></td><td>Coordinación, gestión de datos y materiales, redacción científica, portavoz. Rotación por bloques.</td></tr>
+<tr><td><b>Producto final</b></td><td><b>Dossier de fisiología aplicada de la compañía</b>, que se construye por bloques (SdA 1, 2 y 3) y se entrega y defiende el 22 de enero, antes del examen final.</td></tr>
+<tr><td><b>Módulo de especialidad</b></td><td><i>Pedagogía:</i> sección «Se lo explicamos a los alumnos» (cómo traducir 3 conceptos fisiológicos al aula + calentamiento/enfriamiento seguros justificados). <i>Coreografía e interpretación:</i> sección «Manual de uso de mi cuerpo» (protocolo personal pre-escena y post-función: activación, nutrición, sueño, gestión de los nervios).</td></tr>
+</tbody></table>
+<div class="note">Los tres bloques de contenido no son «temas» sino <b>momentos del proyecto</b>: cada sistema estudiado aporta un capítulo necesario del dossier.</div>`},
+
+{id:"blocs",t:"5. Contenidos por bloques",h:`
+<table>
+<thead><tr><th>Bloque</th><th>Contenidos</th><th>Capítulo del dossier</th></tr></thead>
+<tbody>
+<tr><td>0. Base celular</td><td>Homeostasis, medio interno, membrana, transporte, señalización celular</td><td>Marco introductorio del dossier</td></tr>
+<tr><td>1. Musculoesquelético</td><td>Hueso y adaptación a la carga, articulaciones, hiperlaxitud, músculo, unidad motora, tipos de contracción, palancas, lesiones típicas de danza</td><td>Cap. 1: Anatomía de un paso</td></tr>
+<tr><td>2. Nervioso y sueño</td><td>Neurona y sinapsis, memoria motora, propiocepción y vestibular (equilibrio, vértigo, <i>spotting</i>), sistema autónomo y miedo escénico, sueño y consolidación</td><td>Cap. 2: El cerebro que baila</td></tr>
+<tr><td>3. Sangre, hormonal y nutrición</td><td>Componentes de la sangre, transporte de O₂, anemia ferropénica; eje hipotálamo-hipófisis, estrés (adrenalina/cortisol), salud ósea y RED-S; demanda energética, hidratación, timing nutricional</td><td>Cap. 3: Motor y combustible</td></tr>
+<tr><td>4. Cardiovascular y respiratorio</td><td>Corazón, FC, adaptaciones al ejercicio, zonas de intensidad, recuperación; mecánica ventilatoria, volúmenes, respiración aplicada al movimiento, deuda de O₂</td><td>Cap. 4: Cardio y respiración</td></tr>
+<tr><td>Transversales</td><td>Prevención de lesiones, imagen corporal, búsqueda de fuentes científicas (IADMS), comunicación</td><td>Integrales a todos los capítulos</td></tr>
+</tbody></table>`},
+
+{id:"metod",t:"6. Metodología",h:`
+<ul>
+<li><b>ABP / SdA continuada</b> con producto final real y entregas parciales con <i>feedforward</i>.</li>
+<li><b>Aprendizaje cooperativo</b> con roles, interdependencia positiva y evaluación individual dentro del producto grupal.</li>
+<li><b>Aula invertida:</b> lecturas y vídeos breves previos (dentro de las 30 h no presenciales) para destinar el aula a práctica y producción.</li>
+<li><b>Prácticas corporales de laboratorio:</b> mediciones sobre el propio cuerpo (FC, equilibrio, respiración, hidratación) y sobre el movimiento danzado.</li>
+<li><b>Estudios de caso y contextualización:</b> todos los exámenes y actividades parten de escenarios profesionales de danza.</li>
+<li><b>Experticia externa:</b> sesión con nutricionista especializado/a; colaboración con el departamento de técnica para hacer mediciones en clases reales.</li>
+<li><b>Tutorías</b> de seguimiento por grupos (30 min/grupo/semana, en línea o presenciales).</li>
+</ul>`},
+
+{id:"calendario",t:"7. Planificación de sesiones y trabajo no presencial",h:`
+<table>
+<thead><tr><th>Fecha</th><th>Sesión</th><th>En el aula (3 h)</th><th>No presencial</th><th>Evidencia</th></tr></thead>
+<tbody>
+<tr><td>9-oct</td><td>Presentación · Homeostasis y célula</td><td>Programa y evaluación. Micro-SdA «El termostato que baila» <span class="badge b-practice">práctica</span> (FC, temperatura, sudor antes/después de una secuencia). Configuración de grupos y Ficha de compañía</td><td>Lectura célula + acabar ficha + portafolio 1 (1,5 h)</td><td><span class="badge b-deliver">Ficha de compañía</span></td></tr>
+<tr><td>16-oct</td><td>Musculoesquelético I</td><td>Hueso, articulaciones, músculo y contracciones. Práctica de palpación; identificar contracciones en <i>plié</i>/<i>relevé</i>. Lanzamiento SdA 1</td><td>Estudio + inicio de la búsqueda del paso (2 h)</td><td>—</td></tr>
+<tr><td>23-oct</td><td>Musculoesquelético II</td><td>Palancas, agonistas/antagonistas. Lesiones típicas de danza (estudios de caso). Laboratorio: etiquetado muscular sobre compañero/a. Tutorías SdA 1</td><td>Grabación y edición del vídeo SdA 1 (3 h)</td><td>—</td></tr>
+<tr><td>30-oct</td><td><i>Libre disposición CSD</i> <span class="badge b-free">sin clase</span></td><td>Tutorías de seguimiento SdA 1 (en línea)</td><td>Acabar SdA 1 + lectura nervioso I (2 h)</td><td><span class="badge b-deliver">Entrega SdA 1</span> (campus)</td></tr>
+<tr><td>6-nov</td><td>Nervioso I</td><td>Retorno entre iguales de SdA 1. Neurona, sinapsis, neuroplasticidad y memoria motora. Práctica: frase de movimiento, práctica física vs. mental <span class="badge b-practice">práctica</span>. Sorteo de preguntas SdA 2</td><td>Lectura sistema autónomo + investigación SdA 2 (2 h)</td><td>Ficha práctica P3</td></tr>
+<tr><td>13-nov</td><td>Preparación de trabajos orales</td><td>Laboratorio de presentación: estructura pregunta-evidencia-conclusión, fuentes fiables, comunicación escénica. Tutorías por grupos. Quiz formativo bloques 0-1</td><td>Guion + ensayo de la presentación (3 h)</td><td>—</td></tr>
+<tr><td>20-nov</td><td>Nervioso II + sueño</td><td>Propiocepción, vestibular, <i>spotting</i>; miedo escénica y autónomo; higiene del sueño. Práctica: Romberg, vértigo y rotación, tiempo de reacción <span class="badge b-practice">práctica</span></td><td>Pulir presentación + portafolio 2 (1,5 h)</td><td>Ficha práctica P4</td></tr>
+<tr><td>27-nov</td><td><b>Presentaciones orales</b> · Sangre</td><td>SdA 2: exposiciones (10 min + preguntas) con coevaluación. Sangre: transporte de O₂, anemia ferropénica. Lanzamiento SdA 3</td><td>Iniciar plan SdA 3 + lectura sangre (2 h)</td><td><span class="badge b-deliver">Producto SdA 2</span></td></tr>
+<tr><td>4-dic</td><td>Sistema hormonal</td><td>Eje hipotálamo-hipófisis; estrés y miedo escénico; insulina/glucagón; salud ósea y RED-S (sensibilización). Actividad: mapeo hormonal de una semana de gira</td><td>Preparar caso nutrición + estudio (2,5 h)</td><td>—</td></tr>
+<tr><td>11-dic</td><td>Nutrición (nutricionista + práctica)</td><td>Taller con nutricionista: demanda energética, hidratación, timing, RED-S. Resolución de los casos de cada compañía. Práctica: menú pre/post función <span class="badge b-practice">práctica</span></td><td>Integrar recomendaciones en el plan (1,5 h)</td><td>Ficha práctica P5</td></tr>
+<tr><td>18-dic</td><td><b>EVALUACIÓN PARCIAL</b> <span class="badge b-eval">examen</span></td><td>Prueba escrita bloques 0-3 (90 min) + corrección y cierre de trimestre</td><td>Reto de Navidad: registro de FC de una clase propia (3 h)</td><td><span class="badge b-eval">Examen parcial</span></td></tr>
+<tr><td>8-ene</td><td>Cardiovascular</td><td>Corazón, FC, zonas de intensidad. Práctica P6: FC en clase real (barra / allegro / improvisación) y cálculo de zonas <span class="badge b-practice">práctica</span>. Integración en el plan de acondicionamiento</td><td>Analizar datos + dossier (2 h)</td><td>Ficha práctica P6</td></tr>
+<tr><td>15-ene</td><td>Respiratorio</td><td>Mecánica ventilatoria, volúmenes, respiración diafragmática aplicada, deuda de O₂. Práctica P7. Checklist del dossier. Tutorías finales</td><td>Cerrar dossier + estudio (3 h)</td><td>Ficha práctica P7</td></tr>
+<tr><td>22-ene</td><td><b>EXAMEN FINAL + defensa</b> <span class="badge b-eval">examen</span></td><td>Defensa del dossier: <i>pitch</i> de 5 min por grupo + preguntas. Prueba final (2 h). Cierre y portafolio final</td><td>Portafolio 7 final (1 h)</td><td><span class="badge b-deliver">Dossier</span> + <span class="badge b-eval">examen final</span></td></tr>
+</tbody></table>`},
+
+{id:"fitxes",t:"8. El trabajo del alumnado: fichas",h:`
+<h3>Ficha 0 — Ficha de compañía (individual/grupo · 9-oct)</h3>
+<p>Nombre y perfil de la compañía, disciplina, repertorio de temporada, calendario de funciones, perfil de intérpretes (edad, nivel, horas semanales de baile) y 3 preocupaciones de salud del grupo.</p>
+<h3>Ficha 1 — SdA 1: «Anatomía de un paso» (grupo · entrega 30-oct)</h3>
+<ul>
+<li>Elegir un elemento técnico de la compañía (<i>plié, développé, grand jeté</i>, pirueta, elevación…).</li>
+<li><b>Producto:</b> (a) ficha anatómica (1-2 págs.): huesos y articulaciones implicadas, músculos principales por fases (preparación-acción-recepción), tipo de contracción, 2 lesiones de riesgo + 1 medida de prevención; (b) vídeo de 2-3 min con anotaciones (flechas, nombres o voz en off).</li>
+<li>Mínimo 3 fuentes citadas (una de ellas IADMS). Declaración individual de contribuciones.</li>
+</ul>
+<h3>Ficha 2 — SdA 2: «El cerebro que baila» (grupo · exposición 27-nov)</h3>
+<ul>
+<li>Cada grupo responde <b>una pregunta de investigación</b> (10 min + 2 min de preguntas, mínimo 5 referencias, con <b>1 demostración o experimento en directo</b> con el público):</li>
+</ul>
+<ol>
+<li>¿Por qué hacemos <i>spotting</i>? 2. ¿Cómo se consolida una coreografía mientras dormimos? 3. ¿Qué es la memoria motora y cómo se entrena? 4. ¿Qué ocurre en el cuerpo con el miedo escénico? 5. ¿Por qué aparece vértigo al girar y cómo se adapta el vestíbulo? 6. ¿Cómo afecta la fatiga a la propiocepción? 7. Práctica mental vs. práctica física: ¿qué dice la ciencia? 8. Espejo e imagen corporal: ¿qué percibe el cerebro? 9. ¿Por qué se descoordinan los movimientos con los nervios? 10. ¿Cuál es el mejor horario de ensayo según el cerebro?</li>
+</ol>
+<ul><li>Cada miembro expone una sección. Coevaluación entre grupos con hoja normalizada.</li></ul>
+<h3>Ficha 3 — SdA 3: «Plan fisiológico de la semana de funciones» (grupo · entrega 20-ene, defensa 22-ene)</h3>
+<p>Plan integral para una semana típica de la compañía (3-4 h de baile/día, 2 funciones):</p>
+<ol>
+<li><b>Diagnóstico:</b> demandas energéticas estimadas y riesgos del perfil.</li>
+<li><b>Acondicionamiento:</b> zonas de FC objetivo (a partir de datos P6), 1 sesión de cardio complementaria, protocolo de enfriamiento y recuperación.</li>
+<li><b>Nutrición:</b> menú pre-función, hidratación y recuperación post-función (validado por el nutricionista).</li>
+<li><b>Sueño y estrés:</b> higiene del sueño en giras + protocolo de gestión del miedo escénico (respiración, visualización).</li>
+<li><b>Módulo de especialidad</b> (ver §4).</li>
+</ol>
+<p>El <b>dossier final</b> integra: ficha SdA 1 + síntesis SdA 2 + plan SdA 3 + anexo de datos de prácticas. Versión avanzada el 15-ene (feedback), versión final el 20-ene, defensa el 22-ene.</p>`},
+
+{id:"diversitat",t:"9. Atención a la diversidad e inclusión",h:`
+<ul>
+<li><b>DUA:</b> todos los contenidos en formatos múltiples (texto, vídeo, práctico); productos con vías de expresión diversas.</li>
+<li><b>Prácticas adaptadas:</b> cualquier lesión o condición de salud actual se acomoda con alternativas de medición o rol de observador/a documentando (nunca obligar a provocar dolor o malestar).</li>
+<li><b>Salud mental e imagen corporal:</b> lenguaje no estigmatizante, tratamiento del bloque hormonal/nutrición con perspectiva de prevención de TCA, derivación a los servicios del centro si procede.</li>
+<li><b>Cooperación estructurada:</b> roles rotatorios para garantizar la participación de todos los perfiles; tutoría entre iguales.</li>
+<li>Apoyo lingüístico: glosario castellano/catalán de alta especialización en el campus.</li>
+</ul>`},
+
+{id:"materials",t:"10. Materiales, recursos y bibliografía",h:`
+<p>Aula diáfana con espacio libre de movimiento; proyector; pulsioxímetros o apps de FC; cinta métrica; modelos anatómicos y app de anatomía 3D; campus virtual (fichas, quiz, entregas); fichas de práctica normalizadas.</p>
+<p><b>Bibliografía recomendada:</b> Tortora &amp; Derrickson, <i>Principios de anatomía y fisiología</i>; Calais-Germain, <i>Anatomía para el movimiento</i>; Haas, <i>Dance Anatomy</i>; Quin, Rafferty &amp; Tomlinson, <i>Safe Dance Practice</i>; Krasnow &amp; Wilmerding, <i>Motor Learning and Control for Dance</i>; recursos y declaraciones de la <b>IADMS</b> (iadms.org).</p>`},
+
+{id:"avaluacio",t:"11. Evaluación",h:`
+<h3>11.1 Criterios de evaluación</h3>
+<ul>
+<li><b>CE1</b> Explica los mecanismos fisiológicos de los sistemas estudiados aplicados al movimiento danzado.</li>
+<li><b>CE2</b> Analiza elementos técnicos de danza desde la anatomía funcional e identifica factores de riesgo.</li>
+<li><b>CE3</b> Recoge e interpreta datos fisiológicos propios para valorar la carga y la recuperación.</li>
+<li><b>CE4</b> Diseña estrategias fundamentadas de prevención, nutrición, sueño y rendimiento para un contexto profesional real.</li>
+<li><b>CE5</b> Comunica conocimiento científico con rigor, oralmente y por escrito, adaptándolo al público.</li>
+<li><b>CE6</b> Busca, contrasta y cita fuentes científicas fiables.</li>
+<li><b>CE7</b> Colabora cooperativamente y ejerce la responsabilidad individual dentro del trabajo grupal.</li>
+<li><b>CE8</b> (especialidad) Traduce conceptos fisiológicos a propuestas didácticas seguras / a un protocolo personal de rendimiento.</li>
+</ul>
+<h3>11.2 Actividades de evaluación y ponderación</h3>
+<table>
+<thead><tr><th>#</th><th>Actividad</th><th>Instrumento</th><th>Peso</th><th>Modalidad</th><th>Momento</th></tr></thead>
+<tbody>
+<tr><td>A1</td><td>Quiz formativos de bloque</td><td>Quiz en línea/Kahoot</td><td><i>Formativo</i></td><td>Individual</td><td>13-nov, 4-dic, 8-ene</td></tr>
+<tr><td>A2</td><td>Fichas de práctica (P1-P7)</td><td>Hoja de registro: datos + interpretación</td><td>10 %</td><td>Individual</td><td>Continua</td></tr>
+<tr><td>A3</td><td>Portafolio de aprendizaje (7 entradas)</td><td>Lista de control + valoración cualitativa</td><td>10 %</td><td>Individual</td><td>Continua</td></tr>
+<tr><td>A4</td><td>SdA 1: vídeo + ficha anatómica</td><td>Rúbrica de análisis anatómico</td><td>8 %</td><td>Grupo</td><td>30-oct</td></tr>
+<tr><td>A5</td><td>SdA 2: presentación oral</td><td>Rúbrica + coevaluación entre grupos</td><td>10 %</td><td>Grupo (parte individual: exposición)</td><td>27-nov</td></tr>
+<tr><td>A6</td><td>SdA 3: dossier + defensa</td><td>Rúbrica + preguntas de defensa</td><td>12 %</td><td>Grupo</td><td>20-22-ene</td></tr>
+<tr><td>A7</td><td>Examen parcial</td><td>Prueba escrita (90 min)</td><td>20 %</td><td>Individual</td><td>18-dic</td></tr>
+<tr><td>A8</td><td>Examen final</td><td>Prueba escrita (2 h)</td><td>30 %</td><td>Individual</td><td>22-ene</td></tr>
+<tr><td>A9</td><td>Autoevaluación cooperativa</td><td>Declaración individual de contribuciones</td><td>Ajuste ±10 %</td><td>Individual</td><td>Final de cada SdA</td></tr>
+</tbody></table>
+<h3>11.3 Descripción de las actividades</h3>
+<p><b>A1 · Quiz formativos (0 %):</b> 10 min, 8-10 ítems; retroalimentación inmediata; detectan carencias antes de los exámenes.</p>
+<p><b>A2 · Fichas de práctica:</b> en cada práctica (homeostasis, palpación, aprendizaje motor, equilibrio/vestibular, hidratación, FC en clase, respiración) el alumnado registra datos y los interpreta en 10-15 líneas. Se valoran la precisión del registro y la calidad de la interpretación fisiológica.</p>
+<p><b>A3 · Portafolio individual</b> (7 entradas, 15-20 min cada una): 1) expectativas y preocupaciones de salud; 2) qué he descubierto de mi cuerpo en la SdA 1; 3) qué aplicaré del cerebro/aprendizaje a mis ensayos; 4) reflexión post-presentación; 5) imagen corporal y alimentación: qué me llevo; 6) qué me dicen los datos de mis clases; 7) metacognición final: qué haré diferente. Criterios: regularidad, profundidad reflexiva, conexión teoría-experiencia.</p>
+<p><b>A4 · Rúbrica SdA 1</b> (dimensiones): precisión anatómica; aplicación al movimiento real; lesiones y prevención; calidad técnica del vídeo; citación de fuentes.</p>
+<p><b>A5 · Rúbrica de presentación oral:</b></p>
+<table>
+<thead><tr><th>Criterio</th><th>Excelente (4)</th><th>Notable (3)</th><th>Suficiente (2)</th><th>Insuficiente (1)</th></tr></thead>
+<tbody>
+<tr><td>Contenido científico</td><td>Riguroso, actual, bien explicado</td><td>Correcto con imprecisiones menores</td><td>Básico, con errores puntuales</td><td>Errores graves o vacíos</td></tr>
+<tr><td>Estructura</td><td>Pregunta-evidencia-conclusión clara</td><td>Lógica con desajustes menores</td><td>Secuenciable pero confusa</td><td>Desordenado</td></tr>
+<tr><td>Comunicación</td><td>Cautiva, adaptada al público</td><td>Fluida, lectura mínima</td><td>Depende del guion</td><td>Lee, no conecta</td></tr>
+<tr><td>Demostración práctica</td><td>Pertinente, segura, integrada</td><td>Pertinente pero poco integrada</td><td>Superficial</td><td>Ausente o irrelevante</td></tr>
+<tr><td>Fuentes y tiempo</td><td>5+ fuentes, dentro de tiempo</td><td>Fuentes suficientes, pequeño exceso</td><td>Pocas fuentes o excede</td><td>Sin fuentes ni control</td></tr>
+</tbody></table>
+<p>La coevaluación (hoja de 5 ítems por grupo) ajusta hasta 1 punto la nota de la presentación.</p>
+<p><b>A6 · Rúbrica dossier + defensa</b> (dimensiones): fundamentación fisiológica; viabilidad y personalización al perfil de compañía; integración nutrición-sueño-carga; módulo de especialidad; formato, visual y citación; calidad de las respuestas en la defensa (<i>pitch</i> de 5 min + 3 preguntas).</p>
+<p><b>A7 · Examen parcial (18-dic, 90 min):</b> 20 preguntas test (40 %) + 3 preguntas de desarrollo contextualizadas (45 %) + 1 mini-caso (15 %). <i>Ejemplos:</i> «Durante la recepción de un <i>grand jeté</i>, ¿qué acción hacen los isquiotibiales de la pierna delantera? Justifícalo»; «Una bailarina tiene vértigo recurrente en piruetas: explica la estructura vestibular implicada y por qué ayuda el <i>spotting</i>».</p>
+<p><b>A8 · Examen final (22-ene, 2 h):</b> mismo formato sobre bloques 4 y transversales + <b>1 pregunta integradora de todo el curso</b>: «Los registros de FC de la compañía muestran una recuperación lenta después del <i>allegro</i>. Propón dos explicaciones fisiológicas y dos acciones de vuestro plan de salud».</p>
+<p><b>A9 · Autoevaluación cooperativa:</b> al final de cada SdA, declaración individual de contribuciones; permite ajustar la nota grupal individualmente (±10 %).</p>
+<h3>11.4 Mínimos, recuperación y seguimiento</h3>
+<ul>
+<li><b>Asistencia mínima del 80 %</b> a las sesiones presenciales para poder ser evaluado/a de las actividades prácticas.</li>
+<li><b>Mínimos:</b> examen final ≥ 4 (sobre 10) para hacer media ponderada; entrega de todos los productos grupales.</li>
+<li><b>Recuperación:</b> prueba escrita global en febrero (sustituye la nota de exámenes si mejora); los productos grupales se pueden volver a entregar en una semana con máximo de notable; la presentación oral se recupera en tutoría.</li>
+<li><b>Seguimiento:</b> notas visibles en el campus; tutorías semanales; comunicación directa de riesgo de no superación después de la evaluación parcial.</li>
+</ul>`},
+
+{id:"temari",t:"12. Esquema fisiológico de cada sesión",h:`
+<h3>Tema 0 · Presentación, homeostasis y fisiología celular (9-oct)</h3>
+<h4>1. Introducción a la fisiología</h4>
+<ul><li>Concepto de fisiología; niveles de organización (célula → tejido → órgano → sistema → organismo)</li><li>Las cuatro bases: relación estructura-función, gradientes, comunicación, energía (ATP)</li></ul>
+<h4>2. Homeostasis</h4>
+<ul><li>Medio interno (Claude Bernard) y homeostasis (Cannon)</li><li>Sistema de control: variable regulada, sensores, centro de integración, efectores</li><li>Retroalimentación negativa (temperatura, glucemia, osmolaridad) y positiva (parto, coagulación)</li><li>El ejercicio como perturbación homeostática: ↑temperatura, ↓pH, ↓volumen plasmático, ↓glucógeno</li><li><b>Aplicación a la danza:</b> la fatiga como desequilibrio temporal; la recuperación como retorno al equilibrio; por qué «calentar» y «enfriar» son regulaciones homeostáticas</li></ul>
+<h4>3. Fisiología celular</h4>
+<ul><li>La membrana plasmática: bicapa lipídica y proteínas; permeabilidad selectiva</li><li>Transportes pasivos (difusión simple y facilitada, ósmosis) y activos (bomba Na⁺/K⁺)</li><li>Potencial de membrana y excitabilidad (base de nervio y músculo)</li><li>Orgánulos funcionales: mitocondrias (energía), retículo sarcoplásmico (Ca²⁺), ribosomas (proteínas)</li><li>Comunicación intercelular: señales químicas y receptores</li><li>Tipos celulares del curso: fibra muscular, neurona, osteocito, condrocito, eritrocito</li><li><b>Aplicación:</b> ¿qué le ocurre a la célula muscular durante un <i>allegro</i>? ATP, Ca²⁺, metabolitos</li></ul>
+<h3>Tema 1 · Sistema musculoesquelético I (16-oct) — <i>Hueso y articulaciones</i></h3>
+<h4>1. Visión general del sistema</h4>
+<ul><li>Funciones: soporte, movimiento, protección, minerales, hematopoyesis</li><li>Tejido conectivo: colágeno y elastina (base de tendón, ligamento, fascia, cápsula)</li></ul>
+<h4>2. Tejido óseo</h4>
+<ul><li>Hueso compacto y esponjoso; matriz (colágeno + hidroxiapatita)</li><li>Células óseas: osteoblastos, osteocitos, osteoclastos</li><li>Remodelado óseo y <b>ley de Wolff</b>: el hueso se adapta a la carga</li><li>Estructura del hueso largo: diáfisis, epífisis, cartílago de crecimiento, médula</li><li><b>Aplicación:</b> adaptación ósea al impacto de la danza; fracturas por estrés (metatarsos, tibia); osteopenia y salud ósea (enlace con RED-S, tema 7)</li></ul>
+<h4>3. Cartílago articular</h4>
+<ul><li>Tipos (hialino, fibrocartílago); avascularidad → nutrición por difusión con el movimiento</li></ul>
+<h4>4. Articulaciones</h4>
+<ul><li>Clasificación: fibrosas, cartilaginosas, sinoviales</li><li>Estructura de la sinovial: cápsula, líquido sinovial, meniscos, labrum</li><li>Planos y ejes anatómicos; terminología de movimientos (flexión/extensión, abducción, rotación, dorsiflexión/plantarflexión, pronación/supinación)</li><li>Rango de movimiento: factores limitantes</li><li><b>Hiperlaxitud:</b> test de Beighton; ventajas estéticas vs. riesgo de lesión</li><li><b>Aplicación:</b> <i>turnout</i> desde cadera vs. forzado en rodilla/tobillo; <i>en pointe</i>; estabilización del hombro en <i>port de bras</i></li></ul>
+<h3>Tema 2 · Sistema musculoesquelético II (23-oct) — <i>Músculo</i></h3>
+<h4>1. Estructura del músculo esquelético</h4>
+<ul><li>Vientre, origen e inserción, tendón; epimisio, perimisio, endomisio</li><li>La fibra muscular: sarcolema, retículo sarcoplásmico, miofibrillas</li></ul>
+<h4>2. Contracción muscular</h4>
+<ul><li>El sarcómero: actina, miosina, troponina, tropomiosina; bandas A e I</li><li>Teoría de los filamentos deslizantes; acoplamiento excitación-contracción (papel del Ca²⁺ y el ATP)</li><li>Ciclo de puentes cruzados; rigor y falta de ATP</li></ul>
+<h4>3. Tipos de fibras y unidad motora</h4>
+<ul><li>Fibras I (lentas/oxidativas) vs. IIa/IIx (rápidas/glicolíticas); perfil del bailarín</li><li>Unidad motora: motoneurona + fibras; ley del tamaño y reclutamiento</li></ul>
+<h4>4. Tipos de contracción y función muscular</h4>
+<ul><li>Isométrica, concéntrica, <b>excéntrica</b> (base del DOMS: agujetas)</li><li>Papel muscular: agonista, antagonista, sinergista, fijador; co-contracción</li><li><b>Aplicación:</b> análisis muscular de <i>plié</i> (excéntrica), <i>relevé</i> (concéntrica), equilibrio (isométrica), <i>grand jeté</i> (secuencia completa)</li></ul>
+<h4>5. Propiocepción muscular</h4>
+<ul><li>Huso neuromuscular (reflejo miotático) y órgano tendinoso de Golgi</li></ul>
+<h4>6. Fatiga muscular y flexibilidad</h4>
+<ul><li>Mecanismos de fatiga; calambres; propiedades viscoelásticas y estiramiento</li><li>Lesiones musculotendinosas típicas de danza: distensiones, tendinopatías (Aquiles, rotadores)</li></ul>
+<h3>— Festivo de libre disposición CSD (30-oct) —</h3>
+<p>Sin docencia presencial: trabajo no presencial del bloque musculoesquelético.</p>
+<h3>Tema 3 · Sistema nervioso I (6-nov) — <i>Neurona y control del movimiento</i></h3>
+<h4>1. Organización del sistema nervioso</h4>
+<ul><li>SNC / SNP; vías aferentes y eferentes; somático y autónomo</li></ul>
+<h4>2. La neurona</h4>
+<ul><li>Estructura: soma, dendritas, axón, mielina; neuroglía</li><li>Potencial de reposo, potencial de acción; conducción saltatoria y velocidad</li></ul>
+<h4>3. Sinapsis</h4>
+<ul><li>Sinapsis química; neurotransmisores clave (ACh, glutamato, GABA, dopamina, serotonina, <b>endorfinas</b>)</li><li>Integración: sumación, excitación e inhibición</li></ul>
+<h4>4. Control motor</h4>
+<ul><li>Corteza motora y premotora; vías descendentes; motoneurona como vía final común</li><li><b>Cerebelo:</b> coordinación, timing, equilibrio</li><li><b>Ganglios basales:</b> automatización de movimientos aprendidos</li><li><b>Plasticidad y aprendizaje motor:</b> fases (cognitiva → asociativa → autónoma); memoria motora</li><li><b>Aplicación:</b> cómo se aprende una coreografía; ensayo distribuido vs. masivo; práctica mental/visualización; por qué el movimiento «automatizado» libera atención para la interpretación</li></ul>
+<h3>Tema 4 · Preparación y envío de trabajos orales (13-nov)</h3>
+<p>Sin contenido fisiológico nuevo: sesión de metodología (búsqueda de fuentes, estructura científica, comunicación oral) y tutorías de grupo.</p>
+<h3>Tema 5 · Sistema nervioso II / Sueño (20-nov)</h3>
+<h4>1. Sensación y equilibrio</h4>
+<ul><li>Propiocepción (husos, receptores articulares) + visión + <b>sistema vestibular</b></li><li>Vestíbulo: otolitos (utrículo/sáculo) y canales semicirculares (endolinfa)</li><li><b>Vértigo rotatorio, nistagmo y adaptación vestibular</b></li><li><b>Aplicación:</b> por qué funciona el <i>spotting</i>; el giro como entrenamiento del vestíbulo; desequilibrio en fatiga</li></ul>
+<h4>2. Sistema nervioso autónomo</h4>
+<ul><li>Simpático vs. parasimpático; tono autonómico</li><li><b>Respuesta de estrés escénico:</b> adrenalina (taquicardia, temblor, boca seca), curva de Yerkes-Dodson (activación óptima)</li><li><b>Aplicación:</b> control de los «nervios» del estreno; respiración como activador parasimpático; rutinas pre-escena</li></ul>
+<h4>3. El sueño</h4>
+<ul><li>Arquitectura del sueño: fases NREM (1-3) y REM; ritmos circadianos</li><li>Funciones: <b>consolidación de la memoria motora</b> (la coreografía «se instala» durmiendo), secreción de GH, reparación tisular</li><li>Privación de sueño: atención, tiempo de reacción, riesgo de lesión</li><li><b>Aplicación:</b> higiene del sueño del bailarín; funciones nocturnas y giras; siestas; cafeína</li></ul>
+<h3>Tema 6 · Presentaciones orales / La sangre (27-nov)</h3>
+<p><b>Primera parte:</b> presentación de los trabajos orales (evaluación del bloque nervioso).</p>
+<h4>1. Composición de la sangre</h4>
+<ul><li>Plasma (agua, proteínas, electrolitos, nutrientes) y elementos formes (hematocrito)</li></ul>
+<h4>2. Eritrocitos</h4>
+<ul><li>Hemoglobina; transporte de O₂ y CO₂; eritropoyesis</li><li><b>Adaptación al entrenamiento:</b> ↑volumen plasmático y capacidad de transporte</li></ul>
+<h4>3. Leucocitos y plaquetas</h4>
+<ul><li>Función inmune e inflamación (enlace con recuperación y lesiones); hemostasia</li></ul>
+<h4>4. La sangre en la danza</h4>
+<ul><li><b>Anemia ferropénica en bailarines:</b> fatiga inexplicable, ferritina, mayor riesgo en mujeres, impacto en el rendimiento aeróbico</li><li>Interpretación básica de un análisis de sangre</li></ul>
+<h3>Tema 7 · Sistema hormonal (4-dic)</h3>
+<h4>1. Fundamentos de endocrinología</h4>
+<ul><li>Hormona, glándula diana, receptores; hormonas proteicas vs. esteroideas</li><li>Eje hipotálamo-hipófisis y <b>retroalimentación</b></li></ul>
+<h4>2. Principales ejes hormonales</h4>
+<ul><li>Hipófisis: GH, ACTH, TSH, gonadotropinas, ADH</li><li>Tiroides: T3/T4 y <b>metabolismo basal</b></li><li>Paratiroides: PTH y regulación del calcio (enlace con el hueso)</li><li>Cápsula suprarrenal: <b>catecolaminas</b> (adrenalina: respuesta de lucha-huida) y <b>cortisol</b> (estrés, catabolismo); aldosterona</li><li>Páncreas endocrino: <b>insulina/glucagón</b> y glucemia (enlace con nutrición)</li><li>Gónadas: estrógenos, progesterona, testosterona; <b>ciclo menstrual y rendimiento</b></li></ul>
+<h4>3. Hormonas, estrés y danza</h4>
+<ul><li>Respuesta hormonal al ejercicio agudo y al sobreentrenamiento (cortisol crónico)</li><li><b>Baja disponibilidad energética y RED-S:</b> alteración hormonal, amenorrea, salud ósea (integración de temas 1, 6 y 8)</li><li><b>Aplicación:</b> la adrenalina del estreno; salud menstrual como indicador de salud global; comunicación profesional sin estigma</li></ul>
+<h3>Tema 8 · Nutrición (11-dic) — <i>con nutricionista + práctica</i></h3>
+<h4>1. Combustible del músculo (revisión integradora)</h4>
+<ul><li>ATP y sistemas energéticos: fosfágenos, glucólisis, metabolismo oxidativo</li><li>Sistemas dominantes según el tipo de demanda dancística (salto vs. variación larga vs. improvisación)</li></ul>
+<h4>2. Macronutrientes</h4>
+<ul><li>Carbohidratos: glucógeno muscular y hepático; rendimiento</li><li>Proteínas: reparación y adaptación; requerimientos del bailarín</li><li>Grasas: función hormonal y energética; ácidos esenciales</li></ul>
+<h4>3. Micronutrientes e hidratación</h4>
+<ul><li>Hierro, calcio, vitamina D (enlace con sangre y hueso)</li><li>Equilibrio hídrico; hipohidratación y pérdida de rendimiento y coordinación</li></ul>
+<h4>4. Nutrición aplicada</h4>
+<ul><li>Timing nutricional: pre-ensayo, recuperación post-clase, día de función</li><li><b>Disponibilidad energética, imagen corporal y TCA en danza:</b> señales de alerta y actitud profesional</li><li><b>Práctica:</b> análisis de menús reales, planificación de un día de función con el nutricionista</li></ul>
+<h3>Tema 9 · EVALUACIÓN PARCIAL (18-dic)</h3>
+<p>Prueba escrita de los temas 0-7. Retorno calificado antes de las vacaciones.</p>
+<h3>Tema 10 · Aparato cardiovascular (8-ene)</h3>
+<h4>1. El corazón</h4>
+<ul><li>Estructura: cámaras, válvulas, miocardio, arterias coronarias</li><li>Sistema de conducción: nódulo sinusal y auriculoventricular; miocardio como músculo autoexcitable</li><li>Ciclo cardíaco: sístole/diástole; <b>gasto cardíaco = FC × volumen sistólico</b></li></ul>
+<h4>2. Vasos y presión arterial</h4>
+<ul><li>Arterias, capilares, venas; retorno venoso (papel de la <b>bomba muscular</b>: relevancia de seguir moviéndose tras el esfuerzo)</li></ul>
+<h4>3. Regulación</h4>
+<ul><li>Autonómica (simpático ↑FC / parasimpático ↓FC), hormonal y local</li></ul>
+<h4>4. Cardiovascular y danza</h4>
+<ul><li>Respuesta al ejercicio: FC, redistribución del flujo, tensión arterial</li><li><b>FC máxima y zonas de intensidad;</b> la danza como ejercicio intermitente (perfil de intensidad de una clase: barra vs. allegro vs. repertorio)</li><li>Adaptaciones al entrenamiento: bradicardia de reposo, ↑volumen sistólico</li><li><b>Frecuencia cardíaca de recuperación</b> como indicador de forma</li><li><b>Práctica:</b> toma de FC en una clase real y cálculo de zonas</li></ul>
+<h3>Tema 11 · Aparato respiratorio (15-ene)</h3>
+<h4>1. Estructura</h4>
+<ul><li>Vías aéreas (conducción) y zona de intercambio: <b>alvéolos</b>; pleura</li></ul>
+<h4>2. Mecánica ventilatoria</h4>
+<ul><li>Diafragma e intercostales; presiones e inspiración/espiración</li><li>Volúmenes y capacidades pulmonares: volumen corriente, VC, volumen residual</li></ul>
+<h4>3. Intercambio y transporte de gases</h4>
+<ul><li>Difusión alvéolo-capilar; papel de la hemoglobina (integración con la sangre)</li><li>Regulación de la ventilación: quimiorreceptores sensibles al CO₂ (por eso «ahogo» no es falta de O₂)</li></ul>
+<h4>4. Respiración y ejercicio</h4>
+<ul><li>Ventilación y consumo de O₂; <b>VO₂máx</b>; umbral ventilatorio</li><li><b>EPOC (deuda de oxígeno)</b> y recuperación activa</li><li>Cadena O₂ completa: pulmón → sangre → corazón → músculo (síntesis del curso)</li></ul>
+<h4>5. Respiración aplicada a la danza</h4>
+<ul><li>Respiración diafragmática vs. costal superficial; evitar apnea/Valsalva en el esfuerzo</li><li>Coordinación respiración-fase de movimiento (<i>port de bras</i>, saltos, adagio)</li><li>Respiración como herramienta de regulación del estrés escénico (cierre transversal con sistema nervioso autónomo)</li><li><b>Práctica:</b> ejercicios respiratorios y test sencillos de ventilación</li></ul>
+<h3>Tema 12 · EXAMEN FINAL (22-ene)</h3>
+<p>Prueba escrita acumulativa con énfasis en cardiovascular, respiratorio e integración (pregunta tipo caso: «una semana de funciones»).</p>
+<h3>Notas transversales del esquema</h3>
+<ul>
+<li><b>Hilo conductor:</b> la homeostasis (tema 0) reaparece en todos los sistemas: temperatura y agua (cardio), Ca²⁺ y pH (músculo), glucemia (hormonal-nutrición), CO₂ (respiratorio).</li>
+<li><b>Repaso integrador:</b> cada tema abre con 10-15 min de conexión con el anterior; las prácticas miden variables del propio cuerpo para reforzar la transferencia.</li>
+<li>Los cuatro días sin contenido teórico (30-oct, 13-nov, 18-dic, 22-ene) se dedican a trabajo autónomo tutorizado, preparación de productos y evaluación.</li>
+</ul>`}
+]},
+
+/* ================= CATALÀ ================= */
+ca:{
+ui:{brand:"Fisiologia aplicada a la dansa",brandSub:"Programació didàctica · Cursos professionals de dansa · 2026-27",
+ edit:"✏️ Edita",editing:"✅ Acaba l'edició",save:"💾 Desa",export:"⬇ Exporta canvis",import:"⬆ Importa canvis",
+ reset:"↺ Restaura l'original",print:"🖨 Imprimeix / PDF",saved:"Desat",nochanges:"No hi ha canvis nous",
+ resetMsg:"Vols restaurar el contingut ORIGINAL d'aquest idioma? Perdràs les teves edicions en català.",
+ edited:"editat",navTitle:"Índex"},
+secs:[
+{id:"present",t:"Presentació",h:`
+<table class="info">
+<tr><th>Mòdul</th><td>Fisiologia aplicada a la dansa</td></tr>
+<tr><th>Matèria</th><td>Ciències de la salut aplicades a la dansa</td></tr>
+<tr><th>Curs / especialitats</th><td>1r curs · Coreografia i Interpretació / Pedagogia de la Dansa</td></tr>
+<tr><th>Càrrega horària</th><td>45 h presencials (divendres, sessions de 3 h) + 30 h no presencials</td></tr>
+<tr><th>Calendari</th><td>9 d'octubre de 2026 – 22 de gener de 2027 · 14 divendres</td></tr>
+<tr><th>Avaluacions</th><td><span class="badge b-eval">Parcial</span> 18-des · <span class="badge b-eval">Final + defensa del dossier</span> 22-gen</td></tr>
+</table>
+<h3>L'assignatura d'un cop d'ull</h3>
+<div class="chips">
+<span class="chip">🧭 <b>Eix global:</b> equip de ciències de la salut d'una companyia</span>
+<span class="chip"><span class="badge b-sda">SdA 1</span> Anatomia d'un pas <small>(oct)</small></span>
+<span class="chip"><span class="badge b-sda">SdA 2</span> El cervell que balla <small>(nov)</small></span>
+<span class="chip"><span class="badge b-sda">SdA 3</span> Motor i combustible <small>(nov–gen)</small></span>
+<span class="chip">🥗 Nutricionista convidat/da <small>(11-des)</small></span>
+<span class="chip">📁 Dossier final + defensa <small>(22-gen)</small></span>
+</div>
+<div class="note"><b>Llegenda:</b> <span class="badge b-eval">avaluació</span> <span class="badge b-deliver">lliurament</span> <span class="badge b-practice">pràctica</span> <span class="badge b-free">sense docència</span> <span class="badge b-sda">SdA</span></div>`},
+
+{id:"justif",t:"1. Justificació",h:`
+<p>La fisiologia és la base científica que permet a l'intèrpret i al pedagog comprendre com funciona el cos en acció: per què s'escalfa, com es recupera, per què es lesiona i com optimitzar el rendiment. Aquesta assignatura no es planteja com un repertori de sistemes anatòmics per memoritzar, sinó com un <b>conjunt d'eines per prendre decisions professionals</b>: assajar millor, prevenir lesions, rendir en escena i ensenyar amb seguretat. Per això tota l'assignatura s'articula al voltant d'una situació professional real i continuada (l'eix global), en què el coneixement fisiològic es construeix <i>perquè</i> és necessari per resoldre el repte.</p>`},
+
+{id:"marc",t:"2. Marc normatiu i contextualització",h:`
+<ul>
+<li>Reial decret 754/1992, de títol superior de Dansa, i normativa autonòmica de desplegament vigent <i>[adaptar segons el pla d'estudis del centre]</i>.</li>
+<li>LOMLOE i projecte curricular del centre.</li>
+<li>Assignatura de <b>1r curs</b>, comuna a les dues especialitats, dins de la matèria <i>Ciències de la salut aplicades a la dansa</i>.</li>
+<li>Alumnat amb alta competència motriu i escènica (s'explota com a recurs d'aprenentatge) però, en general, sense formació prèvia en ciències de la salut.</li>
+<li>Calendari: 14 divendres d'octubre de 2026 a gener de 2027 (inclosa la jornada de lliure disposició del 30-oct, que s'aprofita per a tutories de seguiment).</li>
+</ul>`},
+
+{id:"objectius",t:"3. Contribució al perfil i objectius",h:`
+<p>L'assignatura contribueix a les competències transversals (comunicació científica, treball cooperatiu, autonomia d'aprenentatge) i a les competències específiques de cura del cos, prevenció i rendiment <i>[mapar amb el pla d'estudis del centre]</i>.</p>
+<h3>Objectius d'aprenentatge</h3>
+<p>En acabar el curs, l'alumnat serà capable de:</p>
+<ol>
+<li>Explicar els mecanismes d'homeòstasi i regulació corporal aplicats a la pràctica dansada.</li>
+<li>Descriure l'estructura i el funcionament dels sistemes musculoesquelètic, nerviós, endocrí, sanguini, cardiovascular i respiratori.</li>
+<li>Analitzar elements tècnics de dansa des de l'anatomia funcional i identificar factors de risc de lesió.</li>
+<li>Interpretar dades fisiològiques pròpies (FC, equilibri, recuperació, hidratació) per autoregular la càrrega de treball.</li>
+<li>Aplicar coneixements de nutrició, son i recuperació a una setmana professional real (funcions, gires, intensius).</li>
+<li>Dissenyar propostes segures i justificades d'escalfament, refredament i condicionament.</li>
+<li>Comunicar coneixement científic amb rigor i adaptació al públic (companyia, alumnes, famílies).</li>
+<li>Desenvolupar actituds de cura de la salut i ètica professional, amb sensibilitat especial cap a la imatge corporal i els TCA.</li>
+</ol>`},
+
+{id:"eix",t:"4. Eix global: «L'equip de ciències de la salut de la companyia»",h:`
+<table>
+<thead><tr><th>Element</th><th>Descripció</th></tr></thead>
+<tbody>
+<tr><td><b>Repte</b></td><td><i>Sou l'equip de ciències de la salut d'una companyia de dansa. La companyia ha d'arribar a la temporada sense lesions i amb el màxim rendiment: prepareu el seu «dossier de salut».</i></td></tr>
+<tr><td><b>Agrupament</b></td><td>Grups heterogenis de 3-4. Cada grup adopta un perfil de companyia (contemporània en creació, flamenca en gira, companyia júnior… o una companyia real del centre) i el documenta en la <b>Fitxa de companyia</b> inicial.</td></tr>
+<tr><td><b>Rols cooperatius</b></td><td>Coordinació, gestió de dades i materials, redacció científica, portaveu. Rotació per blocs.</td></tr>
+<tr><td><b>Producte final</b></td><td><b>Dossier de fisiologia aplicada de la companyia</b>, que es construeix per blocs (SdA 1, 2 i 3) i es lliura i defensa el 22 de gener, abans de l'examen final.</td></tr>
+<tr><td><b>Mòdul d'especialitat</b></td><td><i>Pedagogia:</i> secció «Expliquem-ho als alumnes» (com traduir 3 conceptes fisiològics a l'aula + escalfament/refredament segurs justificats). <i>Coreografia i interpretació:</i> secció «Manual d'ús del meu cos» (protocol personal pre-escena i post-funció: activació, nutrició, son, gestió dels nervis).</td></tr>
+</tbody></table>
+<div class="note">Els tres blocs de contingut no són «temes» sinó <b>moments del projecte</b>: cada sistema estudiat aporta un capítol necessari del dossier.</div>`},
+
+{id:"blocs",t:"5. Continguts per blocs",h:`
+<table>
+<thead><tr><th>Bloc</th><th>Continguts</th><th>Capítol del dossier</th></tr></thead>
+<tbody>
+<tr><td>0. Base cel·lular</td><td>Homeòstasi, medi intern, membrana, transport, senyalització cel·lular</td><td>Marc introductori del dossier</td></tr>
+<tr><td>1. Musculoesquelètic</td><td>Os i adaptació a càrrega, articulacions, hiperlaxitud, múscul, unitat motriu, tipus de contracció, palanques, lesions típiques de dansa</td><td>Cap. 1: Anatomia d'un pas</td></tr>
+<tr><td>2. Nerviós i son</td><td>Neurona i sinapsi, memòria motora, propiocepció i vestibular (equilibri, vertigen, <i>spotting</i>), sistema autònom i por escènica, son i consolidació</td><td>Cap. 2: El cervell que balla</td></tr>
+<tr><td>3. Sang, hormonal i nutrició</td><td>Components de la sang, transport d'O₂, anèmia ferropènica; eix hipotàlem-hipòfisi, estrès (adrenalina/cortisol), salut òssia i RED-S; demanda energètica, hidratació, timing nutricional</td><td>Cap. 3: Motor i combustible</td></tr>
+<tr><td>4. Cardiovascular i respiratori</td><td>Cor, FC, adaptacions a l'exercici, zones d'intensitat, recuperació; mecànica ventilatòria, volums, respiració aplicada al moviment, deute d'O₂</td><td>Cap. 4: Cardio i respiració</td></tr>
+<tr><td>Transversals</td><td>Prevenció de lesions, imatge corporal, cerca de fonts científiques (IADMS), comunicació</td><td>Integrals a tots els capítols</td></tr>
+</tbody></table>`},
+
+{id:"metod",t:"6. Metodologia",h:`
+<ul>
+<li><b>ABP / SdA continuada</b> amb producte final real i lliuraments parcials amb <i>feedforward</i>.</li>
+<li><b>Aprenentatge cooperatiu</b> amb rols, interdependència positiva i avaluació individual dins del producte grupal.</li>
+<li><b>Aula invertida:</b> lectures i vídeos curts previs (dins de les 30 h no presencials) per destinar l'aula a pràctica i producció.</li>
+<li><b>Pràctiques corporals de laboratori:</b> mesures sobre el propi cos (FC, equilibri, respiració, hidratació) i sobre el moviment dansat.</li>
+<li><b>Estudis de cas i contextualització:</b> tots els exàmens i activitats parteixen d'escenaris professionals de dansa.</li>
+<li><b>Expertesa externa:</b> sessió amb nutricionista especialitzat/da; col·laboració amb el departament de tècnica per fer mesures en classes reals.</li>
+<li><b>Tutories</b> de seguiment per grups (30 min/grup/setmana, en línia o presencials).</li>
+</ul>`},
+
+{id:"calendario",t:"7. Planificació de sessions i feina no presencial",h:`
+<table>
+<thead><tr><th>Data</th><th>Sessió</th><th>A l'aula (3 h)</th><th>No presencial</th><th>Evidència</th></tr></thead>
+<tbody>
+<tr><td>9-oct</td><td>Presentació · Homeòstasi i cèl·lula</td><td>Programa i avaluació. Micro-SdA «El termòstat que balla» <span class="badge b-practice">pràctica</span> (FC, temperatura, suor abans/després d'una seqüència). Configuració de grups i Fitxa de companyia</td><td>Lectura cèl·lula + acabar fitxa + portafolis 1 (1,5 h)</td><td><span class="badge b-deliver">Fitxa de companyia</span></td></tr>
+<tr><td>16-oct</td><td>Musculoesquelètic I</td><td>Os, articulacions, múscul i contraccions. Pràctica de palpacions; identificar contraccions en <i>plié</i>/<i>relevé</i>. Llançament SdA 1</td><td>Estudi + inici recerca del pas (2 h)</td><td>—</td></tr>
+<tr><td>23-oct</td><td>Musculoesquelètic II</td><td>Palanques, agonistes/antagonistes. Lesions típiques de dansa (estudis de cas). Laboratori: etiquetatge muscular sobre company/a. Tutories SdA 1</td><td>Gravat i edició vídeo SdA 1 (3 h)</td><td>—</td></tr>
+<tr><td>30-oct</td><td><i>Lliure disposició CSD</i> <span class="badge b-free">sense classe</span></td><td>Tutories de seguiment SdA 1 (en línia)</td><td>Acabar SdA 1 + lectura nerviós I (2 h)</td><td><span class="badge b-deliver">Entrega SdA 1</span> (campus)</td></tr>
+<tr><td>6-nov</td><td>Nerviós I</td><td>Retorn entre iguals de SdA 1. Neurona, sinapsi, neuroplasticitat i memòria motora. Pràctica: frase de moviment, pràctica física vs. mental <span class="badge b-practice">pràctica</span>. Sorteig de preguntes SdA 2</td><td>Lectura sistema autònom + recerca SdA 2 (2 h)</td><td>Fitxa pràctica P3</td></tr>
+<tr><td>13-nov</td><td>Preparació treballs orals</td><td>Laboratori de presentació: estructura pregunta-evidència-conclusió, fonts fiables, comunicació escènica. Tutories per grups. Quiz formatiu blocs 0-1</td><td>Guió + assaig presentació (3 h)</td><td>—</td></tr>
+<tr><td>20-nov</td><td>Nerviós II + son</td><td>Propiocepció, vestibular, <i>spotting</i>; por escènica i autònom; higiene del son. Pràctica: Romberg, vertigen i rotació, temps de reacció <span class="badge b-practice">pràctica</span></td><td>Polir presentació + portafolis 2 (1,5 h)</td><td>Fitxa pràctica P4</td></tr>
+<tr><td>27-nov</td><td><b>Presentacions orals</b> · Sang</td><td>SdA 2: exposicions (10 min + preguntes) amb coavaluació. Sang: transport d'O₂, anèmia ferropènica. Llançament SdA 3</td><td>Iniciar pla SdA 3 + lectura sang (2 h)</td><td><span class="badge b-deliver">Producte SdA 2</span></td></tr>
+<tr><td>4-des</td><td>Sistema hormonal</td><td>Eix hipotàlem-hipòfisi; estrès i por escènica; insulina/glucagó; salut òssia i RED-S (sensibilització). Activitat: mapatge hormonal d'una setmana de gires</td><td>Preparar cas nutrició + estudi (2,5 h)</td><td>—</td></tr>
+<tr><td>11-des</td><td>Nutrició (nutricionista + pràctica)</td><td>Taller amb nutricionista: demanda energètica, hidratació, timing, RED-S. Resolució dels casos de cada companyia. Pràctica: menú pre/post funció <span class="badge b-practice">pràctica</span></td><td>Integrar recomanacions al pla (1,5 h)</td><td>Fitxa pràctica P5</td></tr>
+<tr><td>18-des</td><td><b>AVALUACIÓ PARCIAL</b> <span class="badge b-eval">examen</span></td><td>Prova escrita blocs 0-3 (90 min) + correcció i tancament de trimestre</td><td>Repte de nadal: registre de FC d'una classe pròpia (3 h)</td><td><span class="badge b-eval">Examen parcial</span></td></tr>
+<tr><td>8-gen</td><td>Cardiovascular</td><td>Cor, FC, zones d'intensitat. Pràctica P6: FC en classe real (barra / allegro / improvisació) i càlcul de zones <span class="badge b-practice">pràctica</span>. Integració al pla de condicionament</td><td>Analitzar dades + dossier (2 h)</td><td>Fitxa pràctica P6</td></tr>
+<tr><td>15-gen</td><td>Respiratori</td><td>Mecànica ventilatòria, volums, respiració diafragmàtica aplicada, deute d'O₂. Pràctica P7. Checklist del dossier. Tutories finals</td><td>Tancar dossier + estudi (3 h)</td><td>Fitxa pràctica P7</td></tr>
+<tr><td>22-gen</td><td><b>EXAMEN FINAL + defensa</b> <span class="badge b-eval">examen</span></td><td>Defensa del dossier: <i>pitch</i> de 5 min per grup + preguntes. Prova final (2 h). Tancament i portafolis final</td><td>Portafolis 7 final (1 h)</td><td><span class="badge b-deliver">Dossier</span> + <span class="badge b-eval">examen final</span></td></tr>
+</tbody></table>`},
+
+{id:"fitxes",t:"8. La feina de l'alumnat: fitxes",h:`
+<h3>Fitxa 0 — Fitxa de companyia (individual/grup · 9-oct)</h3>
+<p>Nom i perfil de la companyia, disciplina, repertori de temporada, calendari de funcions, perfil d'intèrprets (edat, nivell, hores setmanals de ball) i 3 preocupacions de salut del grup.</p>
+<h3>Fitxa 1 — SdA 1: «Anatomia d'un pas» (grup · entrega 30-oct)</h3>
+<ul>
+<li>Triar un element tècnic de la companyia (<i>plié, développé, grand jeté</i>, pirueta, elevació…).</li>
+<li><b>Producte:</b> (a) fitxa anatòmica (1-2 p.): ossos i articulacions implicades, músculs principals per fases (preparació-acció-recepció), tipus de contracció, 2 lesions de risc + 1 mesura de prevenció; (b) vídeo de 2-3 min amb anotacions (fletxes, noms o veu en off).</li>
+<li>Mínim 3 fonts citades (una d'elles IADMS). Declaració individual de contribucions.</li>
+</ul>
+<h3>Fitxa 2 — SdA 2: «El cervell que balla» (grup · exposició 27-nov)</h3>
+<ul>
+<li>Cada grup respon <b>una pregunta de recerca</b> (10 min + 2 min de preguntes, mínim 5 referències, amb <b>1 demostració o experiment en directe</b> amb el públic):</li>
+</ul>
+<ol>
+<li>Per què fem <i>spotting</i>? 2. Com es consolida una coreografia mentre dormim? 3. Què és la memòria motora i com s'entrena? 4. Què passa al cos amb la por escènica? 5. Per què apareix vertigen en girar i com s'adapta el vestíbul? 6. Com afecta la fatiga la propiocepció? 7. Pràctica mental vs. pràctica física: què diu la ciència? 8. Mirall i imatge corporal: què percep el cervell? 9. Per què es descoordina el moviment amb els nervis? 10. Quin és el millor horari d'assaig segons el cervell?</li>
+</ol>
+<ul><li>Cada membre exposa una secció. Coavaluació entre grups amb full normalitzat.</li></ul>
+<h3>Fitxa 3 — SdA 3: «Pla fisiològic de la setmana de funcions» (grup · lliurament 20-gen, defensa 22-gen)</h3>
+<p>Pla integral per a una setmana típica de la companyia (3-4 h de ball/dia, 2 funcions):</p>
+<ol>
+<li><b>Diagnòstic:</b> demandes energètiques estimades i riscos del perfil.</li>
+<li><b>Condicionament:</b> zones de FC objectiu (a partir de dades P6), 1 sessió cardio complementària, protocol de refredament i recuperació.</li>
+<li><b>Nutrició:</b> menú pre-funció, hidratació i recuperació post-funció (validat pel nutricionista).</li>
+<li><b>Son i estrès:</b> higiene del son en gires + protocol de gestió de la por escènica (respiració, visualització).</li>
+<li><b>Mòdul d'especialitat</b> (vegeu §4).</li>
+</ol>
+<p>El <b>dossier final</b> integra: fitxa SdA 1 + síntesi SdA 2 + pla SdA 3 + annex de dades de pràctiques. Versió avançada el 15-gen (feedback), versió final el 20-gen, defensa el 22-gen.</p>`},
+
+{id:"diversitat",t:"9. Atenció a la diversitat i mesures inclusives",h:`
+<ul>
+<li><b>DUA:</b> tots els continguts en formats múltiples (text, vídeo, pràctic); productes amb vies d'expressió diverses.</li>
+<li><b>Pràctiques adaptades:</b> qualsevol lesió o condició de salut actual s'acomoda amb alternatives de mesura o rol d'observador/a documentant (mai obligar a provocar dolor o malestar).</li>
+<li><b>Salut mental i imatge corporal:</b> llenguatge no estigmatitzant, tractament del bloc hormonal/nutrició amb perspectiva de prevenció de TCA, derivació als serveis del centre si cal.</li>
+<li><b>Cooperació estructurada:</b> rols rotatius per garantir participació de tots els perfils; tutoria entre iguals.</li>
+<li>Suport lingüístic: glossari català/castellà d'alta especialització al campus.</li>
+</ul>`},
+
+{id:"materials",t:"10. Materials, recursos i bibliografia",h:`
+<p>Aula diàfana amb espai lliure de moviment; projector; pulsioxímetres o apps de FC; cinta mètrica; models anatòmics i app d'anatomia 3D; campus virtual (fitxes, quiz, entregues); fitxes de pràctica normalitzades.</p>
+<p><b>Bibliografia recomanada:</b> Tortora &amp; Derrickson, <i>Principios de anatomía y fisiología</i>; Calais-Germain, <i>Anatomía para el movimiento</i>; Haas, <i>Dance Anatomy</i>; Quin, Rafferty &amp; Tomlinson, <i>Safe Dance Practice</i>; Krasnow &amp; Wilmerding, <i>Motor Learning and Control for Dance</i>; recursos i declaracions de la <b>IADMS</b> (iadms.org).</p>`},
+
+{id:"avaluacio",t:"11. Avaluació",h:`
+<h3>11.1 Criteris d'avaluació</h3>
+<ul>
+<li><b>CE1</b> Explica els mecanismes fisiològics dels sistemes estudiats aplicats al moviment dansat.</li>
+<li><b>CE2</b> Analitza elements tècnics de dansa des de l'anatomia funcional i identifica factors de risc.</li>
+<li><b>CE3</b> Recull i interpreta dades fisiològiques pròpies per valorar la càrrega i la recuperació.</li>
+<li><b>CE4</b> Dissenya estratègies fonamentades de prevenció, nutrició, son i rendiment per a un context professional real.</li>
+<li><b>CE5</b> Comunica coneixement científic amb rigor, oralment i per escrit, adaptant-lo al públic.</li>
+<li><b>CE6</b> Cerca, contrasta i cita fonts científiques fiables.</li>
+<li><b>CE7</b> Col·labora cooperativament i exerceix la responsabilitat individual dins del treball grupal.</li>
+<li><b>CE8</b> (especialitat) Tradueix conceptes fisiològics a propostes didàctiques segures / a un protocol personal de rendiment.</li>
+</ul>
+<h3>11.2 Activitats d'avaluació i ponderació</h3>
+<table>
+<thead><tr><th>#</th><th>Activitat</th><th>Instrument</th><th>Pes</th><th>Modalitat</th><th>Moment</th></tr></thead>
+<tbody>
+<tr><td>A1</td><td>Quiz formatius de bloc</td><td>Quiz en línia/Kahoot</td><td><i>Formatiu</i></td><td>Individual</td><td>13-nov, 4-des, 8-gen</td></tr>
+<tr><td>A2</td><td>Fitxes de pràctica (P1-P7)</td><td>Full de registre: dades + interpretació</td><td>10 %</td><td>Individual</td><td>Contínua</td></tr>
+<tr><td>A3</td><td>Portafolis d'aprenentatge (7 entrades)</td><td>Llista de control + valoració qualitativa</td><td>10 %</td><td>Individual</td><td>Contínua</td></tr>
+<tr><td>A4</td><td>SdA 1: vídeo + fitxa anatòmica</td><td>Rúbrica d'anàlisi anatòmica</td><td>8 %</td><td>Grup</td><td>30-oct</td></tr>
+<tr><td>A5</td><td>SdA 2: presentació oral</td><td>Rúbrica + coavaluació entre grups</td><td>10 %</td><td>Grup (part individual: exposició)</td><td>27-nov</td></tr>
+<tr><td>A6</td><td>SdA 3: dossier + defensa</td><td>Rúbrica + preguntes de defensa</td><td>12 %</td><td>Grup</td><td>20-22-gen</td></tr>
+<tr><td>A7</td><td>Examen parcial</td><td>Prova escrita (90 min)</td><td>20 %</td><td>Individual</td><td>18-des</td></tr>
+<tr><td>A8</td><td>Examen final</td><td>Prova escrita (2 h)</td><td>30 %</td><td>Individual</td><td>22-gen</td></tr>
+<tr><td>A9</td><td>Autoavaluació cooperativa</td><td>Declaració individual de contribucions</td><td>Ajust ±10 %</td><td>Individual</td><td>Final de cada SdA</td></tr>
+</tbody></table>
+<h3>11.3 Descripció de les activitats</h3>
+<p><b>A1 · Quiz formatius (0 %):</b> 10 min, 8-10 ítems; retroalimentació immediata; detecten mancances abans dels exàmens.</p>
+<p><b>A2 · Fitxes de pràctica:</b> en cada pràctica (homeòstasi, palpació, aprenentatge motor, equilibri/vestibular, hidratació, FC en classe, respiració) l'alumnat registra dades i les interpreta en 10-15 línies. Es valoren la precisió del registre i la qualitat de la interpretació fisiològica.</p>
+<p><b>A3 · Portafolis individual</b> (7 entrades, 15-20 min cadascuna): 1) expectatives i preocupacions de salut; 2) què he descobert del meu cos a SdA 1; 3) què aplicaré del cervell/aprenentatge als meus assajos; 4) reflexió post-presentació; 5) imatge corporal i alimentació: què m'emporto; 6) què em diuen les dades de les meves classes; 7) metacognició final: què faré diferent. Criteris: regularitat, profunditat reflexiva, connexió teoria-experiència.</p>
+<p><b>A4 · Rúbrica SdA 1</b> (dimensions): precisió anatòmica; aplicació al moviment real; lesions i prevenció; qualitat tècnica del vídeo; citació de fonts.</p>
+<p><b>A5 · Rúbrica de presentació oral:</b></p>
+<table>
+<thead><tr><th>Criteri</th><th>Excel·lent (4)</th><th>Notable (3)</th><th>Suficient (2)</th><th>Insuficient (1)</th></tr></thead>
+<tbody>
+<tr><td>Contingut científic</td><td>Rigorós, actual, ben explicat</td><td>Correcte amb imprecisions menors</td><td>Bàsic, amb errors puntuals</td><td>Errors greus o buits</td></tr>
+<tr><td>Estructura</td><td>Pregunta-evidència-conclusió clara</td><td>Lògica amb desajustos menors</td><td>Sequenciable però confusa</td><td>Desordenat</td></tr>
+<tr><td>Comunicació</td><td>Captiva, adaptada al públic</td><td>Fluida, lectura mínima</td><td>Depèn del guió</td><td>Llegeix, no connecta</td></tr>
+<tr><td>Demostració pràctica</td><td>Pertinent, segura, integrada</td><td>Pertinent però poc integrada</td><td>Superficial</td><td>Absent o irrellevant</td></tr>
+<tr><td>Fonts i temps</td><td>5+ fonts, dins de temps</td><td>Fonts suficients, petit excés</td><td>Poques fonts o excedeix</td><td>Sense fonts ni control</td></tr>
+</tbody></table>
+<p>La coavaluació (full de 5 ítems per grup) ajusta fins a 1 punt la nota de presentació.</p>
+<p><b>A6 · Rúbrica dossier + defensa</b> (dimensions): fonamentació fisiològica; viabilitat i personalització al perfil de companyia; integració nutrició-son-càrrega; mòdul d'especialitat; format, visual i citació; qualitat de les respostes en la defensa (<i>pitch</i> de 5 min + 3 preguntes).</p>
+<p><b>A7 · Examen parcial (18-des, 90 min):</b> 20 preguntes test (40 %) + 3 preguntes de desenvolupament contextualitzades (45 %) + 1 mini-cas (15 %). <i>Exemples:</i> «Durant la recepció d'un <i>grand jeté</i>, quina acció fan els isquiotibials de la cama davantera? Justifica-ho»; «Una ballarina té vertigen recurrent en piruetes: explica l'estructura vestibular implicada i per què ajuda el <i>spotting</i>».</p>
+<p><b>A8 · Examen final (22-gen, 2 h):</b> mateix format sobre blocs 4 i transversals + <b>1 pregunta integradora de tot el curs</b>: «Els registres de FC de la companyia mostren recuperació lenta després de l'allegro. Proposa dues explicacions fisiològiques i dues accions del vostre pla de salut».</p>
+<p><b>A9 · Autoavaluació cooperativa:</b> al final de cada SdA, declaració individual de contribucions; permet ajustar la nota grupal individualment (±10 %).</p>
+<h3>11.4 Mínims, recuperació i seguiment</h3>
+<ul>
+<li><b>Assistència mínima del 80 %</b> a les sessions presencials per poder ser avaluat/da de les activitats pràctiques.</li>
+<li><b>Mínims:</b> examen final ≥ 4 (sobre 10) per fer mitjana ponderada; lliurament de tots els productes grupals.</li>
+<li><b>Recuperació:</b> prova escrita global al febrer (substitueix la nota d'exàmens si millora); els productes grupals es poden tornar a lliurar en una setmana amb màxim de notable; la presentació oral es recupera en tutoria.</li>
+<li><b>Seguiment:</b> notes visibles al campus; tutories setmanals; comunicació directa de risc de no superació després de l'avaluació parcial.</li>
+</ul>`},
+
+{id:"temari",t:"12. Esquema fisiològic de cada sessió",h:`
+<h3>Tema 0 · Presentació, homeòstasi i fisiologia cel·lular (9-oct)</h3>
+<h4>1. Introducció a la fisiologia</h4>
+<ul><li>Concepte de fisiologia; nivells d'organització (cèl·lula → teixit → òrgan → sistema → organisme)</li><li>Les quatre bases: relació estructura-funció, gradients, comunicació, energia (ATP)</li></ul>
+<h4>2. Homeòstasi</h4>
+<ul><li>Medi intern (Claude Bernard) i homeòstasi (Cannon)</li><li>Sistema de control: variable regulada, sensors, centre d'integració, efectors</li><li>Retroalimentació negativa (temperatura, glucèmia, osmolaritat) i positiva (part, coagulació)</li><li>L'exercici com a pertorbació homeostàtica: ↑temperatura, ↓pH, ↓volum plasmàtic, ↓glucògen</li><li><b>Aplicació a la dansa:</b> la fatiga com a desequilibri temporal; la recuperació com a retorn a l'equilibri; per què «escalfar» i «refredar» són regulacions homeostàtiques</li></ul>
+<h4>3. Fisiologia cel·lular</h4>
+<ul><li>La membrana plasmàtica: bicapa lipídica i proteïnes; permeabilitat selectiva</li><li>Transport passius (difusió simple i facilitada, osmosi) i actius (bomba Na⁺/K⁺)</li><li>Potencial de membrana i excitabilitat (base de nervi i múscul)</li><li>Orgànuls funcionals: mitocondris (energia), reticle sarcoplasmàtic (Ca²⁺), ribosomes (proteïnes)</li><li>Comunicació intercel·lular: senyals químiques i receptors</li><li>Tipus cel·lulars del curs: fibra muscular, neurona, osteòcit, condrocit, eritròcit</li><li><b>Aplicació:</b> què li passa a la cèl·lula muscular durant un <i>allegro</i>? ATP, Ca²⁺, metabolits</li></ul>
+<h3>Tema 1 · Sistema musculoesquelètic I (16-oct) — <i>Os i articulacions</i></h3>
+<h4>1. Visió general del sistema</h4>
+<ul><li>Funcions: suport, moviment, protecció, minerals, hematopoesi</li><li>Teixit connectiu: col·lagen i elastina (base de tendó, lligament, fascia, càpsula)</li></ul>
+<h4>2. Teixit ossi</h4>
+<ul><li>Os compacte i esponjós; matriu (col·lagen + hidroxiapatita)</li><li>Cèl·lules òssies: osteoblasts, osteòcits, osteoclasts</li><li>Remodelat ossi i <b>llei de Wolff</b>: l'os s'adapta a la càrrega</li><li>Estructura de l'os llarg: diàfisi, epífisi, cartílag de creixement, medul·la</li><li><b>Aplicació:</b> adaptació òssia a l'impacte de la dansa; fractures per estrès (metatarsians, tíbia); osteopènia i salut òssia (enllaç amb RED-S, tema 7)</li></ul>
+<h4>3. Cartílag articular</h4>
+<ul><li>Tipus (hialí, fibrocartílag); avascularitat → nutrició per difusió amb el moviment</li></ul>
+<h4>4. Articulacions</h4>
+<ul><li>Classificació: fibroses, cartilaginoses, sinovials</li><li>Estructura de la sinovial: càpsula, líquid sinovial, meniscs, labrum</li><li>Planes i eixos anatòmics; terminologia de moviments (flexió/extensió, abducció, rotació, dorsiflexió/plantarflexió, pronació/supinació)</li><li>Rang de moviment: factors limitants</li><li><b>Hiperlaxitud:</b> test de Beighton; avantatges estètiques vs. risc de lesió</li><li><b>Aplicació:</b> <i>turnout</i> des de maluc vs. forçat a genoll/turmel; <i>en pointe</i>; estabilització de l'espatlla en <i>port de bras</i></li></ul>
+<h3>Tema 2 · Sistema musculoesquelètic II (23-oct) — <i>Múscul</i></h3>
+<h4>1. Estructura del múscul esquelètic</h4>
+<ul><li>Ventre, origen i inserció, tendó; epimisi, perimisi, endomisi</li><li>La fibra muscular: sarcolema, reticle sarcoplasmàtic, miofibril·les</li></ul>
+<h4>2. Contracció muscular</h4>
+<ul><li>El sarcòmer: actina, miosina, troponina, tropomiosina; bandes A i I</li><li>Teoria dels filaments lliscants; acoblament excitació-contracció (paper del Ca²⁺ i l'ATP)</li><li>Cicle de ponts creuats; rigor i manca d'ATP</li></ul>
+<h4>3. Tipus de fibres i unitat motriu</h4>
+<ul><li>Fibres I (lentes/oxidatives) vs. IIa/IIx (ràpides/glicolítiques); perfil del ballarí</li><li>Unitat motriu: motoneurona + fibres; llei de la mida i reclutament</li></ul>
+<h4>4. Tipus de contracció i funció muscular</h4>
+<ul><li>Isomètrica, concèntrica, <b>excèntrica</b> (base del DOMS: agulletes)</li><li>Paper muscular: agonista, antagonista, sinergista, fixador; co-contracció</li><li><b>Aplicació:</b> anàlisi muscular de <i>plié</i> (excèntrica), <i>relevé</i> (concèntrica), equilibri (isomètrica), <i>grand jeté</i> (seqüència completa)</li></ul>
+<h4>5. Propiocepció muscular</h4>
+<ul><li>Fus neuromuscular (reflex miotàtic) i òrgan tendinós de Golgi</li></ul>
+<h4>6. Fatiga muscular i flexibilitat</h4>
+<ul><li>Mecanismes de fatiga; rampes; propietats viscoelàstiques i estirament</li><li>Lesions músculotendinoses típiques de dansa: distensions, tendinopaties (Aquil·les, rotadors)</li></ul>
+<h3>— Festiu de lliure disposició CSD (30-oct) —</h3>
+<p>Sense docència presencial: treball no presencial del bloc musculoesquelètic.</p>
+<h3>Tema 3 · Sistema nerviós I (6-nov) — <i>Neurona i control del moviment</i></h3>
+<h4>1. Organització del sistema nerviós</h4>
+<ul><li>SNC / SNP; vies aferents i eferents; somàtic i autònom</li></ul>
+<h4>2. La neurona</h4>
+<ul><li>Estructura: soma, dendrites, axó, mielina; neuroglia</li><li>Potencial de repòs, potencial d'acció; conducció saltatòria i velocitat</li></ul>
+<h4>3. Sinapsi</h4>
+<ul><li>Sinapsi química; neurotransmissors clau (ACh, glutamat, GABA, dopamina, serotonina, <b>endorfines</b>)</li><li>Integració: sumació, excitació i inhibició</li></ul>
+<h4>4. Control motor</h4>
+<ul><li>Còrtex motor i premotor; vies descendents; motoneurona com a via final comuna</li><li><b>Cerebel:</b> coordinació, timing, equilibri</li><li><b>Ganglis basals:</b> automatització de moviments apresos</li><li><b>Plasticitat i aprenentatge motor:</b> fases (cognitiva → associativa → autònoma); memòria motora</li><li><b>Aplicació:</b> com s'aprèn una coreografia; assaig distribuït vs. massiu; pràctica mental/visualització; per què el moviment «automatitzat» allibera atenció per a la interpretació</li></ul>
+<h3>Tema 4 · Preparació i enviament de treballs orals (13-nov)</h3>
+<p>Sense contingut fisiològic nou: sessió de metodologia (cerca de fonts, estructura científica, comunicació oral) i tutories de grup.</p>
+<h3>Tema 5 · Sistema nerviós II / Son (20-nov)</h3>
+<h4>1. Sensació i equilibri</h4>
+<ul><li>Propiocepció (fusos, receptors articulars) + visió + <b>sistema vestibular</b></li><li>Vestíbul: otòlits (utricle/sàcul) i canals semicirculars (endolimfa)</li><li><b>Vertigen rotatori, nistagme i adaptació vestibular</b></li><li><b>Aplicació:</b> per què funciona el <i>spotting</i>; el gir com a entrenament del vestíbul; desequilibri en fatiga</li></ul>
+<h4>2. Sistema nerviós autònom</h4>
+<ul><li>Simpàtic vs. parasimpàtic; to autonòmic</li><li><b>Resposta d'estrès escènic:</b> adrenalina (taquicàrdia, tremolor, boca seca), corba de Yerkes-Dodson (activació òptima)</li><li><b>Aplicació:</b> control dels «nervis» d'estrena; respiració com a activador parasimpàtic; rutines pre-escena</li></ul>
+<h4>3. El son</h4>
+<ul><li>Arquitectura del son: fases NREM (1-3) i REM; ritmes circadians</li><li>Funcions: <b>consolidació de la memòria motora</b> (la coreografia «s'instal·la» dormint), secreció de GH, reparació tissular</li><li>Privació de son: atenció, temps de reacció, risc de lesió</li><li><b>Aplicació:</b> higiene del son del ballarí; funcions nocturnes i gires; migdiades; cafeïna</li></ul>
+<h3>Tema 6 · Presentacions orals / La sang (27-nov)</h3>
+<p><b>Primera part:</b> presentació dels treballs orals (avaluació del bloc nerviós).</p>
+<h4>1. Composició de la sang</h4>
+<ul><li>Plasma (aigua, proteïnes, electròlits, nutrients) i elements formats (hematòcrit)</li></ul>
+<h4>2. Eritròcits</h4>
+<ul><li>Hemoglobina; transport d'O₂ i CO₂; eritropoesi</li><li><b>Adaptació a l'entrenament:</b> ↑volum plasmàtic i capacitat de transport</li></ul>
+<h4>3. Leucòcits i plaquetes</h4>
+<ul><li>Funció immune i inflamació (enllaç amb recuperació i lesions); hemostàsia</li></ul>
+<h4>4. La sang en la dansa</h4>
+<ul><li><b>Anèmia ferropènica en ballarins:</b> fatiga inexplicable, ferritina, major risc en dones, impacte en el rendiment aeròbic</li><li>Interpretació bàsica d'una analítica de sang</li></ul>
+<h3>Tema 7 · Sistema hormonal (4-des)</h3>
+<h4>1. Fonaments d'endocrinologia</h4>
+<ul><li>Hormona, glàndula diana, receptors; hormones proteiques vs. esteroidees</li><li>Eix hipotàlem-hipòfisi i <b>retroalimentació</b></li></ul>
+<h4>2. Principals eixos hormonals</h4>
+<ul><li>Hipòfisi: GH, ACTH, TSH, gonadotropines, ADH</li><li>Tiroides: T3/T4 i <b>metabolisme basal</b></li><li>Paratiroides: PTH i regulació del calci (enllaç amb l'os)</li><li>Càpsula suprarenal: <b>catecolamines</b> (adrenalina: resposta de lluita-fugida) i <b>cortisol</b> (estrès, catabolisme); aldosterona</li><li>Pàncrees endocrí: <b>insulina/glucagó</b> i glucèmia (enllaç amb nutrició)</li><li>Gònades: estrògens, progesterona, testosterona; <b>cicle menstrual i rendiment</b></li></ul>
+<h4>3. Hormones, estrès i dansa</h4>
+<ul><li>Resposta hormonal a l'exercici agut i al sobreentrenament (cortisol crònic)</li><li><b>Baixa disponibilitat energètica i RED-S:</b> alteració hormonal, amenorrea, salut òssia (integració de temes 1, 6 i 8)</li><li><b>Aplicació:</b> l'adrenalina de l'estrena; salut menstrual com a indicador de salut global; comunicació professional sense estigma</li></ul>
+<h3>Tema 8 · Nutrició (11-des) — <i>amb nutricionista + pràctica</i></h3>
+<h4>1. Combustible del múscul (revisió integradora)</h4>
+<ul><li>ATP i sistemes energètics: fosfàgens, glucòlisi, metabolisme oxidatiu</li><li>Sistemes dominants segons el tipus de demanda dancística (salt vs. variació llarga vs. improvisació)</li></ul>
+<h4>2. Macronutrients</h4>
+<ul><li>Hidrats de carboni: glucògen muscular i hepàtic; rendiment</li><li>Proteïnes: reparació i adaptació; requeriments del ballarí</li><li>Greixos: funció hormonal i energètica; àcids essencials</li></ul>
+<h4>3. Micronutrients i hidratació</h4>
+<ul><li>Ferro, calci, vitamina D (enllaç amb sang i os)</li><li>Balanç hídric; hipohidratació i pèrdua de rendiment i coordinació</li></ul>
+<h4>4. Nutrició aplicada</h4>
+<ul><li>Timing nutricional: pre-assaig, recuperació post-classe, dia de funció</li><li><b>Disponibilitat energètica, imatge corporal i TCA en dansa:</b> senyals d'alerta i actitud professional</li><li><b>Pràctica:</b> anàlisi de menús reals, planificació d'un dia de funció amb el nutricionista</li></ul>
+<h3>Tema 9 · AVALUACIÓ PARCIAL (18-des)</h3>
+<p>Prova escrita dels temes 0-7. Retorn qualificat abans de les vacances.</p>
+<h3>Tema 10 · Aparell cardiovascular (8-gen)</h3>
+<h4>1. El cor</h4>
+<ul><li>Estructura: cambres, vàlvules, miocardi, artèries coronàries</li><li>Sistema de conducció: nòdul sinusal i auriculoventricular; miocardi com a múscul autoexcitable</li><li>Cicle cardíac: sístole/diàstole; <b>gasto cardíac = FC × volum sistòlic</b></li></ul>
+<h4>2. Vasos i pressió arterial</h4>
+<ul><li>Artèries, capil·lars, venes; retorn venós (paper de la <b>bomba muscular</b>: rellevància de seguir movent-se després de l'esforç)</li></ul>
+<h4>3. Regulació</h4>
+<ul><li>Autonòmica (simpàtic ↑FC / parasimpàtic ↓FC), hormonal i local</li></ul>
+<h4>4. Cardiovascular i dansa</h4>
+<ul><li>Resposta a l'exercici: FC, redistribució del flux, tensió arterial</li><li><b>FC màxima i zones d'intensitat;</b> la dansa com a exercici intermitent (perfil d'intensitat d'una classe: barra vs. allegro vs. repertori)</li><li>Adaptacions a l'entrenament: bradicàrdia de repòs, ↑volum sistòlic</li><li><b>Freqüència cardíaca de recuperació</b> com a indicador de forma</li><li><b>Pràctica:</b> mesura de FC en una classe real i càlcul de zones</li></ul>
+<h3>Tema 11 · Aparell respiratori (15-gen)</h3>
+<h4>1. Estructura</h4>
+<ul><li>Vies aèries (conducció) i zona d'intercanvi: <b>alvèols</b>; pleura</li></ul>
+<h4>2. Mecànica ventilatòria</h4>
+<ul><li>Diafragma i intercostals; pressions i inspiració/espiració</li><li>Volums i capacitats pulmonars: volum corrent, VC, volum residual</li></ul>
+<h4>3. Intercanvi i transport de gasos</h4>
+<ul><li>Difusió alvèol-capil·lar; paper de l'hemoglobina (integració amb la sang)</li><li>Regulació de la ventilació: quimiorreceptors sensibles al CO₂ (per això «ofec» no és falta d'O₂)</li></ul>
+<h4>4. Respiració i exercici</h4>
+<ul><li>Ventilació i consum d'O₂; <b>VO₂màx</b>; llindar ventilatori</li><li><b>EPOC (deute d'oxigen)</b> i recuperació activa</li><li>Cadena O₂ completa: pulmó → sang → cor → múscul (síntesi del curs)</li></ul>
+<h4>5. Respiració aplicada a la dansa</h4>
+<ul><li>Respiració diafragmàtica vs. costal superficial; evitar apnea/Valsalva a l'esforç</li><li>Coordinació respiració-fase de moviment (<i>port de bras</i>, salts, adagio)</li><li>Respiració com a eina de regulació de l'estrès escènic (tancament transversal amb sistema nerviós autònom)</li><li><b>Pràctica:</b> exercicis respiratoris i tests senzills de ventilació</li></ul>
+<h3>Tema 12 · EXAMEN FINAL (22-gen)</h3>
+<p>Prova escrita acumulativa amb èmfasi en cardiovascular, respiratori i integració (pregunta tipus cas: «una setmana de funcions»).</p>
+<h3>Notes transversals de l'esquema</h3>
+<ul>
+<li><b>Fil conductor:</b> l'homeòstasi (tema 0) reapareix en tots els sistemes: temperatura i aigua (cardio), Ca²⁺ i pH (múscul), glucèmia (hormonal-nutrició), CO₂ (respiratori).</li>
+<li><b>Repàs integrador:</b> cada tema obre amb 10-15 min de connexió amb l'anterior; les pràctiques mesuren variables del propi cos per reforçar la transferència.</li>
+<li>Els quatre dies sense contingut teòric (30-oct, 13-nov, 18-des, 22-gen) es dediquen a treball autònom tutoritzat, preparació de productes i avaluació.</li>
+</ul>`}
+]},
+
+/* ================= ENGLISH ================= */
+en:{
+ui:{brand:"Physiology Applied to Dance",brandSub:"Didactic programme · Professional dance training · 2026-27",
+ edit:"✏️ Edit",editing:"✅ Finish editing",save:"💾 Save",export:"⬇ Export changes",import:"⬆ Import changes",
+ reset:"↺ Restore original",print:"🖨 Print / PDF",saved:"Saved",nochanges:"No new changes",
+ resetMsg:"Restore the ORIGINAL content of this language? Your English edits will be lost.",
+ edited:"edited",navTitle:"Contents"},
+secs:[
+{id:"present",t:"Overview",h:`
+<table class="info">
+<tr><th>Module</th><td>Physiology Applied to Dance</td></tr>
+<tr><th>Subject area</th><td>Health Sciences Applied to Dance</td></tr>
+<tr><th>Year / specialisations</th><td>1st year · Choreography &amp; Performance / Dance Pedagogy</td></tr>
+<tr><th>Workload</th><td>45 contact hours (Fridays, 3-hour sessions) + 30 non-contact hours</td></tr>
+<tr><th>Calendar</th><td>9 October 2026 – 22 January 2027 · 14 Fridays</td></tr>
+<tr><th>Assessments</th><td><span class="badge b-eval">Mid-term</span> 18 Dec · <span class="badge b-eval">Final + dossier defence</span> 22 Jan</td></tr>
+</table>
+<h3>The course at a glance</h3>
+<div class="chips">
+<span class="chip">🧭 <b>Core project:</b> a dance company's health-science team</span>
+<span class="chip"><span class="badge b-sda">SdA 1</span> Anatomy of a dance step <small>(Oct)</small></span>
+<span class="chip"><span class="badge b-sda">SdA 2</span> The dancing brain <small>(Nov)</small></span>
+<span class="chip"><span class="badge b-sda">SdA 3</span> Engine &amp; fuel <small>(Nov–Jan)</small></span>
+<span class="chip">🥗 Guest dietitian <small>(11 Dec)</small></span>
+<span class="chip">📁 Final dossier + defence <small>(22 Jan)</small></span>
+</div>
+<div class="note"><b>Legend:</b> <span class="badge b-eval">assessment</span> <span class="badge b-deliver">submission</span> <span class="badge b-practice">practical</span> <span class="badge b-free">no teaching</span> <span class="badge b-sda">SdA</span></div>`},
+
+{id:"justif",t:"1. Rationale",h:`
+<p>Physiology is the scientific foundation that enables performers and educators to understand how the body works in action: why it heats up, how it recovers, why it gets injured and how to optimise performance. This course is not conceived as a catalogue of anatomical systems to memorise, but as a <b>set of tools for professional decision-making</b>: rehearsing better, preventing injuries, performing on stage and teaching safely. That is why the whole course is built around a real, ongoing professional situation (the core project), in which physiological knowledge is constructed <i>because</i> it is needed to solve the challenge.</p>`},
+
+{id:"marc",t:"2. Regulatory framework and context",h:`
+<ul>
+<li>Royal Decree 754/1992 (higher degree in Dance) and current regional implementing regulations <i>[adapt to the centre's study plan]</i>.</li>
+<li>LOMLOE (Spanish education law) and the school's curricular project.</li>
+<li>First-year subject, common to both specialisations, within the subject area <i>Health Sciences Applied to Dance</i>.</li>
+<li>Students with high motor and stage competence (used as a learning resource) but generally with no prior training in health sciences.</li>
+<li>Calendar: 14 Fridays from October 2026 to January 2027 (including the 30 Oct self-directed day, used for progress tutorials).</li>
+</ul>`},
+
+{id:"objectius",t:"3. Contribution to the graduate profile and objectives",h:`
+<p>The course contributes to transversal competences (scientific communication, cooperative work, learning autonomy) and to the specific competences of body care, injury prevention and performance <i>[map to the centre's study plan]</i>.</p>
+<h3>Learning objectives</h3>
+<p>By the end of the course, students will be able to:</p>
+<ol>
+<li>Explain homeostatic and bodily regulation mechanisms applied to dance practice.</li>
+<li>Describe the structure and function of the musculoskeletal, nervous, endocrine, blood, cardiovascular and respiratory systems.</li>
+<li>Analyse dance technical elements from functional anatomy and identify injury risk factors.</li>
+<li>Interpret their own physiological data (HR, balance, recovery, hydration) to self-regulate workload.</li>
+<li>Apply nutrition, sleep and recovery knowledge to a real professional week (shows, tours, intensives).</li>
+<li>Design safe, evidence-based warm-up, cool-down and conditioning proposals.</li>
+<li>Communicate scientific knowledge rigorously and in a way adapted to the audience (company, students, families).</li>
+<li>Develop health-care attitudes and professional ethics, with special sensitivity towards body image and eating disorders (EDs).</li>
+</ol>`},
+
+{id:"eix",t:"4. Core project: «The company's health-science team»",h:`
+<table>
+<thead><tr><th>Element</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><b>Challenge</b></td><td><i>You are the health-science team of a dance company. The company must reach the season injury-free and performing at its best: prepare its "health dossier".</i></td></tr>
+<tr><td><b>Grouping</b></td><td>Heterogeneous groups of 3-4. Each group adopts a company profile (a contemporary company in creation, a flamenco company on tour, a junior company… or a real company from the centre) and documents it in the initial <b>Company Profile Sheet</b>.</td></tr>
+<tr><td><b>Cooperative roles</b></td><td>Coordination, data &amp; materials management, scientific writing, spokesperson. Rotation per block.</td></tr>
+<tr><td><b>Final product</b></td><td><b>Applied Physiology Dossier of the company</b>, built block by block (SdA 1, 2 and 3) and submitted and defended on 22 January, before the final exam.</td></tr>
+<tr><td><b>Specialisation module</b></td><td><i>Pedagogy:</i> section "Explaining it to our students" (how to translate 3 physiological concepts to the classroom + safe, justified warm-ups/cool-downs). <i>Choreography &amp; performance:</i> section "My body's user manual" (personal pre-stage and post-show protocol: activation, nutrition, sleep, managing nerves).</td></tr>
+</tbody></table>
+<div class="note">The three content blocks are not "topics" but <b>moments of the project</b>: every system studied supplies a necessary chapter of the dossier.</div>`},
+
+{id:"blocs",t:"5. Content blocks",h:`
+<table>
+<thead><tr><th>Block</th><th>Content</th><th>Dossier chapter</th></tr></thead>
+<tbody>
+<tr><td>0. Cellular basis</td><td>Homeostasis, internal environment, membrane, transport, cell signalling</td><td>Introductory framework of the dossier</td></tr>
+<tr><td>1. Musculoskeletal</td><td>Bone and load adaptation, joints, hypermobility, muscle, motor unit, contraction types, levers, typical dance injuries</td><td>Ch. 1: Anatomy of a dance step</td></tr>
+<tr><td>2. Nervous system &amp; sleep</td><td>Neuron and synapse, motor memory, proprioception and vestibular system (balance, vertigo, <i>spotting</i>), autonomic system and stage fright, sleep and consolidation</td><td>Ch. 2: The dancing brain</td></tr>
+<tr><td>3. Blood, endocrine &amp; nutrition</td><td>Blood components, O₂ transport, iron-deficiency anaemia; hypothalamus-pituitary axis, stress (adrenaline/cortisol), bone health and RED-S; energy demands, hydration, nutrient timing</td><td>Ch. 3: Engine &amp; fuel</td></tr>
+<tr><td>4. Cardiovascular &amp; respiratory</td><td>Heart, HR, training adaptations, intensity zones, recovery; ventilatory mechanics, lung volumes, breathing applied to movement, oxygen debt</td><td>Ch. 4: Cardio &amp; breathing</td></tr>
+<tr><td>Transversal</td><td>Injury prevention, body image, sourcing scientific literature (IADMS), communication</td><td>Integrated into every chapter</td></tr>
+</tbody></table>`},
+
+{id:"metod",t:"6. Methodology",h:`
+<ul>
+<li><b>PBL / ongoing SdA</b> with a real final product and partial submissions with <i>feedforward</i>.</li>
+<li><b>Cooperative learning</b> with roles, positive interdependence and individual assessment within the group product.</li>
+<li><b>Flipped classroom:</b> short pre-class readings and videos (within the 30 non-contact hours) so class time is devoted to practice and production.</li>
+<li><b>Body-lab practicals:</b> measurements on one's own body (HR, balance, breathing, hydration) and on danced movement.</li>
+<li><b>Case studies and contextualisation:</b> all exams and activities start from professional dance scenarios.</li>
+<li><b>External expertise:</b> session with a specialised dietitian; collaboration with the technique department for measurements in real classes.</li>
+<li><b>Group tutorials</b> (30 min/group/week, online or on site).</li>
+</ul>`},
+
+{id:"calendario",t:"7. Session plan and non-contact work",h:`
+<table>
+<thead><tr><th>Date</th><th>Session</th><th>In class (3 h)</th><th>Non-contact</th><th>Evidence</th></tr></thead>
+<tbody>
+<tr><td>9 Oct</td><td>Introduction · Homeostasis &amp; cell</td><td>Programme and assessment. Micro-SdA "The thermostat that dances" <span class="badge b-practice">practical</span> (HR, temperature, sweat before/after a sequence). Group setup and Company Profile Sheet</td><td>Cell reading + finish sheet + portfolio 1 (1.5 h)</td><td><span class="badge b-deliver">Company sheet</span></td></tr>
+<tr><td>16 Oct</td><td>Musculoskeletal I</td><td>Bone, joints, muscle and contractions. Palpation practice; identifying contractions in <i>plié</i>/<i>relevé</i>. SdA 1 launch</td><td>Study + start step research (2 h)</td><td>—</td></tr>
+<tr><td>23 Oct</td><td>Musculoskeletal II</td><td>Levers, agonists/antagonists. Typical dance injuries (case studies). Lab: muscle "tagging" on a partner. SdA 1 tutorials</td><td>Film and edit SdA 1 video (3 h)</td><td>—</td></tr>
+<tr><td>30 Oct</td><td><i>Self-directed day</i> <span class="badge b-free">no class</span></td><td>SdA 1 progress tutorials (online)</td><td>Finish SdA 1 + nervous system I reading (2 h)</td><td><span class="badge b-deliver">SdA 1 submission</span> (campus)</td></tr>
+<tr><td>6 Nov</td><td>Nervous system I</td><td>Peer feedback on SdA 1. Neuron, synapse, neuroplasticity and motor memory. Practical: movement phrase, physical vs. mental practice <span class="badge b-practice">practical</span>. SdA 2 question draw</td><td>Autonomic system reading + SdA 2 research (2 h)</td><td>Practical sheet P3</td></tr>
+<tr><td>13 Nov</td><td>Oral presentations workshop</td><td>Presentation lab: question-evidence-conclusion structure, reliable sources, stage communication. Group tutorials. Formative quiz blocks 0-1</td><td>Script + rehearse presentation (3 h)</td><td>—</td></tr>
+<tr><td>20 Nov</td><td>Nervous system II + sleep</td><td>Proprioception, vestibular system, <i>spotting</i>; stage fright and the autonomic system; sleep hygiene. Practical: Romberg test, vertigo and rotation, reaction time <span class="badge b-practice">practical</span></td><td>Polish presentation + portfolio 2 (1.5 h)</td><td>Practical sheet P4</td></tr>
+<tr><td>27 Nov</td><td><b>Oral presentations</b> · Blood</td><td>SdA 2: presentations (10 min + questions) with peer assessment. Blood: O₂ transport, iron-deficiency anaemia. SdA 3 launch</td><td>Start SdA 3 plan + blood reading (2 h)</td><td><span class="badge b-deliver">SdA 2 product</span></td></tr>
+<tr><td>4 Dec</td><td>Endocrine system</td><td>Hypothalamus-pituitary axis; stress and stage fright; insulin/glucagon; bone health and RED-S (awareness). Activity: hormonal mapping of a tour week</td><td>Prepare nutrition case + study (2.5 h)</td><td>—</td></tr>
+<tr><td>11 Dec</td><td>Nutrition (dietitian + practical)</td><td>Workshop with dietitian: energy demands, hydration, timing, RED-S. Solving each company's cases. Practical: pre/post-show menu <span class="badge b-practice">practical</span></td><td>Integrate recommendations into the plan (1.5 h)</td><td>Practical sheet P5</td></tr>
+<tr><td>18 Dec</td><td><b>MID-TERM ASSESSMENT</b> <span class="badge b-eval">exam</span></td><td>Written test blocks 0-3 (90 min) + feedback and end-of-term wrap-up</td><td>Christmas challenge: HR log of one of your own classes (3 h)</td><td><span class="badge b-eval">Mid-term exam</span></td></tr>
+<tr><td>8 Jan</td><td>Cardiovascular</td><td>Heart, HR, intensity zones. Practical P6: HR in a real class (barre / allegro / improvisation) and zone calculation <span class="badge b-practice">practical</span>. Integration into the conditioning plan</td><td>Analyse data + dossier (2 h)</td><td>Practical sheet P6</td></tr>
+<tr><td>15 Jan</td><td>Respiratory</td><td>Ventilatory mechanics, volumes, applied diaphragmatic breathing, oxygen debt. Practical P7. Dossier checklist. Final tutorials</td><td>Finish dossier + study (3 h)</td><td>Practical sheet P7</td></tr>
+<tr><td>22 Jan</td><td><b>FINAL EXAM + defence</b> <span class="badge b-eval">exam</span></td><td>Dossier defence: 5-min pitch per group + questions. Final test (2 h). Closing and final portfolio</td><td>Final portfolio 7 (1 h)</td><td><span class="badge b-deliver">Dossier</span> + <span class="badge b-eval">final exam</span></td></tr>
+</tbody></table>`},
+
+{id:"fitxes",t:"8. Student work: worksheets",h:`
+<h3>Sheet 0 — Company Profile Sheet (individual/group · 9 Oct)</h3>
+<p>Company name and profile, discipline, season repertoire, performance calendar, dancer profile (age, level, weekly dancing hours) and 3 health concerns of the group.</p>
+<h3>Sheet 1 — SdA 1: "Anatomy of a dance step" (group · due 30 Oct)</h3>
+<ul>
+<li>Choose a technical element from the company's repertoire (<i>plié, développé, grand jeté</i>, pirouette, arm elevation…).</li>
+<li><b>Product:</b> (a) anatomical sheet (1-2 pages): bones and joints involved, main muscles by phase (preparation-action-reception), contraction type, 2 risk injuries + 1 preventive measure; (b) 2-3 min annotated video (arrows, labels or voice-over).</li>
+<li>Minimum 3 cited sources (one from IADMS). Individual statement of contributions.</li>
+</ul>
+<h3>Sheet 2 — SdA 2: "The dancing brain" (group · presentation 27 Nov)</h3>
+<ul>
+<li>Each group answers <b>one research question</b> (10 min + 2 min of questions, minimum 5 references, with <b>1 live demonstration or experiment</b> with the audience):</li>
+</ul>
+<ol>
+<li>Why do we <i>spot</i>? 2. How is a choreography consolidated while we sleep? 3. What is motor memory and how is it trained? 4. What happens in the body during stage fright? 5. Why does turning cause vertigo and how does the vestibular system adapt? 6. How does fatigue affect proprioception? 7. Mental vs. physical practice: what does science say? 8. Mirrors and body image: what does the brain perceive? 9. Why do nerves make movement uncoordinated? 10. What is the best rehearsal schedule according to the brain?</li>
+</ol>
+<ul><li>Every member presents one section. Inter-group peer assessment with a standardised form.</li></ul>
+<h3>Sheet 3 — SdA 3: "Physiological plan for performance week" (group · due 20 Jan, defence 22 Jan)</h3>
+<p>Integral plan for a typical company week (3-4 h dancing/day, 2 shows):</p>
+<ol>
+<li><b>Diagnosis:</b> estimated energy demands and profile risks.</li>
+<li><b>Conditioning:</b> target HR zones (from P6 data), 1 complementary cardio session, cool-down and recovery protocol.</li>
+<li><b>Nutrition:</b> pre-show menu, hydration and post-show recovery (validated by the dietitian).</li>
+<li><b>Sleep &amp; stress:</b> sleep hygiene on tour + stage-fright management protocol (breathing, visualisation).</li>
+<li><b>Specialisation module</b> (see §4).</li>
+</ol>
+<p>The <b>final dossier</b> integrates: SdA 1 sheet + SdA 2 summary + SdA 3 plan + practical-data annex. Draft due 15 Jan (feedback), final version 20 Jan, defence 22 Jan.</p>`},
+
+{id:"diversitat",t:"9. Diversity and inclusive measures",h:`
+<ul>
+<li><b>UDL:</b> all content in multiple formats (text, video, hands-on); products with diverse means of expression.</li>
+<li><b>Adapted practicals:</b> any current injury or health condition is accommodated with alternative measurements or a documented observer role (never forcing pain or discomfort).</li>
+<li><b>Mental health and body image:</b> non-stigmatising language, the endocrine/nutrition block treated from an eating-disorder-prevention perspective, referral to the centre's services when needed.</li>
+<li><b>Structured cooperation:</b> rotating roles to guarantee participation of all profiles; peer tutoring.</li>
+<li>Language support: highly specialised Spanish/Catalan glossary on the virtual campus.</li>
+</ul>`},
+
+{id:"materials",t:"10. Materials, resources and bibliography",h:`
+<p>Open studio space with free movement area; projector; pulse oximeters or HR apps; measuring tape; anatomical models and 3D anatomy app; virtual campus (sheets, quizzes, submissions); standardised practical worksheets.</p>
+<p><b>Recommended bibliography:</b> Tortora &amp; Derrickson, <i>Principles of Anatomy and Physiology</i>; Calais-Germain, <i>Anatomy of Movement</i>; Haas, <i>Dance Anatomy</i>; Quin, Rafferty &amp; Tomlinson, <i>Safe Dance Practice</i>; Krasnow &amp; Wilmerding, <i>Motor Learning and Control for Dance</i>; resources and statements of the <b>IADMS</b> (iadms.org).</p>`},
+
+{id:"avaluacio",t:"11. Assessment",h:`
+<h3>11.1 Assessment criteria</h3>
+<ul>
+<li><b>AC1</b> Explains the physiological mechanisms of the systems studied as applied to danced movement.</li>
+<li><b>AC2</b> Analyses dance technical elements from functional anatomy and identifies risk factors.</li>
+<li><b>AC3</b> Collects and interprets personal physiological data to assess load and recovery.</li>
+<li><b>AC4</b> Designs evidence-based prevention, nutrition, sleep and performance strategies for a real professional context.</li>
+<li><b>AC5</b> Communicates scientific knowledge rigorously, orally and in writing, adapting it to the audience.</li>
+<li><b>AC6</b> Finds, cross-checks and cites reliable scientific sources.</li>
+<li><b>AC7</b> Cooperates and exercises individual responsibility within group work.</li>
+<li><b>AC8</b> (specialisation) Translates physiological concepts into safe didactic proposals / into a personal performance protocol.</li>
+</ul>
+<h3>11.2 Assessment activities and weighting</h3>
+<table>
+<thead><tr><th>#</th><th>Activity</th><th>Instrument</th><th>Weight</th><th>Mode</th><th>Timing</th></tr></thead>
+<tbody>
+<tr><td>A1</td><td>Formative block quizzes</td><td>Online quiz / Kahoot</td><td><i>Formative</i></td><td>Individual</td><td>13 Nov, 4 Dec, 8 Jan</td></tr>
+<tr><td>A2</td><td>Practical sheets (P1-P7)</td><td>Recording sheet: data + interpretation</td><td>10 %</td><td>Individual</td><td>Ongoing</td></tr>
+<tr><td>A3</td><td>Learning portfolio (7 entries)</td><td>Checklist + qualitative appraisal</td><td>10 %</td><td>Individual</td><td>Ongoing</td></tr>
+<tr><td>A4</td><td>SdA 1: video + anatomical sheet</td><td>Anatomical-analysis rubric</td><td>8 %</td><td>Group</td><td>30 Oct</td></tr>
+<tr><td>A5</td><td>SdA 2: oral presentation</td><td>Rubric + inter-group peer assessment</td><td>10 %</td><td>Group (individual part: speaking)</td><td>27 Nov</td></tr>
+<tr><td>A6</td><td>SdA 3: dossier + defence</td><td>Rubric + defence questions</td><td>12 %</td><td>Group</td><td>20-22 Jan</td></tr>
+<tr><td>A7</td><td>Mid-term exam</td><td>Written test (90 min)</td><td>20 %</td><td>Individual</td><td>18 Dec</td></tr>
+<tr><td>A8</td><td>Final exam</td><td>Written test (2 h)</td><td>30 %</td><td>Individual</td><td>22 Jan</td></tr>
+<tr><td>A9</td><td>Cooperative self-assessment</td><td>Individual statement of contributions</td><td>Adjustment ±10 %</td><td>Individual</td><td>End of each SdA</td></tr>
+</tbody></table>
+<h3>11.3 Activity descriptions</h3>
+<p><b>A1 · Formative quizzes (0 %):</b> 10 min, 8-10 items; immediate feedback; detect gaps before exams.</p>
+<p><b>A2 · Practical sheets:</b> in each practical (homeostasis, palpation, motor learning, balance/vestibular, hydration, HR in class, breathing) students record data and interpret it in 10-15 lines. Precision of recording and quality of physiological interpretation are assessed.</p>
+<p><b>A3 · Individual portfolio</b> (7 entries, 15-20 min each): 1) health expectations and concerns; 2) what I discovered about my body in SdA 1; 3) what I will apply from brain/learning to my rehearsals; 4) post-presentation reflection; 5) body image and eating: my takeaways; 6) what my class data tell me; 7) final metacognition: what I will do differently. Criteria: regularity, reflective depth, theory-experience connection.</p>
+<p><b>A4 · SdA 1 rubric</b> (dimensions): anatomical accuracy; application to real movement; injuries and prevention; technical quality of the video; source citation.</p>
+<p><b>A5 · Oral presentation rubric:</b></p>
+<table>
+<thead><tr><th>Criterion</th><th>Excellent (4)</th><th>Good (3)</th><th>Pass (2)</th><th>Fail (1)</th></tr></thead>
+<tbody>
+<tr><td>Scientific content</td><td>Rigorous, up to date, well explained</td><td>Correct with minor imprecision</td><td>Basic, with occasional errors</td><td>Serious errors or gaps</td></tr>
+<tr><td>Structure</td><td>Clear question-evidence-conclusion</td><td>Logical with minor mismatches</td><td>Followable but confusing</td><td>Disorganised</td></tr>
+<tr><td>Communication</td><td>Engaging, audience-adapted</td><td>Fluent, minimal reading</td><td>Script-dependent</td><td>Reads, no connection</td></tr>
+<tr><td>Live demonstration</td><td>Relevant, safe, well integrated</td><td>Relevant but weakly integrated</td><td>Superficial</td><td>Absent or irrelevant</td></tr>
+<tr><td>Sources &amp; timing</td><td>5+ sources, on time</td><td>Enough sources, slight overrun</td><td>Few sources or overtime</td><td>No sources, no timing control</td></tr>
+</tbody></table>
+<p>Peer assessment (5-item form per group) adjusts the presentation mark by up to 1 point.</p>
+<p><b>A6 · Dossier + defence rubric</b> (dimensions): physiological grounding; feasibility and tailoring to the company profile; nutrition-sleep-load integration; specialisation module; format, visual design and citation; quality of defence answers (5-min pitch + 3 questions).</p>
+<p><b>A7 · Mid-term exam (18 Dec, 90 min):</b> 20 multiple-choice questions (40 %) + 3 contextualised essay questions (45 %) + 1 mini-case (15 %). <i>Examples:</i> "During the landing of a <i>grand jeté</i>, what do the hamstrings of the front leg do? Justify your answer"; "A dancer has recurrent vertigo in pirouettes: explain the vestibular structure involved and why <i>spotting</i> helps".</p>
+<p><b>A8 · Final exam (22 Jan, 2 h):</b> same format on block 4 and transversal content + <b>1 integrating question on the whole course</b>: "The company's HR logs show slow recovery after <i>allegro</i>. Propose two physiological explanations and two actions from your health plan".</p>
+<p><b>A9 · Cooperative self-assessment:</b> at the end of each SdA, an individual statement of contributions; allows the group mark to be adjusted individually (±10 %).</p>
+<h3>11.4 Minimum requirements, recovery and monitoring</h3>
+<ul>
+<li><b>Minimum attendance of 80 %</b> at contact sessions to be assessable in practical activities.</li>
+<li><b>Minimums:</b> final exam ≥ 4 (out of 10) to compute the weighted average; all group products submitted.</li>
+<li><b>Recovery:</b> global written re-sit in February (replaces the exam mark if higher); group products may be resubmitted within one week with a maximum grade of "good" (notable); the oral presentation is recovered in a tutorial.</li>
+<li><b>Monitoring:</b> grades visible on the campus; weekly tutorials; direct communication of failure risk after the mid-term.</li>
+</ul>`},
+
+{id:"temari",t:"12. Physiological outline of every session",h:`
+<h3>Topic 0 · Introduction, homeostasis and cell physiology (9 Oct)</h3>
+<h4>1. Introduction to physiology</h4>
+<ul><li>Concept of physiology; levels of organisation (cell → tissue → organ → system → organism)</li><li>The four foundations: structure-function relationship, gradients, communication, energy (ATP)</li></ul>
+<h4>2. Homeostasis</h4>
+<ul><li>Internal environment (Claude Bernard) and homeostasis (Cannon)</li><li>Control system: regulated variable, sensors, integration centre, effectors</li><li>Negative feedback (temperature, blood glucose, osmolarity) and positive feedback (birth, clotting)</li><li>Exercise as homeostatic disturbance: ↑temperature, ↓pH, ↓plasma volume, ↓glycogen</li><li><b>Dance application:</b> fatigue as temporary imbalance; recovery as return to equilibrium; why "warming up" and "cooling down" are homeostatic regulations</li></ul>
+<h4>3. Cell physiology</h4>
+<ul><li>Plasma membrane: lipid bilayer and proteins; selective permeability</li><li>Passive transport (simple and facilitated diffusion, osmosis) and active transport (Na⁺/K⁺ pump)</li><li>Membrane potential and excitability (basis of nerve and muscle)</li><li>Functional organelles: mitochondria (energy), sarcoplasmic reticulum (Ca²⁺), ribosomes (proteins)</li><li>Intercellular communication: chemical signals and receptors</li><li>Cell types of the course: muscle fibre, neuron, osteocyte, chondrocyte, erythrocyte</li><li><b>Application:</b> what happens to the muscle cell during an <i>allegro</i>? ATP, Ca²⁺, metabolites</li></ul>
+<h3>Topic 1 · Musculoskeletal system I (16 Oct) — <i>Bone and joints</i></h3>
+<h4>1. System overview</h4>
+<ul><li>Functions: support, movement, protection, minerals, haematopoiesis</li><li>Connective tissue: collagen and elastin (basis of tendon, ligament, fascia, capsule)</li></ul>
+<h4>2. Bone tissue</h4>
+<ul><li>Compact and spongy bone; matrix (collagen + hydroxyapatite)</li><li>Bone cells: osteoblasts, osteocytes, osteoclasts</li><li>Bone remodelling and <b>Wolff's law</b>: bone adapts to load</li><li>Long bone structure: diaphysis, epiphysis, growth cartilage, marrow</li><li><b>Application:</b> bone adaptation to dance impact; stress fractures (metatarsals, tibia); osteopenia and bone health (link with RED-S, topic 7)</li></ul>
+<h4>3. Articular cartilage</h4>
+<ul><li>Types (hyaline, fibrocartilage); avascularity → nutrition by diffusion through movement</li></ul>
+<h4>4. Joints</h4>
+<ul><li>Classification: fibrous, cartilaginous, synovial</li><li>Synovial joint structure: capsule, synovial fluid, menisci, labrum</li><li>Anatomical planes and axes; movement terminology (flexion/extension, abduction, rotation, dorsiflexion/plantarflexion, pronation/supination)</li><li>Range of motion: limiting factors</li><li><b>Hypermobility:</b> Beighton test; aesthetic advantages vs. injury risk</li><li><b>Application:</b> <i>turnout</i> from the hip vs. forced at knee/ankle; <i>en pointe</i>; shoulder stabilisation in <i>port de bras</i></li></ul>
+<h3>Topic 2 · Musculoskeletal system II (23 Oct) — <i>Muscle</i></h3>
+<h4>1. Structure of skeletal muscle</h4>
+<ul><li>Belly, origin and insertion, tendon; epimysium, perimysium, endomysium</li><li>The muscle fibre: sarcolemma, sarcoplasmic reticulum, myofibrils</li></ul>
+<h4>2. Muscle contraction</h4>
+<ul><li>The sarcomere: actin, myosin, troponin, tropomyosin; A and I bands</li><li>Sliding filament theory; excitation-contraction coupling (role of Ca²⁺ and ATP)</li><li>Cross-bridge cycle; rigor and ATP shortage</li></ul>
+<h4>3. Fibre types and motor unit</h4>
+<ul><li>Type I (slow/oxidative) vs. IIa/IIx (fast/glycolytic) fibres; the dancer's profile</li><li>Motor unit: motor neuron + fibres; size principle and recruitment</li></ul>
+<h4>4. Contraction types and muscle function</h4>
+<ul><li>Isometric, concentric, <b>eccentric</b> (basis of DOMS: soreness)</li><li>Muscle roles: agonist, antagonist, synergist, fixator; co-contraction</li><li><b>Application:</b> muscle analysis of <i>plié</i> (eccentric), <i>relevé</i> (concentric), balance (isometric), <i>grand jeté</i> (full sequence)</li></ul>
+<h4>5. Muscle proprioception</h4>
+<ul><li>Muscle spindle (myotatic reflex) and Golgi tendon organ</li></ul>
+<h4>6. Muscle fatigue and flexibility</h4>
+<ul><li>Fatigue mechanisms; cramps; viscoelastic properties and stretching</li><li>Typical dance musculotendinous injuries: strains, tendinopathies (Achilles, rotator cuff)</li></ul>
+<h3>— Self-directed day (30 Oct) —</h3>
+<p>No on-site teaching: non-contact work on the musculoskeletal block.</p>
+<h3>Topic 3 · Nervous system I (6 Nov) — <i>Neuron and movement control</i></h3>
+<h4>1. Organisation of the nervous system</h4>
+<ul><li>CNS / PNS; afferent and efferent pathways; somatic and autonomic</li></ul>
+<h4>2. The neuron</h4>
+<ul><li>Structure: soma, dendrites, axon, myelin; neuroglia</li><li>Resting potential, action potential; saltatory conduction and speed</li></ul>
+<h4>3. Synapse</h4>
+<ul><li>Chemical synapse; key neurotransmitters (ACh, glutamate, GABA, dopamine, serotonin, <b>endorphins</b>)</li><li>Integration: summation, excitation and inhibition</li></ul>
+<h4>4. Motor control</h4>
+<ul><li>Motor and premotor cortex; descending pathways; the motor neuron as final common pathway</li><li><b>Cerebellum:</b> coordination, timing, balance</li><li><b>Basal ganglia:</b> automatisation of learned movements</li><li><b>Plasticity and motor learning:</b> stages (cognitive → associative → autonomous); motor memory</li><li><b>Application:</b> how a choreography is learned; distributed vs. massed rehearsal; mental practice/visualisation; why "automatised" movement frees attention for interpretation</li></ul>
+<h3>Topic 4 · Oral presentation workshop (13 Nov)</h3>
+<p>No new physiological content: methodology session (source searching, scientific structure, oral communication) and group tutorials.</p>
+<h3>Topic 5 · Nervous system II / Sleep (20 Nov)</h3>
+<h4>1. Sensation and balance</h4>
+<ul><li>Proprioception (spindles, joint receptors) + vision + <b>vestibular system</b></li><li>Vestibular apparatus: otoliths (utricle/saccule) and semicircular canals (endolymph)</li><li><b>Rotational vertigo, nystagmus and vestibular adaptation</b></li><li><b>Application:</b> why <i>spotting</i> works; turning as vestibular training; balance impairment under fatigue</li></ul>
+<h4>2. Autonomic nervous system</h4>
+<ul><li>Sympathetic vs. parasympathetic; autonomic tone</li><li><b>Stage-fright stress response:</b> adrenaline (tachycardia, trembling, dry mouth), Yerkes-Dodson curve (optimal arousal)</li><li><b>Application:</b> controlling opening-night nerves; breathing as a parasympathetic activator; pre-stage routines</li></ul>
+<h4>3. Sleep</h4>
+<ul><li>Sleep architecture: NREM (1-3) and REM stages; circadian rhythms</li><li>Functions: <b>motor memory consolidation</b> (choreography "sets in" while sleeping), GH secretion, tissue repair</li><li>Sleep deprivation: attention, reaction time, injury risk</li><li><b>Application:</b> dancer's sleep hygiene; evening shows and tours; naps; caffeine</li></ul>
+<h3>Topic 6 · Oral presentations / Blood (27 Nov)</h3>
+<p><b>First part:</b> oral presentations (assessment of the nervous block).</p>
+<h4>1. Blood composition</h4>
+<ul><li>Plasma (water, proteins, electrolytes, nutrients) and formed elements (haematocrit)</li></ul>
+<h4>2. Erythrocytes</h4>
+<ul><li>Haemoglobin; O₂ and CO₂ transport; erythropoiesis</li><li><b>Training adaptation:</b> ↑plasma volume and transport capacity</li></ul>
+<h4>3. Leukocytes and platelets</h4>
+<ul><li>Immune function and inflammation (link with recovery and injuries); haemostasis</li></ul>
+<h4>4. Blood in dance</h4>
+<ul><li><b>Iron-deficiency anaemia in dancers:</b> unexplained fatigue, ferritin, higher risk in women, impact on aerobic performance</li><li>Basic interpretation of a blood test</li></ul>
+<h3>Topic 7 · Endocrine system (4 Dec)</h3>
+<h4>1. Endocrinology fundamentals</h4>
+<ul><li>Hormone, target gland, receptors; protein vs. steroid hormones</li><li>Hypothalamus-pituitary axis and <b>feedback</b></li></ul>
+<h4>2. Main hormonal axes</h4>
+<ul><li>Pituitary: GH, ACTH, TSH, gonadotropins, ADH</li><li>Thyroid: T3/T4 and <b>basal metabolism</b></li><li>Parathyroid: PTH and calcium regulation (link with bone)</li><li>Adrenal gland: <b>catecholamines</b> (adrenaline: fight-or-flight) and <b>cortisol</b> (stress, catabolism); aldosterone</li><li>Endocrine pancreas: <b>insulin/glucagon</b> and blood glucose (link with nutrition)</li><li>Gonads: oestrogens, progesterone, testosterone; <b>menstrual cycle and performance</b></li></ul>
+<h4>3. Hormones, stress and dance</h4>
+<ul><li>Hormonal response to acute exercise and overtraining (chronic cortisol)</li><li><b>Low energy availability and RED-S:</b> hormonal disruption, amenorrhoea, bone health (integration of topics 1, 6 and 8)</li><li><b>Application:</b> opening-night adrenaline; menstrual health as an indicator of overall health; stigma-free professional communication</li></ul>
+<h3>Topic 8 · Nutrition (11 Dec) — <i>with dietitian + practical</i></h3>
+<h4>1. Muscle fuel (integrative review)</h4>
+<ul><li>ATP and energy systems: phosphagens, glycolysis, oxidative metabolism</li><li>Dominant systems by dance demand (jump vs. long variation vs. improvisation)</li></ul>
+<h4>2. Macronutrients</h4>
+<ul><li>Carbohydrates: muscle and liver glycogen; performance</li><li>Proteins: repair and adaptation; dancer's requirements</li><li>Fats: hormonal and energy function; essential fatty acids</li></ul>
+<h4>3. Micronutrients and hydration</h4>
+<ul><li>Iron, calcium, vitamin D (link with blood and bone)</li><li>Fluid balance; hypohydration and loss of performance and coordination</li></ul>
+<h4>4. Applied nutrition</h4>
+<ul><li>Nutrient timing: pre-rehearsal, post-class recovery, show day</li><li><b>Energy availability, body image and EDs in dance:</b> warning signs and professional attitude</li><li><b>Practical:</b> analysis of real menus, planning a show day with the dietitian</li></ul>
+<h3>Topic 9 · MID-TERM ASSESSMENT (18 Dec)</h3>
+<p>Written test on topics 0-7. Graded feedback before the holidays.</p>
+<h3>Topic 10 · Cardiovascular system (8 Jan)</h3>
+<h4>1. The heart</h4>
+<ul><li>Structure: chambers, valves, myocardium, coronary arteries</li><li>Conduction system: sinoatrial and atrioventricular nodes; myocardium as self-excitable muscle</li><li>Cardiac cycle: systole/diastole; <b>cardiac output = HR × stroke volume</b></li></ul>
+<h4>2. Vessels and blood pressure</h4>
+<ul><li>Arteries, capillaries, veins; venous return (role of the <b>muscle pump</b>: why to keep moving after exertion)</li></ul>
+<h4>3. Regulation</h4>
+<ul><li>Autonomic (sympathetic ↑HR / parasympathetic ↓HR), hormonal and local</li></ul>
+<h4>4. Cardiovascular system and dance</h4>
+<ul><li>Exercise response: HR, flow redistribution, blood pressure</li><li><b>Max HR and intensity zones;</b> dance as intermittent exercise (intensity profile of a class: barre vs. allegro vs. repertoire)</li><li>Training adaptations: resting bradycardia, ↑stroke volume</li><li><b>Heart-rate recovery</b> as a fitness indicator</li><li><b>Practical:</b> measuring HR in a real class and calculating zones</li></ul>
+<h3>Topic 11 · Respiratory system (15 Jan)</h3>
+<h4>1. Structure</h4>
+<ul><li>Airways (conduction) and exchange zone: <b>alveoli</b>; pleura</li></ul>
+<h4>2. Ventilatory mechanics</h4>
+<ul><li>Diaphragm and intercostals; pressures and inspiration/expiration</li><li>Lung volumes and capacities: tidal volume, VC, residual volume</li></ul>
+<h4>3. Gas exchange and transport</h4>
+<ul><li>Alveolar-capillary diffusion; role of haemoglobin (integration with blood)</li><li>Regulation of ventilation: CO₂-sensitive chemoreceptors (why "breathlessness" is not lack of O₂)</li></ul>
+<h4>4. Breathing and exercise</h4>
+<ul><li>Ventilation and O₂ consumption; <b>VO₂max</b>; ventilatory threshold</li><li><b>EPOC (oxygen debt)</b> and active recovery</li><li>The complete O₂ chain: lungs → blood → heart → muscle (course synthesis)</li></ul>
+<h4>5. Breathing applied to dance</h4>
+<ul><li>Diaphragmatic vs. shallow costal breathing; avoiding apnoea/Valsalva during exertion</li><li>Breath-movement phase coordination (<i>port de bras</i>, jumps, adagio)</li><li>Breathing as a tool for regulating stage stress (transversal closing with the autonomic nervous system)</li><li><b>Practical:</b> breathing exercises and simple ventilation tests</li></ul>
+<h3>Topic 12 · FINAL EXAM (22 Jan)</h3>
+<p>Cumulative written test with emphasis on cardiovascular, respiratory and integration (case-type question: "a performance week").</p>
+<h3>Transversal notes</h3>
+<ul>
+<li><b>Common thread:</b> homeostasis (topic 0) reappears in every system: temperature and water (cardio), Ca²⁺ and pH (muscle), blood glucose (endocrine-nutrition), CO₂ (respiratory).</li>
+<li><b>Integrative review:</b> each topic opens with 10-15 min connecting to the previous one; practicals measure variables of one's own body to reinforce transfer.</li>
+<li>The four days without theoretical content (30 Oct, 13 Nov, 18 Dec, 22 Jan) are devoted to tutored autonomous work, product preparation and assessment.</li>
+</ul>`}
+]}
+};
+
+/* =========================================================
+   APLICACIÓ — render, idiomes, edició, persistència
+   ========================================================= */
+let lang=localStorage.getItem(KEY+'_lang')||'es';
+let overrides=JSON.parse(localStorage.getItem(KEY+'_overrides')||'{}');
+let editing=false;
+
+const $=s=>document.querySelector(s);
+const U=()=>DATA[lang].ui;
+const orig=(id)=>DATA[lang].secs.find(s=>s.id===id).h;
+const cur=(id)=>(overrides[lang]&&overrides[lang][id]!==undefined)?overrides[lang][id]:orig(id);
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2200);}
+
+function render(){
+  const d=DATA[lang];
+  document.documentElement.lang=lang;
+  $('#brandTitle').textContent='🩰 '+d.ui.brand;
+  $('#brandSub').textContent=d.ui.brandSub;
+  $('#bEdit').textContent=editing?d.ui.editing:d.ui.edit;
+  $('#bSave').textContent=d.ui.save;
+  $('#bExport').textContent=d.ui.export;
+  $('#bImport').textContent=d.ui.import;
+  $('#bReset').textContent=d.ui.reset;
+  $('#bPrint').textContent=d.ui.print;
+  document.querySelectorAll('#langBox button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  // nav
+  $('#nav').innerHTML=d.ui.navTitle?`<strong style="display:block;padding:.3rem .5rem;color:var(--granate);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px">${d.ui.navTitle}</strong>`:''+
+    d.secs.map((s,i)=>`<a href="#s-${s.id}" data-i="${i}">${s.t}</a>`).join('');
+  // main
+  $('#main').innerHTML=d.secs.map(s=>`
+    <section class="card" id="s-${s.id}">
+      <h2>${s.t}${(overrides[lang]&&overrides[lang][s.id]!==undefined)?`<span class="edited-chip">${d.ui.edited}</span>`:''}</h2>
+      <div class="secbody" data-id="${s.id}">${cur(s.id)}</div>
+    </section>`).join('');
+  applyEdit();
+  // nav activa
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('section.card').forEach(sec=>obs.observe(sec));
+}
+
+function applyEdit(){
+  document.querySelectorAll('.secbody').forEach(el=>{
+    el.setAttribute('contenteditable',editing?'true':'false');
+  });
+  document.body.classList.toggle('editing',editing);
+}
+
+/* ---- guardar / restaurar ---- */
+function save(){
+  if(!editing){toast(U().nochanges);return;}
+  overrides[lang]=overrides[lang]||{};
+  let n=0;
+  document.querySelectorAll('.secbody').forEach(el=>{
+    const id=el.dataset.id;
+    if(el.innerHTML!==orig(id)){overrides[lang][id]=el.innerHTML;n++;}
+    else{delete overrides[lang][id];}
+  });
+  if(!Object.keys(overrides[lang]).length)delete overrides[lang];
+  localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));
+  toast(U().saved+' ('+n+') · '+new Date().toLocaleTimeString());
+  $('#savestate').textContent=U().saved+' '+new Date().toLocaleTimeString();
+  render();
+}
+function resetLang(){
+  if(!confirm(U().resetMsg))return;
+  delete overrides[lang];
+  localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));
+  render();toast(U().saved);
+}
+function exportJSON(){
+  const blob=new Blob([JSON.stringify({app:KEY,exported:new Date().toISOString(),overrides},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='programacio-fisiologia-edicions.json';a.click();
+}
+function importJSON(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const j=JSON.parse(e.target.result);
+      if(j.overrides){overrides=j.overrides;localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));render();toast(U().saved);}
+      else toast('Format no vàlid');
+    }catch(err){toast('Error: fitxer no vàlid');}
+  };
+  r.readAsText(file);
+}
+
+/* ---- events ---- */
+ $('#langBox').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(editing&&!confirm('Canviar d\'idioma tanca el mode d\'edició sense desar. Continuar?'))return;
+  editing=false;lang=b.dataset.lang;localStorage.setItem(KEY+'_lang',lang);render();
+});
+ $('#bEdit').onclick=()=>{editing=!editing;applyEdit();$('#bEdit').textContent=editing?U().editing:U().edit;};
+ $('#bSave').onclick=save;
+ $('#bReset').onclick=resetLang;
+ $('#bExport').onclick=exportJSON;
+ $('#bPrint').onclick=()=>window.print();
+ $('#bImport').onclick=()=>$('#fileImp').click();
+ $('#fileImp').onchange=e=>{if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';};
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia docent · Fisiologia aplicada a la dansa</title>
+<style>
+  :root{
+    --granate:#0e4d64; --granate2:#16607c; --oro:#b8912f; --crema:#f4f8f9;
+    --tinta:#252a2e; --gris:#6b6570; --bord:#d8e2e7; --card:#ffffff;
+    --verd:#2e7d4f; --blau:#1f5f8b; --taronja:#c05621; --vermell:#a52834;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.55}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif}
+  .topbar{position:sticky;top:0;z-index:50;background:var(--granate);color:#fff;padding:.6rem 1rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .brand{font-family:Georgia,serif;font-size:1.05rem;font-weight:bold}
+  .brand small{opacity:.85;font-weight:normal;display:block;font-size:.72rem}
+  .optchip{background:var(--oro);color:#fff;padding:.2rem .6rem;border-radius:12px;font-size:.72rem;font-weight:700;letter-spacing:.5px}
+  .lang{display:flex;gap:.3rem;margin-left:auto}
+  .lang button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.3rem .7rem;border-radius:20px;cursor:pointer;font-weight:600}
+  .lang button.on{background:#fff;color:var(--granate)}
+  .tools{display:flex;gap:.4rem;flex-wrap:wrap;width:100%}
+  .tools button{border:none;border-radius:8px;padding:.42rem .8rem;cursor:pointer;font-weight:600;font-size:.85rem;background:rgba(255,255,255,.92);color:var(--granate)}
+  .tools button:hover{background:#fff}
+  .tools button.danger{background:#f3d9de;color:var(--vermell)}
+  .tools button.primary{background:var(--oro);color:#fff}
+  .savestate{font-size:.8rem;opacity:.9;align-self:center}
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:1.2rem;max-width:1250px;margin:1.2rem auto;padding:0 1rem}
+  nav{position:sticky;top:120px;align-self:start;background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:.8rem;max-height:calc(100vh - 150px);overflow:auto}
+  .navtitle{display:block;padding:.3rem .5rem;color:var(--granate);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
+  nav a{display:block;padding:.4rem .5rem;color:var(--tinta);text-decoration:none;border-radius:8px;font-size:.88rem}
+  nav a:hover{background:#eef4f6}
+  nav a.on{background:var(--granate);color:#fff}
+  main{min-width:0}
+  section.card{background:var(--card);border:1px solid var(--bord);border-radius:14px;padding:1.4rem 1.6rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  section.card>h2{margin:.1rem 0 .9rem;color:var(--granate);font-size:1.4rem;border-bottom:2px solid var(--bord);padding-bottom:.45rem}
+  section.card h3{color:var(--granate2);font-size:1.1rem;margin:1.3rem 0 .5rem}
+  section.card h3 small{color:var(--gris);font-weight:normal;font-size:.85rem}
+  section.card h4{color:var(--tinta);font-size:.98rem;margin:1.1rem 0 .4rem}
+  table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.87rem}
+  th{background:var(--granate);color:#fff;text-align:left;padding:.5rem .55rem;font-weight:600}
+  td{border:1px solid var(--bord);padding:.5rem .55rem;vertical-align:top}
+  tbody tr:nth-child(even){background:#f7fafb}
+  table.info th{width:32%;background:#eef4f6;color:var(--granate)}
+  table.wide{font-size:.78rem}
+  .twrap{overflow-x:auto}
+  ul,ol{margin:.4rem 0 .8rem;padding-left:1.4rem}
+  li{margin:.25rem 0}
+  .badge{display:inline-block;font-size:.7rem;font-weight:700;padding:.1rem .5rem;border-radius:10px;vertical-align:middle;white-space:nowrap}
+  .b-eval{background:var(--vermell);color:#fff}
+  .b-deliver{background:var(--verd);color:#fff}
+  .b-practice{background:var(--blau);color:#fff}
+  .b-free{background:var(--gris);color:#fff}
+  .note{background:#fdf6e7;border-left:4px solid var(--oro);padding:.6rem .8rem;border-radius:0 8px 8px 0;margin:.8rem 0;font-size:.9rem}
+  body.editing [contenteditable=true]{outline:1.5px dashed rgba(14,77,100,.35);outline-offset:2px;border-radius:4px;cursor:text}
+  body.editing [contenteditable=true]:hover{background:#fffbe8}
+  body.editing [contenteditable=true]:focus{outline:2px solid var(--granate);background:#fffdf2}
+  #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  #toast.show{opacity:1}
+  .edited-chip{background:#e7f0ea;color:var(--verd);font-size:.72rem;font-weight:700;padding:.15rem .6rem;border-radius:10px;margin-left:.6rem;font-family:system-ui}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;max-height:none}}
+  @media print{
+    .topbar,nav,#toast{display:none!important}
+    .layout{display:block;max-width:none;margin:0;padding:0}
+    section.card{border:none;box-shadow:none;page-break-inside:avoid;padding:.5rem 0}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span id="brandTitle"></span> <span class="optchip">OPCIÓ B</span> <small id="brandSub"></small></div>
+  <div class="lang" id="langBox">
+    <button data-lang="es">ES</button><button data-lang="ca">CA</button><button data-lang="en">EN</button>
+  </div>
+  <div class="tools">
+    <button id="bEdit"></button>
+    <button id="bSave" class="primary"></button>
+    <button id="bExport"></button>
+    <button id="bImport"></button>
+    <button id="bReset" class="danger"></button>
+    <button id="bPrint"></button>
+    <span class="savestate" id="savestate"></span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div id="toast"></div>
+<input type="file" id="fileImp" accept=".json" hidden>
+
+<script>
+const KEY='fisiodanza_guiaB';
+
+const DATA={
+/* ================= CATALÀ ================= */
+ca:{
+ui:{brand:"Fisiologia aplicada a la dansa",brandSub:"Guia docent · Grau en Dansa · Institut del Teatre · 2026-27",
+ edit:"✏️ Edita",editing:"✅ Acaba l'edició",save:"💾 Desa",export:"⬇ Exporta canvis",import:"⬆ Importa canvis",
+ reset:"↺ Restaura l'original",print:"🖨 Imprimeix / PDF",saved:"Desat",nochanges:"No hi ha canvis nous",
+ resetMsg:"Vols restaurar el contingut ORIGINAL d'aquest idioma? Perdràs les teves edicions.",edited:"editat",navTitle:"Índex"},
+secs:[
+{id:"dades",t:"1. Dades identificatives",h:`
+<table class="info">
+<tr><th>Nom de l'assignatura</th><td>Fisiologia aplicada a la dansa</td></tr>
+<tr><th>Codi</th><td>[Codi oficial del pla d'estudis]</td></tr>
+<tr><th>Titulació</th><td>Grau en Dansa</td></tr>
+<tr><th>Centre</th><td>Institut del Teatre (Diputació de Barcelona)</td></tr>
+<tr><th>Curs acadèmic</th><td>2026-2027</td></tr>
+<tr><th>Curs del pla d'estudis</th><td>[1r / 2n curs — segons el pla d'estudis]</td></tr>
+<tr><th>Caràcter</th><td>Obligatòria (OB)</td></tr>
+<tr><th>Crèdits ECTS</th><td>3 ECTS (75 hores totals)</td></tr>
+<tr><th>Semestre</th><td>1r semestre</td></tr>
+<tr><th>Llengua vehicular</th><td>Català</td></tr>
+<tr><th>Departament / Àrea</th><td>[Departament de Ciències Aplicades a la Dansa / Pedagogia de la Dansa]</td></tr>
+<tr><th>Requisits previs recomanats</th><td>Cap específic, tot i que es recomana haver cursat assignatures bàsiques de tècnica de dansa.</td></tr>
+</table>`},
+
+{id:"prof",t:"2. Professorat i dades de contacte",h:`
+<table class="info">
+<tr><th>Professor/a responsable</th><td>[Nom i cognoms]</td></tr>
+<tr><th>Correu electrònic</th><td>[correu@institutdelteatre.cat]</td></tr>
+<tr><th>Despatx</th><td>[Edifici / Planta / Número]</td></tr>
+<tr><th>Horari de tutories</th><td>[Dia i hora] — amb cita prèvia per correu electrònic</td></tr>
+<tr><th>Campus virtual</th><td>Espai de l'assignatura a la plataforma digital de l'Institut del Teatre</td></tr>
+<tr><th>Altres docents col·laboradors</th><td>Nutricionista convidat/da (sessió de l'11-des-26); professionals convidats en sessions puntuals</td></tr>
+</table>
+<div class="note">Les tutories es poden sol·licitar també en finalitzar les sessions presencials o mitjançant el sistema de cita prèvia del campus virtual.</div>`},
+
+{id:"presentacio",t:"3. Presentació de l'assignatura",h:`
+<h3>3.1 Descripció general</h3>
+<p>La <b>Fisiologia aplicada a la dansa</b> és una assignatura de formació bàsica dins del Grau en Dansa que proporciona a l'alumnat les eines científiques necessàries per comprendre el funcionament del cos humà en acció. S'allunya deliberadament d'un plantejament memorístic dels sistemes anatòmics per situar l'aprenentatge en contextos professionals reals: assajar millor, prevenir lesions, rendir en escena i ensenyar amb seguretat.</p>
+<p>Tota l'assignatura s'articula al voltant d'una <b>situació professional real i continuada</b> (l'eix global), que simula una setmana professional intensa (gira, residència de creació o sèrie de funcions). Aquest eix actua com a fil conductor i permet que el coneixement fisiològic es construeixi <i>perquè és necessari</i> per resoldre el repte professional plantejat.</p>
+<h3>3.2 Justificació en el perfil del graduat/da</h3>
+<p>La dansa és una disciplina artística d'alta exigència física que requereix dels seus intèrprets i pedagogs un coneixement profund del cos. L'assignatura respon a la necessitat de formar professionals que:</p>
+<ul>
+<li><b>Comprenguin</b> els mecanismes fisiològics que regulen l'esforç, la recuperació i la lesió.</li>
+<li><b>Previnguin</b> riscos derivats de càrregues intenses, gires o pràctiques inadequades.</li>
+<li><b>Optimitzin</b> el rendiment artístic a partir de l'evidència científica.</li>
+<li><b>Comunicuin</b> amb rigor el coneixement corporal a companyies, alumnes i famílies.</li>
+<li><b>Exerceixin</b> amb ètica, especialment en relació amb la imatge corporal i la prevenció dels TCA.</li>
+</ul>
+<p>Aquesta assignatura contribueix, per tant, a les <b>competències transversals</b> (comunicació científica, treball cooperatiu, autonomia d'aprenentatge) i a les <b>competències específiques</b> de cura del cos, prevenció i rendiment del pla d'estudis.</p>
+<h3>3.3 Enfocament competencial i metodològic</h3>
+<p>L'enfocament de l'assignatura és <b>competencial, actiu i contextualitzat</b>. El coneixement no es transmet de forma aïllada, sinó que es construeix a través de:</p>
+<ul>
+<li>L'<b>experimentació en primera persona</b> (tallers corporals, registre de dades fisiològiques pròpies).</li>
+<li>L'<b>anàlisi de situacions professionals reals</b> (estudis de cas, disseny de propostes).</li>
+<li>La <b>comunicació científica adaptada</b> a diferents públics (presentacions orals).</li>
+<li>La <b>reflexió ètica</b> sobre la imatge corporal, els TCA i la responsabilitat professional.</li>
+</ul>
+<h3>3.4 Relació amb altres assignatures del pla d'estudis</h3>
+<p>L'assignatura s'insereix en una xarxa de matèries del Grau en Dansa que comparteixen l'objectiu de formar professionals íntegres i rigorosos:</p>
+<ul>
+<li><b>Assignatures de tècnica de dansa:</b> on s'apliquen els principis de biomecànica i condicionament físic treballats en aquesta assignatura.</li>
+<li><b>Anatomia funcional / Kinesiologia:</b> amb la qual comparteix fonaments i amb la qual es coordina per evitar duplicats.</li>
+<li><b>Pedagogia de la dansa:</b> on es transfereixen els coneixements sobre prevenció, escalfament i comunicació científica.</li>
+<li><b>Assignatures de salut i benestar:</b> amb les quals es treballa de manera transversal la prevenció de TCA i la cura de la salut integral del ballarí/na.</li>
+</ul>
+<h3>3.5 Objectius de l'assignatura</h3>
+<p>En finalitzar el curs, l'alumnat haurà assolit els <b>8 Resultats d'Aprenentatge (RA)</b> descrits a l'apartat 4, que abasten des de la comprensió dels mecanismes fisiològics bàsics fins a la capacitat de dissenyar propostes segures, comunicar amb rigor i exercir amb ètica professional.</p>`},
+
+{id:"avaluacio",t:"4. Criteris i instruments d'avaluació",h:`
+<p>L'avaluació de l'assignatura es fonamenta en un <b>enfocament competencial i continuat</b>, on el coneixement fisiològic s'avalua en contextos professionals reals. Es combina l'avaluació formativa (durant el procés) amb l'avaluació sumativa (al final).</p>
+<h3>4.1 Instruments d'avaluació i ponderació</h3>
+<table>
+<thead><tr><th>Instrument</th><th>Descripció</th><th>Ponderació</th><th>RA vinculats</th></tr></thead>
+<tbody>
+<tr><td><b>Prova escrita teoricopràctica</b></td><td>Examen tipus test i preguntes curtes sobre mecanismes fisiològics i sistemes corporals aplicats a la dansa. Inclou casos pràctics de prevenció de lesions i optimització del rendiment.</td><td><b>30 %</b></td><td>RA1, RA2, RA3, RA5</td></tr>
+<tr><td><b>Dossier de seguiment de la setmana professional</b></td><td>Document on l'alumnat registra i analitza dades fisiològiques pròpies (FC, hidratació, son, recuperació) durant una setmana real de càrrega professional (assajos intensius, funcions, gira). Inclou proposta de condicionament físic i nutrició.</td><td><b>35 %</b></td><td>RA4, RA5, RA6</td></tr>
+<tr><td><b>Presentació oral de comunicació científica</b></td><td>Exposició grupal (2-3 persones) on es comunica un concepte fisiològic adaptat a un públic concret (companyia de dansa, alumnes d'una escola, famílies). S'avalua el rigor científic i l'adaptació didàctica.</td><td><b>20 %</b></td><td>RA7, RA3</td></tr>
+<tr><td><b>Participació i treball cooperatiu</b></td><td>Avaluació continuada de la participació en classe, treball en equip, resolució de casos pràctics i actituds de cura de la salut i ètica professional. Inclou autoavaluació i coavaluació.</td><td><b>15 %</b></td><td>RA8, RA6, CT1, CT2</td></tr>
+</tbody></table>
+<h3>4.2 Criteris d'avaluació per Resultat d'Aprenentatge</h3>
+<p><b>RA1 · Mecanismes d'homeòstasi i regulació corporal</b></p>
+<ul><li>Explica amb precisió els processos de regulació tèrmica, hídrica i energètica durant l'activitat dancística.</li><li>Relaciona els mecanismes fisiològics amb situacions reals d'assaig i actuació.</li></ul>
+<p><b>RA2 · Estructura i funcionament dels sistemes corporals</b></p>
+<ul><li>Descriu correctament l'anatomia i la fisiologia dels sistemes musculoesquelètic, nerviós, endocrí, cardiovascular i respiratori.</li><li>Identifica les interrelacions entre sistemes durant l'esforç físic.</li></ul>
+<p><b>RA3 · Anàlisi tècnica i factors de risc de lesió</b></p>
+<ul><li>Analitza moviments tècnics de dansa des de la biomecànica i identifica patrons de risc.</li><li>Proposa ajustos tècnics preventius basats en evidència fisiològica.</li></ul>
+<p><b>RA4 · Interpretació de dades fisiològiques i autorregulació</b></p>
+<ul><li>Recull i interpreta correctament dades pròpies de FC, recuperació i hidratació.</li><li>Pren decisions d'autorregulació de la càrrega de treball basades en les dades.</li></ul>
+<p><b>RA5 · Aplicació de nutrició, son i recuperació</b></p>
+<ul><li>Dissenyar un pla d'alimentació, hidratació i descans coherent amb una setmana professional real.</li><li>Justifica les decisions preses amb fonaments fisiològics.</li></ul>
+<p><b>RA6 · Disseny de propostes d'escalfament i condicionament</b></p>
+<ul><li>Crea seqüències d'escalfament, volta a la calma i condicionament físic segures i justificades.</li><li>Adapta les propostes a diferents contextos professionals (assaig, funció, classe).</li></ul>
+<p><b>RA7 · Comunicació científica adaptada</b></p>
+<ul><li>Comunica conceptes fisiològics amb rigor i claredat.</li><li>Adapta el llenguatge i els exemples al públic destinatari (ballarins, alumnes, famílies).</li></ul>
+<p><b>RA8 · Actituds de cura i ètica professional</b></p>
+<ul><li>Demostra sensibilitat envers la imatge corporal i prevenció de TCA.</li><li>Mostra responsabilitat en la cura pròpia i en la transmissió de missatges saludables.</li></ul>
+<h3>4.3 Requisits per superar l'assignatura</h3>
+<ul>
+<li><b>Assistència mínima del 80 %</b> a les sessions presencials.</li>
+<li><b>Lliurament de totes les activitats avaluables</b> (dossier, presentació, proves).</li>
+<li><b>Nota mínima de 5/10</b> en el conjunt de l'assignatura.</li>
+<li><b>Nota mínima de 4/10</b> en la prova escrita teoricopràctica (per garantir l'assoliment dels continguts bàsics).</li>
+</ul>
+<h3>4.4 Avaluació de recuperació</h3>
+<p>L'alumnat que no superi l'assignatura podrà acollir-se a una <b>prova de recuperació</b> que inclourà:</p>
+<ul>
+<li>Prova escrita teoricopràctica (substitueix el 30 % de la nota final).</li>
+<li>Possibilitat de millorar el dossier de seguiment (substitueix el 35 % de la nota final).</li>
+<li><b>No es poden recuperar</b> la presentació oral ni la participació continuada.</li>
+</ul>
+<h3>4.5 Avaluació formativa (no ponderada)</h3>
+<p>Durant tot el curs es realitzaran activitats formatives no puntuables però obligatòries:</p>
+<ul>
+<li><b>Qüestionaris ràpids</b> d'autoavaluació al final de cada bloc temàtic.</li>
+<li><b>Tutories individuals</b> per revisar el dossier de seguiment.</li>
+<li><b>Debats i estudis de cas</b> en grup sobre prevenció de lesions i ètica professional.</li>
+</ul>`},
+
+{id:"blocs",t:"5. Continguts temàtics",h:`
+<p>Els continguts s'organitzen en <b>5 blocs temàtics</b> que segueixen una progressió lògica: des dels fonaments fisiològics bàsics fins a l'aplicació professional avançada. Tot l'aprenentatge es vertebra al voltant de l'<b>eix global</b> (situació professional real continuada), que actua com a fil conductor i context d'aplicació.</p>
+
+<h3>Bloc 1 · Fonaments de la fisiologia aplicada a la dansa <small>(3 setmanes)</small></h3>
+<p><b>Conceptuals:</b></p>
+<ul><li>Concepte d'homeòstasi i regulació corporal en l'activitat física.</li><li>Sistemes de regulació: nerviós, endocrí i cardiovascular.</li><li>Metabolisme energètic: vies aeròbiques i anaeròbiques aplicades a la dansa.</li><li>Termoregulació i hidratació durant l'esforç.</li></ul>
+<p><b>Procedimentals:</b></p>
+<ul><li>Mesura i registre de la freqüència cardíaca (FC) en repòs i durant l'esforç.</li><li>Interpretació de la resposta fisiològica immediata a l'exercici.</li><li>Anàlisi de la demanda energètica de diferents estils de dansa.</li></ul>
+<p><b>Actitudinals:</b></p>
+<ul><li>Valoració de la importància de conèixer el propi cos per optimitzar el rendiment.</li><li>Consciència de les diferències individuals en la resposta fisiològica.</li></ul>
+<p><b>RA vinculats:</b> RA1, RA2</p>
+
+<h3>Bloc 2 · Anatomia funcional i biomecànica del moviment dancístic <small>(4 setmanes)</small></h3>
+<p><b>Conceptuals:</b></p>
+<ul><li>Sistema musculoesquelètic: estructura i funcionament.</li><li>Principis de biomecànica aplicats a la dansa: forces, palanques, equilibri.</li><li>Anàlisi funcional dels principals grups musculars en moviments tècnics (salts, girs, extensions).</li><li>Factors de risc de lesió: sobrecàrrega, mala tècnica, desequilibris musculars.</li></ul>
+<p><b>Procedimentals:</b></p>
+<ul><li>Anàlisi biomecànica de moviments tècnics específics.</li><li>Identificació de patrons de moviment de risc en l'execució pròpia i d'altres.</li><li>Proposta d'ajustos tècnics preventius basats en evidència fisiològica.</li></ul>
+<p><b>Actitudinals:</b></p>
+<ul><li>Responsabilitat en la cura del propi cos i prevenció de lesions.</li><li>Respecte per les limitacions individuals i adaptació de l'esforç.</li></ul>
+<p><b>RA vinculats:</b> RA2, RA3</p>
+
+<h3>Bloc 3 · Nutrició, son i recuperació per a la setmana professional <small>(3 setmanes)</small></h3>
+<p><b>Conceptuals:</b></p>
+<ul><li>Necessitats nutricionals del ballarí/na: macronutrients, micronutrients, hidratació.</li><li>Importància del son i la recuperació en el rendiment i la prevenció de lesions.</li><li>Estratègies de recuperació activa i passiva.</li><li>Relació entre alimentació, imatge corporal i salut mental (prevenció de TCA).</li></ul>
+<p><b>Procedimentals:</b></p>
+<ul><li>Disseny d'un pla d'alimentació i hidratació per a una setmana professional real (assajos intensius, funcions, gira).</li><li>Registre i anàlisi de dades pròpies de son, hidratació i recuperació.</li><li>Aplicació de tècniques de recuperació (estiraments, foam roller, bany de contrast).</li></ul>
+<p><b>Actitudinals:</b></p>
+<ul><li>Compromís amb hàbits saludables i sostenibles en el temps.</li><li>Sensibilitat cap a la imatge corporal i rebuig de pràctiques nocives.</li><li>Ètica professional en la transmissió de consells nutricionals.</li></ul>
+<p><b>RA vinculats:</b> RA4, RA5, RA8</p>
+
+<h3>Bloc 4 · Disseny de propostes d'escalfament, volta a la calma i condicionament físic <small>(4 setmanes)</small></h3>
+<p><b>Conceptuals:</b></p>
+<ul><li>Fisiologia de l'escalfament: efectes sobre el sistema cardiovascular, muscular i nerviós.</li><li>Principis del condicionament físic aplicat a la dansa: força, resistència, flexibilitat, potència.</li><li>Disseny de sessions d'escalfament i volta a la calma segures i efectives.</li><li>Adaptació de les propostes a diferents contextos (assaig, funció, classe, gira).</li></ul>
+<p><b>Procedimentals:</b></p>
+<ul><li>Creació de seqüències d'escalfament i volta a la calma justificades fisiològicament.</li><li>Disseny de programes de condicionament físic complementaris a la pràctica dancística.</li><li>Avaluació de l'efectivitat de les propostes mitjançant dades fisiològiques (FC, percepció de l'esforç).</li></ul>
+<p><b>Actitudinals:</b></p>
+<ul><li>Responsabilitat en la seguretat de les propostes dissenyades.</li><li>Capacitat d'adaptació a les necessitats individuals i del grup.</li></ul>
+<p><b>RA vinculats:</b> RA6, RA3</p>
+
+<h3>Bloc 5 · Comunicació científica i ètica professional <small>(2 setmanes)</small></h3>
+<p><b>Conceptuals:</b></p>
+<ul><li>Principis de comunicació científica: rigor, claredat, adaptació al públic.</li><li>Estratègies per transmetre coneixement fisiològic a diferents audiències (companyia, alumnes, famílies).</li><li>Ètica professional en la pedagogia de la dansa: límits, responsabilitat, respecte.</li><li>Prevenció i detecció de TCA en l'àmbit de la dansa.</li></ul>
+<p><b>Procedimentals:</b></p>
+<ul><li>Preparació i presentació d'una exposició científica adaptada a un públic concret.</li><li>Ús de recursos didàctics (visuals, pràctics, analògics) per facilitar la comprensió.</li><li>Debat sobre casos ètics reals en la pedagogia i la pràctica professional de la dansa.</li></ul>
+<p><b>Actitudinals:</b></p>
+<ul><li>Compromís amb la transmissió de missatges saludables i basats en evidència.</li><li>Sensibilitat cap a la diversitat corporal i rebuig d'estereotips nocius.</li><li>Responsabilitat en el rol de model per a alumnes i companyes.</li></ul>
+<p><b>RA vinculats:</b> RA7, RA8</p>`},
+
+{id:"eix",t:"6. Eix global: situació professional real continuada",h:`
+<p>Tot l'aprenentatge es vertebra al voltant d'una <b>situació professional real i continuada</b> que actua com a fil conductor de l'assignatura. Aquesta situació simula una <b>setmana professional intensa</b> (per exemple, una gira, una residència de creació o una sèrie de funcions) on l'alumnat ha d'aplicar tots els coneixements adquirits.</p>
+<h3>Fases de l'eix global</h3>
+<ol>
+<li><b>Preparació (blocs 1-2):</b> l'alumnat analitza les demandes fisiològiques de la situació professional i identifica els riscos potencials.</li>
+<li><b>Execució (bloc 3):</b> durant la setmana simulada, l'alumnat registra dades pròpies (FC, son, hidratació, nutrició) i pren decisions d'autorregulació.</li>
+<li><b>Disseny i aplicació (bloc 4):</b> l'alumnat crea i aplica propostes d'escalfament, volta a la calma i condicionament físic adaptades al context.</li>
+<li><b>Comunicació i reflexió (bloc 5):</b> l'alumnat comunica els resultats i aprenentatges a un públic concret i reflexiona sobre l'ètica professional.</li>
+</ol>
+<div class="note">Aquest eix global garanteix que l'aprenentatge sigui <b>significatiu, contextualitzat i transferible</b> a la pràctica professional real.</div>`},
+
+{id:"metodologia",t:"7. Metodologia didàctica",h:`
+<p>La metodologia de l'assignatura es fonamenta en un <b>enfocament competencial, actiu i contextualitzat</b>, on l'alumnat construeix el coneixement fisiològic <i>perquè el necessita</i> per resoldre reptes professionals reals. S'allunya deliberadament del model transmissiu tradicional (memorització de sistemes anatòmics) per situar l'aprenentatge en contextos d'aplicació professional.</p>
+
+<h3>7.1 Principis metodològics generals</h3>
+<ol>
+<li><b>Aprenentatge basat en situacions professionals reals (ABSP):</b> tot el contingut s'introdueix i es desenvolupa a partir d'una situació professional continuada (la «setmana professional intensa») que actua com a vertebrador de l'assignatura.</li>
+<li><b>Aprenentatge significatiu i transferible:</b> els coneixements es construeixen en contextos aplicats per garantir la seva transferència a la pràctica professional futura (escena, pedagogia, prevenció).</li>
+<li><b>Rol actiu de l'alumnat:</b> l'estudiant és protagonista del seu aprenentatge: investiga, experimenta, decideix, dissenya i comunica. El docent actua com a guia, facilitador i mentor.</li>
+<li><b>Treball cooperatiu:</b> es fomenta l'aprenentatge entre iguals mitjançant activitats en petit grup, coavaluació i projectes col·laboratius.</li>
+<li><b>Autonomia i autorregulació:</b> es promou la capacitat de gestionar el propi aprenentatge, interpretar les dades fisiològiques i prendre decisions fonamentades.</li>
+<li><b>Integració teoria-pràctica:</b> no existeix una separació artificial entre continguts teòrics i pràctics; la teoria s'introdueix <i>en el moment en què és necessària</i> per resoldre el repte professional.</li>
+<li><b>Enfocament ètic i de cura del cos:</b> s'incorpora transversalment la reflexió sobre la imatge corporal, la prevenció de TCA i la responsabilitat professional.</li>
+</ol>
+
+<h3>7.2 Estratègies i activitats d'ensenyament-aprenentatge</h3>
+<h4>A) Activitats presencials dirigides (sessions síncrones)</h4>
+<table>
+<thead><tr><th>Tipus d'activitat</th><th>Descripció</th><th>Finalitat</th></tr></thead>
+<tbody>
+<tr><td><b>Sessions expositives dialogades</b></td><td>Presentació de continguts teòrics amb participació activa de l'alumnat (preguntes, casos breus, discussió).</td><td>Introduir conceptes clau i resoldre dubtes.</td></tr>
+<tr><td><b>Tallers pràctics de laboratori corporal</b></td><td>Experimentació en primera persona: mesura de FC, tests d'equilibri, anàlisi biomecànica de moviments tècnics, registres d'hidratació.</td><td>Vivenciar els conceptes fisiològics en el propi cos.</td></tr>
+<tr><td><b>Estudis de cas en grup</b></td><td>Anàlisi de situacions professionals reals (lesions de ballarins, gires intensives, casos de TCA) amb debat guiat.</td><td>Desenvolupar el pensament crític i la presa de decisions.</td></tr>
+<tr><td><b>Laboratori de disseny</b></td><td>Creació en grup de propostes d'escalfament, condicionament i plans de recuperació.</td><td>Aplicar els coneixements al disseny professional.</td></tr>
+<tr><td><b>Assajos de comunicació científica</b></td><td>Preparació i simulació d'exposicions adaptades a diferents públics (companyia, alumnes, famílies).</td><td>Desenvolupar la competència comunicativa.</td></tr>
+</tbody></table>
+<h4>B) Activitats autònomes (treball no presencial)</h4>
+<table>
+<thead><tr><th>Tipus d'activitat</th><th>Descripció</th><th>Finalitat</th></tr></thead>
+<tbody>
+<tr><td><b>Lectura crítica d'articles i recursos</b></td><td>Selecció de textos científics, vídeos i recursos digitals sobre fisiologia aplicada a la dansa.</td><td>Ampliar i aprofundir els continguts treballats a classe.</td></tr>
+<tr><td><b>Registre del diari fisiològic personal</b></td><td>Seguiment continuat de dades pròpies (FC, son, hidratació, nutrició, percepció de l'esforç) durant la «setmana professional».</td><td>Desenvolupar l'autorregulació i la consciència corporal.</td></tr>
+<tr><td><b>Preparació del dossier final</b></td><td>Elaboració individual del document d'anàlisi i proposta professional.</td><td>Sintetitzar els aprenentatges i demostrar la competència adquirida.</td></tr>
+<tr><td><b>Preparació de la presentació grupal</b></td><td>Treball cooperatiu per dissenyar l'exposició científica adaptada.</td><td>Consolidar l'aprenentatge mitjançant l'ensenyament a altres.</td></tr>
+<tr><td><b>Visionat de vídeos tècnics</b></td><td>Anàlisi de gravacions de ballarins professionals des de la perspectiva biomecànica i fisiològica.</td><td>Connectar la teoria amb referents artístics reals.</td></tr>
+</tbody></table>
+<h4>C) Activitats de tutoria i acompanyament</h4>
+<table>
+<thead><tr><th>Tipus d'activitat</th><th>Descripció</th><th>Finalitat</th></tr></thead>
+<tbody>
+<tr><td><b>Tutories individuals</b></td><td>Seguiment personalitzat del diari fisiològic i del dossier final.</td><td>Orientar l'aprenentatge autònom i resoldre dubtes específics.</td></tr>
+<tr><td><b>Devolutives formatives</b></td><td>Retroalimentació continuada sobre les activitats en procés (no només al final).</td><td>Permetre la millora durant el procés d'aprenentatge.</td></tr>
+<tr><td><b>Espais de consulta grupal</b></td><td>Horaris dedicats a resoldre dubtes col·lectius sobre els projectes.</td><td>Fomentar l'aprenentatge entre iguals.</td></tr>
+</tbody></table>
+
+<h3>7.3 Organització del treball de l'alumnat</h3>
+<table>
+<thead><tr><th>Modalitat</th><th>% del treball total</th><th>Descripció</th></tr></thead>
+<tbody>
+<tr><td><b>Treball presencial a l'aula</b></td><td>40 %</td><td>Sessions teòriques, tallers pràctics, estudis de cas, laboratoris de disseny.</td></tr>
+<tr><td><b>Treball autònom individual</b></td><td>35 %</td><td>Lectures, diari fisiològic, preparació del dossier, visionats.</td></tr>
+<tr><td><b>Treball cooperatiu en grup</b></td><td>20 %</td><td>Estudis de cas, disseny de propostes, preparació de la presentació oral.</td></tr>
+<tr><td><b>Tutories i acompanyament</b></td><td>5 %</td><td>Seguiment personalitzat i devolutives formatives.</td></tr>
+</tbody></table>
+<div class="note">Distribució orientativa per tipologia de treball. La distribució horària oficial (45 h presencials + 30 h autònomes = 75 h, 3 ECTS) es detalla a l'apartat 8.</div>
+
+<h3>7.4 Recursos i materials didàctics</h3>
+<p><b>Recursos físics:</b></p>
+<ul><li>Aula amb mobiliari adaptable per al treball pràctic.</li><li>Espai de moviment (sala de dansa) per als tallers corporals.</li><li>Material de mesura: pulsòmetres, bàscules de bioimpedància, cronòmetres, cintes mètriques.</li><li>Material de condicionament: foam rollers, bandes elàstiques, colchonetas.</li></ul>
+<p><b>Recursos digitals:</b></p>
+<ul><li><b>Campus virtual de l'Institut del Teatre:</b> espai central per a l'entrega de materials, enviament d'activitats, fòrums de debat i devolutives.</li><li><b>Biblioteca digital:</b> accés a articles científics, llibres especialitzats i bases de dades (PubMed, Dialnet, SPORTDiscus).</li><li><b>Aplicacions mòbils de registre:</b> ús d'apps per al seguiment de FC, son, hidratació i nutrició (amb criteris de selecció proporcionats pel docent).</li><li><b>Vídeos didàctics propis i de referència:</b> gravacions de tallers, anàlisis biomecàniques, exemples de comunicació científica.</li></ul>
+<p><b>Recursos humans:</b></p>
+<ul><li><b>Docent-tutor:</b> guia el procés, facilita recursos, ofereix devolutives formatives.</li><li><b>Professionals convidats:</b> ballarins, fisioterapeutes, nutricionistes especialitzats en arts escèniques que participen en sessions puntuals.</li><li><b>Companyes de curs:</b> recurs fonamental per a l'aprenentatge cooperatiu i la coavaluació.</li></ul>
+
+<h3>7.5 Justificació pedagògica de la metodologia</h3>
+<ol>
+<li><b>Constructivisme social (Vygotsky):</b> el coneixement es construeix activament per l'alumnat en interacció amb el context professional i amb els companyes.</li>
+<li><b>Aprenentatge situat (Lave &amp; Wenger):</b> l'aprenentatge és més efectiu quan es produeix en contextos autèntics d'aplicació, no en abstraccions acadèmiques.</li>
+<li><b>Aprenentatge experiencial (Kolb):</b> la vivència corporal dels conceptes fisiològics (a través del propi cos) genera un aprenentatge més profund i durador que la mera memorització.</li>
+<li><b>Enfocament per competències (EEES):</b> la metodologia està orientada al desenvolupament de competències transferibles, no a l'acumulació de continguts inerts.</li>
+<li><b>Avaluació formativa (Black &amp; Wiliam):</b> la retroalimentació continuada permet a l'alumnat regular el seu propi aprenentatge i millorar progressivament.</li>
+</ol>
+
+<h3>7.6 Atenció a la diversitat de l'alumnat</h3>
+<ul>
+<li><b>Múltiples formats de presentació de continguts:</b> textos, vídeos, pràctiques corporals, esquemes visuals, pòdcasts.</li>
+<li><b>Flexibilitat en les formes de demostració de l'aprenentatge:</b> l'alumnat pot triar el format del seu dossier final (escrit, audiovisual, mixt) segons les seves preferències i fortaleses.</li>
+<li><b>Ritmes diferenciats:</b> s'ofereixen activitats d'ampliació per a qui avança més ràpid i de reforç per a qui necessita consolidar conceptes.</li>
+<li><b>Tutories individualitzades:</b> seguiment personalitzat per adaptar el procés a les necessitats específiques de cada estudiant.</li>
+<li><b>Accessibilitat:</b> tots els recursos digitals compleixen criteris d'accessibilitat (subtítols, transcripcions, contrast adequat).</li>
+</ul>
+
+<h3>7.7 Rol del docent i de l'alumnat</h3>
+<table>
+<thead><tr><th>Rol del docent</th><th>Rol de l'alumnat</th></tr></thead>
+<tbody>
+<tr><td>Dissenyador de situacions professionals autèntiques</td><td>Protagonista actiu del seu propi aprenentatge</td></tr>
+<tr><td>Facilitador de recursos i experiències</td><td>Investigador i experimentador en primera persona</td></tr>
+<tr><td>Guia i mentor del procés</td><td>Autorregulador de la seva càrrega i la seva recuperació</td></tr>
+<tr><td>Avaluador formatiu i sumatiu</td><td>Coavaluador i autoavaluador</td></tr>
+<tr><td>Model d'ètica professional i cura del cos</td><td>Comunicador de coneixement científic a diversos públics</td></tr>
+<tr><td>Promotor del pensament crític</td><td>Prenedor de decisions fonamentades</td></tr>
+</tbody></table>`},
+
+{id:"cronograma",t:"8. Planificació temporal i cronograma",h:`
+<h3>Dades generals de l'assignatura</h3>
+<ul>
+<li><b>Crèdits ECTS:</b> 3 ECTS (25 hores per crèdit = 75 hores totals de treball de l'estudiant).</li>
+<li><b>Hores presencials:</b> 45 hores assignades (42 lectives efectives per pèrdua d'un festiu no recuperable).</li>
+<li><b>Hores de treball autònom:</b> 30 hores.</li>
+</ul>
+<p>A continuació es detalla la distribució temporal de les sessions, vinculant cada data amb el bloc temàtic corresponent, el tipus d'activitat, les hores de treball i la seva relació amb l'eix global o l'avaluació.</p>
+<div class="twrap">
+<table class="wide">
+<thead><tr><th>Data</th><th>Bloc</th><th>Contingut / Activitat</th><th>Tipus de sessió</th><th>H. pres.</th><th>H. aut.</th><th>Observacions</th></tr></thead>
+<tbody>
+<tr><td><b>9-oct-26</b></td><td>Bloc 1</td><td>Presentació de l'assignatura. Homeòstasi i fisiologia cel·lular.</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Presentació del repte de la «setmana professional» i entrega de directrius.</td></tr>
+<tr><td><b>16-oct-26</b></td><td>Bloc 2</td><td>Sistema musculoesquelètic I: estructura i funció en la dansa.</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Anàlisi de demandes físiques del repte professional.</td></tr>
+<tr><td><b>23-oct-26</b></td><td>Bloc 2</td><td>Sistema musculoesquelètic II: biomecànica i factors de risc.</td><td><span class="badge b-practice">taller</span> Taller pràctic</td><td>3</td><td>2</td><td>Identificació de riscos en l'execució tècnica. Cal roba còmoda.</td></tr>
+<tr><td><b>30-oct-26</b></td><td>—</td><td><b>Festiu</b> (lliure disposició CSD).</td><td><span class="badge b-free">no lectiva</span></td><td>0</td><td>2</td><td>Treball autònom: inici del registre del diari fisiològic personal.</td></tr>
+<tr><td><b>6-nov-26</b></td><td>Bloc 2/3</td><td>Sistema nerviós I: control del moviment i percepció de l'esforç.</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Autorregulació de la càrrega de treball.</td></tr>
+<tr><td><b>13-nov-26</b></td><td>Bloc 5</td><td>Preparació i enviament de treballs orals (tutorització a l'aula).</td><td>Taller cooperatiu</td><td>3</td><td>3</td><td>Sessió dedicada al desenvolupament del <b>RA7</b> (comunicació científica).</td></tr>
+<tr><td><b>20-nov-26</b></td><td>Bloc 3</td><td>Sistema nerviós II i fisiologia del son.</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Estratègies de recuperació per a la setmana professional.</td></tr>
+<tr><td><b>27-nov-26</b></td><td>Bloc 3/5</td><td>La sang (transport i termorregulació) + <b>presentacions de treballs orals</b>.</td><td><span class="badge b-eval">avaluació</span> / taller</td><td>3</td><td>2</td><td>Instrument d'avaluació: presentació oral grupal (20 %).</td></tr>
+<tr><td><b>4-des-26</b></td><td>Bloc 3</td><td>Sistema hormonal: estrès, adaptació i recuperació.</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Anàlisi de l'impacte de la càrrega d'assajos/funcions.</td></tr>
+<tr><td><b>11-des-26</b></td><td>Bloc 3</td><td>Nutrició aplicada a la dansa (sessió amb nutricionista + pràctica).</td><td>Taller amb expert</td><td>3</td><td>2</td><td>Disseny del pla nutricional del dossier. Assistència de professional extern.</td></tr>
+<tr><td><b>18-des-26</b></td><td>Transversal</td><td><b>AVALUACIÓ PARCIAL</b> (repàs i prova de coneixements).</td><td><span class="badge b-eval">sumativa</span> Avaluació sumativa</td><td>3</td><td>3</td><td>Instrument d'avaluació: prova teoricopràctica (30 %).</td></tr>
+<tr><td><b>Vacances</b></td><td>—</td><td>Període de vacances de Nadal.</td><td><span class="badge b-free">no lectiva</span></td><td>0</td><td>4</td><td>Finalització i lliurament del dossier de seguiment.</td></tr>
+<tr><td><b>8-gen-27</b></td><td>Bloc 4</td><td>Aparell cardiovascular: resposta a l'esforç i monitoratge (FC).</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Interpretació de dades de FC per al dossier.</td></tr>
+<tr><td><b>15-gen-27</b></td><td>Bloc 4</td><td>Aparell respiratori i eficiència energètica en escena.</td><td>Teoricopràctica</td><td>3</td><td>2</td><td>Disseny de propostes d'escalfament i volta a la calma.</td></tr>
+<tr><td><b>22-gen-27</b></td><td>Transversal</td><td><b>EXAMEN FINAL</b> (avaluació global de tots els continguts).</td><td><span class="badge b-eval">sumativa</span> Avaluació sumativa</td><td>3</td><td>0</td><td>Instrument d'avaluació: examen global (30 %). No hi ha hores de treball autònom després de la prova.</td></tr>
+</tbody></table>
+</div>
+<h3>Resum de hores totals de l'assignatura</h3>
+<table>
+<thead><tr><th>Modalitat</th><th>Hores totals</th><th>% del treball total</th></tr></thead>
+<tbody>
+<tr><td><b>Treball presencial a l'aula</b></td><td>45 hores (assignades) / 42 hores (efectives)</td><td>60 %</td></tr>
+<tr><td><b>Treball autònom individual</b></td><td>30 hores</td><td>40 %</td></tr>
+<tr><td><b>TOTAL</b></td><td><b>75 hores</b></td><td><b>100 % (3 ECTS)</b></td></tr>
+</tbody></table>
+<h3>Observacions metodològiques sobre la planificació</h3>
+<ol>
+<li><b>Festiu no recuperable:</b> la sessió del 30 d'octubre es perd per festiu de lliure disposició. Els continguts i les hores de treball autònom previstes per a aquesta setmana es redistribueixen mitjançant lectures i l'inici del diari fisiològic personal, garantint la continuïtat de l'eix global sense necessitat de recuperar les 3 hores presencials.</li>
+<li><b>Distribució del treball autònom:</b> les 30 hores de treball personal es concentren especialment en les setmanes prèvies a les avaluacions (preparació de treballs orals, estudi per al parcial i finalització del dossier durant les vacances de Nadal), optimitzant així el temps de l'alumnat.</li>
+<li><b>Avaluació final:</b> l'examen del 22 de gener avalua la globalitat dels continguts (blocs 1 a 4), incloent-hi tant la matèria impartida abans com després de l'avaluació parcial.</li>
+</ol>`},
+
+{id:"biblio",t:"9. Bibliografia i recursos",h:`
+<p>La bibliografia i els recursos de l'assignatura s'han seleccionat per garantir un equilibri entre els <b>fonaments científics de la fisiologia de l'exercici</b> i l'<b>especificitat aplicada a la dansa</b>. S'inclouen tant textos de referència general com publicacions especialitzades en medicina i ciència de la dansa, amb especial atenció a la prevenció de lesions, la nutrició i els aspectes ètics (TCA, imatge corporal).</p>
+<p>Tots els recursos estan disponibles a la <b>biblioteca de l'Institut del Teatre</b> o a través de la <b>biblioteca digital</b> del campus virtual.</p>
+
+<h3>9.1 Bibliografia bàsica (obligatòria)</h3>
+<p>Aquesta bibliografia constitueix el nucli de continguts de l'assignatura i és de consulta obligada per a l'alumnat.</p>
+<ul>
+<li>Angioi, M., Metsios, G. S., Koutedakis, Y., Wyon, M. A., Nevill, A. M., Fairclough, S. J., &amp; Hagel, M. (2009). Fitness in contemporary dance: A systematic review. <i>International Journal of Sports Medicine, 30</i>(7), 475–484. https://doi.org/10.1055/s-0029-1185839</li>
+<li>Howley, E. T., &amp; Franks, B. D. (2007). <i>Health fitness instructor's handbook</i> (5a ed.). Human Kinetics.</li>
+<li>Koutedakis, Y., &amp; Jamurtas, A. (2004). The dancer as a performing athlete: Physiological considerations. <i>Sports Medicine, 34</i>(10), 651–661. https://doi.org/10.2165/00007256-200434100-00003</li>
+<li>McArdle, W. D., Katch, F. I., &amp; Katch, V. L. (2015). <i>Fisiología del ejercicio: Nutrición, energía y rendimiento humano</i> (7a ed.). Alianza Editorial.</li>
+<li>Solomon, R., Solomon, J., &amp; Minton, S. C. (2005). <i>Preventive dance medicine: The art and science of health and conditioning</i>. Princeton Book Company.</li>
+<li>Wyon, M. A. (2010). Guidance for dance nutrition. En <i>Dance medicine: Science, art and practice</i> (pp. 113–132). Routledge.</li>
+</ul>
+
+<h3>9.2 Bibliografia complementària (recomanada)</h3>
+<p>Aquesta bibliografia permet aprofundir en aspectes específics de l'assignatura i és especialment útil per al desenvolupament del dossier, els treballs orals i la preparació de les avaluacions.</p>
+<p><b>Biomecànica i prevenció de lesions:</b></p>
+<ul>
+<li>Hamilton, W. G., Hamilton, L. H., &amp; Lockett, J. (2018). <i>Anatomy and kinesiology for dancers</i> (3a ed.). Routledge.</li>
+<li>Liederbach, M., &amp; Richardson, M. A. (2016). <i>Dance medicine in practice: Anatomy, physiology, theory</i>. Routledge.</li>
+</ul>
+<p><b>Nutrició i recuperació:</b></p>
+<ul>
+<li>American College of Sports Medicine, American Dietetic Association, &amp; Dietitians of Canada (2016). Nutrition and athletic performance. <i>Medicine &amp; Science in Sports &amp; Exercise, 48</i>(3), 543–568.</li>
+<li>Burk, L. (2013). <i>Nutrition for dance: A practical guide</i>. Routledge.</li>
+</ul>
+<p><b>Imatge corporal i TCA en dansa:</b></p>
+<ul>
+<li>Arcelus, J., Witcomb, G. L., &amp; Mitchell, T. (2014). Prevalence of eating disorders amongst dancers: A systematic review and meta-analysis. <i>European Eating Disorders Review, 22</i>(2), 92–101. https://doi.org/10.1002/erv.2272</li>
+<li>Quested, E., &amp; Ntoumanis, N. (2010). The relationship between perceived autonomy support, exercise intentions and exercise behaviours. <i>Psychology of Sport and Exercise, 11</i>(4), 467–474.</li>
+</ul>
+<p><b>Comunicació científica i pedagogia:</b></p>
+<ul>
+<li>Ambrose, M. (2016). <i>Dance pedagogy for a changing world: Teaching, learning and research</i>. Routledge.</li>
+<li>Fortin, S., &amp; Siedentop, D. (1995). <i>Teaching dance in the school setting</i>. AAHPERD.</li>
+</ul>
+
+<h3>9.3 Recursos digitals i en línia</h3>
+<p>Els següents recursos són d'accés lliure o estan disponibles a través de la subscripció institucional de l'Institut del Teatre:</p>
+<p><b>Institucions i associacions de referència:</b></p>
+<ul>
+<li><b>IADMS (International Association for Dance Medicine &amp; Science):</b> https://www.iadms.org — Recull de <i>Fact Sheets</i> sobre nutrició, prevenció de lesions, imatge corporal i condició física del ballarí/na. Material essencial per a la comunicació científica adaptada.</li>
+<li><b>CDR (Committee for Dance Education):</b> https://www.dance-education.org</li>
+<li><b>One Dance UK — Healthy Dancer Programme:</b> https://www.onedanceuk.org/healthy-dancer/</li>
+</ul>
+<p><b>Bases de dades científiques:</b></p>
+<ul>
+<li><b>PubMed:</b> https://pubmed.ncbi.nlm.nih.gov (accés lliure a resums; articles complets a través de la biblioteca).</li>
+<li><b>Dialnet:</b> https://dialnet.unirioja.es/ (recursos en castellà i català).</li>
+<li><b>SPORTDiscus:</b> base de dades especialitzada en ciències de l'esport (accés institucional).</li>
+</ul>
+<p><b>Plataformes de vídeo i anàlisi tècnica:</b></p>
+<ul>
+<li><b>Dance Magazine — Science for Dancers:</b> https://www.dancemagazine.com/</li>
+<li><b>Canal de YouTube de l'IADMS:</b> vídeos didàctics sobre prevenció de lesions i biomecànica.</li>
+</ul>
+
+<h3>9.4 Revistes científiques de referència</h3>
+<p>L'alumnat és encoratjat a consultar regularment les següents revistes per mantenir-se actualitzat i per a la preparació dels treballs orals:</p>
+<ul>
+<li><i>Journal of Dance Medicine &amp; Science</i> (IADMS)</li>
+<li><i>Medical Problems of Performing Artists</i></li>
+<li><i>Sports Medicine</i></li>
+<li><i>International Journal of Sports Medicine</i></li>
+<li><i>Journal of Dance Education</i></li>
+<li><i>Research in Dance Education</i></li>
+<li><i>Apunts: Educació Física i Esports</i> (revista catalana de referència)</li>
+</ul>
+
+<h3>9.5 Aplicacions mòbils i eines de registre</h3>
+<p>Per al seguiment del <b>diari fisiològic personal</b> (eina central de l'eix global), es recomana l'ús d'aplicacions validades científicament. El docent proporcionarà una llista actualitzada al començament del curs, però les més habituals són:</p>
+<ul>
+<li><b>Registre de freqüència cardíaca:</b> Polar Flow, Garmin Connect, HeartRate Monitor.</li>
+<li><b>Registre de son:</b> Sleep Cycle, Pillow.</li>
+<li><b>Registre d'hidratació i nutrició:</b> MyFitnessPal, Yazio.</li>
+<li><b>Percepció de l'esforç (escala RPE):</b> diàriament amb registre propi en plantilla proporcionada pel docent.</li>
+</ul>
+<div class="note">L'ús d'aplicacions és voluntari i sempre respectuós amb la privacitat de les dades personals. Es treballarà a classe la interpretació crítica d'aquestes eines i els seus límits.</div>
+
+<h3>9.6 Altres recursos</h3>
+<ul>
+<li><b>Material d'aula:</b> pulsòmetres, bàscules de bioimpedància, cronòmetres, cintes mètriques, foam rollers i bandes elàstiques (disponibles a les instal·lacions de l'Institut del Teatre).</li>
+<li><b>Tutoria de nutrició:</b> sessió específica amb nutricionista especialitzat/da en arts escèniques (11-des-26).</li>
+<li><b>Estudis de cas reals:</b> documentació proporcionada pel docent sobre casos professionals de ballarins/es (anònims i amb consentiment).</li>
+</ul>
+
+<h3>9.7 Criteris de selecció bibliogràfica</h3>
+<p>La bibliografia s'ha seleccionat seguint els següents criteris:</p>
+<ol>
+<li><b>Rigor científic:</b> tots els textos són publicats per editorials acadèmiques de prestigi o revistes amb revisió per parells.</li>
+<li><b>Actualització:</b> es prioritzen publicacions dels últims 10 anys, tot i que s'inclouen clàssics de referència.</li>
+<li><b>Especificitat per a la dansa:</b> es combinen textos generals de fisiologia de l'exercici amb publicacions específiques de medicina i ciència de la dansa.</li>
+<li><b>Diversitat lingüística:</b> s'inclouen recursos en català, castellà i anglès, tot i que l'anglès és imprescindible per a la literatura científica actual.</li>
+<li><b>Accessibilitat:</b> tots els recursos estan disponibles a través de la biblioteca de l'Institut del Teatre o són d'accés lliure.</li>
+</ol>`}
+]},
+
+/* ================= CASTELLANO ================= */
+es:{
+ui:{brand:"Fisiología aplicada a la danza",brandSub:"Guía docente · Grado en Danza · Institut del Teatre · 2026-27",
+ edit:"✏️ Editar",editing:"✅ Terminar edición",save:"💾 Guardar",export:"⬇ Exportar cambios",import:"⬆ Importar cambios",
+ reset:"↺ Restaurar original",print:"🖨 Imprimir / PDF",saved:"Guardado",nochanges:"No hay cambios nuevos",
+ resetMsg:"¿Restaurar el contenido ORIGINAL de este idioma? Se perderán tus ediciones.",edited:"editado",navTitle:"Índice"},
+secs:[
+{id:"dades",t:"1. Datos identificativos de la asignatura",h:`
+<table class="info">
+<tr><th>Nombre de la asignatura</th><td>Fisiología aplicada a la danza</td></tr>
+<tr><th>Código</th><td>[Código oficial del plan de estudios]</td></tr>
+<tr><th>Titulación</th><td>Grado en Danza</td></tr>
+<tr><th>Centro</th><td>Institut del Teatre (Diputación de Barcelona)</td></tr>
+<tr><th>Curso académico</th><td>2026-2027</td></tr>
+<tr><th>Curso del plan de estudios</th><td>[1º / 2º curso — según el plan de estudios]</td></tr>
+<tr><th>Carácter</th><td>Obligatoria (OB)</td></tr>
+<tr><th>Créditos ECTS</th><td>3 ECTS (75 horas totales)</td></tr>
+<tr><th>Semestre</th><td>1.er semestre</td></tr>
+<tr><th>Lengua vehicular</th><td>Catalán</td></tr>
+<tr><th>Departamento / Área</th><td>[Departamento de Ciencias Aplicadas a la Danza / Pedagogía de la Danza]</td></tr>
+<tr><th>Requisitos previos recomendados</th><td>Ninguno específico, aunque se recomienda haber cursado asignaturas básicas de técnica de danza.</td></tr>
+</table>`},
+
+{id:"prof",t:"2. Profesorado y datos de contacto",h:`
+<table class="info">
+<tr><th>Profesor/a responsable</th><td>[Nombre y apellidos]</td></tr>
+<tr><th>Correo electrónico</th><td>[correu@institutdelteatre.cat]</td></tr>
+<tr><th>Despacho</th><td>[Edificio / Planta / Número]</td></tr>
+<tr><th>Horario de tutorías</th><td>[Día y hora] — con cita previa por correo electrónico</td></tr>
+<tr><th>Campus virtual</th><td>Espacio de la asignatura en la plataforma digital del Institut del Teatre</td></tr>
+<tr><th>Otros docentes colaboradores</th><td>Nutricionista invitado/a (sesión del 11-dic-26); profesionales invitados en sesiones puntuales</td></tr>
+</table>
+<div class="note">Las tutorías se pueden solicitar también al finalizar las sesiones presenciales o mediante el sistema de cita previa del campus virtual.</div>`},
+
+{id:"presentacio",t:"3. Presentación de la asignatura",h:`
+<h3>3.1 Descripción general</h3>
+<p>La <b>Fisiología aplicada a la danza</b> es una asignatura de formación básica dentro del Grado en Danza que proporciona al alumnado las herramientas científicas necesarias para comprender el funcionamiento del cuerpo humano en acción. Se aleja deliberadamente de un planteamiento memorístico de los sistemas anatómicos para situar el aprendizaje en contextos profesionales reales: ensayar mejor, prevenir lesiones, rendir en escena y enseñar con seguridad.</p>
+<p>Toda la asignatura se articula en torno a una <b>situación profesional real y continuada</b> (el eje global), que simula una semana profesional intensa (gira, residencia de creación o serie de funciones). Este eje actúa como hilo conductor y permite que el conocimiento fisiológico se construya <i>porque es necesario</i> para resolver el reto profesional planteado.</p>
+<h3>3.2 Justificación en el perfil del graduado/da</h3>
+<p>La danza es una disciplina artística de alta exigencia física que requiere de sus intérpretes y pedagogos un conocimiento profundo del cuerpo. La asignatura responde a la necesidad de formar profesionales que:</p>
+<ul>
+<li><b>Comprendan</b> los mecanismos fisiológicos que regulan el esfuerzo, la recuperación y la lesión.</li>
+<li><b>Prevengan</b> riesgos derivados de cargas intensas, giras o prácticas inadecuadas.</li>
+<li><b>Optimicen</b> el rendimiento artístico a partir de la evidencia científica.</li>
+<li><b>Comuniquen</b> con rigor el conocimiento corporal a compañías, alumnos y familias.</li>
+<li><b>Ejerzan</b> con ética, especialmente en relación con la imagen corporal y la prevención de los TCA.</li>
+</ul>
+<p>Esta asignatura contribuye, por tanto, a las <b>competencias transversales</b> (comunicación científica, trabajo cooperativo, autonomía de aprendizaje) y a las <b>competencias específicas</b> de cuidado del cuerpo, prevención y rendimiento del plan de estudios.</p>
+<h3>3.3 Enfoque competencial y metodológico</h3>
+<p>El enfoque de la asignatura es <b>competencial, activo y contextualizado</b>. El conocimiento no se transmite de forma aislada, sino que se construye a través de:</p>
+<ul>
+<li>La <b>experimentación en primera persona</b> (talleres corporales, registro de datos fisiológicos propios).</li>
+<li>El <b>análisis de situaciones profesionales reales</b> (estudios de caso, diseño de propuestas).</li>
+<li>La <b>comunicación científica adaptada</b> a diferentes públicos (presentaciones orales).</li>
+<li>La <b>reflexión ética</b> sobre la imagen corporal, los TCA y la responsabilidad profesional.</li>
+</ul>
+<h3>3.4 Relación con otras asignaturas del plan de estudios</h3>
+<p>La asignatura se inserta en una red de materias del Grado en Danza que comparten el objetivo de formar profesionales íntegros y rigurosos:</p>
+<ul>
+<li><b>Asignaturas de técnica de danza:</b> donde se aplican los principios de biomecánica y acondicionamiento físico trabajados en esta asignatura.</li>
+<li><b>Anatomía funcional / Kinesiología:</b> con la cual comparte fundamentos y con la que se coordina para evitar duplicados.</li>
+<li><b>Pedagogía de la danza:</b> donde se transfieren los conocimientos sobre prevención, calentamiento y comunicación científica.</li>
+<li><b>Asignaturas de salud y bienestar:</b> con las que se trabaja de manera transversal la prevención de TCA y el cuidado de la salud integral del bailarín/na.</li>
+</ul>
+<h3>3.5 Objetivos de la asignatura</h3>
+<p>Al finalizar el curso, el alumnado habrá alcanzado los <b>8 Resultados de Aprendizaje (RA)</b> descritos en el apartado 4, que abarcan desde la comprensión de los mecanismos fisiológicos básicos hasta la capacidad de diseñar propuestas seguras, comunicar con rigor y ejercer con ética profesional.</p>`},
+
+{id:"avaluacio",t:"4. Criterios e instrumentos de evaluación",h:`
+<p>La evaluación de la asignatura se fundamenta en un <b>enfoque competencial y continuado</b>, donde el conocimiento fisiológico se evalúa en contextos profesionales reales. Se combina la evaluación formativa (durante el proceso) con la evaluación sumativa (al final).</p>
+<h3>4.1 Instrumentos de evaluación y ponderación</h3>
+<table>
+<thead><tr><th>Instrumento</th><th>Descripción</th><th>Ponderación</th><th>RA vinculados</th></tr></thead>
+<tbody>
+<tr><td><b>Prueba escrita teoricopráctica</b></td><td>Examen tipo test y preguntas cortas sobre mecanismos fisiológicos y sistemas corporales aplicados a la danza. Incluye casos prácticos de prevención de lesiones y optimización del rendimiento.</td><td><b>30 %</b></td><td>RA1, RA2, RA3, RA5</td></tr>
+<tr><td><b>Dossier de seguimiento de la semana profesional</b></td><td>Documento donde el alumnado registra y analiza datos fisiológicos propios (FC, hidratación, sueño, recuperación) durante una semana real de carga profesional (ensayos intensivos, funciones, gira). Incluye propuesta de acondicionamiento físico y nutrición.</td><td><b>35 %</b></td><td>RA4, RA5, RA6</td></tr>
+<tr><td><b>Presentación oral de comunicación científica</b></td><td>Exposición grupal (2-3 personas) donde se comunica un concepto fisiológico adaptado a un público concreto (compañía de danza, alumnos de una escuela, familias). Se evalúa el rigor científico y la adaptación didáctica.</td><td><b>20 %</b></td><td>RA7, RA3</td></tr>
+<tr><td><b>Participación y trabajo cooperativo</b></td><td>Evaluación continuada de la participación en clase, trabajo en equipo, resolución de casos prácticos y actitudes de cuidado de la salud y ética profesional. Incluye autoevaluación y coevaluación.</td><td><b>15 %</b></td><td>RA8, RA6, CT1, CT2</td></tr>
+</tbody></table>
+<h3>4.2 Criterios de evaluación por Resultado de Aprendizaje</h3>
+<p><b>RA1 · Mecanismos de homeostasis y regulación corporal</b></p>
+<ul><li>Explica con precisión los procesos de regulación térmica, hídrica y energética durante la actividad dancística.</li><li>Relaciona los mecanismos fisiológicos con situaciones reales de ensayo y actuación.</li></ul>
+<p><b>RA2 · Estructura y funcionamiento de los sistemas corporales</b></p>
+<ul><li>Describe correctamente la anatomía y la fisiología de los sistemas musculoesquelético, nervioso, endocrino, cardiovascular y respiratorio.</li><li>Identifica las interrelaciones entre sistemas durante el esfuerzo físico.</li></ul>
+<p><b>RA3 · Análisis técnica y factores de riesgo de lesión</b></p>
+<ul><li>Analiza movimientos técnicos de danza desde la biomecánica e identifica patrones de riesgo.</li><li>Propone ajustes técnicos preventivos basados en evidencia fisiológica.</li></ul>
+<p><b>RA4 · Interpretación de datos fisiológicos y autorregulación</b></p>
+<ul><li>Recoge e interpreta correctamente datos propios de FC, recuperación e hidratación.</li><li>Toma decisiones de autorregulación de la carga de trabajo basadas en los datos.</li></ul>
+<p><b>RA5 · Aplicación de nutrición, sueño y recuperación</b></p>
+<ul><li>Diseña un plan de alimentación, hidratación y descanso coherente con una semana profesional real.</li><li>Justifica las decisiones tomadas con fundamentos fisiológicos.</li></ul>
+<p><b>RA6 · Diseño de propuestas de calentamiento y acondicionamiento</b></p>
+<ul><li>Crea secuencias de calentamiento, vuelta a la calma y acondicionamiento físico seguras y justificadas.</li><li>Adapta las propuestas a diferentes contextos profesionales (ensayo, función, clase).</li></ul>
+<p><b>RA7 · Comunicación científica adaptada</b></p>
+<ul><li>Comunica conceptos fisiológicos con rigor y claridad.</li><li>Adapta el lenguaje y los ejemplos al público destinatario (bailarines, alumnos, familias).</li></ul>
+<p><b>RA8 · Actitudes de cuidado y ética profesional</b></p>
+<ul><li>Demuestra sensibilidad hacia la imagen corporal y prevención de TCA.</li><li>Muestra responsabilidad en el cuidado propio y en la transmisión de mensajes saludables.</li></ul>
+<h3>4.3 Requisitos para superar la asignatura</h3>
+<ul>
+<li><b>Asistencia mínima del 80 %</b> a las sesiones presenciales.</li>
+<li><b>Entrega de todas las actividades evaluables</b> (dossier, presentación, pruebas).</li>
+<li><b>Nota mínima de 5/10</b> en el conjunto de la asignatura.</li>
+<li><b>Nota mínima de 4/10</b> en la prueba escrita teoricopráctica (para garantizar el logro de los contenidos básicos).</li>
+</ul>
+<h3>4.4 Evaluación de recuperación</h3>
+<p>El alumnado que no supere la asignatura podrá acogerse a una <b>prueba de recuperación</b> que incluirá:</p>
+<ul>
+<li>Prueba escrita teoricopráctica (sustituye el 30 % de la nota final).</li>
+<li>Posibilidad de mejorar el dossier de seguimiento (sustituye el 35 % de la nota final).</li>
+<li><b>No se pueden recuperar</b> la presentación oral ni la participación continuada.</li>
+</ul>
+<h3>4.5 Evaluación formativa (no ponderada)</h3>
+<p>Durante todo el curso se realizarán actividades formativas no puntuables pero obligatorias:</p>
+<ul>
+<li><b>Cuestionarios rápidos</b> de autoevaluación al final de cada bloque temático.</li>
+<li><b>Tutorías individuales</b> para revisar el dossier de seguimiento.</li>
+<li><b>Debates y estudios de caso</b> en grupo sobre prevención de lesiones y ética profesional.</li>
+</ul>`},
+
+{id:"blocs",t:"5. Contenidos temáticos",h:`
+<p>Los contenidos se organizan en <b>5 bloques temáticos</b> que siguen una progresión lógica: desde los fundamentos fisiológicos básicos hasta la aplicación profesional avanzada. Todo el aprendizaje se vertebra alrededor del <b>eje global</b> (situación profesional real continuada), que actúa como hilo conductor y contexto de aplicación.</p>
+
+<h3>Bloque 1 · Fundamentos de la fisiología aplicada a la danza <small>(3 semanas)</small></h3>
+<p><b>Conceptuales:</b></p>
+<ul><li>Concepto de homeostasis y regulación corporal en la actividad física.</li><li>Sistemas de regulación: nervioso, endocrino y cardiovascular.</li><li>Metabolismo energético: vías aeróbicas y anaeróbicas aplicadas a la danza.</li><li>Termorregulación e hidratación durante el esfuerzo.</li></ul>
+<p><b>Procedimentales:</b></p>
+<ul><li>Medida y registro de la frecuencia cardíaca (FC) en reposo y durante el esfuerzo.</li><li>Interpretación de la respuesta fisiológica inmediata al ejercicio.</li><li>Análisis de la demanda energética de diferentes estilos de danza.</li></ul>
+<p><b>Actitudinales:</b></p>
+<ul><li>Valoración de la importancia de conocer el propio cuerpo para optimizar el rendimiento.</li><li>Consciencia de las diferencias individuales en la respuesta fisiológica.</li></ul>
+<p><b>RA vinculados:</b> RA1, RA2</p>
+
+<h3>Bloque 2 · Anatomía funcional y biomecánica del movimiento dancístico <small>(4 semanas)</small></h3>
+<p><b>Conceptuales:</b></p>
+<ul><li>Sistema musculoesquelético: estructura y funcionamiento.</li><li>Principios de biomecánica aplicados a la danza: fuerzas, palancas, equilibrio.</li><li>Análisis funcional de los principales grupos musculares en movimientos técnicos (saltos, giros, extensiones).</li><li>Factores de riesgo de lesión: sobrecarga, mala técnica, desequilibrios musculares.</li></ul>
+<p><b>Procedimentales:</b></p>
+<ul><li>Análisis biomecánico de movimientos técnicos específicos.</li><li>Identificación de patrones de movimiento de riesgo en la ejecución propia y de otros.</li><li>Propuesta de ajustes técnicos preventivos basados en evidencia fisiológica.</li></ul>
+<p><b>Actitudinales:</b></p>
+<ul><li>Responsabilidad en el cuidado del propio cuerpo y prevención de lesiones.</li><li>Respeto por las limitaciones individuales y adaptación del esfuerzo.</li></ul>
+<p><b>RA vinculados:</b> RA2, RA3</p>
+
+<h3>Bloque 3 · Nutrición, sueño y recuperación para la semana profesional <small>(3 semanas)</small></h3>
+<p><b>Conceptuales:</b></p>
+<ul><li>Necesidades nutricionales del bailarín/na: macronutrientes, micronutrientes, hidratación.</li><li>Importancia del sueño y la recuperación en el rendimiento y la prevención de lesiones.</li><li>Estrategias de recuperación activa y pasiva.</li><li>Relación entre alimentación, imagen corporal y salud mental (prevención de TCA).</li></ul>
+<p><b>Procedimentales:</b></p>
+<ul><li>Diseño de un plan de alimentación e hidratación para una semana profesional real (ensayos intensivos, funciones, gira).</li><li>Registro y análisis de datos propios de sueño, hidratación y recuperación.</li><li>Aplicación de técnicas de recuperación (estiramientos, foam roller, baño de contraste).</li></ul>
+<p><b>Actitudinales:</b></p>
+<ul><li>Compromiso con hábitos saludables y sostenibles en el tiempo.</li><li>Sensibilidad hacia la imagen corporal y rechazo de prácticas nocivas.</li><li>Ética profesional en la transmisión de consejos nutricionales.</li></ul>
+<p><b>RA vinculados:</b> RA4, RA5, RA8</p>
+
+<h3>Bloque 4 · Diseño de propuestas de calentamiento, vuelta a la calma y acondicionamiento físico <small>(4 semanas)</small></h3>
+<p><b>Conceptuales:</b></p>
+<ul><li>Fisiología del calentamiento: efectos sobre el sistema cardiovascular, muscular y nervioso.</li><li>Principios del acondicionamiento físico aplicado a la danza: fuerza, resistencia, flexibilidad, potencia.</li><li>Diseño de sesiones de calentamiento y vuelta a la calma seguras y efectivas.</li><li>Adaptación de las propuestas a diferentes contextos (ensayo, función, clase, gira).</li></ul>
+<p><b>Procedimentales:</b></p>
+<ul><li>Creación de secuencias de calentamiento y vuelta a la calma justificadas fisiológicamente.</li><li>Diseño de programas de acondicionamiento físico complementarios a la práctica dancística.</li><li>Evaluación de la efectividad de las propuestas mediante datos fisiológicos (FC, percepción del esfuerzo).</li></ul>
+<p><b>Actitudinales:</b></p>
+<ul><li>Responsabilidad en la seguridad de las propuestas diseñadas.</li><li>Capacidad de adaptación a las necesidades individuales y del grupo.</li></ul>
+<p><b>RA vinculados:</b> RA6, RA3</p>
+
+<h3>Bloque 5 · Comunicación científica y ética profesional <small>(2 semanas)</small></h3>
+<p><b>Conceptuales:</b></p>
+<ul><li>Principios de comunicación científica: rigor, claridad, adaptación al público.</li><li>Estrategias para transmitir conocimiento fisiológico a diferentes audiencias (compañía, alumnos, familias).</li><li>Ética profesional en la pedagogía de la danza: límites, responsabilidad, respeto.</li><li>Prevención y detección de TCA en el ámbito de la danza.</li></ul>
+<p><b>Procedimentales:</b></p>
+<ul><li>Preparación y presentación de una exposición científica adaptada a un público concreto.</li><li>Uso de recursos didácticos (visuales, prácticos, analógicos) para facilitar la comprensión.</li><li>Debate sobre casos éticos reales en la pedagogía y la práctica profesional de la danza.</li></ul>
+<p><b>Actitudinales:</b></p>
+<ul><li>Compromiso con la transmisión de mensajes saludables y basados en evidencia.</li><li>Sensibilidad hacia la diversidad corporal y rechazo de estereotipos nocivos.</li><li>Responsabilidad en el rol de modelo para alumnos y compañeros.</li></ul>
+<p><b>RA vinculados:</b> RA7, RA8</p>`},
+
+{id:"eix",t:"6. Eje global: situación profesional real continuada",h:`
+<p>Todo el aprendizaje se vertebra alrededor de una <b>situación profesional real y continuada</b> que actúa como hilo conductor de la asignatura. Esta situación simula una <b>semana profesional intensa</b> (por ejemplo, una gira, una residencia de creación o una serie de funciones) donde el alumnado debe aplicar todos los conocimientos adquiridos.</p>
+<h3>Fases del eje global</h3>
+<ol>
+<li><b>Preparación (bloques 1-2):</b> el alumnado analiza las demandas fisiológicas de la situación profesional e identifica los riesgos potenciales.</li>
+<li><b>Ejecución (bloque 3):</b> durante la semana simulada, el alumnado registra datos propios (FC, sueño, hidratación, nutrición) y toma decisiones de autorregulación.</li>
+<li><b>Diseño y aplicación (bloque 4):</b> el alumnado crea y aplica propuestas de calentamiento, vuelta a la calma y acondicionamiento físico adaptadas al contexto.</li>
+<li><b>Comunicación y reflexión (bloque 5):</b> el alumnado comunica los resultados y aprendizajes a un público concreto y reflexiona sobre la ética profesional.</li>
+</ol>
+<div class="note">Este eje global garantiza que el aprendizaje sea <b>significativo, contextualizado y transferible</b> a la práctica profesional real.</div>`},
+
+{id:"metodologia",t:"7. Metodología didáctica",h:`
+<p>La metodología de la asignatura se fundamenta en un <b>enfoque competencial, activo y contextualizado</b>, donde el alumnado construye el conocimiento fisiológico <i>porque lo necesita</i> para resolver retos profesionales reales. Se aleja deliberadamente del modelo transmisivo tradicional (memorización de sistemas anatómicos) para situar el aprendizaje en contextos de aplicación profesional.</p>
+
+<h3>7.1 Principios metodológicos generales</h3>
+<ol>
+<li><b>Aprendizaje basado en situaciones profesionales reales (ABSP):</b> todo el contenido se introduce y desarrolla a partir de una situación profesional continuada (la «semana profesional intensa») que actúa como vertebrador de la asignatura.</li>
+<li><b>Aprendizaje significativo y transferible:</b> los conocimientos se construyen en contextos aplicados para garantizar su transferencia a la práctica profesional futura (escena, pedagogía, prevención).</li>
+<li><b>Rol activo del alumnado:</b> el estudiante es protagonista de su aprendizaje: investiga, experimenta, decide, diseña y comunica. El docente actúa como guía, facilitador y mentor.</li>
+<li><b>Trabajo cooperativo:</b> se fomenta el aprendizaje entre iguales mediante actividades en pequeño grupo, coevaluación y proyectos colaborativos.</li>
+<li><b>Autonomía y autorregulación:</b> se promueve la capacidad de gestionar el propio aprendizaje, interpretar los datos fisiológicos y tomar decisiones fundamentadas.</li>
+<li><b>Integración teoría-práctica:</b> no existe una separación artificial entre contenidos teóricos y prácticos; la teoría se introduce <i>en el momento en que es necesaria</i> para resolver el reto profesional.</li>
+<li><b>Enfoque ético y de cuidado del cuerpo:</b> se incorpora transversalmente la reflexión sobre la imagen corporal, la prevención de TCA y la responsabilidad profesional.</li>
+</ol>
+
+<h3>7.2 Estrategias y actividades de enseñanza-aprendizaje</h3>
+<h4>A) Actividades presenciales dirigidas (sesiones síncronas)</h4>
+<table>
+<thead><tr><th>Tipo de actividad</th><th>Descripción</th><th>Finalidad</th></tr></thead>
+<tbody>
+<tr><td><b>Sesiones expositivas dialogadas</b></td><td>Presentación de contenidos teóricos con participación activa del alumnado (preguntas, casos breves, discusión).</td><td>Introducir conceptos clave y resolver dudas.</td></tr>
+<tr><td><b>Talleres prácticos de laboratorio corporal</b></td><td>Experimentación en primera persona: medición de FC, tests de equilibrio, análisis biomecánico de movimientos técnicos, registros de hidratación.</td><td>Vivenciar los conceptos fisiológicos en el propio cuerpo.</td></tr>
+<tr><td><b>Estudios de caso en grupo</b></td><td>Análisis de situaciones profesionales reales (lesiones de bailarines, giras intensivas, casos de TCA) con debate guiado.</td><td>Desarrollar el pensamiento crítico y la toma de decisiones.</td></tr>
+<tr><td><b>Laboratorio de diseño</b></td><td>Creación en grupo de propuestas de calentamiento, acondicionamiento y planes de recuperación.</td><td>Aplicar los conocimientos al diseño profesional.</td></tr>
+<tr><td><b>Ensayos de comunicación científica</b></td><td>Preparación y simulación de exposiciones adaptadas a diferentes públicos (compañía, alumnos, familias).</td><td>Desarrollar la competencia comunicativa.</td></tr>
+</tbody></table>
+<h4>B) Actividades autónomas (trabajo no presencial)</h4>
+<table>
+<thead><tr><th>Tipo de actividad</th><th>Descripción</th><th>Finalidad</th></tr></thead>
+<tbody>
+<tr><td><b>Lectura crítica de artículos y recursos</b></td><td>Selección de textos científicos, vídeos y recursos digitales sobre fisiología aplicada a la danza.</td><td>Ampliar y profundizar los contenidos trabajados en clase.</td></tr>
+<tr><td><b>Registro del diario fisiológico personal</b></td><td>Seguimiento continuado de datos propios (FC, sueño, hidratación, nutrición, percepción del esfuerzo) durante la «semana profesional».</td><td>Desarrollar la autorregulación y la consciencia corporal.</td></tr>
+<tr><td><b>Preparación del dossier final</b></td><td>Elaboración individual del documento de análisis y propuesta profesional.</td><td>Sintetizar los aprendizajes y demostrar la competencia adquirida.</td></tr>
+<tr><td><b>Preparación de la presentación grupal</b></td><td>Trabajo cooperativo para diseñar la exposición científica adaptada.</td><td>Consolidar el aprendizaje mediante la enseñanza a otros.</td></tr>
+<tr><td><b>Visionado de vídeos técnicos</b></td><td>Análisis de grabaciones de bailarines profesionales desde la perspectiva biomecánica y fisiológica.</td><td>Conectar la teoría con referentes artísticos reales.</td></tr>
+</tbody></table>
+<h4>C) Actividades de tutoría y acompañamiento</h4>
+<table>
+<thead><tr><th>Tipo de actividad</th><th>Descripción</th><th>Finalidad</th></tr></thead>
+<tbody>
+<tr><td><b>Tutorías individuales</b></td><td>Seguimiento personalizado del diario fisiológico y del dossier final.</td><td>Orientar el aprendizaje autónomo y resolver dudas específicas.</td></tr>
+<tr><td><b>Devolutivas formativas</b></td><td>Retroalimentación continuada sobre las actividades en proceso (no solo al final).</td><td>Permitir la mejora durante el proceso de aprendizaje.</td></tr>
+<tr><td><b>Espacios de consulta grupal</b></td><td>Horarios dedicados a resolver dudas colectivas sobre los proyectos.</td><td>Fomentar el aprendizaje entre iguales.</td></tr>
+</tbody></table>
+
+<h3>7.3 Organización del trabajo del alumnado</h3>
+<table>
+<thead><tr><th>Modalidad</th><th>% del trabajo total</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td><b>Trabajo presencial en el aula</b></td><td>40 %</td><td>Sesiones teóricas, talleres prácticos, estudios de caso, laboratorios de diseño.</td></tr>
+<tr><td><b>Trabajo autónomo individual</b></td><td>35 %</td><td>Lecturas, diario fisiológico, preparación del dossier, visionados.</td></tr>
+<tr><td><b>Trabajo cooperativo en grupo</b></td><td>20 %</td><td>Estudios de caso, diseño de propuestas, preparación de la presentación oral.</td></tr>
+<tr><td><b>Tutorías y acompañamiento</b></td><td>5 %</td><td>Seguimiento personalizado y devolutivas formativas.</td></tr>
+</tbody></table>
+<div class="note">Distribución orientativa por tipología de trabajo. La distribución horaria oficial (45 h presenciales + 30 h autónomas = 75 h, 3 ECTS) se detalla en el apartado 8.</div>
+
+<h3>7.4 Recursos y materiales didácticos</h3>
+<p><b>Recursos físicos:</b></p>
+<ul><li>Aula con mobiliario adaptable para trabajo práctico.</li><li>Espacio de movimiento (sala de danza) para los talleres corporales.</li><li>Material de medición: pulsómetros, básculas de bioimpedancia, cronómetros, cintas métricas.</li><li>Material de acondicionamiento: foam rollers, bandas elásticas, colchonetas.</li></ul>
+<p><b>Recursos digitales:</b></p>
+<ul><li><b>Campus virtual del Institut del Teatre:</b> espacio central para la entrega de materiales, envío de actividades, foros de debate y devolutivas.</li><li><b>Biblioteca digital:</b> acceso a artículos científicos, libros especializados y bases de datos (PubMed, Dialnet, SPORTDiscus).</li><li><b>Aplicaciones móviles de registro:</b> uso de apps para el seguimiento de FC, sueño, hidratación y nutrición (con criterios de selección proporcionados por el docente).</li><li><b>Vídeos didácticos propios y de referencia:</b> grabaciones de talleres, análisis biomecánicos, ejemplos de comunicación científica.</li></ul>
+<p><b>Recursos humanos:</b></p>
+<ul><li><b>Docente-tutor:</b> guía el proceso, facilita recursos, ofrece devolutivas formativas.</li><li><b>Profesionales invitados:</b> bailarines, fisioterapeutas, nutricionistas especializados en artes escénicas que participan en sesiones puntuales.</li><li><b>Compañeros de curso:</b> recurso fundamental para el aprendizaje cooperativo y la coevaluación.</li></ul>
+
+<h3>7.5 Justificación pedagógica de la metodología</h3>
+<ol>
+<li><b>Constructivismo social (Vygotsky):</b> el conocimiento se construye activamente por el alumnado en interacción con el contexto profesional y con los compañeros.</li>
+<li><b>Aprendizaje situado (Lave &amp; Wenger):</b> el aprendizaje es más efectivo cuando se produce en contextos auténticos de aplicación, no en abstracciones académicas.</li>
+<li><b>Aprendizaje experiencial (Kolb):</b> la vivencia corporal de los conceptos fisiológicos (a través del propio cuerpo) genera un aprendizaje más profundo y duradero que la mera memorización.</li>
+<li><b>Enfoque por competencias (EEES):</b> la metodología está orientada al desarrollo de competencias transferibles, no a la acumulación de contenidos inertes.</li>
+<li><b>Evaluación formativa (Black &amp; Wiliam):</b> la retroalimentación continuada permite al alumnado regular su propio aprendizaje y mejorar progresivamente.</li>
+</ol>
+
+<h3>7.6 Atención a la diversidad del alumnado</h3>
+<ul>
+<li><b>Múltiples formatos de presentación de contenidos:</b> textos, vídeos, prácticas corporales, esquemas visuales, pódcasts.</li>
+<li><b>Flexibilidad en las formas de demostración del aprendizaje:</b> el alumnado puede elegir el formato de su dossier final (escrito, audiovisual, mixto) según sus preferencias y fortalezas.</li>
+<li><b>Ritmos diferenciados:</b> se ofrecen actividades de ampliación para quienes avanzan más rápido y de refuerzo para quienes necesitan consolidar conceptos.</li>
+<li><b>Tutorías individualizadas:</b> seguimiento personalizado para adaptar el proceso a las necesidades específicas de cada estudiante.</li>
+<li><b>Accesibilidad:</b> todos los recursos digitales cumplen criterios de accesibilidad (subtítulos, transcripciones, contraste adecuado).</li>
+</ul>
+
+<h3>7.7 Rol del docente y del alumnado</h3>
+<table>
+<thead><tr><th>Rol del docente</th><th>Rol del alumnado</th></tr></thead>
+<tbody>
+<tr><td>Diseñador de situaciones profesionales auténticas</td><td>Protagonista activo de su propio aprendizaje</td></tr>
+<tr><td>Facilitador de recursos y experiencias</td><td>Investigador y experimentador en primera persona</td></tr>
+<tr><td>Guía y mentor del proceso</td><td>Autorregulador de su carga y su recuperación</td></tr>
+<tr><td>Evaluador formativo y sumativo</td><td>Coevaluador y autoevaluador</td></tr>
+<tr><td>Modelo de ética profesional y cuidado del cuerpo</td><td>Comunicador de conocimiento científico a diversos públicos</td></tr>
+<tr><td>Promotor del pensamiento crítico</td><td>Tomador de decisiones fundamentadas</td></tr>
+</tbody></table>`},
+
+{id:"cronograma",t:"8. Planificación temporal y cronograma",h:`
+<h3>Datos generales de la asignatura</h3>
+<ul>
+<li><b>Créditos ECTS:</b> 3 ECTS (25 horas por crédito = 75 horas totales de trabajo del estudiante).</li>
+<li><b>Horas presenciales:</b> 45 horas asignadas (42 lectivas efectivas por pérdida de un festivo no recuperable).</li>
+<li><b>Horas de trabajo autónomo:</b> 30 horas.</li>
+</ul>
+<p>A continuación, se detalla la distribución temporal de las sesiones, vinculando cada fecha con el bloque temático correspondiente, el tipo de actividad, las horas de trabajo y su relación con el eje global o la evaluación.</p>
+<div class="twrap">
+<table class="wide">
+<thead><tr><th>Fecha</th><th>Bloque</th><th>Contenido / Actividad</th><th>Tipo de sesión</th><th>H. pres.</th><th>H. aut.</th><th>Observaciones</th></tr></thead>
+<tbody>
+<tr><td><b>9-oct-26</b></td><td>Bloque 1</td><td>Presentación de la asignatura. Homeostasis y fisiología celular.</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Presentación del reto de la «semana profesional» y entrega de directrices.</td></tr>
+<tr><td><b>16-oct-26</b></td><td>Bloque 2</td><td>Sistema musculoesquelético I: estructura y función en la danza.</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Análisis de demandas físicas del reto profesional.</td></tr>
+<tr><td><b>23-oct-26</b></td><td>Bloque 2</td><td>Sistema musculoesquelético II: biomecánica y factores de riesgo.</td><td><span class="badge b-practice">taller</span> Taller práctico</td><td>3</td><td>2</td><td>Identificación de riesgos en la ejecución técnica. Se requiere ropa cómoda.</td></tr>
+<tr><td><b>30-oct-26</b></td><td>—</td><td><b>Festivo</b> (Libre disposición CSD).</td><td><span class="badge b-free">no lectiva</span></td><td>0</td><td>2</td><td>Trabajo autónomo: inicio del registro del diario fisiológico personal.</td></tr>
+<tr><td><b>6-nov-26</b></td><td>Bloque 2/3</td><td>Sistema nervioso I: control del movimiento y percepción del esfuerzo.</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Autorregulación de la carga de trabajo.</td></tr>
+<tr><td><b>13-nov-26</b></td><td>Bloque 5</td><td>Preparación y envío de trabajos orales (tutorización en aula).</td><td>Taller cooperativo</td><td>3</td><td>3</td><td>Sesión dedicada al desarrollo del <b>RA7</b> (Comunicación científica).</td></tr>
+<tr><td><b>20-nov-26</b></td><td>Bloque 3</td><td>Sistema nervioso II y fisiología del sueño.</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Estrategias de recuperación para la semana profesional.</td></tr>
+<tr><td><b>27-nov-26</b></td><td>Bloque 3/5</td><td>La sangre (transporte y termorregulación) + <b>presentaciones trabajos orales</b>.</td><td><span class="badge b-eval">evaluación</span> / taller</td><td>3</td><td>2</td><td>Instrumento de evaluación: Presentación oral grupal (20 %).</td></tr>
+<tr><td><b>4-des-26</b></td><td>Bloque 3</td><td>Sistema hormonal: estrés, adaptación y recuperación.</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Análisis del impacto de la carga de ensayos/funciones.</td></tr>
+<tr><td><b>11-des-26</b></td><td>Bloque 3</td><td>Nutrición aplicada a la danza (sesión con nutricionista + práctica).</td><td>Taller con experto</td><td>3</td><td>2</td><td>Diseño del plan nutricional del dossier. Asistencia de profesional externo.</td></tr>
+<tr><td><b>18-des-26</b></td><td>Transversal</td><td><b>EVALUACIÓN PARCIAL</b> (Repaso y prueba de conocimientos).</td><td><span class="badge b-eval">sumativa</span> Evaluación sumativa</td><td>3</td><td>3</td><td>Instrumento de evaluación: Prueba teoricopráctica (30 %).</td></tr>
+<tr><td><b>Vacaciones</b></td><td>—</td><td>Período de vacaciones de Navidad.</td><td><span class="badge b-free">no lectiva</span></td><td>0</td><td>4</td><td>Finalización y entrega del Dossier de seguimiento.</td></tr>
+<tr><td><b>8-gen-27</b></td><td>Bloque 4</td><td>Aparato cardiovascular: respuesta al esfuerzo y monitoreo (FC).</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Interpretación de datos de FC para el dossier.</td></tr>
+<tr><td><b>15-gen-27</b></td><td>Bloque 4</td><td>Aparato respiratorio y eficiencia energética en escena.</td><td>Teoricopráctica</td><td>3</td><td>2</td><td>Diseño de propuestas de calentamiento y vuelta a la calma.</td></tr>
+<tr><td><b>22-gen-27</b></td><td>Transversal</td><td><b>EXAMEN FINAL</b> (Evaluación global de todos los contenidos).</td><td><span class="badge b-eval">sumativa</span> Evaluación sumativa</td><td>3</td><td>0</td><td>Instrumento de evaluación: Examen global (30 %). No hay horas de trabajo autónomo tras la prueba.</td></tr>
+</tbody></table>
+</div>
+<h3>Resumen de horas totales de la asignatura</h3>
+<table>
+<thead><tr><th>Modalidad</th><th>Horas totales</th><th>% del trabajo total</th></tr></thead>
+<tbody>
+<tr><td><b>Trabajo presencial en el aula</b></td><td>45 horas (asignadas) / 42 horas (efectivas)</td><td>60 %</td></tr>
+<tr><td><b>Trabajo autónomo individual</b></td><td>30 horas</td><td>40 %</td></tr>
+<tr><td><b>TOTAL</b></td><td><b>75 horas</b></td><td><b>100 % (3 ECTS)</b></td></tr>
+</tbody></table>
+<h3>Observaciones metodológicas sobre la planificación</h3>
+<ol>
+<li><b>Festivo no recuperable:</b> la sesión del 30 de octubre se pierde por festivo de libre disposición. Los contenidos y las horas de trabajo autónomo previstas para esa semana se redistribuyen mediante lecturas y el inicio del diario fisiológico personal, garantizando la continuidad del eje global sin necesidad de recuperar las 3 horas presenciales.</li>
+<li><b>Distribución del trabajo autónomo:</b> las 30 horas de trabajo personal se concentran especialmente en las semanas previas a las evaluaciones (preparación de trabajos orales, estudio para el parcial y finalización del dossier durante las vacaciones de Navidad), optimizando así el tiempo del alumnado.</li>
+<li><b>Evaluación final:</b> el examen del 22 de enero evalúa la globalidad de los contenidos (bloques 1 a 4), incluyendo tanto la materia impartida antes como después de la evaluación parcial.</li>
+</ol>`},
+
+{id:"biblio",t:"9. Bibliografía y recursos",h:`
+<p>La bibliografía y los recursos de la asignatura se han seleccionado para garantizar un equilibrio entre los <b>fundamentos científicos de la fisiología del ejercicio</b> y la <b>especificidad aplicada a la danza</b>. Se incluyen tanto textos de referencia general como publicaciones especializadas en medicina y ciencia de la danza, con especial atención a la prevención de lesiones, la nutrición y los aspectos éticos (TCA, imagen corporal).</p>
+<p>Todos los recursos están disponibles en la <b>biblioteca del Institut del Teatre</b> o a través de la <b>biblioteca digital</b> del campus virtual.</p>
+
+<h3>9.1 Bibliografía básica (obligatoria)</h3>
+<p>Esta bibliografía constituye el núcleo de contenidos de la asignatura y es de consulta obligada para el alumnado.</p>
+<ul>
+<li>Angioi, M., Metsios, G. S., Koutedakis, Y., Wyon, M. A., Nevill, A. M., Fairclough, S. J., &amp; Hagel, M. (2009). Fitness in contemporary dance: A systematic review. <i>International Journal of Sports Medicine, 30</i>(7), 475–484. https://doi.org/10.1055/s-0029-1185839</li>
+<li>Howley, E. T., &amp; Franks, B. D. (2007). <i>Health fitness instructor's handbook</i> (5ª ed.). Human Kinetics.</li>
+<li>Koutedakis, Y., &amp; Jamurtas, A. (2004). The dancer as a performing athlete: Physiological considerations. <i>Sports Medicine, 34</i>(10), 651–661. https://doi.org/10.2165/00007256-200434100-00003</li>
+<li>McArdle, W. D., Katch, F. I., &amp; Katch, V. L. (2015). <i>Fisiología del ejercicio: Nutrición, energía y rendimiento humano</i> (7ª ed.). Alianza Editorial.</li>
+<li>Solomon, R., Solomon, J., &amp; Minton, S. C. (2005). <i>Preventive dance medicine: The art and science of health and conditioning</i>. Princeton Book Company.</li>
+<li>Wyon, M. A. (2010). Guidance for dance nutrition. En <i>Dance medicine: Science, art and practice</i> (pp. 113–132). Routledge.</li>
+</ul>
+
+<h3>9.2 Bibliografía complementaria (recomendada)</h3>
+<p>Esta bibliografía permite profundizar en aspectos específicos de la asignatura y es especialmente útil para el desarrollo del dossier, los trabajos orales y la preparación de las evaluaciones.</p>
+<p><b>Biomecánica y prevención de lesiones:</b></p>
+<ul>
+<li>Hamilton, W. G., Hamilton, L. H., &amp; Lockett, J. (2018). <i>Anatomy and kinesiology for dancers</i> (3ª ed.). Routledge.</li>
+<li>Liederbach, M., &amp; Richardson, M. A. (2016). <i>Dance medicine in practice: Anatomy, physiology, theory</i>. Routledge.</li>
+</ul>
+<p><b>Nutrición y recuperación:</b></p>
+<ul>
+<li>American College of Sports Medicine, American Dietetic Association, &amp; Dietitians of Canada (2016). Nutrition and athletic performance. <i>Medicine &amp; Science in Sports &amp; Exercise, 48</i>(3), 543–568.</li>
+<li>Burk, L. (2013). <i>Nutrition for dance: A practical guide</i>. Routledge.</li>
+</ul>
+<p><b>Imagen corporal y TCA en danza:</b></p>
+<ul>
+<li>Arcelus, J., Witcomb, G. L., &amp; Mitchell, T. (2014). Prevalence of eating disorders amongst dancers: A systematic review and meta-analysis. <i>European Eating Disorders Review, 22</i>(2), 92–101. https://doi.org/10.1002/erv.2272</li>
+<li>Quested, E., &amp; Ntoumanis, N. (2010). The relationship between perceived autonomy support, exercise intentions and exercise behaviours. <i>Psychology of Sport and Exercise, 11</i>(4), 467–474.</li>
+</ul>
+<p><b>Comunicación científica y pedagogía:</b></p>
+<ul>
+<li>Ambrose, M. (2016). <i>Dance pedagogy for a changing world: Teaching, learning and research</i>. Routledge.</li>
+<li>Fortin, S., &amp; Siedentop, D. (1995). <i>Teaching dance in the school setting</i>. AAHPERD.</li>
+</ul>
+
+<h3>9.3 Recursos digitales y en línea</h3>
+<p>Los siguientes recursos son de acceso libre o están disponibles a través de la suscripción institucional del Institut del Teatre:</p>
+<p><b>Instituciones y asociaciones de referencia:</b></p>
+<ul>
+<li><b>IADMS (International Association for Dance Medicine &amp; Science):</b> https://www.iadms.org — Recogida de <i>Fact Sheets</i> sobre nutrición, prevención de lesiones, imagen corporal y condición física del bailarín/na. Material esencial para la comunicación científica adaptada.</li>
+<li><b>CDR (Committee for Dance Education):</b> https://www.dance-education.org</li>
+<li><b>One Dance UK — Healthy Dancer Programme:</b> https://www.onedanceuk.org/healthy-dancer/</li>
+</ul>
+<p><b>Bases de datos científicas:</b></p>
+<ul>
+<li><b>PubMed:</b> https://pubmed.ncbi.nlm.nih.gov (acceso libre a resúmenes; artículos completos a través de la biblioteca).</li>
+<li><b>Dialnet:</b> https://dialnet.unirioja.es/ (recursos en castellano y catalán).</li>
+<li><b>SPORTDiscus:</b> base de datos especializada en ciencias del deporte (acceso institucional).</li>
+</ul>
+<p><b>Plataformas de vídeo y análisis técnica:</b></p>
+<ul>
+<li><b>Dance Magazine — Science for Dancers:</b> https://www.dancemagazine.com/</li>
+<li><b>Canal de YouTube de la IADMS:</b> vídeos didácticos sobre prevención de lesiones y biomecánica.</li>
+</ul>
+
+<h3>9.4 Revistas científicas de referencia</h3>
+<p>Se anima al alumnado a consultar regularmente las siguientes revistas para mantenerse actualizado y para la preparación de los trabajos orales:</p>
+<ul>
+<li><i>Journal of Dance Medicine &amp; Science</i> (IADMS)</li>
+<li><i>Medical Problems of Performing Artists</i></li>
+<li><i>Sports Medicine</i></li>
+<li><i>International Journal of Sports Medicine</i></li>
+<li><i>Journal of Dance Education</i></li>
+<li><i>Research in Dance Education</i></li>
+<li><i>Apunts: Educació Física i Esports</i> (revista catalana de referencia)</li>
+</ul>
+
+<h3>9.5 Aplicaciones móviles y herramientas de registro</h3>
+<p>Para el seguimiento del <b>diario fisiológico personal</b> (herramienta central del eje global), se recomienda el uso de aplicaciones validadas científicamente. El docente proporcionará una lista actualizada al comienzo del curso, pero las más habituales son:</p>
+<ul>
+<li><b>Registro de frecuencia cardíaca:</b> Polar Flow, Garmin Connect, HeartRate Monitor.</li>
+<li><b>Registro de sueño:</b> Sleep Cycle, Pillow.</li>
+<li><b>Registro de hidratación y nutrición:</b> MyFitnessPal, Yazio.</li>
+<li><b>Percepción del esfuerzo (escala RPE):</b> diariamente con registro propio en plantilla proporcionada por el docente.</li>
+</ul>
+<div class="note">El uso de aplicaciones es voluntario y siempre respetuoso con la privacidad de los datos personales. Se trabajará en clase la interpretación crítica de estas herramientas y sus límites.</div>
+
+<h3>9.6 Otros recursos</h3>
+<ul>
+<li><b>Material de aula:</b> pulsómetros, básculas de bioimpedancia, cronómetros, cintas métricas, foam rollers y bandas elásticas (disponibles en las instalaciones del Institut del Teatre).</li>
+<li><b>Tutoría de nutrición:</b> sesión específica con nutricionista especializado/a en artes escénicas (11-dic-26).</li>
+<li><b>Estudios de caso reales:</b> documentación proporcionada por el docente sobre casos profesionales de bailarines/as (anónimos y con consentimiento).</li>
+</ul>
+
+<h3>9.7 Criterios de selección bibliográfica</h3>
+<p>La bibliografía se ha seleccionado siguiendo los siguientes criterios:</p>
+<ol>
+<li><b>Rigor científico:</b> todos los textos son publicados por editoriales académicas de prestigio o revistas con revisión por pares.</li>
+<li><b>Actualización:</b> se priorizan publicaciones de los últimos 10 años, aunque se incluyen clásicos de referencia.</li>
+<li><b>Especificidad para la danza:</b> se combinan textos generales de fisiología del ejercicio con publicaciones específicas de medicina y ciencia de la danza.</li>
+<li><b>Diversidad lingüística:</b> se incluyen recursos en catalán, castellano e inglés, aunque el inglés es imprescindible para la literatura científica actual.</li>
+<li><b>Accesibilidad:</b> todos los recursos están disponibles a través de la biblioteca del Institut del Teatre o son de acceso libre.</li>
+</ol>`}
+]},
+
+/* ================= ENGLISH ================= */
+en:{
+ui:{brand:"Physiology Applied to Dance",brandSub:"Teaching guide · Degree in Dance · Institut del Teatre · 2026-27",
+ edit:"✏️ Edit",editing:"✅ Finish editing",save:"💾 Save",export:"⬇ Export changes",import:"⬆ Import changes",
+ reset:"↺ Restore original",print:"🖨 Print / PDF",saved:"Saved",nochanges:"No new changes",
+ resetMsg:"Restore the ORIGINAL content of this language? Your edits will be lost.",edited:"edited",navTitle:"Contents"},
+secs:[
+{id:"dades",t:"1. Subject identification data",h:`
+<table class="info">
+<tr><th>Subject name</th><td>Physiology Applied to Dance</td></tr>
+<tr><th>Code</th><td>[Official study plan code]</td></tr>
+<tr><th>Qualification</th><td>Bachelor's Degree in Dance</td></tr>
+<tr><th>Centre</th><td>Institut del Teatre (Barcelona Provincial Council)</td></tr>
+<tr><th>Academic year</th><td>2026-2027</td></tr>
+<tr><th>Year of the study plan</th><td>[1st / 2nd year — according to the study plan]</td></tr>
+<tr><th>Type</th><td>Compulsory (OB)</td></tr>
+<tr><th>ECTS credits</th><td>3 ECTS (75 total hours)</td></tr>
+<tr><th>Semester</th><td>1st semester</td></tr>
+<tr><th>Language of instruction</th><td>Catalan</td></tr>
+<tr><th>Department / Area</th><td>[Department of Applied Sciences to Dance / Dance Pedagogy]</td></tr>
+<tr><th>Recommended prerequisites</th><td>None specific, although having taken basic dance technique subjects is recommended.</td></tr>
+</table>`},
+
+{id:"prof",t:"2. Teaching staff and contact details",h:`
+<table class="info">
+<tr><th>Responsible lecturer</th><td>[Full name]</td></tr>
+<tr><th>Email</th><td>[correu@institutdelteatre.cat]</td></tr>
+<tr><th>Office</th><td>[Building / Floor / Number]</td></tr>
+<tr><th>Tutorial hours</th><td>[Day and time] — by appointment via email</td></tr>
+<tr><th>Virtual campus</th><td>Course space on the Institut del Teatre digital platform</td></tr>
+<tr><th>Other collaborating staff</th><td>Guest dietitian (11 Dec 26 session); guest professionals in one-off sessions</td></tr>
+</table>
+<div class="note">Tutorials can also be requested at the end of on-site sessions or via the virtual campus appointment system.</div>`},
+
+{id:"presentacio",t:"3. Subject presentation",h:`
+<h3>3.1 General description</h3>
+<p><b>Physiology Applied to Dance</b> is a core training subject within the Degree in Dance that provides students with the scientific tools needed to understand how the human body works in action. It deliberately avoids a rote-learning approach to anatomical systems, placing learning in real professional contexts: rehearsing better, preventing injuries, performing on stage and teaching safely.</p>
+<p>The whole subject is structured around a <b>real, ongoing professional situation</b> (the core project), which simulates an intense professional week (tour, creation residency or run of shows). This thread acts as the guiding principle and ensures physiological knowledge is built <i>because it is needed</i> to solve the professional challenge posed.</p>
+<h3>3.2 Contribution to the graduate profile</h3>
+<p>Dance is a highly demanding artistic discipline requiring its performers and educators to have deep knowledge of the body. The subject responds to the need to train professionals who:</p>
+<ul>
+<li><b>Understand</b> the physiological mechanisms regulating exertion, recovery and injury.</li>
+<li><b>Prevent</b> risks arising from intense workloads, tours or inadequate practices.</li>
+<li><b>Optimise</b> artistic performance based on scientific evidence.</li>
+<li><b>Communicate</b> body knowledge with rigour to companies, students and families.</li>
+<li><b>Act</b> ethically, especially regarding body image and the prevention of eating disorders (EDs).</li>
+</ul>
+<p>The subject therefore contributes to <b>transversal competences</b> (scientific communication, cooperative work, learning autonomy) and to the <b>specific competences</b> of body care, prevention and performance in the study plan.</p>
+<h3>3.3 Competence-based and methodological approach</h3>
+<p>The approach is <b>competence-based, active and contextualised</b>. Knowledge is not transmitted in isolation but built through:</p>
+<ul>
+<li><b>First-person experimentation</b> (body workshops, recording of one's own physiological data).</li>
+<li><b>Analysis of real professional situations</b> (case studies, design of proposals).</li>
+<li><b>Scientific communication adapted</b> to different audiences (oral presentations).</li>
+<li><b>Ethical reflection</b> on body image, EDs and professional responsibility.</li>
+</ul>
+<h3>3.4 Relationship with other subjects in the study plan</h3>
+<p>The subject is part of a network of subjects in the Degree in Dance that share the goal of training well-rounded, rigorous professionals:</p>
+<ul>
+<li><b>Dance technique subjects:</b> where the biomechanics and physical conditioning principles of this subject are applied.</li>
+<li><b>Functional Anatomy / Kinesiology:</b> shares foundations and is coordinated to avoid duplication.</li>
+<li><b>Dance Pedagogy:</b> where knowledge on prevention, warm-up and scientific communication is transferred.</li>
+<li><b>Health and well-being subjects:</b> ED prevention and holistic dancer care are addressed transversally.</li>
+</ul>
+<h3>3.5 Subject objectives</h3>
+<p>By the end of the course, students will have achieved the <b>8 Learning Outcomes (LOs)</b> described in section 4, ranging from understanding basic physiological mechanisms to the ability to design safe proposals, communicate with rigour and act with professional ethics.</p>`},
+
+{id:"avaluacio",t:"4. Assessment criteria and instruments",h:`
+<p>Assessment rests on a <b>competence-based, continuous approach</b>, where physiological knowledge is assessed in real professional contexts. Formative assessment (during the process) is combined with summative assessment (at the end).</p>
+<h3>4.1 Assessment instruments and weighting</h3>
+<table>
+<thead><tr><th>Instrument</th><th>Description</th><th>Weighting</th><th>Linked LOs</th></tr></thead>
+<tbody>
+<tr><td><b>Written theory-practice test</b></td><td>Test-type exam and short questions on physiological mechanisms and body systems applied to dance. Includes practical cases on injury prevention and performance optimisation.</td><td><b>30 %</b></td><td>LO1, LO2, LO3, LO5</td></tr>
+<tr><td><b>Professional-week monitoring dossier</b></td><td>Document in which students record and analyse their own physiological data (HR, hydration, sleep, recovery) during a real week of professional workload (intensive rehearsals, shows, tour). Includes a physical conditioning and nutrition proposal.</td><td><b>35 %</b></td><td>LO4, LO5, LO6</td></tr>
+<tr><td><b>Oral scientific communication presentation</b></td><td>Group presentation (2-3 people) communicating a physiological concept adapted to a specific audience (dance company, school students, families). Scientific rigour and didactic adaptation are assessed.</td><td><b>20 %</b></td><td>LO7, LO3</td></tr>
+<tr><td><b>Participation and cooperative work</b></td><td>Continuous assessment of class participation, teamwork, solving practical cases, and health-care attitudes and professional ethics. Includes self- and peer-assessment.</td><td><b>15 %</b></td><td>LO8, LO6, TC1, TC2</td></tr>
+</tbody></table>
+<h3>4.2 Assessment criteria per Learning Outcome</h3>
+<p><b>LO1 · Homeostasis and bodily regulation mechanisms</b></p>
+<ul><li>Accurately explains thermal, fluid and energy regulation processes during dance activity.</li><li>Relates physiological mechanisms to real rehearsal and performance situations.</li></ul>
+<p><b>LO2 · Structure and function of body systems</b></p>
+<ul><li>Correctly describes the anatomy and physiology of the musculoskeletal, nervous, endocrine, cardiovascular and respiratory systems.</li><li>Identifies interrelations between systems during physical exertion.</li></ul>
+<p><b>LO3 · Technical analysis and injury risk factors</b></p>
+<ul><li>Analyses dance technical movements from a biomechanical perspective and identifies risk patterns.</li><li>Proposes preventive technical adjustments based on physiological evidence.</li></ul>
+<p><b>LO4 · Interpretation of physiological data and self-regulation</b></p>
+<ul><li>Correctly collects and interprets own HR, recovery and hydration data.</li><li>Makes data-based decisions on self-regulation of workload.</li></ul>
+<p><b>LO5 · Application of nutrition, sleep and recovery</b></p>
+<ul><li>Designs an eating, hydration and rest plan coherent with a real professional week.</li><li>Justifies decisions with physiological grounds.</li></ul>
+<p><b>LO6 · Design of warm-up and conditioning proposals</b></p>
+<ul><li>Creates safe, justified warm-up, cool-down and physical conditioning sequences.</li><li>Adapts proposals to different professional contexts (rehearsal, show, class).</li></ul>
+<p><b>LO7 · Adapted scientific communication</b></p>
+<ul><li>Communicates physiological concepts with rigour and clarity.</li><li>Adapts language and examples to the target audience (dancers, students, families).</li></ul>
+<p><b>LO8 · Care attitudes and professional ethics</b></p>
+<ul><li>Demonstrates sensitivity towards body image and ED prevention.</li><li>Shows responsibility in self-care and in conveying healthy messages.</li></ul>
+<h3>4.3 Requirements to pass the subject</h3>
+<ul>
+<li><b>Minimum attendance of 80 %</b> at on-site sessions.</li>
+<li><b>Submission of all assessable activities</b> (dossier, presentation, tests).</li>
+<li><b>Minimum overall grade of 5/10</b> for the subject.</li>
+<li><b>Minimum grade of 4/10</b> in the written theory-practice test (to guarantee achievement of basic content).</li>
+</ul>
+<h3>4.4 Resit assessment</h3>
+<p>Students who do not pass the subject may take a <b>resit</b> that will include:</p>
+<ul>
+<li>Written theory-practice test (replaces 30 % of the final grade).</li>
+<li>Possibility of improving the monitoring dossier (replaces 35 % of the final grade).</li>
+<li>The oral presentation and continuous participation <b>cannot be recovered</b>.</li>
+</ul>
+<h3>4.5 Formative assessment (unweighted)</h3>
+<p>Throughout the course, formative activities will be carried out that are ungraded but compulsory:</p>
+<ul>
+<li><b>Quick questionnaires</b> for self-assessment at the end of each thematic block.</li>
+<li><b>Individual tutorials</b> to review the monitoring dossier.</li>
+<li><b>Group debates and case studies</b> on injury prevention and professional ethics.</li>
+</ul>`},
+
+{id:"blocs",t:"5. Thematic contents",h:`
+<p>Contents are organised into <b>5 thematic blocks</b> following a logical progression: from basic physiological foundations to advanced professional application. All learning is structured around the <b>core project</b> (ongoing real professional situation), which acts as the guiding thread and application context.</p>
+
+<h3>Block 1 · Fundamentals of physiology applied to dance <small>(3 weeks)</small></h3>
+<p><b>Conceptual:</b></p>
+<ul><li>Concept of homeostasis and bodily regulation in physical activity.</li><li>Regulation systems: nervous, endocrine and cardiovascular.</li><li>Energy metabolism: aerobic and anaerobic pathways applied to dance.</li><li>Thermoregulation and hydration during exertion.</li></ul>
+<p><b>Procedural:</b></p>
+<ul><li>Measuring and recording heart rate (HR) at rest and during exertion.</li><li>Interpreting the immediate physiological response to exercise.</li><li>Analysing the energy demand of different dance styles.</li></ul>
+<p><b>Attitudinal:</b></p>
+<ul><li>Valuing the importance of knowing one's own body to optimise performance.</li><li>Awareness of individual differences in physiological response.</li></ul>
+<p><b>Linked LOs:</b> LO1, LO2</p>
+
+<h3>Block 2 · Functional anatomy and biomechanics of dance movement <small>(4 weeks)</small></h3>
+<p><b>Conceptual:</b></p>
+<ul><li>Musculoskeletal system: structure and function.</li><li>Biomechanics principles applied to dance: forces, levers, balance.</li><li>Functional analysis of the main muscle groups in technical movements (jumps, turns, extensions).</li><li>Injury risk factors: overload, poor technique, muscular imbalances.</li></ul>
+<p><b>Procedural:</b></p>
+<ul><li>Biomechanical analysis of specific technical movements.</li><li>Identifying risk movement patterns in one's own and others' execution.</li><li>Proposing preventive technical adjustments based on physiological evidence.</li></ul>
+<p><b>Attitudinal:</b></p>
+<ul><li>Responsibility for self-care and injury prevention.</li><li>Respect for individual limitations and adaptation of effort.</li></ul>
+<p><b>Linked LOs:</b> LO2, LO3</p>
+
+<h3>Block 3 · Nutrition, sleep and recovery for the professional week <small>(3 weeks)</small></h3>
+<p><b>Conceptual:</b></p>
+<ul><li>Dancers' nutritional needs: macronutrients, micronutrients, hydration.</li><li>Importance of sleep and recovery for performance and injury prevention.</li><li>Active and passive recovery strategies.</li><li>Relationship between nutrition, body image and mental health (ED prevention).</li></ul>
+<p><b>Procedural:</b></p>
+<ul><li>Designing a nutrition and hydration plan for a real professional week (intensive rehearsals, shows, tour).</li><li>Recording and analysing own sleep, hydration and recovery data.</li><li>Applying recovery techniques (stretching, foam roller, contrast bath).</li></ul>
+<p><b>Attitudinal:</b></p>
+<ul><li>Commitment to healthy, sustainable habits over time.</li><li>Sensitivity to body image and rejection of harmful practices.</li><li>Professional ethics in conveying nutritional advice.</li></ul>
+<p><b>Linked LOs:</b> LO4, LO5, LO8</p>
+
+<h3>Block 4 · Design of warm-up, cool-down and physical conditioning proposals <small>(4 weeks)</small></h3>
+<p><b>Conceptual:</b></p>
+<ul><li>Physiology of warm-up: effects on the cardiovascular, muscular and nervous systems.</li><li>Principles of physical conditioning applied to dance: strength, endurance, flexibility, power.</li><li>Designing safe, effective warm-up and cool-down sessions.</li><li>Adapting proposals to different contexts (rehearsal, show, class, tour).</li></ul>
+<p><b>Procedural:</b></p>
+<ul><li>Creating physiologically justified warm-up and cool-down sequences.</li><li>Designing conditioning programmes complementary to dance practice.</li><li>Evaluating the effectiveness of proposals using physiological data (HR, perceived exertion).</li></ul>
+<p><b>Attitudinal:</b></p>
+<ul><li>Responsibility for the safety of designed proposals.</li><li>Capacity to adapt to individual and group needs.</li></ul>
+<p><b>Linked LOs:</b> LO6, LO3</p>
+
+<h3>Block 5 · Scientific communication and professional ethics <small>(2 weeks)</small></h3>
+<p><b>Conceptual:</b></p>
+<ul><li>Principles of scientific communication: rigour, clarity, audience adaptation.</li><li>Strategies to convey physiological knowledge to different audiences (company, students, families).</li><li>Professional ethics in dance pedagogy: limits, responsibility, respect.</li><li>ED prevention and detection in the dance field.</li></ul>
+<p><b>Procedural:</b></p>
+<ul><li>Preparing and delivering a scientific presentation adapted to a specific audience.</li><li>Using didactic resources (visual, practical, analogical) to aid understanding.</li><li>Debate on real ethical cases in dance pedagogy and professional practice.</li></ul>
+<p><b>Attitudinal:</b></p>
+<ul><li>Commitment to conveying healthy, evidence-based messages.</li><li>Sensitivity to body diversity and rejection of harmful stereotypes.</li><li>Responsibility in the role model for students and peers.</li></ul>
+<p><b>Linked LOs:</b> LO7, LO8</p>`},
+
+{id:"eix",t:"6. Core project: ongoing real professional situation",h:`
+<p>All learning is structured around a <b>real, ongoing professional situation</b> that acts as the subject's guiding thread. This situation simulates an <b>intense professional week</b> (for example, a tour, a creation residency or a run of shows) where students must apply all the knowledge acquired.</p>
+<h3>Phases of the core project</h3>
+<ol>
+<li><b>Preparation (Blocks 1-2):</b> students analyse the physiological demands of the professional situation and identify potential risks.</li>
+<li><b>Execution (Block 3):</b> during the simulated week, students record their own data (HR, sleep, hydration, nutrition) and make self-regulation decisions.</li>
+<li><b>Design and application (Block 4):</b> students create and apply warm-up, cool-down and physical conditioning proposals adapted to the context.</li>
+<li><b>Communication and reflection (Block 5):</b> students communicate results and learning to a specific audience and reflect on professional ethics.</li>
+</ol>
+<div class="note">This core project guarantees learning that is <b>meaningful, contextualised and transferable</b> to real professional practice.</div>`},
+
+{id:"metodologia",t:"7. Teaching methodology",h:`
+<p>The methodology is grounded in a <b>competence-based, active and contextualised approach</b>, where students build physiological knowledge <i>because they need it</i> to solve real professional challenges. It deliberately departs from the traditional transmission model (memorising anatomical systems) to situate learning in professional application contexts.</p>
+
+<h3>7.1 General methodological principles</h3>
+<ol>
+<li><b>Learning based on real professional situations:</b> all content is introduced and developed from an ongoing professional situation (the "intense professional week") that acts as the backbone of the subject.</li>
+<li><b>Meaningful and transferable learning:</b> knowledge is built in applied contexts to guarantee transfer to future professional practice (stage, pedagogy, prevention).</li>
+<li><b>Active student role:</b> students are protagonists of their learning: they research, experiment, decide, design and communicate. The teacher acts as guide, facilitator and mentor.</li>
+<li><b>Cooperative work:</b> peer learning is fostered through small-group activities, peer assessment and collaborative projects.</li>
+<li><b>Autonomy and self-regulation:</b> the capacity to manage one's own learning, interpret physiological data and make informed decisions is promoted.</li>
+<li><b>Theory-practice integration:</b> there is no artificial separation between theoretical and practical content; theory is introduced <i>when it is needed</i> to solve the professional challenge.</li>
+<li><b>Ethical and body-care focus:</b> reflection on body image, ED prevention and professional responsibility is incorporated transversally.</li>
+</ol>
+
+<h3>7.2 Teaching-learning strategies and activities</h3>
+<h4>A) Directed on-site activities (synchronous sessions)</h4>
+<table>
+<thead><tr><th>Activity type</th><th>Description</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><b>Dialogued expository sessions</b></td><td>Presentation of theoretical content with active student participation (questions, brief cases, discussion).</td><td>Introduce key concepts and solve doubts.</td></tr>
+<tr><td><b>Body-lab practical workshops</b></td><td>First-person experimentation: HR measurement, balance tests, biomechanical analysis of technical movements, hydration records.</td><td>Experience physiological concepts in one's own body.</td></tr>
+<tr><td><b>Group case studies</b></td><td>Analysis of real professional situations (dancer injuries, intensive tours, ED cases) with guided debate.</td><td>Develop critical thinking and decision-making.</td></tr>
+<tr><td><b>Design laboratory</b></td><td>Group creation of warm-up, conditioning and recovery plan proposals.</td><td>Apply knowledge to professional design.</td></tr>
+<tr><td><b>Scientific communication rehearsals</b></td><td>Preparation and simulation of presentations adapted to different audiences (company, students, families).</td><td>Develop communicative competence.</td></tr>
+</tbody></table>
+<h4>B) Autonomous activities (non-contact work)</h4>
+<table>
+<thead><tr><th>Activity type</th><th>Description</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><b>Critical reading of articles and resources</b></td><td>Selection of scientific texts, videos and digital resources on physiology applied to dance.</td><td>Broaden and deepen the content worked on in class.</td></tr>
+<tr><td><b>Personal physiological diary recording</b></td><td>Continuous tracking of own data (HR, sleep, hydration, nutrition, perceived exertion) during the "professional week".</td><td>Develop self-regulation and body awareness.</td></tr>
+<tr><td><b>Preparation of the final dossier</b></td><td>Individual preparation of the analysis and professional proposal document.</td><td>Synthesise learning and demonstrate acquired competence.</td></tr>
+<tr><td><b>Preparation of the group presentation</b></td><td>Cooperative work to design the adapted scientific presentation.</td><td>Consolidate learning through teaching others.</td></tr>
+<tr><td><b>Watching technical videos</b></td><td>Analysis of recordings of professional dancers from a biomechanical and physiological perspective.</td><td>Connect theory with real artistic references.</td></tr>
+</tbody></table>
+<h4>C) Tutorial and support activities</h4>
+<table>
+<thead><tr><th>Activity type</th><th>Description</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><b>Individual tutorials</b></td><td>Personalised monitoring of the physiological diary and final dossier.</td><td>Guide autonomous learning and solve specific doubts.</td></tr>
+<tr><td><b>Formative feedback</b></td><td>Continuous feedback on activities in progress (not only at the end).</td><td>Allow improvement during the learning process.</td></tr>
+<tr><td><b>Group consultation spaces</b></td><td>Time slots devoted to solving collective doubts about the projects.</td><td>Foster peer learning.</td></tr>
+</tbody></table>
+
+<h3>7.3 Organisation of student work</h3>
+<table>
+<thead><tr><th>Mode</th><th>% of total work</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><b>On-site classroom work</b></td><td>40 %</td><td>Theoretical sessions, practical workshops, case studies, design laboratories.</td></tr>
+<tr><td><b>Individual autonomous work</b></td><td>35 %</td><td>Readings, physiological diary, dossier preparation, video viewing.</td></tr>
+<tr><td><b>Cooperative group work</b></td><td>20 %</td><td>Case studies, proposal design, oral presentation preparation.</td></tr>
+<tr><td><b>Tutorials and support</b></td><td>5 %</td><td>Personalised monitoring and formative feedback.</td></tr>
+</tbody></table>
+<div class="note">Orientative distribution by type of work. The official hourly distribution (45 contact hours + 30 autonomous = 75 h, 3 ECTS) is detailed in section 8.</div>
+
+<h3>7.4 Teaching resources and materials</h3>
+<p><b>Physical resources:</b></p>
+<ul><li>Classroom with adaptable furniture for practical work.</li><li>Movement space (dance studio) for body workshops.</li><li>Measuring equipment: heart-rate monitors, bioimpedance scales, stopwatches, measuring tapes.</li><li>Conditioning equipment: foam rollers, elastic bands, mats.</li></ul>
+<p><b>Digital resources:</b></p>
+<ul><li><b>Institut del Teatre virtual campus:</b> central space for material delivery, activity submission, debate forums and feedback.</li><li><b>Digital library:</b> access to scientific articles, specialised books and databases (PubMed, Dialnet, SPORTDiscus).</li><li><b>Mobile tracking apps:</b> use of apps to track HR, sleep, hydration and nutrition (with selection criteria provided by the teacher).</li><li><b>Own and reference didactic videos:</b> workshop recordings, biomechanical analyses, examples of scientific communication.</li></ul>
+<p><b>Human resources:</b></p>
+<ul><li><b>Teacher-tutor:</b> guides the process, provides resources, offers formative feedback.</li><li><b>Guest professionals:</b> dancers, physiotherapists and dietitians specialised in performing arts participating in one-off sessions.</li><li><b>Course peers:</b> a fundamental resource for cooperative learning and peer assessment.</li></ul>
+
+<h3>7.5 Pedagogical justification of the methodology</h3>
+<ol>
+<li><b>Social constructivism (Vygotsky):</b> knowledge is actively built by students in interaction with the professional context and peers.</li>
+<li><b>Situated learning (Lave &amp; Wenger):</b> learning is more effective when it occurs in authentic application contexts, not academic abstractions.</li>
+<li><b>Experiential learning (Kolb):</b> bodily experience of physiological concepts (through one's own body) generates deeper, more lasting learning than mere memorisation.</li>
+<li><b>Competence-based approach (EHEA):</b> the methodology is oriented to the development of transferable competences, not the accumulation of inert content.</li>
+<li><b>Formative assessment (Black &amp; Wiliam):</b> continuous feedback allows students to regulate their own learning and improve progressively.</li>
+</ol>
+
+<h3>7.6 Attention to student diversity</h3>
+<ul>
+<li><b>Multiple formats for content presentation:</b> texts, videos, body practices, visual schemes, podcasts.</li>
+<li><b>Flexibility in ways of demonstrating learning:</b> students can choose the format of their final dossier (written, audiovisual, mixed) according to their preferences and strengths.</li>
+<li><b>Differentiated paces:</b> extension activities for faster learners and reinforcement for those needing to consolidate concepts.</li>
+<li><b>Individualised tutorials:</b> personalised monitoring to adapt the process to each student's specific needs.</li>
+<li><b>Accessibility:</b> all digital resources meet accessibility criteria (subtitles, transcripts, adequate contrast).</li>
+</ul>
+
+<h3>7.7 Role of the teacher and the students</h3>
+<table>
+<thead><tr><th>Teacher's role</th><th>Students' role</th></tr></thead>
+<tbody>
+<tr><td>Designer of authentic professional situations</td><td>Active protagonist of their own learning</td></tr>
+<tr><td>Facilitator of resources and experiences</td><td>First-person researcher and experimenter</td></tr>
+<tr><td>Guide and mentor of the process</td><td>Self-regulator of their workload and recovery</td></tr>
+<tr><td>Formative and summative assessor</td><td>Peer and self-assessor</td></tr>
+<tr><td>Model of professional ethics and body care</td><td>Communicator of scientific knowledge to diverse audiences</td></tr>
+<tr><td>Promoter of critical thinking</td><td>Informed decision-maker</td></tr>
+</tbody></table>`},
+
+{id:"cronograma",t:"8. Time planning and activity schedule",h:`
+<h3>General subject data</h3>
+<ul>
+<li><b>ECTS credits:</b> 3 ECTS (25 hours per credit = 75 total student-work hours).</li>
+<li><b>Contact hours:</b> 45 assigned hours (42 effective teaching hours due to one non-recoverable holiday).</li>
+<li><b>Autonomous work hours:</b> 30 hours.</li>
+</ul>
+<p>Below is the time distribution of the sessions, linking each date with the corresponding thematic block, the type of activity, the working hours and their relationship with the core project or the assessment.</p>
+<div class="twrap">
+<table class="wide">
+<thead><tr><th>Date</th><th>Block</th><th>Content / Activity</th><th>Session type</th><th>Contact h</th><th>Auton. h</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><b>9 Oct 26</b></td><td>Block 1</td><td>Course introduction. Homeostasis and cell physiology.</td><td>Theory-practice</td><td>3</td><td>2</td><td>Presentation of the "professional week" challenge and briefing.</td></tr>
+<tr><td><b>16 Oct 26</b></td><td>Block 2</td><td>Musculoskeletal system I: structure and function in dance.</td><td>Theory-practice</td><td>3</td><td>2</td><td>Analysis of the physical demands of the professional challenge.</td></tr>
+<tr><td><b>23 Oct 26</b></td><td>Block 2</td><td>Musculoskeletal system II: biomechanics and risk factors.</td><td><span class="badge b-practice">workshop</span> Practical workshop</td><td>3</td><td>2</td><td>Identification of risks in technical execution. Comfortable clothing required.</td></tr>
+<tr><td><b>30 Oct 26</b></td><td>—</td><td><b>Holiday</b> (self-directed day).</td><td><span class="badge b-free">no teaching</span></td><td>0</td><td>2</td><td>Autonomous work: start of the personal physiological diary.</td></tr>
+<tr><td><b>6 Nov 26</b></td><td>Block 2/3</td><td>Nervous system I: movement control and perceived exertion.</td><td>Theory-practice</td><td>3</td><td>2</td><td>Self-regulation of workload.</td></tr>
+<tr><td><b>13 Nov 26</b></td><td>Block 5</td><td>Preparation and submission of oral presentations (in-class tutoring).</td><td>Cooperative workshop</td><td>3</td><td>3</td><td>Session devoted to developing <b>LO7</b> (scientific communication).</td></tr>
+<tr><td><b>20 Nov 26</b></td><td>Block 3</td><td>Nervous system II and physiology of sleep.</td><td>Theory-practice</td><td>3</td><td>2</td><td>Recovery strategies for the professional week.</td></tr>
+<tr><td><b>27 Nov 26</b></td><td>Block 3/5</td><td>Blood (transport and thermoregulation) + <b>oral presentations</b>.</td><td><span class="badge b-eval">assessment</span> / workshop</td><td>3</td><td>2</td><td>Assessment instrument: group oral presentation (20 %).</td></tr>
+<tr><td><b>4 Dec 26</b></td><td>Block 3</td><td>Endocrine system: stress, adaptation and recovery.</td><td>Theory-practice</td><td>3</td><td>2</td><td>Analysis of the impact of rehearsal/show workload.</td></tr>
+<tr><td><b>11 Dec 26</b></td><td>Block 3</td><td>Nutrition applied to dance (session with dietitian + practical).</td><td>Expert workshop</td><td>3</td><td>2</td><td>Design of the dossier's nutrition plan. External professional attendance.</td></tr>
+<tr><td><b>18 Dec 26</b></td><td>Transversal</td><td><b>MID-TERM ASSESSMENT</b> (review and knowledge test).</td><td><span class="badge b-eval">summative</span> Summative assessment</td><td>3</td><td>3</td><td>Assessment instrument: theory-practice test (30 %).</td></tr>
+<tr><td><b>Holidays</b></td><td>—</td><td>Christmas holiday period.</td><td><span class="badge b-free">no teaching</span></td><td>0</td><td>4</td><td>Completion and submission of the monitoring dossier.</td></tr>
+<tr><td><b>8 Jan 27</b></td><td>Block 4</td><td>Cardiovascular system: response to exertion and monitoring (HR).</td><td>Theory-practice</td><td>3</td><td>2</td><td>Interpretation of HR data for the dossier.</td></tr>
+<tr><td><b>15 Jan 27</b></td><td>Block 4</td><td>Respiratory system and energy efficiency on stage.</td><td>Theory-practice</td><td>3</td><td>2</td><td>Design of warm-up and cool-down proposals.</td></tr>
+<tr><td><b>22 Jan 27</b></td><td>Transversal</td><td><b>FINAL EXAM</b> (global assessment of all content).</td><td><span class="badge b-eval">summative</span> Summative assessment</td><td>3</td><td>0</td><td>Assessment instrument: global exam (30 %). No autonomous work hours after the test.</td></tr>
+</tbody></table>
+</div>
+<h3>Summary of total subject hours</h3>
+<table>
+<thead><tr><th>Mode</th><th>Total hours</th><th>% of total work</th></tr></thead>
+<tbody>
+<tr><td><b>On-site classroom work</b></td><td>45 h (assigned) / 42 h (effective)</td><td>60 %</td></tr>
+<tr><td><b>Individual autonomous work</b></td><td>30 h</td><td>40 %</td></tr>
+<tr><td><b>TOTAL</b></td><td><b>75 h</b></td><td><b>100 % (3 ECTS)</b></td></tr>
+</tbody></table>
+<h3>Methodological notes on the planning</h3>
+<ol>
+<li><b>Non-recoverable holiday:</b> the 30 October session is lost to a self-directed holiday. The content and autonomous hours planned for that week are redistributed through readings and the start of the personal physiological diary, ensuring the continuity of the core project without needing to recover the 3 contact hours.</li>
+<li><b>Distribution of autonomous work:</b> the 30 hours are concentrated especially in the weeks before assessments (preparation of oral presentations, study for the mid-term and completion of the dossier during the Christmas holidays), optimising students' time.</li>
+<li><b>Final assessment:</b> the 22 January exam assesses all content (blocks 1 to 4), including both material taught before and after the mid-term.</li>
+</ol>`},
+
+{id:"biblio",t:"9. Bibliography and resources",h:`
+<p>The bibliography and resources of the subject have been selected to guarantee a balance between the <b>scientific foundations of exercise physiology</b> and <b>specificity applied to dance</b>. Both general reference texts and publications specialised in dance medicine and science are included, with special attention to injury prevention, nutrition and ethical aspects (EDs, body image).</p>
+<p>All resources are available at the <b>Institut del Teatre library</b> or through the <b>digital library</b> of the virtual campus.</p>
+
+<h3>9.1 Basic bibliography (compulsory)</h3>
+<p>This bibliography constitutes the core content of the subject and is compulsory consultation for students.</p>
+<ul>
+<li>Angioi, M., Metsios, G. S., Koutedakis, Y., Wyon, M. A., Nevill, A. M., Fairclough, S. J., &amp; Hagel, M. (2009). Fitness in contemporary dance: A systematic review. <i>International Journal of Sports Medicine, 30</i>(7), 475–484. https://doi.org/10.1055/s-0029-1185839</li>
+<li>Howley, E. T., &amp; Franks, B. D. (2007). <i>Health fitness instructor's handbook</i> (5th ed.). Human Kinetics.</li>
+<li>Koutedakis, Y., &amp; Jamurtas, A. (2004). The dancer as a performing athlete: Physiological considerations. <i>Sports Medicine, 34</i>(10), 651–661. https://doi.org/10.2165/00007256-200434100-00003</li>
+<li>McArdle, W. D., Katch, F. I., &amp; Katch, V. L. (2015). <i>Fisiología del ejercicio: Nutrición, energía y rendimiento humano</i> (7th ed.). Alianza Editorial.</li>
+<li>Solomon, R., Solomon, J., &amp; Minton, S. C. (2005). <i>Preventive dance medicine: The art and science of health and conditioning</i>. Princeton Book Company.</li>
+<li>Wyon, M. A. (2010). Guidance for dance nutrition. In <i>Dance medicine: Science, art and practice</i> (pp. 113–132). Routledge.</li>
+</ul>
+
+<h3>9.2 Complementary bibliography (recommended)</h3>
+<p>This bibliography allows deeper exploration of specific aspects of the subject and is especially useful for developing the dossier, oral presentations and assessment preparation.</p>
+<p><b>Biomechanics and injury prevention:</b></p>
+<ul>
+<li>Hamilton, W. G., Hamilton, L. H., &amp; Lockett, J. (2018). <i>Anatomy and kinesiology for dancers</i> (3rd ed.). Routledge.</li>
+<li>Liederbach, M., &amp; Richardson, M. A. (2016). <i>Dance medicine in practice: Anatomy, physiology, theory</i>. Routledge.</li>
+</ul>
+<p><b>Nutrition and recovery:</b></p>
+<ul>
+<li>American College of Sports Medicine, American Dietetic Association, &amp; Dietitians of Canada (2016). Nutrition and athletic performance. <i>Medicine &amp; Science in Sports &amp; Exercise, 48</i>(3), 543–568.</li>
+<li>Burk, L. (2013). <i>Nutrition for dance: A practical guide</i>. Routledge.</li>
+</ul>
+<p><b>Body image and EDs in dance:</b></p>
+<ul>
+<li>Arcelus, J., Witcomb, G. L., &amp; Mitchell, T. (2014). Prevalence of eating disorders amongst dancers: A systematic review and meta-analysis. <i>European Eating Disorders Review, 22</i>(2), 92–101. https://doi.org/10.1002/erv.2272</li>
+<li>Quested, E., &amp; Ntoumanis, N. (2010). The relationship between perceived autonomy support, exercise intentions and exercise behaviours. <i>Psychology of Sport and Exercise, 11</i>(4), 467–474.</li>
+</ul>
+<p><b>Scientific communication and pedagogy:</b></p>
+<ul>
+<li>Ambrose, M. (2016). <i>Dance pedagogy for a changing world: Teaching, learning and research</i>. Routledge.</li>
+<li>Fortin, S., &amp; Siedentop, D. (1995). <i>Teaching dance in the school setting</i>. AAHPERD.</li>
+</ul>
+
+<h3>9.3 Digital and online resources</h3>
+<p>The following resources are freely accessible or available through the Institut del Teatre institutional subscription:</p>
+<p><b>Reference institutions and associations:</b></p>
+<ul>
+<li><b>IADMS (International Association for Dance Medicine &amp; Science):</b> https://www.iadms.org — Collection of <i>Fact Sheets</i> on nutrition, injury prevention, body image and dancer fitness. Essential material for adapted scientific communication.</li>
+<li><b>CDR (Committee for Dance Education):</b> https://www.dance-education.org</li>
+<li><b>One Dance UK — Healthy Dancer Programme:</b> https://www.onedanceuk.org/healthy-dancer/</li>
+</ul>
+<p><b>Scientific databases:</b></p>
+<ul>
+<li><b>PubMed:</b> https://pubmed.ncbi.nlm.nih.gov (free access to abstracts; full articles through the library).</li>
+<li><b>Dialnet:</b> https://dialnet.unirioja.es/ (resources in Spanish and Catalan).</li>
+<li><b>SPORTDiscus:</b> database specialised in sport sciences (institutional access).</li>
+</ul>
+<p><b>Video and technical analysis platforms:</b></p>
+<ul>
+<li><b>Dance Magazine — Science for Dancers:</b> https://www.dancemagazine.com/</li>
+<li><b>IADMS YouTube channel:</b> didactic videos on injury prevention and biomechanics.</li>
+</ul>
+
+<h3>9.4 Reference scientific journals</h3>
+<p>Students are encouraged to regularly consult the following journals to stay up to date and for oral presentation preparation:</p>
+<ul>
+<li><i>Journal of Dance Medicine &amp; Science</i> (IADMS)</li>
+<li><i>Medical Problems of Performing Artists</i></li>
+<li><i>Sports Medicine</i></li>
+<li><i>International Journal of Sports Medicine</i></li>
+<li><i>Journal of Dance Education</i></li>
+<li><i>Research in Dance Education</i></li>
+<li><i>Apunts: Educació Física i Esports</i> (Catalan reference journal)</li>
+</ul>
+
+<h3>9.5 Mobile apps and tracking tools</h3>
+<p>For tracking the <b>personal physiological diary</b> (central tool of the core project), the use of scientifically validated apps is recommended. The teacher will provide an updated list at the start of the course; the most common are:</p>
+<ul>
+<li><b>Heart-rate recording:</b> Polar Flow, Garmin Connect, HeartRate Monitor.</li>
+<li><b>Sleep recording:</b> Sleep Cycle, Pillow.</li>
+<li><b>Hydration and nutrition recording:</b> MyFitnessPal, Yazio.</li>
+<li><b>Perceived exertion (RPE scale):</b> daily, with own record in the template provided by the teacher.</li>
+</ul>
+<div class="note">The use of apps is voluntary and always respectful of personal data privacy. The critical interpretation of these tools and their limits will be discussed in class.</div>
+
+<h3>9.6 Other resources</h3>
+<ul>
+<li><b>Classroom equipment:</b> heart-rate monitors, bioimpedance scales, stopwatches, measuring tapes, foam rollers and elastic bands (available at Institut del Teatre facilities).</li>
+<li><b>Nutrition tutorial:</b> specific session with a dietitian specialised in performing arts (11 Dec 26).</li>
+<li><b>Real case studies:</b> documentation provided by the teacher on professional dancer cases (anonymous and with consent).</li>
+</ul>
+
+<h3>9.7 Bibliographic selection criteria</h3>
+<p>The bibliography has been selected following these criteria:</p>
+<ol>
+<li><b>Scientific rigour:</b> all texts are published by prestigious academic publishers or peer-reviewed journals.</li>
+<li><b>Currency:</b> publications from the last 10 years are prioritised, although reference classics are included.</li>
+<li><b>Dance specificity:</b> general exercise physiology texts are combined with publications specific to dance medicine and science.</li>
+<li><b>Linguistic diversity:</b> resources in Catalan, Spanish and English are included, although English is essential for current scientific literature.</li>
+<li><b>Accessibility:</b> all resources are available through the Institut del Teatre library or are freely accessible.</li>
+</ol>`}
+]}
+};
+
+/* =========================================================
+   APLICACIÓ — render, idiomes, edició, persistència
+   ========================================================= */
+let lang=localStorage.getItem(KEY+'_lang')||'ca';
+let overrides=JSON.parse(localStorage.getItem(KEY+'_overrides')||'{}');
+let editing=false;
+
+const $=s=>document.querySelector(s);
+const U=()=>DATA[lang].ui;
+const orig=(id)=>DATA[lang].secs.find(s=>s.id===id).h;
+const cur=(id)=>(overrides[lang]&&overrides[lang][id]!==undefined)?overrides[lang][id]:orig(id);
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2200);}
+
+function render(){
+  const d=DATA[lang];
+  document.documentElement.lang=lang;
+  $('#brandTitle').textContent='🩰 '+d.ui.brand;
+  $('#brandSub').textContent=d.ui.brandSub;
+  $('#bEdit').textContent=editing?d.ui.editing:d.ui.edit;
+  $('#bSave').textContent=d.ui.save;
+  $('#bExport').textContent=d.ui.export;
+  $('#bImport').textContent=d.ui.import;
+  $('#bReset').textContent=d.ui.reset;
+  $('#bPrint').textContent=d.ui.print;
+  document.querySelectorAll('#langBox button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  $('#nav').innerHTML='<strong class="navtitle">'+d.ui.navTitle+'</strong>'+
+    d.secs.map((s,i)=>'<a href="#s-'+s.id+'" data-i="'+i+'">'+s.t+'</a>').join('');
+  $('#main').innerHTML=d.secs.map(s=>{
+    const ed=(overrides[lang]&&overrides[lang][s.id]!==undefined)?'<span class="edited-chip">'+d.ui.edited+'</span>':'';
+    return '<section class="card" id="s-'+s.id+'"><h2>'+s.t+ed+'</h2><div class="secbody" data-id="'+s.id+'">'+cur(s.id)+'</div></section>';
+  }).join('');
+  applyEdit();
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('section.card').forEach(sec=>obs.observe(sec));
+}
+
+function applyEdit(){
+  document.querySelectorAll('.secbody').forEach(el=>{
+    el.setAttribute('contenteditable',editing?'true':'false');
+  });
+  document.body.classList.toggle('editing',editing);
+}
+
+function save(){
+  if(!editing){toast(U().nochanges);return;}
+  overrides[lang]=overrides[lang]||{};
+  let n=0;
+  document.querySelectorAll('.secbody').forEach(el=>{
+    const id=el.dataset.id;
+    if(el.innerHTML!==orig(id)){overrides[lang][id]=el.innerHTML;n++;}
+    else{delete overrides[lang][id];}
+  });
+  if(!Object.keys(overrides[lang]).length)delete overrides[lang];
+  localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));
+  toast(U().saved+' ('+n+') · '+new Date().toLocaleTimeString());
+  $('#savestate').textContent=U().saved+' '+new Date().toLocaleTimeString();
+  render();
+}
+function resetLang(){
+  if(!confirm(U().resetMsg))return;
+  delete overrides[lang];
+  localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));
+  render();toast(U().saved);
+}
+function exportJSON(){
+  const blob=new Blob([JSON.stringify({app:KEY,exported:new Date().toISOString(),overrides},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='guia-docent-fisiologia-edicions.json';a.click();
+}
+function importJSON(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const j=JSON.parse(e.target.result);
+      if(j.overrides){overrides=j.overrides;localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));render();toast(U().saved);}
+      else toast('Format no vàlid');
+    }catch(err){toast('Error: fitxer no vàlid');}
+  };
+  r.readAsText(file);
+}
+
+ $('#langBox').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(editing&&!confirm("Canviar d'idioma tanca el mode d'edició sense desar. Continuar?"))return;
+  editing=false;lang=b.dataset.lang;localStorage.setItem(KEY+'_lang',lang);render();
+});
+ $('#bEdit').onclick=()=>{editing=!editing;applyEdit();$('#bEdit').textContent=editing?U().editing:U().edit;};
+ $('#bSave').onclick=save;
+ $('#bReset').onclick=resetLang;
+ $('#bExport').onclick=exportJSON;
+ $('#bPrint').onclick=()=>window.print();
+ $('#bImport').onclick=()=>$('#fileImp').click();
+ $('#fileImp').onchange=e=>{if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';};
+
+render();
+</script>
+</body>
+</html>

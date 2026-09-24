@@ -1,0 +1,10 @@
+{
+  "app": "fisiodanza_guiaB",
+  "exported": "2026-09-24T15:25:41.918Z",
+  "overrides": {
+    "ca": {
+      "dades": "\n<table class=\"info\">\n<tbody><tr><th>Nom de l'assignatura</th><td>Fisiologia aplicada a la dansa</td></tr>\n<tr><th>Codi</th><td>[Codi oficial del pla d'estudis]</td></tr>\n<tr><th>Titulació</th><td>Grau en Dansa</td></tr>\n<tr><th>Centre</th><td>Institut del Teatre (Diputació de Barcelona)</td></tr>\n<tr><th>Curs acadèmic</th><td>2026-2027</td></tr>\n<tr><th>Curs del pla d'estudis</th><td>[1r / 2n curs — segons el pla d'estudis]</td></tr>\n<tr><th>Caràcter</th><td>Obligatòria (OB)</td></tr>\n<tr><th>Crèdits ECTS</th><td>3 ECTS (75 hores totals) - 45 h presencials i 30 de treball personal</td></tr>\n<tr><th>Semestre</th><td>1r semestre</td></tr>\n<tr><th>Llengua vehicular</th><td>Català</td></tr>\n<tr><th>Departament / Àrea</th><td>[Departament de Ciències Aplicades a la Dansa / Pedagogia de la Dansa]</td></tr>\n<tr><th>Requisits previs recomanats</th><td>Cap específic, tot i que es recomana haver cursat assignatures bàsiques de tècnica de dansa.</td></tr>\n</tbody></table>",
+      "prof": "\n<table class=\"info\">\n<tbody><tr><th>Professor/a responsable</th><td>[Nom i cognoms]</td></tr>\n<tr><th>Correu electrònic</th><td>[correu@institutdelteatre.cat]</td></tr>\n<tr><th>Despatx</th><td>[Edifici / Planta / Número]</td></tr>\n<tr><th>Horari de tutories</th><td>[Dia i hora] — amb cita prèvia per correu electrònic</td></tr>\n<tr><th>Campus virtual</th><td>Espai de l'assignatura a la plataforma digital de l'Institut del Teatre</td></tr>\n<tr><th>Altres docents col·laboradors</th><td>Nutricionista convidat/da (sessió de l'11-des-26); professionals convidats en sessions puntuals</td></tr>\n</tbody></table>\n<div class=\"note\">Les tutories es poden sol·licitar també en finalitzar les sessions presencials o mitjançant el sistema de cita prèvia del campus virtual.</div>"
+    }
+  }
+}

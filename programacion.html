@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fisiologia aplicada a la dansa - Guia Docent</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/2.4.0/html2pdf.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #f5f7fa;
+    --bg-secondary: #ffffff;
+    --bg-sidebar: #1a2332;
+    --text-primary: #2c3e50;
+    --text-secondary: #7f8c8d;
+    --text-sidebar: #ecf0f1;
+    --accent: #3498db;
+    --accent-hover: #2980b9;
+    --border: #ecf0f1;
+    --edit-hover: #fff9e6;
+    --edit-focus: #fff3cd;
+    --success: #27ae60;
+    --warning: #e67e22;
+    --danger: #e74c3c;
+    --purple: #8e44ad;
+  }
+
+  [data-theme="dark"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-sidebar: #0f0f1e;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --text-sidebar: #e0e0e0;
+    --accent: #4a9eff;
+    --accent-hover: #3a8eef;
+    --border: #2a2a3e;
+    --edit-hover: #2a2a3e;
+    --edit-focus: #3a3a4e;
+    --success: #2ecc71;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --purple: #9b59b6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    display: flex;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+  /* Barra lateral */
+  .sidebar {
+    width: 260px;
+    background: var(--bg-sidebar);
+    color: var(--text-sidebar);
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    transition: transform 0.3s;
+  }
+  .sidebar h2 {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.1rem;
+    color: var(--accent);
+  }
+  .sidebar nav a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--text-sidebar);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .sidebar nav a:hover {
+    background: var(--bg-primary);
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+  /* Cercador */
+  .search-box {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+  }
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  /* Contenido principal */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    padding: 30px 40px;
+    max-width: calc(100% - 260px);
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-secondary);
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .topbar h1 {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+  }
+  .lang-selector, .theme-toggle {
+    display: flex;
+    gap: 5px;
+  }
+  .lang-selector button, .theme-toggle button {
+    padding: 6px 14px;
+    border: 2px solid var(--accent);
+    background: var(--bg-secondary);
+    color: var(--accent);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .lang-selector button.active,
+  .lang-selector button:hover,
+  .theme-toggle button.active,
+  .theme-toggle button:hover {
+    background: var(--accent);
+    color: var(--bg-secondary);
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .btn-save { background: var(--success); color: #fff; }
+  .btn-save:hover { background: #229954; }
+  .btn-export { background: var(--warning); color: #fff; }
+  .btn-export:hover { background: #d35400; }
+  .btn-pdf { background: var(--danger); color: #fff; }
+  .btn-pdf:hover { background: #c0392b; }
+  .btn-import { background: var(--purple); color: #fff; }
+  .btn-import:hover { background: #7d3c98; }
+  .btn-reset { background: #95a5a6; color: #fff; }
+  .btn-reset:hover { background: #7f8c8d; }
+  /* Secciones */
+  section {
+    background: var(--bg-secondary);
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  section h2 {
+    color: var(--text-primary);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+  }
+  section h3 {
+    color: var(--text-primary);
+    margin: 20px 0 10px;
+    font-size: 1.2rem;
+  }
+  section h4 {
+    color: var(--text-secondary);
+    margin: 15px 0 8px;
+    font-size: 1.05rem;
+  }
+  p, li { margin-bottom: 8px; }
+  ul, ol { margin-left: 25px; margin-bottom: 15px; }
+  strong { color: var(--text-primary); }
+  em { color: var(--text-secondary); }
+  /* Tablas */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    background: var(--bg-secondary);
+  }
+  th {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:nth-child(even) { background: var(--bg-primary); }
+  tr:hover { background: var(--edit-hover); }
+  /* Editable */
+  [contenteditable="true"] {
+    outline: none;
+    transition: background 0.2s;
+    border-radius: 3px;
+    padding: 2px 4px;
+  }
+  [contenteditable="true"]:hover {
+    background: var(--edit-hover);
+    cursor: text;
+  }
+  [contenteditable="true"]:focus {
+    background: var(--edit-focus);
+    box-shadow: 0 0 0 2px var(--warning);
+  }
+  .edit-mode-banner {
+    background: var(--edit-focus);
+    border-left: 4px solid var(--warning);
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--success);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Resaltado de búsqueda */
+  .search-highlight {
+    background: #ffeb3b;
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+  [data-theme="dark"] .search-highlight {
+    background: #f39c12;
+    color: #000;
+  }
+  /* Responsive */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); z-index: 100; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 15px; max-width: 100%; }
+    .menu-toggle {
+      display: block;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 101;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+  .menu-toggle { display: none; }
+  @media (max-width: 900px) { .menu-toggle { display: block; } }
+  table { display: block; overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<aside class="sidebar">
+  <h2 data-i18n="sidebar_title">Guia Docent</h2>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 Cercar..." onkeyup="searchContent()">
+  </div>
+  <nav>
+    <a href="#s1" data-i18n="nav1">1. Dades identificatives</a>
+    <a href="#s2" data-i18n="nav2">2. Professorat</a>
+    <a href="#s3" data-i18n="nav3">3. Presentació</a>
+    <a href="#s4" data-i18n="nav4">4. Avaluació</a>
+    <a href="#s5" data-i18n="nav5">5. Continguts</a>
+    <a href="#s6" data-i18n="nav6">6. Eix global</a>
+    <a href="#s7" data-i18n="nav7">7. Metodologia</a>
+    <a href="#s8" data-i18n="nav8">8. Planificació</a>
+    <a href="#s9" data-i18n="nav9">9. Bibliografia</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h1 data-i18n="title">Fisiologia aplicada a la dansa</h1>
+    <div class="lang-selector">
+      <button onclick="setLang('ca')" id="btn-ca" class="active">CA</button>
+      <button onclick="setLang('es')" id="btn-es">ES</button>
+      <button onclick="setLang('en')" id="btn-en">EN</button>
+    </div>
+    <div class="theme-toggle">
+      <button onclick="toggleTheme()" id="theme-btn">🌙</button>
+    </div>
+    <div class="actions">
+      <button class="btn-save" onclick="saveChanges()" data-i18n="btn_save">💾 Guardar</button>
+      <button class="btn-export" onclick="exportJSON()" data-i18n="btn_export">📤 Exportar JSON</button>
+      <button class="btn-pdf" onclick="exportPDF()" data-i18n="btn_pdf">📄 Exportar PDF</button>
+      <button class="btn-import" onclick="document.getElementById('fileInput').click()" data-i18n="btn_import">📥 Importar</button>
+      <button class="btn-reset" onclick="resetChanges()" data-i18n="btn_reset">🔄 Reset</button>
+      <input type="file" id="fileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+  </div>
+
+  <div class="edit-mode-banner" data-i18n="edit_banner">
+    ✏️ <strong>Mode edició activat:</strong> Fes clic a qualsevol text per modificar-lo. Els canvis es guarden al teu navegador amb el botó "Guardar".
+  </div>
+
+  <!-- SECCIÓN 1 -->
+  <section id="s1">
+    <h2 data-i18n="s1_title">1. Dades identificatives de l'assignatura</h2>
+    <table>
+      <tr><th data-i18n="t_dada">Dada</th><th data-i18n="t_desc">Descripció</th></tr>
+      <tr><td data-i18n="r_nom">Nom de l'assignatura</td><td contenteditable="true" data-key="r_nom_val">Fisiologia aplicada a la dansa</td></tr>
+      <tr><td data-i18n="r_codi">Codi</td><td contenteditable="true" data-key="r_codi_val">[Codi oficial del pla d'estudis]</td></tr>
+      <tr><td data-i18n="r_tit">Titulació</td><td contenteditable="true" data-key="r_tit_val">Grau en Dansa</td></tr>
+      <tr><td data-i18n="r_centre">Centre</td><td contenteditable="true" data-key="r_centre_val">Institut del Teatre (Diputació de Barcelona)</td></tr>
+      <tr><td data-i18n="r_curs_ac">Curs acadèmic</td><td contenteditable="true" data-key="r_curs_ac_val">2026-2027</td></tr>
+      <tr><td data-i18n="r_curs_pe">Curs del pla d'estudis</td><td contenteditable="true" data-key="r_curs_pe_val">[1r / 2n curs]</td></tr>
+      <tr><td data-i18n="r_car">Caràcter</td><td contenteditable="true" data-key="r_car_val">Obligatòria (OB)</td></tr>
+      <tr><td data-i18n="r_ects">Crèdits ECTS</td><td contenteditable="true" data-key="r_ects_val">3 ECTS (75 hores totals)</td></tr>
+      <tr><td data-i18n="r_sem">Semestre</td><td contenteditable="true" data-key="r_sem_val">1r semestre</td></tr>
+      <tr><td data-i18n="r_lleng">Llengua vehicular</td><td contenteditable="true" data-key="r_lleng_val">Català</td></tr>
+      <tr><td data-i18n="r_dep">Departament / Àrea</td><td contenteditable="true" data-key="r_dep_val">[Ciències Aplicades a la Dansa / Pedagogia]</td></tr>
+      <tr><td data-i18n="r_req">Requisits previs</td><td contenteditable="true" data-key="r_req_val">Cap d'específic. Es recomana haver cursat assignatures bàsiques de tècnica de dansa.</td></tr>
+    </table>
+  </section>
+
+  <!-- SECCIÓN 2 -->
+  <section id="s2">
+    <h2 data-i18n="s2_title">2. Professorat i dades de contacte</h2>
+    <table>
+      <tr><th data-i18n="t_dada">Dada</th><th data-i18n="t_desc">Descripció</th></tr>
+      <tr><td data-i18n="p_resp">Professor/a responsable</td><td contenteditable="true" data-key="p_resp_val">[Nom i cognoms]</td></tr>
+      <tr><td data-i18n="p_mail">Correu electrònic</td><td contenteditable="true" data-key="p_mail_val">[correu@institutdelteatre.cat]</td></tr>
+      <tr><td data-i18n="p_desp">Despatx</td><td contenteditable="true" data-key="p_desp_val">[Edifici / Planta / Número]</td></tr>
+      <tr><td data-i18n="p_tut">Horari de tutories</td><td contenteditable="true" data-key="p_tut_val">[Dia i hora] – amb cita prèvia</td></tr>
+      <tr><td data-i18n="p_camp">Campus virtual</td><td contenteditable="true" data-key="p_camp_val">Espai de l'assignatura a la plataforma digital de l'Institut del Teatre</td></tr>
+      <tr><td data-i18n="p_altres">Altres docents</td><td contenteditable="true" data-key="p_altres_val">Nutricionista convidat/da (sessió 11-des-26); professionals convidats en sessions puntuals</td></tr>
+    </table>
+  </section>
+
+  <!-- SECCIÓN 3 -->
+  <section id="s3">
+    <h2 data-i18n="s3_title">3. Presentació de l'assignatura</h2>
+    <h3 data-i18n="s3_1_t">3.1. Descripció general</h3>
+    <p contenteditable="true" data-key="s3_1_p1">La <strong>Fisiologia aplicada a la dansa</strong> és una assignatura de formació bàsica dins del Grau en Dansa que proporciona a l'alumnat les eines científiques necessàries per comprendre com funciona el cos en acció: per què s'escalfa, com es recupera, per què es lesiona i com optimitzar el rendiment.</p>
+    <p contenteditable="true" data-key="s3_1_p2">Aquesta assignatura no es planteja com un repertori de sistemes anatòmics a memoritzar, sinó com un <strong>conjunt d'eines per prendre decisions professionals</strong>: assajar millor, prevenir lesions, rendir en escena i ensenyar amb seguretat.</p>
+    <p contenteditable="true" data-key="s3_1_p3">Tota l'assignatura s'articula al voltant d'una <strong>situació professional real i continuada</strong> (l'eix global), on el coneixement fisiològic es construeix <em>perquè</em> és necessari per resoldre el repte.</p>
+
+    <h3 data-i18n="s3_2_t">3.2. Justificació en el perfil del graduat/da</h3>
+    <p contenteditable="true" data-key="s3_2_p1">La dansa és una disciplina artística d'alta exigència física que requereix dels seus intèrprets i pedagogs un coneixement profund del cos. L'assignatura respon a la necessitat de formar professionals que:</p>
+    <ul>
+      <li contenteditable="true" data-key="s3_2_l1"><strong>Comprenquin</strong> els mecanismes fisiològics que regulen l'esforç, la recuperació i la lesió.</li>
+      <li contenteditable="true" data-key="s3_2_l2"><strong>Previnguin</strong> riscos derivats de càrregues intensives, gires o pràctiques inadequades.</li>
+      <li contenteditable="true" data-key="s3_2_l3"><strong>Optimitzin</strong> el rendiment artístic a partir de l'evidència científica.</li>
+      <li contenteditable="true" data-key="s3_2_l4"><strong>Comuniquin</strong> amb rigor el coneixement corporal a companyies, alumnes i famílies.</li>
+      <li contenteditable="true" data-key="s3_2_l5"><strong>Exerceixin</strong> amb ètica, especialment en relació amb la imatge corporal i la prevenció dels TCA.</li>
+    </ul>
+
+    <h3 data-i18n="s3_3_t">3.3. Enfocament competencial i metodològic</h3>
+    <p contenteditable="true" data-key="s3_3_p1">L'enfocament és <strong>competencial, actiu i contextualitzat</strong>. El coneixement es construeix a través de:</p>
+    <ul>
+      <li contenteditable="true" data-key="s3_3_l1">L'<strong>experimentació en primera persona</strong> (tallers corporals, registre de dades fisiològiques pròpies).</li>
+      <li contenteditable="true" data-key="s3_3_l2">L'<strong>anàlisi de situacions professionals reals</strong> (estudis de cas, disseny de propostes).</li>
+      <li contenteditable="true" data-key="s3_3_l3">La <strong>comunicació científica adaptada</strong> a diferents públics (presentacions orals).</li>
+      <li contenteditable="true" data-key="s3_3_l4">La <strong>reflexió ètica</strong> sobre la imatge corporal, els TCA i la responsabilitat professional.</li>
+    </ul>
+
+    <h3 data-i18n="s3_4_t">3.4. Relació amb altres assignatures</h3>
+    <ul>
+      <li contenteditable="true" data-key="s3_4_l1"><strong>Assignatures de tècnica de dansa:</strong> aplicació dels principis de biomecànica i condicionament físic.</li>
+      <li contenteditable="true" data-key="s3_4_l2"><strong>Anatomia funcional / Kinesiologia:</strong> coordinació per evitar duplicitats.</li>
+      <li contenteditable="true" data-key="s3_4_l3"><strong>Pedagogia de la dansa:</strong> transferència de coneixements sobre prevenció, escalfament i comunicació.</li>
+      <li contenteditable="true" data-key="s3_4_l4"><strong>Assignatures de salut i benestar:</strong> treball transversal sobre prevenció de TCA i cura integral.</li>
+    </ul>
+  </section>
+
+  <!-- SECCIÓN 4 -->
+  <section id="s4">
+    <h2 data-i18n="s4_title">4. Criteris i instruments d'avaluació</h2>
+    <p contenteditable="true" data-key="s4_intro">L'avaluació es fonamenta en un <strong>enfocament competencial i continuat</strong>, on el coneixement fisiològic s'avalua en contextos professionals reals.</p>
+
+    <h3 data-i18n="s4_1_t">4.1. Instruments d'avaluació i ponderació</h3>
+    <table>
+      <tr>
+        <th data-i18n="t_inst">Instrument</th>
+        <th data-i18n="t_desc">Descripció</th>
+        <th data-i18n="t_pond">% Ponderació</th>
+        <th data-i18n="t_ra">RA vinculats</th>
+      </tr>
+      <tr>
+        <td contenteditable="true" data-key="inst1_nom">Prova escrita teoricopràctica</td>
+        <td contenteditable="true" data-key="inst1_desc">Examen tipus test i preguntes curtes sobre mecanismes fisiològics, sistemes corporals i aplicació a la dansa. Inclou casos pràctics.</td>
+        <td contenteditable="true" data-key="inst1_pond">30%</td>
+        <td>RA1, RA2, RA3, RA5</td>
+      </tr>
+      <tr>
+        <td contenteditable="true" data-key="inst2_nom">Dossier de seguiment de la setmana professional</td>
+        <td contenteditable="true" data-key="inst2_desc">Registre i anàlisi de dades fisiològiques pròpies (FC, hidratació, son, recuperació) durant una setmana real de càrrega professional.</td>
+        <td contenteditable="true" data-key="inst2_pond">35%</td>
+        <td>RA4, RA5, RA6</td>
+      </tr>
+      <tr>
+        <td contenteditable="true" data-key="inst3_nom">Presentació oral de comunicació científica</td>
+        <td contenteditable="true" data-key="inst3_desc">Exposició grupal (2-3 persones) d'un concepte fisiològic adaptat a un públic concret (companyia, alumnes, famílies).</td>
+        <td contenteditable="true" data-key="inst3_pond">20%</td>
+        <td>RA7, RA3</td>
+      </tr>
+      <tr>
+        <td contenteditable="true" data-key="inst4_nom">Participació i treball cooperatiu</td>
+        <td contenteditable="true" data-key="inst4_desc">Avaluació continuada de la participació, treball en equip, resolució de casos i actituds de cura i ètica professional.</td>
+        <td contenteditable="true" data-key="inst4_pond">15%</td>
+        <td>RA8, RA6, CT1, CT2</td>
+      </tr>
+    </table>
+
+    <h3 data-i18n="s4_2_t">4.2. Criteris d'avaluació per RA</h3>
+    <h4>RA1 - Mecanismes d'homeòstasi i regulació corporal</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra1_c1">Explica amb precisió els processos de regulació tèrmica, hidràtica i energètica durant l'activitat dancística.</li>
+      <li contenteditable="true" data-key="ra1_c2">Relaciona els mecanismes fisiològics amb situacions reals d'assaig i actuació.</li>
+    </ul>
+    <h4>RA2 - Estructura i funcionament dels sistemes corporals</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra2_c1">Descriu correctament l'anatomia i fisiologia dels sistemes musculoesquelètic, nerviós, endocrí, cardiovascular i respiratori.</li>
+      <li contenteditable="true" data-key="ra2_c2">Identifica les interrelacions entre sistemes durant l'esforç físic.</li>
+    </ul>
+    <h4>RA3 - Anàlisi tècnica i factors de risc de lesió</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra3_c1">Analitza moviments tècnics de dansa des de la biomecànica i identifica patrons de risc.</li>
+      <li contenteditable="true" data-key="ra3_c2">Proposa ajustos tècnics preventius basats en evidència fisiològica.</li>
+    </ul>
+    <h4>RA4 - Interpretació de dades fisiològiques i autorregulació</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra4_c1">Recull i interpreta correctament dades pròpies de FC, recuperació i hidratació.</li>
+      <li contenteditable="true" data-key="ra4_c2">Pren decisions d'autoregulació de la càrrega de treball basades en les dades.</li>
+    </ul>
+    <h4>RA5 - Aplicació de nutrició, son i recuperació</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra5_c1">Dissenya un pla d'alimentació, hidratació i descans coherent amb una setmana professional real.</li>
+      <li contenteditable="true" data-key="ra5_c2">Justifica les decisions preses amb fonaments fisiològics.</li>
+    </ul>
+    <h4>RA6 - Disseny de propostes d'escalfament i condicionament</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra6_c1">Crea seqüències d'escalfament, volta a la calma i condicionament físic segures i justificades.</li>
+      <li contenteditable="true" data-key="ra6_c2">Adapta les propostes a diferents contextos professionals.</li>
+    </ul>
+    <h4>RA7 - Comunicació científica adaptada</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra7_c1">Comunica conceptes fisiològics amb rigor i claredat.</li>
+      <li contenteditable="true" data-key="ra7_c2">Adapta el llenguatge i els exemples al públic destinatari.</li>
+    </ul>
+    <h4>RA8 - Actituds de cura i ètica professional</h4>
+    <ul>
+      <li contenteditable="true" data-key="ra8_c1">Demostra sensibilitat envers la imatge corporal i prevenció de TCA.</li>
+      <li contenteditable="true" data-key="ra8_c2">Mostra responsabilitat en la cura pròpia i en la transmissió de missatges saludables.</li>
+    </ul>
+
+    <h3 data-i18n="s4_3_t">4.3. Requisits per superar l'assignatura</h3>
+    <ul>
+      <li contenteditable="true" data-key="req1"><strong>Assistència mínima del 80%</strong> a les sessions presencials.</li>
+      <li contenteditable="true" data-key="req2"><strong>Lliurament de totes les activitats avaluables</strong>.</li>
+      <li contenteditable="true" data-key="req3"><strong>Nota mínima de 5/10</strong> en el conjunt de l'assignatura.</li>
+      <li contenteditable="true" data-key="req4"><strong>Nota mínima de 4/10</strong> en la prova escrita teoricopràctica.</li>
+    </ul>
+
+    <h3 data-i18n="s4_4_t">4.4. Avaluació de recuperació</h3>
+    <p contenteditable="true" data-key="s4_4_p">L'alumnat que no superi l'assignatura podrà acollir-se a una prova de recuperació que inclourà:</p>
+    <ul>
+      <li contenteditable="true" data-key="rec1">Prova escrita teoricopràctica (substitueix el 30% de la nota final).</li>
+      <li contenteditable="true" data-key="rec2">Possibilitat de millorar el dossier de seguiment (substitueix el 35%).</li>
+      <li contenteditable="true" data-key="rec3"><strong>No es poden recuperar</strong> la presentació oral ni la participació continuada.</li>
+    </ul>
+  </section>
+
+  <!-- SECCIÓN 5 -->
+  <section id="s5">
+    <h2 data-i18n="s5_title">5. Continguts temàtics</h2>
+    <p contenteditable="true" data-key="s5_intro">Els continguts s'organitzen en <strong>5 blocs temàtics</strong> amb progressió lògica, vertebrats al voltant de l'<strong>eix global</strong>.</p>
+
+    <h3 data-i18n="s5_b1_t">Bloc 1. Fonaments de la fisiologia aplicada a la dansa (3 setmanes)</h3>
+    <h4 data-i18n="s5_conc">Continguts conceptuais</h4>
+    <ul>
+      <li contenteditable="true" data-key="b1_c1">Concepte d'homeòstasi i regulació corporal en l'activitat física.</li>
+      <li contenteditable="true" data-key="b1_c2">Sistemes de regulació: nerviós, endocrí i cardiovascular.</li>
+      <li contenteditable="true" data-key="b1_c3">Metabolisme energètic: vies aeròbiques i anaeròbiques aplicades a la dansa.</li>
+      <li contenteditable="true" data-key="b1_c4">Termoregulació i hidratació durant l'esforç.</li>
+    </ul>
+    <h4 data-i18n="s5_proc">Continguts procedimentals</h4>
+    <ul>
+      <li contenteditable="true" data-key="b1_p1">Mesura i registre de la freqüència cardíaca (FC) en repòs i durant l'esforç.</li>
+      <li contenteditable="true" data-key="b1_p2">Interpretació de la resposta fisiològica immediata a l'exercici.</li>
+      <li contenteditable="true" data-key="b1_p3">Anàlisi de la demanda energètica de diferents estils de dansa.</li>
+    </ul>
+    <p><strong>RA vinculats:</strong> RA1, RA2</p>
+
+    <h3 data-i18n="s5_b2_t">Bloc 2. Anatomia funcional i biomecànica del moviment dancístic (4 setmanes)</h3>
+    <h4 data-i18n="s5_conc">Continguts conceptuais</h4>
+    <ul>
+      <li contenteditable="true" data-key="b2_c1">Sistema musculoesquelètic: estructura i funcionament.</li>
+      <li contenteditable="true" data-key="b2_c2">Principis de biomecànica aplicats a la dansa: forces, palanques, equilibri.</li>
+      <li contenteditable="true" data-key="b2_c3">Anàlisi funcional dels principals grups musculars en moviments tècnics.</li>
+      <li contenteditable="true" data-key="b2_c4">Factors de risc de lesió: sobrecàrrega, mala tècnica, desequilibris musculars.</li>
+    </ul>
+    <h4 data-i18n="s5_proc">Continguts procedimentals</h4>
+    <ul>
+      <li contenteditable="true" data-key="b2_p1">Anàlisi biomecànica de moviments tècnics específics.</li>
+      <li contenteditable="true" data-key="b2_p2">Identificació de patrons de moviment de risc.</li>
+      <li contenteditable="true" data-key="b2_p3">Proposta d'ajustos tècnics preventius basats en evidència fisiològica.</li>
+    </ul>
+    <p><strong>RA vinculats:</strong> RA2, RA3</p>
+
+    <h3 data-i18n="s5_b3_t">Bloc 3. Nutrició, son i recuperació per a la setmana professional (3 setmanes)</h3>
+    <h4 data-i18n="s5_conc">Continguts conceptuais</h4>
+    <ul>
+      <li contenteditable="true" data-key="b3_c1">Necessitats nutricionals del ballarí/a: macronutrients, micronutrients, hidratació.</li>
+      <li contenteditable="true" data-key="b3_c2">Importància del son i la recuperació en el rendiment i la prevenció de lesions.</li>
+      <li contenteditable="true" data-key="b3_c3">Estratègies de recuperació activa i passiva.</li>
+      <li contenteditable="true" data-key="b3_c4">Relació entre alimentació, imatge corporal i salut mental (prevenció de TCA).</li>
+    </ul>
+    <h4 data-i18n="s5_proc">Continguts procedimentals</h4>
+    <ul>
+      <li contenteditable="true" data-key="b3_p1">Disseny d'un pla d'alimentació i hidratació per a una setmana professional real.</li>
+      <li contenteditable="true" data-key="b3_p2">Registre i anàlisi de dades pròpies de son, hidratació i recuperació.</li>
+      <li contenteditable="true" data-key="b3_p3">Aplicació de tècniques de recuperació (estiraments, foam roller, bany de contrast).</li>
+    </ul>
+    <p><strong>RA vinculats:</strong> RA4, RA5, RA8</p>
+
+    <h3 data-i18n="s5_b4_t">Bloc 4. Disseny de propostes d'escalfament i condicionament (4 setmanes)</h3>
+    <h4 data-i18n="s5_conc">Continguts conceptuais</h4>
+    <ul>
+      <li contenteditable="true" data-key="b4_c1">Fisiologia de l'escalfament: efectes sobre el sistema cardiovascular, muscular i nerviós.</li>
+      <li contenteditable="true" data-key="b4_c2">Principis del condicionament físic aplicat a la dansa: força, resistència, flexibilitat, potència.</li>
+      <li contenteditable="true" data-key="b4_c3">Disseny de sessions d'escalfament i volta a la calma segures i efectives.</li>
+      <li contenteditable="true" data-key="b4_c4">Adaptació de les propostes a diferents contextos.</li>
+    </ul>
+    <h4 data-i18n="s5_proc">Continguts procedimentals</h4>
+    <ul>
+      <li contenteditable="true" data-key="b4_p1">Creació de seqüències d'escalfament i volta a la calma justificades fisiològicament.</li>
+      <li contenteditable="true" data-key="b4_p2">Disseny de programes de condicionament físic complementaris.</li>
+      <li contenteditable="true" data-key="b4_p3">Avaluació de l'efectivitat de les propostes mitjançant dades fisiològiques.</li>
+    </ul>
+    <p><strong>RA vinculats:</strong> RA6, RA3</p>
+
+    <h3 data-i18n="s5_b5_t">Bloc 5. Comunicació científica i ètica professional (2 setmanes)</h3>
+    <h4 data-i18n="s5_conc">Continguts conceptuais</h4>
+    <ul>
+      <li contenteditable="true" data-key="b5_c1">Principis de comunicació científica: rigor, claredat, adaptació al públic.</li>
+      <li contenteditable="true" data-key="b5_c2">Estratègies per transmetre coneixement fisiològic a diferents audiències.</li>
+      <li contenteditable="true" data-key="b5_c3">Ètica professional en la pedagogia de la dansa: límits, responsabilitat, respecte.</li>
+      <li contenteditable="true" data-key="b5_c4">Prevenció i detecció de TCA en l'àmbit de la dansa.</li>
+    </ul>
+    <h4 data-i18n="s5_proc">Continguts procedimentals</h4>
+    <ul>
+      <li contenteditable="true" data-key="b5_p1">Preparació i presentació d'una exposició científica adaptada.</li>
+      <li contenteditable="true" data-key="b5_p2">Ús de recursos didàctics per facilitar la comprensió.</li>
+      <li contenteditable="true" data-key="b5_p3">Debat sobre casos ètics reals en la pedagogia i la pràctica professional.</li>
+    </ul>
+    <p><strong>RA vinculats:</strong> RA7, RA8</p>
+  </section>
+
+  <!-- SECCIÓN 6 -->
+  <section id="s6">
+    <h2 data-i18n="s6_title">6. Eix global: Situació professional real continuada</h2>
+    <p contenteditable="true" data-key="s6_intro">Tot l'aprenentatge es vertebra al voltant d'una <strong>situació professional real i continuada</strong> que simula una <strong>setmana professional intensa</strong> (gira, residència de creació o sèrie de funcions).</p>
+    <h3 data-i18n="s6_fases">Fases de l'eix global</h3>
+    <ol>
+      <li contenteditable="true" data-key="s6_f1"><strong>Preparació (Blocs 1-2):</strong> Anàlisi de les demandes fisiològiques i identificació de riscos potencials.</li>
+      <li contenteditable="true" data-key="s6_f2"><strong>Execució (Bloc 3):</strong> Registre de dades pròpies (FC, son, hidratació, nutrició) i presa de decisions d'autoregulació.</li>
+      <li contenteditable="true" data-key="s6_f3"><strong>Disseny i aplicació (Bloc 4):</strong> Creació i aplicació de propostes d'escalfament, volta a la calma i condicionament.</li>
+      <li contenteditable="true" data-key="s6_f4"><strong>Comunicació i reflexió (Bloc 5):</strong> Comunicació de resultats i aprenentatges, i reflexió sobre l'ètica professional.</li>
+    </ol>
+    <p contenteditable="true" data-key="s6_final">Aquest eix global garanteix que l'aprenentatge sigui <strong>significatiu, contextualitzat i transferible</strong> a la pràctica professional real.</p>
+  </section>
+
+  <!-- SECCIÓN 7 -->
+  <section id="s7">
+    <h2 data-i18n="s7_title">7. Metodologia didàctica</h2>
+    <p contenteditable="true" data-key="s7_intro">La metodologia es fonamenta en un <strong>enfocament competencial, actiu i contextualitzat</strong>, on l'alumnat construeix el coneixement fisiològic <em>perquè el necessita</em> per resoldre reptes professionals reals.</p>
+
+    <h3 data-i18n="s7_1_t">7.1. Principis metodològics generals</h3>
+    <ol>
+      <li contenteditable="true" data-key="s7_p1"><strong>Aprendentatge basat en situacions professionals reals (ABSP).</strong></li>
+      <li contenteditable="true" data-key="s7_p2"><strong>Aprendentatge significatiu i transferible.</strong></li>
+      <li contenteditable="true" data-key="s7_p3"><strong>Rol actiu de l'alumnat</strong> (investiga, experimenta, decideix, dissenya, comunica).</li>
+      <li contenteditable="true" data-key="s7_p4"><strong>Treball cooperatiu</strong> i aprenentatge entre iguals.</li>
+      <li contenteditable="true" data-key="s7_p5"><strong>Autonomia i autorregulació.</strong></li>
+      <li contenteditable="true" data-key="s7_p6"><strong>Integració teoria-pràctica.</strong></li>
+      <li contenteditable="true" data-key="s7_p7"><strong>Enfocament ètic i de cura del cos.</strong></li>
+    </ol>
+
+    <h3 data-i18n="s7_2_t">7.2. Estratègies i activitats</h3>
+    <h4>A) Activitats presencials dirigides</h4>
+    <ul>
+      <li contenteditable="true" data-key="s7_a1">Sessions expositives dialogades.</li>
+      <li contenteditable="true" data-key="s7_a2">Tallers pràctics de laboratori corporal.</li>
+      <li contenteditable="true" data-key="s7_a3">Estudis de cas en grup.</li>
+      <li contenteditable="true" data-key="s7_a4">Laboratori de disseny.</li>
+      <li contenteditable="true" data-key="s7_a5">Assajos de comunicació científica.</li>
+    </ul>
+    <h4>B) Activitats autònomes</h4>
+    <ul>
+      <li contenteditable="true" data-key="s7_b1">Lectura crítica d'articles i recursos.</li>
+      <li contenteditable="true" data-key="s7_b2">Registre del diari fisiològic personal.</li>
+      <li contenteditable="true" data-key="s7_b3">Preparació del dossier final.</li>
+      <li contenteditable="true" data-key="s7_b4">Preparació de la presentació grupal.</li>
+      <li contenteditable="true" data-key="s7_b5">Visionat de vídeos tècnics.</li>
+    </ul>
+    <h4>C) Activitats de tutoria i acompanyament</h4>
+    <ul>
+      <li contenteditable="true" data-key="s7_c1">Tutories individuals.</li>
+      <li contenteditable="true" data-key="s7_c2">Devolutives formatives.</li>
+      <li contenteditable="true" data-key="s7_c3">Espais de consulta grupal.</li>
+    </ul>
+
+    <h3 data-i18n="s7_3_t">7.3. Organització del treball de l'alumnat</h3>
+    <table>
+      <tr><th data-i18n="t_mod">Modalitat</th><th>%</th><th data-i18n="t_desc">Descripció</th></tr>
+      <tr><td contenteditable="true" data-key="org1">Treball presencial a l'aula</td><td>40%</td><td contenteditable="true" data-key="org1_d">Sessions teòriques, tallers pràctics, estudis de cas.</td></tr>
+      <tr><td contenteditable="true" data-key="org2">Treball autònom individual</td><td>35%</td><td contenteditable="true" data-key="org2_d">Lectures, diari fisiològic, dossier, visionats.</td></tr>
+      <tr><td contenteditable="true" data-key="org3">Treball cooperatiu en grup</td><td>20%</td><td contenteditable="true" data-key="org3_d">Estudis de cas, disseny de propostes, presentació oral.</td></tr>
+      <tr><td contenteditable="true" data-key="org4">Tutories i acompanyament</td><td>5%</td><td contenteditable="true" data-key="org4_d">Seguiment personalitzat i devolutives formatives.</td></tr>
+    </table>
+
+    <h3 data-i18n="s7_4_t">7.4. Justificació pedagògica</h3>
+    <ul>
+      <li contenteditable="true" data-key="s7_j1"><strong>Constructivisme social (Vygotsky).</strong></li>
+      <li contenteditable="true" data-key="s7_j2"><strong>Aprenentatge situat (Lave & Wenger).</strong></li>
+      <li contenteditable="true" data-key="s7_j3"><strong>Aprenentatge experiencial (Kolb).</strong></li>
+      <li contenteditable="true" data-key="s7_j4"><strong>Enfocament per competències (EEES).</strong></li>
+      <li contenteditable="true" data-key="s7_j5"><strong>Avaluació formativa (Black & Wiliam).</strong></li>
+    </ul>
+  </section>
+
+  <!-- SECCIÓN 8 -->
+  <section id="s8">
+    <h2 data-i18n="s8_title">8. Planificació temporal i cronograma</h2>
+    <p contenteditable="true" data-key="s8_intro"><strong>Dades generals:</strong> 3 ECTS (75 hores totals) · 45 hores presencials (42 efectives per festiu no recuperable) · 30 hores de treball autònom.</p>
+
+    <table>
+      <tr>
+        <th data-i18n="t_data">Data</th>
+        <th data-i18n="t_bloc">Bloc</th>
+        <th data-i18n="t_contingut">Contingut / Activitat</th>
+        <th data-i18n="t_tipus">Tipus de sessió</th>
+        <th>H. Pres.</th>
+        <th>H. Aut.</th>
+        <th data-i18n="t_obs">Observacions</th>
+      </tr>
+      <tr><td>9-oct-26</td><td>1</td><td contenteditable="true" data-key="c1">Presentació. Homeòstasi i fisiologia cel·lular</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o1">Presentació del repte de la "setmana professional"</td></tr>
+      <tr><td>16-oct-26</td><td>2</td><td contenteditable="true" data-key="c2">Sistema musculoesquel·lètic I</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o2">Anàlisi de demandes físiques</td></tr>
+      <tr><td>23-oct-26</td><td>2</td><td contenteditable="true" data-key="c3">Sistema musculoesquel·lètic II</td><td>Taller pràctic</td><td>3</td><td>2</td><td contenteditable="true" data-key="o3">Identificació de riscos. Ropa còmoda.</td></tr>
+      <tr><td>30-oct-26</td><td>-</td><td contenteditable="true" data-key="c4">Festiu (Lliure disposició CSD)</td><td>No lectiva</td><td>0</td><td>2</td><td contenteditable="true" data-key="o4">Inici del registre del diari fisiològic</td></tr>
+      <tr><td>6-nov-26</td><td>2/3</td><td contenteditable="true" data-key="c5">Sistema nerviós I</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o5">Autorregulació de la càrrega</td></tr>
+      <tr><td>13-nov-26</td><td>5</td><td contenteditable="true" data-key="c6">Preparació treballs orals</td><td>Taller cooperatiu</td><td>3</td><td>3</td><td contenteditable="true" data-key="o6">Desenvolupament RA7</td></tr>
+      <tr><td>20-nov-26</td><td>3</td><td contenteditable="true" data-key="c7">Sistema nerviós II / Son</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o7">Estratègies de recuperació</td></tr>
+      <tr><td>27-nov-26</td><td>3/5</td><td contenteditable="true" data-key="c8">La sang + Presentacions orals</td><td>Avaluació / Taller</td><td>3</td><td>2</td><td contenteditable="true" data-key="o8">Presentació oral (20%)</td></tr>
+      <tr><td>4-des-26</td><td>3</td><td contenteditable="true" data-key="c9">Sistema hormonal</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o9">Impacte de la càrrega d'assajos/funcions</td></tr>
+      <tr><td>11-des-26</td><td>3</td><td contenteditable="true" data-key="c10">Nutrició (nutricionista + pràctica)</td><td>Taller amb expert</td><td>3</td><td>2</td><td contenteditable="true" data-key="o10">Pla nutricional del dossier (35%)</td></tr>
+      <tr><td>18-des-26</td><td>Transv.</td><td contenteditable="true" data-key="c11">EVALUACIÓ PARCIAL</td><td>Avaluació sumativa</td><td>3</td><td>3</td><td contenteditable="true" data-key="o11">Prova teoricopràctica (30%)</td></tr>
+      <tr><td>Vac.</td><td>-</td><td contenteditable="true" data-key="c12">Vacances de Nadal</td><td>No lectiva</td><td>0</td><td>4</td><td contenteditable="true" data-key="o12">Finalització i lliurament del Dossier</td></tr>
+      <tr><td>8-gen-27</td><td>4</td><td contenteditable="true" data-key="c13">Aparell cardiovascular</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o13">Interpretació de dades de FC</td></tr>
+      <tr><td>15-gen-27</td><td>4</td><td contenteditable="true" data-key="c14">Aparell respiratori</td><td>Teòrico-pràctica</td><td>3</td><td>2</td><td contenteditable="true" data-key="o14">Disseny d'escalfament i volta a la calma</td></tr>
+      <tr><td>22-gen-27</td><td>Transv.</td><td contenteditable="true" data-key="c15">EXAMEN FINAL (global)</td><td>Avaluació sumativa</td><td>3</td><td>0</td><td contenteditable="true" data-key="o15">Avaluació global de tots els continguts</td></tr>
+    </table>
+  </section>
+
+  <!-- SECCIÓN 9 -->
+  <section id="s9">
+    <h2 data-i18n="s9_title">9. Bibliografia i recursos</h2>
+
+    <h3 data-i18n="s9_1_t">9.1. Bibliografia bàsica</h3>
+    <ul>
+      <li contenteditable="true" data-key="bib1">Angioi, M. et al. (2009). Fitness in contemporary dance: A systematic review. <em>International Journal of Sports Medicine, 30</em>(7), 475–484.</li>
+      <li contenteditable="true" data-key="bib2">Howley, E. T., & Franks, B. D. (2007). <em>Health fitness instructor's handbook</em> (5a ed.). Human Kinetics.</li>
+      <li contenteditable="true" data-key="bib3">Koutedakis, Y., & Jamurtas, A. (2004). The dancer as a performing athlete. <em>Sports Medicine, 34</em>(10), 651–661.</li>
+      <li contenteditable="true" data-key="bib4">McArdle, W. D., Katch, F. I., & Katch, V. L. (2015). <em>Fisiología del ejercicio</em> (7a ed.). Alianza Editorial.</li>
+      <li contenteditable="true" data-key="bib5">Solomon, R., Solomon, J., & Minton, S. C. (2005). <em>Preventive dance medicine</em>. Princeton Book Company.</li>
+      <li contenteditable="true" data-key="bib6">Wyon, M. A. (2010). Guidance for dance nutrition. En <em>Dance medicine</em> (pp. 113–132). Routledge.</li>
+    </ul>
+
+    <h3 data-i18n="s9_2_t">9.2. Bibliografia complementària</h3>
+    <h4>Biomecànica i prevenció de lesions</h4>
+    <ul>
+      <li contenteditable="true" data-key="bibc1">Hamilton, W. G. et al. (2018). <em>Anatomy and kinesiology for dancers</em> (3a ed.). Routledge.</li>
+      <li contenteditable="true" data-key="bibc2">Liederbach, M., & Richardson, M. A. (2016). <em>Dance medicine in practice</em>. Routledge.</li>
+    </ul>
+    <h4>Nutrició i recuperació</h4>
+    <ul>
+      <li contenteditable="true" data-key="bibc3">ACSM, ADA & Dietitians of Canada (2016). Nutrition and athletic performance. <em>Medicine & Science in Sports & Exercise, 48</em>(3), 543–568.</li>
+      <li contenteditable="true" data-key="bibc4">Burk, L. (2013). <em>Nutrition for dance: A practical guide</em>. Routledge.</li>
+    </ul>
+    <h4>Imatge corporal i TCA</h4>
+    <ul>
+      <li contenteditable="true" data-key="bibc5">Arcelus, J. et al. (2014). Prevalence of eating disorders amongst dancers. <em>European Eating Disorders Review, 22</em>(2), 92–101.</li>
+    </ul>
+
+    <h3 data-i18n="s9_3_t">9.3. Recursos digitals</h3>
+    <ul>
+      <li contenteditable="true" data-key="rec1"><strong>IADMS:</strong> https://www.iadms.org</li>
+      <li contenteditable="true" data-key="rec2"><strong>One Dance UK – Healthy Dancer Programme:</strong> https://www.onedanceuk.org/healthy-dancer/</li>
+      <li contenteditable="true" data-key="rec3"><strong>PubMed:</strong> https://pubmed.ncbi.nlm.nih.gov/</li>
+      <li contenteditable="true" data-key="rec4"><strong>Dialnet:</strong> https://dialnet.unirioja.es/</li>
+      <li contenteditable="true" data-key="rec5"><strong>Dance Magazine – Science for Dancers:</strong> https://www.dancemagazine.com/</li>
+    </ul>
+
+    <h3 data-i18n="s9_4_t">9.4. Revistes científiques de referència</h3>
+    <ul>
+      <li contenteditable="true" data-key="rev1"><em>Journal of Dance Medicine & Science</em> (IADMS)</li>
+      <li contenteditable="true" data-key="rev2"><em>Medical Problems of Performing Artists</em></li>
+      <li contenteditable="true" data-key="rev3"><em>Sports Medicine</em></li>
+      <li contenteditable="true" data-key="rev4"><em>Journal of Dance Education</em></li>
+      <li contenteditable="true" data-key="rev5"><em>Research in Dance Education</em></li>
+      <li contenteditable="true" data-key="rev6"><em>Apunts: Educació Física i Esports</em></li>
+    </ul>
+
+    <h3 data-i18n="s9_5_t">9.5. Aplicacions mòbils recomanades</h3>
+    <ul>
+      <li contenteditable="true" data-key="app1"><strong>FC:</strong> Polar Flow, Garmin Connect, HeartRate Monitor.</li>
+      <li contenteditable="true" data-key="app2"><strong>Son:</strong> Sleep Cycle, Pillow.</li>
+      <li contenteditable="true" data-key="app3"><strong>Hidratació i nutrició:</strong> MyFitnessPal, Yazio.</li>
+      <li contenteditable="true" data-key="app4"><strong>Percepció de l'esforç (RPE):</strong> Registre diari amb plantilla del docent.</li>
+    </ul>
+  </section>
+
+</main>
+
+<div class="toast" id="toast">✅ Canvis guardats correctament!</div>
+
+<script>
+// ============================================
+// SISTEMA DE TRADUCCIONES
+// ============================================
+const translations = {
+  ca: {
+    sidebar_title: "Guia Docent",
+    nav1: "1. Dades identificatives", nav2: "2. Professorat", nav3: "3. Presentació",
+    nav4: "4. Avaluació", nav5: "5. Continguts", nav6: "6. Eix global",
+    nav7: "7. Metodologia", nav8: "8. Planificació", nav9: "9. Bibliografia",
+    title: "Fisiologia aplicada a la dansa",
+    btn_save: "💾 Guardar", btn_export: "📤 Exportar JSON", btn_pdf: "📄 Exportar PDF", btn_import: "📥 Importar", btn_reset: "🔄 Reset",
+    edit_banner: "✏️ <strong>Mode edició activat:</strong> Fes clic a qualsevol text per modificar-lo. Els canvis es guarden al teu navegador amb el botó 'Guardar'.",
+    s1_title: "1. Dades identificatives de l'assignatura",
+    t_dada: "Dada", t_desc: "Descripció",
+    r_nom: "Nom de l'assignatura", r_codi: "Codi", r_tit: "Titulació", r_centre: "Centre",
+    r_curs_ac: "Curs acadèmic", r_curs_pe: "Curs del pla d'estudis", r_car: "Caràcter",
+    r_ects: "Crèdits ECTS", r_sem: "Semestre", r_lleng: "Llengua vehicular",
+    r_dep: "Departament / Àrea", r_req: "Requisits previs",
+    s2_title: "2. Professorat i dades de contacte",
+    p_resp: "Professor/a responsable", p_mail: "Correu electrònic", p_desp: "Despatx",
+    p_tut: "Horari de tutories", p_camp: "Campus virtual", p_altres: "Altres docents",
+    s3_title: "3. Presentació de l'assignatura",
+    s3_1_t: "3.1. Descripció general", s3_2_t: "3.2. Justificació en el perfil del graduat/da",
+    s3_3_t: "3.3. Enfocament competencial i metodològic", s3_4_t: "3.4. Relació amb altres assignatures",
+    s4_title: "4. Criteris i instruments d'avaluació",
+    s4_1_t: "4.1. Instruments d'avaluació i ponderació", s4_2_t: "4.2. Criteris d'avaluació per RA",
+    s4_3_t: "4.3. Requisits per superar l'assignatura", s4_4_t: "4.4. Avaluació de recuperació",
+    t_inst: "Instrument", t_pond: "% Ponderació", t_ra: "RA vinculats",
+    s5_title: "5. Continguts temàtics",
+    s5_b1_t: "Bloc 1. Fonaments de la fisiologia aplicada a la dansa (3 setmanes)",
+    s5_b2_t: "Bloc 2. Anatomia funcional i biomecànica del moviment dancístic (4 setmanes)",
+    s5_b3_t: "Bloc 3. Nutrició, son i recuperació per a la setmana professional (3 setmanes)",
+    s5_b4_t: "Bloc 4. Disseny de propostes d'escalfament i condicionament (4 setmanes)",
+    s5_b5_t: "Bloc 5. Comunicació científica i ètica professional (2 setmanes)",
+    s5_conc: "Continguts conceptuais", s5_proc: "Continguts procedimentals",
+    s6_title: "6. Eix global: Situació professional real continuada", s6_fases: "Fases de l'eix global",
+    s7_title: "7. Metodologia didàctica", s7_1_t: "7.1. Principis metodològics generals",
+    s7_2_t: "7.2. Estratègies i activitats", s7_3_t: "7.3. Organització del treball de l'alumnat",
+    s7_4_t: "7.4. Justificació pedagògica",
+    t_mod: "Modalitat",
+    s8_title: "8. Planificació temporal i cronograma",
+    t_data: "Data", t_bloc: "Bloc", t_contingut: "Contingut / Activitat",
+    t_tipus: "Tipus de sessió", t_obs: "Observacions",
+    s9_title: "9. Bibliografia i recursos",
+    s9_1_t: "9.1. Bibliografia bàsica", s9_2_t: "9.2. Bibliografia complementària",
+    s9_3_t: "9.3. Recursos digitals", s9_4_t: "9.4. Revistes científiques de referència",
+    s9_5_t: "9.5. Aplicacions mòbils recomanades"
+  },
+  es: {
+    sidebar_title: "Guía Docente",
+    nav1: "1. Datos identificativos", nav2: "2. Profesorado", nav3: "3. Presentación",
+    nav4: "4. Evaluación", nav5: "5. Contenidos", nav6: "6. Eje global",
+    nav7: "7. Metodología", nav8: "8. Planificación", nav9: "9. Bibliografía",
+    title: "Fisiología aplicada a la danza",
+    btn_save: "💾 Guardar", btn_export: "📤 Exportar JSON", btn_pdf: "📄 Exportar PDF", btn_import: "📥 Importar", btn_reset: "🔄 Reset",
+    edit_banner: "✏️ <strong>Modo edición activado:</strong> Haz clic en cualquier texto para modificarlo. Los cambios se guardan en tu navegador con el botón 'Guardar'.",
+    s1_title: "1. Datos identificativos de la asignatura",
+    t_dada: "Dato", t_desc: "Descripción",
+    r_nom: "Nombre de la asignatura", r_codi: "Código", r_tit: "Titulación", r_centre: "Centro",
+    r_curs_ac: "Curso académico", r_curs_pe: "Curso del plan de estudios", r_car: "Carácter",
+    r_ects: "Créditos ECTS", r_sem: "Semestre", r_lleng: "Lengua vehicular",
+    r_dep: "Departamento / Área", r_req: "Requisitos previos",
+    s2_title: "2. Profesorado y datos de contacto",
+    p_resp: "Profesor/a responsable", p_mail: "Correo electrónico", p_desp: "Despacho",
+    p_tut: "Horario de tutorías", p_camp: "Campus virtual", p_altres: "Otros docentes",
+    s3_title: "3. Presentación de la asignatura",
+    s3_1_t: "3.1. Descripción general", s3_2_t: "3.2. Justificación en el perfil del graduado/a",
+    s3_3_t: "3.3. Enfoque competencial y metodológico", s3_4_t: "3.4. Relación con otras asignaturas",
+    s4_title: "4. Criterios e instrumentos de evaluación",
+    s4_1_t: "4.1. Instrumentos de evaluación y ponderación", s4_2_t: "4.2. Criterios de evaluación por RA",
+    s4_3_t: "4.3. Requisitos para superar la asignatura", s4_4_t: "4.4. Evaluación de recuperación",
+    t_inst: "Instrumento", t_pond: "% Ponderación", t_ra: "RA vinculados",
+    s5_title: "5. Contenidos temáticos",
+    s5_b1_t: "Bloque 1. Fundamentos de la fisiología aplicada a la danza (3 semanas)",
+    s5_b2_t: "Bloque 2. Anatomía funcional y biomecánica del movimiento dancístico (4 semanas)",
+    s5_b3_t: "Bloque 3. Nutrición, sueño y recuperación para la semana profesional (3 semanas)",
+    s5_b4_t: "Bloque 4. Diseño de propuestas de calentamiento y acondicionamiento (4 semanas)",
+    s5_b5_t: "Bloque 5. Comunicación científica y ética profesional (2 semanas)",
+    s5_conc: "Contenidos conceptuales", s5_proc: "Contenidos procedimentales",
+    s6_title: "6. Eje global: Situación profesional real continuada", s6_fases: "Fases del eje global",
+    s7_title: "7. Metodología didáctica", s7_1_t: "7.1. Principios metodológicos generales",
+    s7_2_t: "7.2. Estrategias y actividades", s7_3_t: "7.3. Organización del trabajo del alumnado",
+    s7_4_t: "7.4. Justificación pedagógica",
+    t_mod: "Modalidad",
+    s8_title: "8. Planificación temporal y cronograma",
+    t_data: "Fecha", t_bloc: "Bloque", t_contingut: "Contenido / Actividad",
+    t_tipus: "Tipo de sesión", t_obs: "Observaciones",
+    s9_title: "9. Bibliografía y recursos",
+    s9_1_t: "9.1. Bibliografía básica", s9_2_t: "9.2. Bibliografía complementaria",
+    s9_3_t: "9.3. Recursos digitales", s9_4_t: "9.4. Revistas científicas de referencia",
+    s9_5_t: "9.5. Aplicaciones móviles recomendadas"
+  },
+  en: {
+    sidebar_title: "Teaching Guide",
+    nav1: "1. Identification data", nav2: "2. Teaching staff", nav3: "3. Presentation",
+    nav4: "4. Assessment", nav5: "5. Contents", nav6: "6. Global axis",
+    nav7: "7. Methodology", nav8: "8. Planning", nav9: "9. Bibliography",
+    title: "Applied Physiology for Dance",
+    btn_save: "💾 Save", btn_export: "📤 Export JSON", btn_pdf: "📄 Export PDF", btn_import: "📥 Import", btn_reset: "🔄 Reset",
+    edit_banner: "✏️ <strong>Edit mode enabled:</strong> Click on any text to modify it. Changes are saved in your browser with the 'Save' button.",
+    s1_title: "1. Subject identification data",
+    t_dada: "Data", t_desc: "Description",
+    r_nom: "Subject name", r_codi: "Code", r_tit: "Degree", r_centre: "Institution",
+    r_curs_ac: "Academic year", r_curs_pe: "Study plan year", r_car: "Type",
+    r_ects: "ECTS Credits", r_sem: "Semester", r_lleng: "Language of instruction",
+    r_dep: "Department / Area", r_req: "Prerequisites",
+    s2_title: "2. Teaching staff and contact details",
+    p_resp: "Responsible professor", p_mail: "Email", p_desp: "Office",
+    p_tut: "Office hours", p_camp: "Virtual campus", p_altres: "Other teachers",
+    s3_title: "3. Subject presentation",
+    s3_1_t: "3.1. General description", s3_2_t: "3.2. Justification in the graduate profile",
+    s3_3_t: "3.3. Competence-based and methodological approach", s3_4_t: "3.4. Relationship with other subjects",
+    s4_title: "4. Assessment criteria and instruments",
+    s4_1_t: "4.1. Assessment instruments and weighting", s4_2_t: "4.2. Assessment criteria per LO",
+    s4_3_t: "4.3. Requirements to pass the subject", s4_4_t: "4.4. Recovery assessment",
+    t_inst: "Instrument", t_pond: "% Weight", t_ra: "Linked LOs",
+    s5_title: "5. Thematic contents",
+    s5_b1_t: "Block 1. Fundamentals of physiology applied to dance (3 weeks)",
+    s5_b2_t: "Block 2. Functional anatomy and biomechanics of dance movement (4 weeks)",
+    s5_b3_t: "Block 3. Nutrition, sleep and recovery for the professional week (3 weeks)",
+    s5_b4_t: "Block 4. Design of warm-up and conditioning proposals (4 weeks)",
+    s5_b5_t: "Block 5. Scientific communication and professional ethics (2 weeks)",
+    s5_conc: "Conceptual contents", s5_proc: "Procedural contents",
+    s6_title: "6. Global axis: Continued real professional situation", s6_fases: "Phases of the global axis",
+    s7_title: "7. Teaching methodology", s7_1_t: "7.1. General methodological principles",
+    s7_2_t: "7.2. Strategies and activities", s7_3_t: "7.3. Organization of student work",
+    s7_4_t: "7.4. Pedagogical justification",
+    t_mod: "Modality",
+    s8_title: "8. Temporal planning and schedule",
+    t_data: "Date", t_bloc: "Block", t_contingut: "Content / Activity",
+    t_tipus: "Session type", t_obs: "Observations",
+    s9_title: "9. Bibliography and resources",
+    s9_1_t: "9.1. Basic bibliography", s9_2_t: "9.2. Complementary bibliography",
+    s9_3_t: "9.3. Digital resources", s9_4_t: "9.4. Reference scientific journals",
+    s9_5_t: "9.5. Recommended mobile applications"
+  }
+};
+
+let currentLang = 'ca';
+let currentTheme = 'light';
+
+// ============================================
+// FUNCIONES DE IDIOMA
+// ============================================
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) {
+      el.innerHTML = translations[lang][key];
+    }
+  });
+  document.querySelectorAll('.lang-selector button').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + lang).classList.add('active');
+  localStorage.setItem('prog_lang', lang);
+}
+
+// ============================================
+// FUNCIONES DE TEMA (MODO OSCURO)
+// ============================================
+function toggleTheme() {
+  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('theme-btn').textContent = currentTheme === 'light' ? '🌙' : '☀️';
+  localStorage.setItem('prog_theme', currentTheme);
+}
+
+// ============================================
+// FUNCIONES DE BÚSQUEDA
+// ============================================
+function searchContent() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  
+  // Eliminar resaltados anteriores
+  document.querySelectorAll('.search-highlight').forEach(el => {
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
+  });
+  
+  if (searchTerm.length < 2) return;
+  
+  // Buscar y resaltar
+  const walker = document.createTreeWalker(
+    document.querySelector('.main'),
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  
+  let node;
+  const textNodes = [];
+  while (node = walker.nextNode()) {
+    if (node.textContent.toLowerCase().includes(searchTerm)) {
+      textNodes.push(node);
+    }
+  }
+  
+  textNodes.forEach(textNode => {
+    const text = textNode.textContent;
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    const parts = text.split(regex);
+    
+    if (parts.length > 1) {
+      const fragment = document.createDocumentFragment();
+      parts.forEach(part => {
+        if (part.toLowerCase() === searchTerm) {
+          const span = document.createElement('span');
+          span.className = 'search-highlight';
+          span.textContent = part;
+          fragment.appendChild(span);
+        } else {
+          fragment.appendChild(document.createTextNode(part));
+        }
+      });
+      textNode.parentNode.replaceChild(fragment, textNode);
+    }
+  });
+}
+
+// ============================================
+// FUNCIONES DE GUARDADO
+// ============================================
+function saveChanges() {
+  const data = {};
+  document.querySelectorAll('[data-key]').forEach(el => {
+    data[el.getAttribute('data-key')] = el.innerHTML;
+  });
+  localStorage.setItem('prog_data', JSON.stringify(data));
+  localStorage.setItem('prog_lang', currentLang);
+  localStorage.setItem('prog_theme', currentTheme);
+  showToast('✅ Canvis guardats correctament!');
+}
+
+function loadChanges() {
+  const saved = localStorage.getItem('prog_data');
+  if (saved) {
+    const data = JSON.parse(saved);
+    Object.keys(data).forEach(key => {
+      const el = document.querySelector(`[data-key="${key}"]`);
+      if (el) el.innerHTML = data[key];
+    });
+  }
+  const lang = localStorage.getItem('prog_lang') || 'ca';
+  setLang(lang);
+  
+  const theme = localStorage.getItem('prog_theme') || 'light';
+  if (theme === 'dark') {
+    currentTheme = 'dark';
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
+}
+
+function exportJSON() {
+  const data = { lang: currentLang, theme: currentTheme, content: {} };
+  document.querySelectorAll('[data-key]').forEach(el => {
+    data.content[el.getAttribute('data-key')] = el.innerHTML;
+  });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `programacio_fisiologia_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📤 Arxiu exportat correctament!');
+}
+
+function exportPDF() {
+  showToast('📄 Generant PDF...');
+  const element = document.querySelector('.main');
+  const opt = {
+    margin: 10,
+    filename: `programacio_fisiologia_${new Date().toISOString().split('T')[0]}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save().then(() => {
+    showToast('✅ PDF generat correctament!');
+  });
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.content) {
+        Object.keys(data.content).forEach(key => {
+          const el = document.querySelector(`[data-key="${key}"]`);
+          if (el) el.innerHTML = data.content[key];
+        });
+      }
+      if (data.lang) setLang(data.lang);
+      if (data.theme) {
+        currentTheme = data.theme;
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.getElementById('theme-btn').textContent = currentTheme === 'light' ? '🌙' : '☀️';
+      }
+      saveChanges();
+      showToast('📥 Dades importades correctament!');
+    } catch (err) {
+      showToast('❌ Error en importar l\'arxiu');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetChanges() {
+  if (confirm('Estàs segur que vols esborrar totes les modificacions? Aquesta acció no es pot desfer.')) {
+    localStorage.removeItem('prog_data');
+    location.reload();
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Cargar datos al iniciar
+window.addEventListener('DOMContentLoaded', loadChanges);
+
+// Guardado automático al cambiar contenido
+document.querySelectorAll('[data-key]').forEach(el => {
+  el.addEventListener('blur', () => {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(e => {
+      data[e.getAttribute('data-key')] = e.innerHTML;
+    });
+    localStorage.setItem('prog_data', JSON.stringify(data));
+  });
+});
+</script>
+
+</body>
+</html>
