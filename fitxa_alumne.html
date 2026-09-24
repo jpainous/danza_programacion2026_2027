@@ -409,6 +409,7 @@ function logHTML(){
 
 /* ================== RENDER GLOBAL ================== */
 function render(){
+ applyBar();
  var ss=sorted(),s=findSes(me.lastSes),h='';
  h+=profileHTML();
  h+=selectorHTML();
@@ -634,6 +635,18 @@ function safeName(s){return String(s||'alumne').replace(/[^a-zA-Z0-9_-]+/g,'-').
 };
 
 /* ================== INICI ================== */
+/* Omple els textos de la barra superior (botons i titol) */
+function applyBar(){
+ $('t1').textContent=t('t1');
+ $('t2').textContent=t('t2');
+ $('bSave').textContent=t('bSave');
+ $('bPrint').textContent=t('bPrint');
+ $('bSend').textContent=t('bSend');
+ $('bImpP').textContent=t('bImpP');
+ $('bBak').textContent=t('bBak');
+ $('bClrLog').textContent=t('bClrLog');
+ $('bReset').textContent=t('bReset');
+}
 log('L_OPEN');
 if(window.__memMode){log('L_MEMMODE');}
 save(true);
