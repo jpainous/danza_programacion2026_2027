@@ -3,49 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fitxa de l'alumne · Fisiologia</title>
+<title>Planificador de sessions · Fisiologia</title>
 <style>
-  :root{--pri:#1f5f8b;--pri2:#2a7aab;--crema:#f4f8fa;--tinta:#252a2e;--bord:#d8e2e7;--verd:#2e7d4f;--gris:#6b6570}
+  :root{--pri:#4b2e6f;--pri2:#5f3d8a;--oro:#b8912f;--crema:#faf8fc;--tinta:#2a2530;--gris:#6b6570;
+    --bord:#e0d8ea;--card:#fff;--verd:#2e7d4f;--blau:#1f5f8b;--taronja:#c05621;--vermell:#a52834;--grisc:#7a8288}
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.5}
-  .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
-  .brand{font-family:Georgia,serif;font-weight:bold;font-size:1rem}
-  .brand small{display:block;font-weight:normal;font-size:.7rem;opacity:.85}
-  .lang{display:flex;gap:.25rem;margin-left:auto}
-  .lang button,.tools button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.3rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.8rem}
+  .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .brand{font-family:Georgia,serif;font-size:1rem;font-weight:bold}
+  .brand small{opacity:.85;font-weight:normal;display:block;font-size:.7rem}
+  .lang{display:flex;gap:.25rem}
+  .lang button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.25rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.8rem}
   .lang button.on{background:#fff;color:var(--pri)}
   .tools{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
-  .tools button{border-radius:8px}
+  .tools button,.tools a,.tools select{border:none;border-radius:8px;padding:.4rem .7rem;cursor:pointer;font-weight:600;font-size:.8rem;background:rgba(255,255,255,.92);color:var(--pri);text-decoration:none}
+  .tools .primary{background:var(--oro);color:#fff}
   #savestate{font-size:.72rem;opacity:.9}
   #memwarn{display:none;background:#fff3cd;color:#7a5b00;padding:.5rem 1rem;font-size:.8rem;border-bottom:1px solid #e6d9a2}
-  main{max-width:850px;margin:1.2rem auto;padding:0 1rem}
-  .card{background:#fff;border:1px solid var(--bord);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-  .card h2{margin:0 0 .6rem;color:var(--pri);font-size:1.1rem}
-  .card h2 small{color:var(--gris);font-weight:normal}
-  .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;background:var(--gris);color:#fff;vertical-align:middle;margin-left:.4rem}
-  h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.4px;color:var(--pri2);margin:1rem 0 .3rem}
-  .act{display:flex;gap:.5rem;align-items:baseline;padding:.3rem 0;border-bottom:1px dashed var(--bord)}
-  .act input[type=checkbox]{transform:translateY(2px)}
-  .act.done span{color:var(--gris);text-decoration:line-through}
-  .act .tm{font-variant-numeric:tabular-nums;color:var(--pri2);font-size:.8rem;min-width:105px}
-  ul.plain{list-style:none;margin:.2rem 0;padding:0}
-  ul.plain li{padding:.15rem 0;font-size:.9rem}
-  textarea{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem;font:inherit;font-size:.88rem;background:#fbfdfe;min-height:52px}
-  .fld{display:block;margin:.8rem 0}
-  .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri);margin-bottom:.2rem}
-  .hint{background:#fdf6e7;border-left:4px solid #b8912f;padding:.8rem 1rem;border-radius:0 8px 8px 0;font-size:.9rem}
+  main{max-width:1100px;margin:1.2rem auto;padding:0 1rem}
+  .card{background:var(--card);border:1px solid var(--bord);border-radius:14px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden}
+  .card.nl{background:#f4f4f5}
+  .chead{display:flex;gap:.7rem;align-items:center;padding:.7rem .9rem;cursor:pointer;flex-wrap:wrap}
+  .chead:hover{background:#f7f3fc}
+  .tw{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--pri);width:1.4rem}
+  .cmeta{flex:1;min-width:220px}
+  .cmeta b{color:var(--pri);margin-right:.5rem}
+  .cmeta .topic{font-family:Georgia,serif;font-size:.98rem}
+  .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;vertical-align:middle}
+  .nlb{background:var(--grisc);color:#fff;margin-left:.5rem}
+  .ccounts{font-size:.72rem;color:var(--gris);background:#f4eefb;border-radius:10px;padding:.25rem .6rem}
+  .del{background:none;border:none;cursor:pointer;opacity:.45;font-size:.9rem}
+  .del:hover{opacity:1}
+  .del.ses:hover{color:var(--vermell)}
+  .del.confirm{opacity:1;background:var(--vermell);color:#fff;border-radius:8px;padding:0 .45rem}
+  .sbody{padding:.4rem 1.1rem 1.2rem;border-top:1px dashed var(--bord)}
+  .grid2{display:grid;grid-template-columns:170px 1fr;gap:.8rem;margin:.8rem 0}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri2);margin-bottom:.2rem}
+  input[type=text],input[type=date],textarea,select.st{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;background:#fffdf7}
+  textarea{resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--pri2)}
+  .sect{margin:.9rem 0;border:1px solid var(--bord);border-radius:10px;padding:.7rem .8rem;background:#fdfbf8}
+  .secth{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.4rem}
+  .secth h3{margin:0;font-size:.92rem;color:var(--pri);flex:1;min-width:180px}
+  .chk{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;color:var(--gris);cursor:pointer;white-space:nowrap}
+  .add{background:var(--pri2);color:#fff;border:none;border-radius:8px;padding:.3rem .65rem;font-size:.78rem;font-weight:600;cursor:pointer}
+  .rows{display:flex;flex-direction:column;gap:.35rem}
+  .row{display:grid;grid-template-columns:1fr 130px auto 130px auto;gap:.4rem;align-items:center}
+  .row.mini-row{grid-template-columns:1fr auto auto}
+  @media(max-width:700px){.row,.row.mini-row{grid-template-columns:1fr}.row .time{max-width:150px}}
+  .row.act input[type=text].time{font-variant-numeric:tabular-nums}
+  select.st{font-size:.78rem;padding:.35rem}
+  .hint{font-size:.75rem;color:var(--gris);margin:.3rem 0}
+  .st-plan{border-left:3px solid var(--blau)}
+  .st-done{border-left:3px solid var(--verd)}
+  .st-pause{border-left:3px solid var(--taronja)}
+  .st-drop{border-left:3px solid var(--grisc);opacity:.55}
   #toast{position:fixed;bottom:18px;left:50%;margin-left:-120px;width:240px;text-align:center;background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
   #toast.show{opacity:1}
-  @media print{.topbar,#toast,#errbox,#memwarn{display:none!important}body{background:#fff}.card{border:none;box-shadow:none;page-break-inside:avoid}}
+  @media print{
+    .topbar,#toast,.add,.del,.tw,.chk,.hint,.tools,#errbox,#memwarn{display:none!important}
+    .card{border:none;box-shadow:none;page-break-inside:avoid}
+    .sbody{display:block!important;border-top:1px solid #ccc}
+    input,textarea,select{border:none!important;background:none!important}
+    body{background:#fff}
+  }
 </style>
 </head>
 <body>
 <div id="errbox" style="display:none;background:#a52834;color:#fff;padding:.6rem 1rem;font:12px monospace;position:relative;z-index:100"></div>
-<div id="memwarn">⚠ <b>Mode memòria</b> · Les teves marques i notes no es desaran en tancar. Obre el fitxer directament al navegador (doble clic). · <b>Modo memoria</b>: abre el archivo directamente en el navegador. · <b>Memory mode</b>: open the file directly in a browser.</div>
+<div id="memwarn">⚠ <b>Mode memòria</b> · Els canvis no es desaran en tancar. Obre el fitxer directament al navegador (doble clic) per desar-los. · <b>Modo memoria</b>: abre el archivo directamente en el navegador para guardar. · <b>Memory mode</b>: open the file directly in a browser to save data.</div>
 <script>
 window.onerror=function(m,s,l){var e=document.getElementById('errbox');if(e){e.style.display='block';e.innerHTML='<strong>Error JS (l\u00ednia '+l+'):</strong> '+m;}};
 
-/* Almacenament segur */
+/* Almacenament segur: usa localStorage si es pot; si est\u00e0 bloquejat (sandbox), usa mem\u00f2ria */
 var ST=(function(){
   try{
     localStorage.setItem('__test','1');
@@ -63,11 +94,18 @@ var ST=(function(){
 })();
 </script>
 <header class="topbar">
-  <div class="brand">🩰 <span id="t1"></span><small id="t2"></small></div>
-  <div class="lang" id="langBox"><button type="button" data-lang="ca">CA</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
+  <div class="brand">🗂 <span id="t1"></span><small id="t2"></small></div>
+  <div class="lang" id="langBox">
+    <button type="button" data-lang="ca">CA</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
+  </div>
   <div class="tools">
+    <a id="lnkStu" href="fitxa-alumne.html" target="_blank" rel="noopener"></a>
+    <button type="button" id="bNew"></button>
+    <button type="button" id="bExpStu" class="primary"></button>
+    <button type="button" id="bExp"></button>
     <button type="button" id="bImp"></button>
     <button type="button" id="bPrint"></button>
+    <select id="flt"></select>
     <span id="savestate"></span>
   </div>
 </header>
@@ -77,153 +115,420 @@ var ST=(function(){
 
 <script>
 /* ================== DADES I IDIOMES ================== */
-var KP='fitxa_alumne_prog_v3', KM='fitxa_alumne_me_v3';
+var KEY='planificador_celia_v3';
 
 var I18N={
-ca:{t1:"Fitxa de l'alumne",t2:"Fisiologia aplicada a la dansa · 2026-27",name:"El meu nom",spec:"Especialitat",imp:"📂 Importar programa del professorat",print:"🖨 Imprimir",
-objT:"Objectius",actT:"Activitats",resT:"Recursos online",avT:"Mitjans audiovisuals",compT:"Treball complementari",evT:"Evidències",notes:"Les meves notes",notesPh:"Escriu aquí les teves notes de la sessió (a mà al quadern i aquí si vols)...",
-noData:"<b>Encara no tens cap programa.</b><br>1. Demana el fitxer <i>fitxa-alumne-dades.json</i> al professorat.<br>2. Prem «Importar programa del professorat» i selecciona'l.<br>3. Marca les activitats que facis i escriu les teves notes: es guarden automàticament en aquest navegador.",
-saved:"Desat",impOk:"Programa importat. Les teves marques i notes s'han conservat."},
-es:{t1:"Ficha del alumnado",t2:"Fisiología aplicada a la danza · 2026-27",name:"Mi nombre",spec:"Especialidad",imp:"📂 Importar programa del profesorado",print:"🖨 Imprimir",
-objT:"Objetivos",actT:"Actividades",resT:"Recursos online",avT:"Medios audiovisuales",compT:"Trabajo complementario",evT:"Evidencias",notes:"Mis notas",notesPh:"Escribe aquí tus notas de la sesión (a mano en el cuaderno y aquí si quieres)...",
-noData:"<b>Todavía no tienes ningún programa.</b><br>1. Pide el archivo <i>fitxa-alumne-dades.json</i> al profesorado.<br>2. Pulsa «Importar programa del profesorado» y selecciónalo.<br>3. Marca las actividades que hagas y escribe tus notas: se guardan automáticamente en este navegador.",
-saved:"Guardado",impOk:"Programa importado. Tus marcas y notas se han conservado."},
-en:{t1:"Student sheet",t2:"Physiology Applied to Dance · 2026-27",name:"My name",spec:"Specialisation",imp:"📂 Import teacher's programme",print:"🖨 Print",
-objT:"Objectives",actT:"Activities",resT:"Online resources",avT:"Audiovisual media",compT:"Complementary work",evT:"Evidence",notes:"My notes",notesPh:"Write your session notes here (by hand in your notebook, and here if you wish)...",
-noData:"<b>No programme yet.</b><br>1. Ask your teacher for the file <i>fitxa-alumne-dades.json</i>.<br>2. Press \"Import teacher's programme\" and select it.<br>3. Tick the activities you complete and write your notes: everything saves automatically in this browser.",
-saved:"Saved",impOk:"Programme imported. Your ticks and notes have been kept."}};
-
-var WD={
- ca:['diumenge','dilluns','dimarts','dimecres','dijous','divendres','dissabte'],
- es:['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
- en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']};
-var MO={
- ca:['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'],
- es:['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],
- en:['January','February','March','April','May','June','July','August','September','October','November','December']};
+ca:{t1:"Planificador de sessions · Fisiologia",t2:"Cèlia Painous Martí · Fisiologia aplicada a la dansa · 2026-27",
+openStu:"👩‍🎓 Fitxa de l'alumne",bNew:"＋ Afegeix sessió",bExpStu:"⬇ Exporta per a l'alumnat",bExp:"💾 Exporta còpia",bImp:"📂 Importa còpia",bPrint:"🖨 Imprimeix",
+saved:"Desat",fltAll:"Totes les activitats",stPlan:"Prevista",stDone:"Feta",stPause:"En pausa",stDrop:"Descartada",
+fDate:"Data",fTopic:"Tema de la sessió",objTitle:"Objectius de la sessió",actTitle:"Activitats a desenvolupar",resTitle:"Recursos online (1 per línia)",avTitle:"Mitjans audiovisuals",compTitle:"Treball complementari",evTitle:"Evidències de la sessió",
+visStudent:"👁 Visible per l'alumnat",addAct:"Afegeix activitat",addLine:"Afegeix línia",del:"Esborra",delSes:"Esborra la sessió (2 clics)",
+noLectiva:"No lectiu",noTopic:"(sense títol)",noActs:"Encara no hi ha activitats.",noItems:"Encara no hi ha elements.",
+phAct:"Descripció de l'activitat",phTime:"Horari (ex. 10:00-11:30)",phObj:"Un objectiu per línia o text lliure...",phComp:"Què ha de treballar l'alumnat fora de l'aula...",phEv:"Quadern, registre, producte...",phRes:"Títol + enllaç (https://...)",phAv:"Vídeo, presentació, àudio... (+ enllaç si n'hi ha)",
+cActs:"Activitats",cVis:"visibles",cRes:"Recursos",cLinks:"Enllaços",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+impOk:"Pla importat i substituït.",dlFail:"La descàrrega s'ha bloquejat en aquest entorn. Obre el fitxer directament al navegador.",
+studentNote:"Fitxer per a l'alumnat generat. Envia'l perquè l'importin a la seva Fitxa de l'alumne.",
+filterHint:"Estat: prevista / feta / en pausa / descartada. El filtre superior amaga o mostra les activitats segons l'estat."},
+es:{t1:"Planificador de sesiones · Fisiología",t2:"Cèlia Painous Martí · Fisiología aplicada a la danza · 2026-27",
+openStu:"👩‍🎓 Ficha del alumnado",bNew:"＋ Añadir sesión",bExpStu:"⬇ Exportar para el alumnado",bExp:"💾 Exportar copia",bImp:"📂 Importar copia",bPrint:"🖨 Imprimir",
+saved:"Guardado",fltAll:"Todas las actividades",stPlan:"Prevista",stDone:"Hecha",stPause:"En pausa",stDrop:"Descartada",
+fDate:"Fecha",fTopic:"Tema de la sesión",objTitle:"Objetivos de la sesión",actTitle:"Actividades a desarrollar",resTitle:"Recursos online (1 por línea)",avTitle:"Medios audiovisuales",compTitle:"Trabajo complementario",evTitle:"Evidencias de la sesión",
+visStudent:"👁 Visible para el alumnado",addAct:"Añadir actividad",addLine:"Añadir línea",del:"Borrar",delSes:"Borrar la sesión (2 clics)",
+noLectiva:"No lectivo",noTopic:"(sin título)",noActs:"Todavía no hay actividades.",noItems:"Todavía no hay elementos.",
+phAct:"Descripción de la actividad",phTime:"Horario (ej. 10:00-11:30)",phObj:"Un objetivo por línea o texto libre...",phComp:"Qué debe trabajar el alumnado fuera del aula...",phEv:"Cuaderno, registro, producto...",phRes:"Título + enlace (https://...)",phAv:"Vídeo, presentación, audio... (+ enlace si lo hay)",
+cActs:"Actividades",cVis:"visibles",cRes:"Recursos",cLinks:"Enlaces",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+impOk:"Plan importado y sustituido.",dlFail:"La descarga se ha bloqueado en este entorno. Abre el archivo directamente en el navegador.",
+studentNote:"Archivo para el alumnado generado. Envíalo para que lo importen en su Ficha.",
+filterHint:"Estado: prevista / hecha / en pausa / descartada. El filtro superior oculta o muestra las actividades según el estado."},
+en:{t1:"Session planner · Physiology",t2:"Celia Painous Marti · Physiology Applied to Dance · 2026-27",
+openStu:"👩‍🎓 Student sheet",bNew:"＋ Add session",bExpStu:"⬇ Export for students",bExp:"💾 Export backup",bImp:"📂 Import backup",bPrint:"🖨 Print",
+saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
+fDate:"Date",fTopic:"Session topic",objTitle:"Session objectives",actTitle:"Activities to carry out",resTitle:"Online resources (1 per line)",avTitle:"Audiovisual media",compTitle:"Complementary work",evTitle:"Session evidence",
+visStudent:"👁 Visible to students",addAct:"Add activity",addLine:"Add line",del:"Delete",delSes:"Delete session (2 clicks)",
+noLectiva:"Non-teaching",noTopic:"(untitled)",noActs:"No activities yet.",noItems:"No items yet.",
+phAct:"Activity description",phTime:"Time slot (e.g. 10:00-11:30)",phObj:"One objective per line or free text...",phComp:"What students must work on outside class...",phEv:"Notebook, record, product...",phRes:"Title + link (https://...)",phAv:"Video, slides, audio... (+ link if any)",
+cActs:"Activities",cVis:"visible",cRes:"Resources",cLinks:"Links",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+impOk:"Plan imported and replaced.",dlFail:"Download blocked in this environment. Open the file directly in a browser.",
+studentNote:"Student file generated. Send it so they can import it into their Student Sheet.",
+filterHint:"Status: planned / done / on hold / discarded. The top filter shows or hides activities by status."}};
 
 /* ================== ESTAT ================== */
-var lang=ST.getItem('fa_lang')||'ca';
-var prog=null;
-try{prog=JSON.parse(ST.getItem(KP));}catch(e){prog=null;}
-var me=null;
-try{me=JSON.parse(ST.getItem(KM));}catch(e){me=null;}
-if(!me||typeof me!=='object')me={name:'',spec:'',done:{},notes:{}};
-if(!me.done)me.done={};
-if(!me.notes)me.notes={};
+var lang=ST.getItem(KEY+'L')||'ca';
+var filter='all';
+var EXP={};
+var plan=null;
 var saveTimer=null;
 
 /* ================== UTILITATS ================== */
 function $(id){return document.getElementById(id);}
 function t(k){return (I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;}
+function uid(){return 'x'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);}
 function esc(s){s=(s==null)?'':String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function linkify(s){return esc(s).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
-function fmtLong(iso){
- if(!iso)return '—';
- var p=String(iso).split('-');
- if(p.length<3)return String(iso);
- var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));
- var i=(I18N[lang])?lang:'ca';
- return WD[i][d.getDay()]+' '+p[2]+' '+MO[i][parseInt(p[1],10)-1]+' '+p[0];
+function fmt(iso){if(!iso)return '—';var p=String(iso).split('-');if(p.length<3)return String(iso);return p[2]+'/'+p[1]+'/'+p[0];}
+
+/* ================== MODEL ================== */
+function S(date,topic,nl){return {id:uid(),date:date||'',topic:topic||'',noLectiva:!!nl,objVis:true,obj:'',acts:[],res:[],av:[],compVis:true,comp:'',evVis:true,ev:''};}
+
+function seed(){
+ var a=[
+  ['2026-10-09','Presentació. Homeòstasi i fisiologia cel·lular'],
+  ['2026-10-16','Sistema musculoesquelètic I'],
+  ['2026-10-23','Sistema musculoesquelètic II'],
+  ['2026-10-30','Festiu de lliure disposició CSD',true],
+  ['2026-11-06','Sistema nerviós I'],
+  ['2026-11-13','Preparació i enviament de treballs orals'],
+  ['2026-11-20','Sistema nerviós II / Son'],
+  ['2026-11-27','Presentacions de treballs orals / La sang'],
+  ['2026-12-04','Sistema hormonal'],
+  ['2026-12-11','Nutrició (nutricionista + pràctica)'],
+  ['2026-12-18','Avaluació parcial'],
+  ['2027-01-08','Aparell cardiovascular'],
+  ['2027-01-15','Aparell respiratori'],
+  ['2027-01-22','Examen final']
+ ];
+ var out=[],i;
+ for(i=0;i<a.length;i++)out.push(S(a[i][0],a[i][1],a[i][2]));
+ return {v:3,sessions:out};
 }
+
+function norm(x){
+ var i,a;
+ if(!x.acts)x.acts=[];
+ for(i=0;i<x.acts.length;i++){a=x.acts[i];a.id=a.id||uid();a.txt=a.txt||'';a.time=a.time||'';a.vis=(a.vis!==false);a.st=a.st||'plan';}
+ if(!x.res)x.res=[];
+ for(i=0;i<x.res.length;i++){a=x.res[i];a.id=a.id||uid();a.txt=a.txt||'';a.vis=(a.vis!==false);}
+ if(!x.av)x.av=[];
+ for(i=0;i<x.av.length;i++){a=x.av[i];a.id=a.id||uid();a.txt=a.txt||'';a.vis=(a.vis!==false);}
+ x.objVis=(x.objVis!==false);x.compVis=(x.compVis!==false);x.evVis=(x.evVis!==false);
+ if(x.obj==null)x.obj='';if(x.comp==null)x.comp='';if(x.ev==null)x.ev='';
+ return x;
+}
+
+function loadPlan(){
+ var d=null,i;
+ try{d=JSON.parse(ST.getItem(KEY));}catch(e){d=null;}
+ if(d&&d.sessions&&d.sessions.length){for(i=0;i<d.sessions.length;i++)norm(d.sessions[i]);return d;}
+ return seed();
+}
+
 function save(){
- try{ST.setItem(KM,JSON.stringify(me));}catch(e){}
+ try{ST.setItem(KEY,JSON.stringify(plan));}catch(e){}
  var el=$('savestate');
  if(el)el.textContent=t('saved')+' · '+new Date().toLocaleTimeString();
 }
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(save,500);}
 window.onbeforeunload=save;
+
 function toast(m){var x=$('toast');x.textContent=m;x.className='show';clearTimeout(x._t);x._t=setTimeout(function(){x.className='';},3000);}
 
-/* ================== RENDER ================== */
-function sec(title,body){return '<h3>'+title+'</h3>'+body;}
-function ptext(s){return '<p style="white-space:pre-wrap;font-size:.9rem">'+esc(s)+'</p>';}
-function lst(arr){
- if(!arr||!arr.length)return '';
- var s='<ul class="plain">',n;
- for(n=0;n<arr.length;n++)s+='<li>'+linkify(arr[n].txt)+'</li>';
- return s+'</ul>';
+/* ================== RECOMPTES ================== */
+function counts(x){
+ var c={at:x.acts.length,av:0,rt:x.res.length,rv:0,vt:x.av.length,vv:0,links:0,
+  comp:(x.comp&&x.comp.replace(/\s/g,''))?1:0,ev:(x.ev&&x.ev.replace(/\s/g,''))?1:0};
+ var i;
+ for(i=0;i<x.acts.length;i++)if(x.acts[i].vis)c.av++;
+ for(i=0;i<x.res.length;i++)if(x.res[i].vis)c.rv++;
+ for(i=0;i<x.av.length;i++)if(x.av[i].vis)c.vv++;
+ for(i=0;i<x.res.length;i++)if(/https?:\/\//i.test(x.res[i].txt))c.links++;
+ for(i=0;i<x.av.length;i++)if(/https?:\/\//i.test(x.av[i].txt))c.links++;
+ return c;
 }
-function sessHTML(x){
- var h,i,a,k,on,acts='';
- if(x.noLectiva){
-  return '<section class="card"><h2>'+fmtLong(x.date)+' <small>'+esc(x.topic||'')+'</small><span class="badge">—</span></h2></section>';
- }
- for(i=0;i<(x.acts||[]).length;i++){
-  a=x.acts[i];
-  k=(x.date||'')+'||'+(a.txt||('a'+i));
-  on=!!me.done[k];
-  acts+='<div class="act'+(on?' done':'')+'" data-k="'+esc(k)+'">'
-   +'<input type="checkbox"'+(on?' checked':'')+'>'
-   +'<span class="tm">'+esc(a.time||'')+'</span>'
-   +'<span>'+esc(a.txt)+'</span></div>';
- }
- h='<section class="card" data-date="'+esc(x.date||'')+'">'
-  +'<h2>'+fmtLong(x.date)+' <small>'+esc(x.topic||'')+'</small></h2>'
-  +(x.obj?sec(t('objT'),ptext(x.obj)):'')
-  +(acts?sec(t('actT'),acts):'')
-  +(x.res&&x.res.length?sec(t('resT'),lst(x.res)):'')
-  +(x.av&&x.av.length?sec(t('avT'),lst(x.av)):'')
-  +(x.comp?sec(t('compT'),ptext(x.comp)):'')
-  +(x.ev?sec(t('evT'),ptext(x.ev)):'')
-  +'<h3>'+t('notes')+'</h3>'
-  +'<textarea data-note="'+esc(x.date||'')+'" placeholder="'+esc(t('notesPh'))+'">'+esc(me.notes[x.date]||'')+'</textarea>'
-  +'</section>';
+function countsHTML(c){
+ return t('cActs')+' '+c.at+' · '+t('cVis')+' '+c.av+' · '+t('cRes')+' '+c.rt+' · '+t('cLinks')+' '+c.links+
+  ' · '+t('cAv')+' '+c.vt+' · '+t('cComp')+' '+(c.comp?'✔':'—')+' · '+t('cEv')+' '+(c.ev?'✔':'—');
+}
+function metaHTML(x){
+ var h='<b>'+fmt(x.date)+'</b><span class="topic">'+(esc(x.topic)||t('noTopic'))+'</span>';
+ if(x.noLectiva)h+='<span class="badge nlb">'+t('noLectiva')+'</span>';
  return h;
 }
-function render(){
- var d=I18N[lang],i,bs;
- $('t1').textContent=d.t1;$('t2').textContent=d.t2;
- $('bImp').textContent=d.imp;$('bPrint').textContent=d.print;
- bs=document.querySelectorAll('#langBox button');
- for(i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute('data-lang')===lang)?'on':'';
- if(window.__memMode)$('memwarn').style.display='block';
- if(!prog||!prog.sessions||!prog.sessions.length){
-  $('main').innerHTML='<div class="hint">'+d.noData+'</div>';
-  return;
- }
- var ss=prog.sessions.slice(0);
- ss.sort(function(a,b){return (a.date||'9999')<(b.date||'9999')?-1:1;});
- var h='<section class="card">'
-  +'<label class="fld"><span>'+d.name+'</span><input type="text" id="meName" value="'+esc(me.name)+'"></label>'
-  +'<label class="fld"><span>'+d.spec+'</span><input type="text" id="meSpec" value="'+esc(me.spec)+'"></label>'
-  +'</section>';
- for(i=0;i<ss.length;i++)h+=sessHTML(ss[i]);
- $('main').innerHTML=h;
+
+/* ================== FILES I BLOCS ================== */
+function actRow(a){
+ return '<div class="row act st-'+a.st+'" data-st="'+a.st+'">'
+ +'<input type="text" data-aid="'+a.id+'" data-k="txt" value="'+esc(a.txt)+'" placeholder="'+esc(t('phAct'))+'">'
+ +'<input type="text" class="time" data-aid="'+a.id+'" data-k="time" value="'+esc(a.time)+'" placeholder="'+esc(t('phTime'))+'">'
+ +'<label class="chk" title="'+esc(t('visStudent'))+'"><input type="checkbox" data-aid="'+a.id+'" data-k="vis"'+(a.vis?' checked':'')+'>👁</label>'
+ +'<select class="st" data-aid="'+a.id+'" data-k="st">'
+ +'<option value="plan"'+(a.st==='plan'?' selected':'')+'>'+t('stPlan')+'</option>'
+ +'<option value="done"'+(a.st==='done'?' selected':'')+'>'+t('stDone')+'</option>'
+ +'<option value="pause"'+(a.st==='pause'?' selected':'')+'>'+t('stPause')+'</option>'
+ +'<option value="drop"'+(a.st==='drop'?' selected':'')+'>'+t('stDrop')+'</option>'
+ +'</select>'
+ +'<button type="button" class="del" data-del-act="'+a.id+'" title="'+esc(t('del'))+'">✕</button>'
+ +'</div>';
+}
+function resRow(r){
+ return '<div class="row mini-row">'
+ +'<input type="text" data-rid="'+r.id+'" data-k="txt" value="'+esc(r.txt)+'" placeholder="'+esc(t('phRes'))+'">'
+ +'<label class="chk"><input type="checkbox" data-rid="'+r.id+'" data-k="vis"'+(r.vis?' checked':'')+'>👁</label>'
+ +'<button type="button" class="del" data-del-res="'+r.id+'" title="'+esc(t('del'))+'">✕</button></div>';
+}
+function avRow(v){
+ return '<div class="row mini-row">'
+ +'<input type="text" data-vid="'+v.id+'" data-k="txt" value="'+esc(v.txt)+'" placeholder="'+esc(t('phAv'))+'">'
+ +'<label class="chk"><input type="checkbox" data-vid="'+v.id+'" data-k="vis"'+(v.vis?' checked':'')+'>👁</label>'
+ +'<button type="button" class="del" data-del-av="'+v.id+'" title="'+esc(t('del'))+'">✕</button></div>';
+}
+function block(title,key,val,inner){
+ return '<div class="sect"><div class="secth"><h3>'+title+'</h3>'
+ +'<label class="chk"><input type="checkbox" data-f="'+key+'"'+(val?' checked':'')+'>'+t('visStudent')+'</label></div>'
+ +inner+'</div>';
 }
 
-/* ================== ESDEVENIMENTS ================== */
-var main=$('main');
-main.addEventListener('input',function(e){
+/* ================== TARGETA DE SESSIÓ ================== */
+function cardHTML(x){
+ var c=counts(x),open=!!EXP[x.id],h;
+ h='<section class="card'+(x.noLectiva?' nl':'')+'" id="c-'+x.id+'" data-sid="'+x.id+'">'
+ +'<div class="chead" data-toggle="'+x.id+'">'
+ +'<button type="button" class="tw" tabindex="-1">'+(open?'▾':'▸')+'</button>'
+ +'<div class="cmeta">'+metaHTML(x)+'</div>'
+ +'<div class="ccounts" id="k-'+x.id+'">'+countsHTML(c)+'</div>'
+ +'<button type="button" class="del ses" data-del-ses="'+x.id+'" title="'+esc(t('delSes'))+'">🗑</button>'
+ +'</div>';
+ if(open){
+  h+='<div class="sbody">'
+  +'<div class="grid2">'
+  +'<label class="fld"><span>'+t('fDate')+'</span><input type="date" data-f="date" value="'+esc(x.date)+'"></label>'
+  +'<label class="fld"><span>'+t('fTopic')+'</span><input type="text" data-f="topic" value="'+esc(x.topic)+'"></label>'
+  +'</div>'
+  +block(t('objTitle'),'objVis',x.objVis,'<textarea rows="3" data-f="obj" placeholder="'+esc(t('phObj'))+'">'+esc(x.obj)+'</textarea>')
+  +'<div class="sect"><div class="secth"><h3>'+t('actTitle')+'</h3><button type="button" class="add" data-add="acts">＋ '+t('addAct')+'</button></div>'
+  +'<div class="rows">'+(x.acts.length?x.acts.map(actRow).join(''):'<p class="hint">'+t('noActs')+'</p>')+'</div>'
+  +'<p class="hint">'+t('filterHint')+'</p></div>'
+  +'<div class="sect"><div class="secth"><h3>'+t('resTitle')+'</h3><button type="button" class="add" data-add="res">＋ '+t('addLine')+'</button></div>'
+  +'<div class="rows">'+(x.res.length?x.res.map(resRow).join(''):'<p class="hint">'+t('noItems')+'</p>')+'</div></div>'
+  +'<div class="sect"><div class="secth"><h3>'+t('avTitle')+'</h3><button type="button" class="add" data-add="av">＋ '+t('addLine')+'</button></div>'
+  +'<div class="rows">'+(x.av.length?x.av.map(avRow).join(''):'<p class="hint">'+t('noItems')+'</p>')+'</div></div>'
+  +block(t('compTitle'),'compVis',x.compVis,'<textarea rows="2" data-f="comp" placeholder="'+esc(t('phComp'))+'">'+esc(x.comp)+'</textarea>')
+  +block(t('evTitle'),'evVis',x.evVis,'<textarea rows="2" data-f="ev" placeholder="'+esc(t('phEv'))+'">'+esc(x.ev)+'</textarea>')
+  +'</div>';
+ }
+ h+='</section>';
+ return h;
+}
+
+/* ================== RENDER ================== */
+function applyRowFilter(row){row.style.display=(filter==='all'||row.getAttribute('data-st')===filter)?'':'none';}
+function updateCounts(x){var k=$('k-'+x.id);if(k)k.textContent=countsHTML(counts(x));}
+
+function render(){
+ var y=window.pageYOffset,h='',i;
+ for(i=0;i<plan.sessions.length;i++)h+=cardHTML(plan.sessions[i]);
+ $('main').innerHTML=h;
+ var rows=document.querySelectorAll('.row.act');
+ for(i=0;i<rows.length;i++)applyRowFilter(rows[i]);
+ try{window.scrollTo(0,y);}catch(e){}
+ applyStatic();
+}
+
+function renderCard(x){
+ var el=$('c-'+x.id);
+ if(el){
+  var d=document.createElement('div');
+  d.innerHTML=cardHTML(x);
+  var neu=d.firstChild;
+  el.parentNode.replaceChild(neu,el);
+  var rows=neu.querySelectorAll('.row.act');
+  for(var i=0;i<rows.length;i++)applyRowFilter(rows[i]);
+ }
+ updateCounts(x);
+}
+
+function applyStatic(){
+ var d=I18N[lang];
+ $('t1').textContent=d.t1;$('t2').textContent=d.t2;
+ $('lnkStu').textContent=d.openStu;$('bNew').textContent=d.bNew;
+ $('bExpStu').textContent=d.bExpStu;$('bExp').textContent=d.bExp;$('bImp').textContent=d.bImp;$('bPrint').textContent=d.bPrint;
+ $('flt').innerHTML='<option value="all">'+d.fltAll+'</option><option value="plan">'+d.stPlan+'</option><option value="done">'+d.stDone+'</option><option value="pause">'+d.stPause+'</option><option value="drop">'+d.stDrop+'</option>';
+ $('flt').value=filter;
+ var bs=document.querySelectorAll('#langBox button');
+ for(var i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute('data-lang')===lang)?'on':'';
+ if(window.__memMode)$('memwarn').style.display='block';
+}
+
+/* ================== EDICIÓ ================== */
+function ancestorWithSid(el){
+ var n=el;
+ while(n&&n!==document.body){
+  if(n.getAttribute&&n.getAttribute('data-sid'))return n;
+  n=n.parentNode;
+ }
+ return null;
+}
+function findSession(cardEl){
+ var sid=cardEl.getAttribute('data-sid');
+ for(var i=0;i<plan.sessions.length;i++)if(plan.sessions[i].id===sid)return plan.sessions[i];
+ return null;
+}
+function removeById(arr,id){var out=[],i;for(i=0;i<arr.length;i++)if(arr[i].id!==id)out.push(arr[i]);return out;}
+
+function onEdit(e){
  var el=e.target;
- if(el.id==='meName'){me.name=el.value;scheduleSave();return;}
- if(el.id==='meSpec'){me.spec=el.value;scheduleSave();return;}
- var nt=el.getAttribute?el.getAttribute('data-note'):null;
- if(nt!==null&&nt!==undefined){me.notes[nt]=el.value;scheduleSave();return;}
-});
-main.addEventListener('change',function(e){
- var el=e.target;
- if(el.type==='checkbox'){
-  var row=el.parentNode;
-  while(row&&!(row.className&&row.className.indexOf('act')>=0))row=row.parentNode;
-  if(row){
-   var k=row.getAttribute('data-k');
-   if(el.checked){me.done[k]=true;row.className='act done';}
-   else{delete me.done[k];row.className='act';}
-   scheduleSave();
+ if(!el.getAttribute)return;
+ var cardEl=ancestorWithSid(el);
+ if(!cardEl)return;
+ var x=findSession(cardEl);
+ if(!x)return;
+ var i,f=el.getAttribute('data-f');
+ if(f!==null&&f!==undefined&&f!==''){
+  if(f==='date'||f==='topic'||f==='obj'||f==='comp'||f==='ev')x[f]=el.value;
+  if(f==='objVis'||f==='compVis'||f==='evVis')x[f]=el.checked;
+  if(f==='date'||f==='topic'){var m=cardEl.querySelector('.cmeta');if(m)m.innerHTML=metaHTML(x);}
+ }else{
+  var aid=el.getAttribute('data-aid'),rid=el.getAttribute('data-rid'),vid=el.getAttribute('data-vid'),k=el.getAttribute('data-k');
+  if(aid){
+   var a=null;
+   for(i=0;i<x.acts.length;i++)if(x.acts[i].id===aid)a=x.acts[i];
+   if(a){
+    if(k==='txt')a.txt=el.value;
+    else if(k==='time')a.time=el.value;
+    else if(k==='vis')a.vis=el.checked;
+    else if(k==='st'){a.st=el.value;var row=el.parentNode;row.setAttribute('data-st',a.st);row.className='row act st-'+a.st;applyRowFilter(row);}
+   }
+  }else if(rid){
+   var r=null;
+   for(i=0;i<x.res.length;i++)if(x.res[i].id===rid)r=x.res[i];
+   if(r){if(k==='txt')r.txt=el.value;else if(k==='vis')r.vis=el.checked;}
+  }else if(vid){
+   var v=null;
+   for(i=0;i<x.av.length;i++)if(x.av[i].id===vid)v=x.av[i];
+   if(v){if(k==='txt')v.txt=el.value;else if(k==='vis')v.vis=el.checked;}
   }
  }
-});
+ updateCounts(x);
+ scheduleSave();
+}
+
+function onClick(e){
+ var el=e.target,node=el;
+ var toggleEl=null,addEl=null,delAct=null,delRes=null,delAv=null,delSes=null;
+ while(node&&node!==document.body){
+  if(node.getAttribute){
+   if(!delSes&&node.getAttribute('data-del-ses'))delSes=node;
+   if(!delAct&&node.getAttribute('data-del-act'))delAct=node;
+   if(!delRes&&node.getAttribute('data-del-res'))delRes=node;
+   if(!delAv&&node.getAttribute('data-del-av'))delAv=node;
+   if(!addEl&&node.getAttribute('data-add'))addEl=node;
+   if(!toggleEl&&node.getAttribute('data-toggle'))toggleEl=node;
+  }
+  node=node.parentNode;
+ }
+ if(delSes){
+  /* confirmació en 2 clics (sense diàlegs, compatible amb sandbox) */
+  if(delSes.className.indexOf('confirm')<0){
+   delSes.className='del ses confirm';
+   delSes.innerHTML='⚠';
+   if(delSes._to)clearTimeout(delSes._to);
+   delSes._to=setTimeout(function(){delSes.className='del ses';delSes.innerHTML='🗑';},3000);
+   return;
+  }
+  if(delSes._to)clearTimeout(delSes._to);
+  var id=delSes.getAttribute('data-del-ses'),out=[];
+  for(var i=0;i<plan.sessions.length;i++)if(plan.sessions[i].id!==id)out.push(plan.sessions[i]);
+  plan.sessions=out;render();scheduleSave();
+  return;
+ }
+ if(delAct||delRes||delAv){
+  var cardEl=ancestorWithSid(el);
+  if(!cardEl)return;
+  var x=findSession(cardEl);
+  if(!x)return;
+  if(delAct)x.acts=removeById(x.acts,delAct.getAttribute('data-del-act'));
+  if(delRes)x.res=removeById(x.res,delRes.getAttribute('data-del-res'));
+  if(delAv)x.av=removeById(x.av,delAv.getAttribute('data-del-av'));
+  renderCard(x);scheduleSave();
+  return;
+ }
+ if(addEl){
+  var cardEl2=ancestorWithSid(el);
+  if(!cardEl2)return;
+  var y=findSession(cardEl2);
+  if(!y)return;
+  var k=addEl.getAttribute('data-add');
+  if(k==='acts')y.acts.push({id:uid(),txt:'',time:'',vis:true,st:'plan'});
+  if(k==='res')y.res.push({id:uid(),txt:'',vis:true});
+  if(k==='av')y.av.push({id:uid(),txt:'',vis:true});
+  renderCard(y);scheduleSave();
+  return;
+ }
+ if(toggleEl){
+  var tid=toggleEl.getAttribute('data-toggle');
+  if(EXP[tid])delete EXP[tid];else EXP[tid]=true;
+  render();
+ }
+}
+
+/* ================== EXPORTACIÓ ================== */
+function download(name,txt){
+ try{
+  var a=document.createElement('a');
+  var blob=new Blob([txt],{type:'application/json'});
+  a.href=URL.createObjectURL(blob);
+  a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){document.body.removeChild(a);},100);
+ }catch(e){toast(t('dlFail'));}
+}
+
+/* ================== CABLEJAT ================== */
+var main=$('main');
+main.addEventListener('input',onEdit);
+main.addEventListener('change',onEdit);
+main.addEventListener('click',onClick);
 
  $('langBox').addEventListener('click',function(e){
  var b=e.target;
  while(b&&b.tagName!=='BUTTON')b=b.parentNode;
  if(!b||!b.getAttribute('data-lang'))return;
  lang=b.getAttribute('data-lang');
- ST.setItem('fa_lang',lang);
+ ST.setItem(KEY+'L',lang);
  render();
 });
- $('bPrint').onclick=function(){window.print();};
+
+ $('flt').onchange=function(e){
+ filter=e.target.value;
+ var rows=document.querySelectorAll('.row.act');
+ for(var i=0;i<rows.length;i++)applyRowFilter(rows[i]);
+};
+
+ $('bNew').onclick=function(){
+ var s=S('','');
+ plan.sessions.push(s);
+ EXP[s.id]=true;
+ render();
+ scheduleSave();
+ var el=$('c-'+s.id);
+ if(el&&el.scrollIntoView)el.scrollIntoView();
+};
+
+ $('bPrint').onclick=function(){
+ for(var i=0;i<plan.sessions.length;i++)EXP[plan.sessions[i].id]=true;
+ render();
+ setTimeout(function(){window.print();},200);
+};
+
+ $('bExp').onclick=function(){download('planificador-copia.json',JSON.stringify(plan));};
+
+ $('bExpStu').onclick=function(){
+ var out={app:'fitxa-alumne',generated:new Date().toISOString(),sessions:[]};
+ var i,j;
+ for(i=0;i<plan.sessions.length;i++){
+  var x=plan.sessions[i];
+  var o={date:x.date,topic:x.topic,noLectiva:x.noLectiva,obj:'',acts:[],res:[],av:[],comp:'',ev:''};
+  if(x.objVis)o.obj=x.obj;
+  for(j=0;j<x.acts.length;j++){var a=x.acts[j];if(a.vis&&a.st!=='drop')o.acts.push({txt:a.txt,time:a.time});}
+  for(j=0;j<x.res.length;j++)if(x.res[j].vis)o.res.push({txt:x.res[j].txt});
+  for(j=0;j<x.av.length;j++)if(x.av[j].vis)o.av.push({txt:x.av[j].txt});
+  if(x.compVis)o.comp=x.comp;
+  if(x.evVis)o.ev=x.ev;
+  out.sessions.push(o);
+ }
+ download('fitxa-alumne-dades.json',JSON.stringify(out));
+ toast(t('studentNote'));
+};
+
  $('bImp').onclick=function(){$('fImp').click();};
  $('fImp').onchange=function(e){
  var f=e.target.files[0];
@@ -233,9 +538,9 @@ main.addEventListener('change',function(e){
   try{
    var j=JSON.parse(ev.target.result);
    if(j&&j.sessions){
-    prog={sessions:j.sessions};
-    ST.setItem(KP,JSON.stringify(prog));
-    render();
+    plan={v:3,sessions:j.sessions};
+    for(var i=0;i<plan.sessions.length;i++)norm(plan.sessions[i]);
+    render();save();
     toast(t('impOk'));
    }else toast('JSON no vàlid');
   }catch(x){toast('JSON no vàlid');}
@@ -245,6 +550,7 @@ main.addEventListener('change',function(e){
 };
 
 /* ================== INICI ================== */
+plan=loadPlan();
 render();
 </script>
 </body>

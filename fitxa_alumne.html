@@ -9,13 +9,15 @@
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.5}
   .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
-  .brand{font-family:Georgia,serif;font-weight:bold;font-size:1rem}.brand small{display:block;font-weight:normal;font-size:.7rem;opacity:.85}
+  .brand{font-family:Georgia,serif;font-weight:bold;font-size:1rem}
+  .brand small{display:block;font-weight:normal;font-size:.7rem;opacity:.85}
   .lang{display:flex;gap:.25rem;margin-left:auto}
   .lang button,.tools button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.3rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.8rem}
   .lang button.on{background:#fff;color:var(--pri)}
   .tools{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
   .tools button{border-radius:8px}
   #savestate{font-size:.72rem;opacity:.9}
+  #memwarn{display:none;background:#fff3cd;color:#7a5b00;padding:.5rem 1rem;font-size:.8rem;border-bottom:1px solid #e6d9a2}
   main{max-width:850px;margin:1.2rem auto;padding:0 1rem}
   .card{background:#fff;border:1px solid var(--bord);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
   .card h2{margin:0 0 .6rem;color:var(--pri);font-size:1.1rem}
@@ -32,102 +34,217 @@
   .fld{display:block;margin:.8rem 0}
   .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri);margin-bottom:.2rem}
   .hint{background:#fdf6e7;border-left:4px solid #b8912f;padding:.8rem 1rem;border-radius:0 8px 8px 0;font-size:.9rem}
-  #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  #toast{position:fixed;bottom:18px;left:50%;margin-left:-120px;width:240px;text-align:center;background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
   #toast.show{opacity:1}
-  @media print{.topbar,#toast{display:none!important}body{background:#fff}.card{border:none;box-shadow:none;page-break-inside:avoid}}
+  @media print{.topbar,#toast,#errbox,#memwarn{display:none!important}body{background:#fff}.card{border:none;box-shadow:none;page-break-inside:avoid}}
 </style>
 </head>
 <body>
+<div id="errbox" style="display:none;background:#a52834;color:#fff;padding:.6rem 1rem;font:12px monospace;position:relative;z-index:100"></div>
+<div id="memwarn">⚠ <b>Mode memòria</b> · Les teves marques i notes no es desaran en tancar. Obre el fitxer directament al navegador (doble clic). · <b>Modo memoria</b>: abre el archivo directamente en el navegador. · <b>Memory mode</b>: open the file directly in a browser.</div>
+<script>
+window.onerror=function(m,s,l){var e=document.getElementById('errbox');if(e){e.style.display='block';e.innerHTML='<strong>Error JS (l\u00ednia '+l+'):</strong> '+m;}};
+
+/* Almacenament segur */
+var ST=(function(){
+  try{
+    localStorage.setItem('__test','1');
+    localStorage.removeItem('__test');
+    return localStorage;
+  }catch(e){
+    var mem={};
+    window.__memMode=true;
+    return {
+      getItem:function(k){return (k in mem)?mem[k]:null;},
+      setItem:function(k,v){mem[k]=String(v);},
+      removeItem:function(k){delete mem[k];}
+    };
+  }
+})();
+</script>
 <header class="topbar">
   <div class="brand">🩰 <span id="t1"></span><small id="t2"></small></div>
-  <div class="lang" id="langBox"><button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button></div>
+  <div class="lang" id="langBox"><button type="button" data-lang="ca">CA</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
   <div class="tools">
-    <button id="bImp"></button><button id="bPrint"></button><span id="savestate"></span>
+    <button type="button" id="bImp"></button>
+    <button type="button" id="bPrint"></button>
+    <span id="savestate"></span>
   </div>
 </header>
 <main id="main"></main>
 <div id="toast"></div>
-<input type="file" id="fImp" accept=".json" hidden>
+<input type="file" id="fImp" accept=".json" style="display:none">
+
 <script>
-const KP='fitxa_alumne_prog_v1', KM='fitxa_alumne_me_v1';
-const I18N={
+/* ================== DADES I IDIOMES ================== */
+var KP='fitxa_alumne_prog_v3', KM='fitxa_alumne_me_v3';
+
+var I18N={
 ca:{t1:"Fitxa de l'alumne",t2:"Fisiologia aplicada a la dansa · 2026-27",name:"El meu nom",spec:"Especialitat",imp:"📂 Importar programa del professorat",print:"🖨 Imprimir",
-objT:"Objectius",actT:"Activitats",resT:"Recursos online",avT:"Mitjans audiovisuals",compT:"Treball complementari",evT:"Evidències",notes:"Les meves notes",notesPh:"Escriu aquí les teves notes de la sessió (a mà al quadern i aquí si vols)…",
+objT:"Objectius",actT:"Activitats",resT:"Recursos online",avT:"Mitjans audiovisuals",compT:"Treball complementari",evT:"Evidències",notes:"Les meves notes",notesPh:"Escriu aquí les teves notes de la sessió (a mà al quadern i aquí si vols)...",
 noData:"<b>Encara no tens cap programa.</b><br>1. Demana el fitxer <i>fitxa-alumne-dades.json</i> al professorat.<br>2. Prem «Importar programa del professorat» i selecciona'l.<br>3. Marca les activitats que facis i escriu les teves notes: es guarden automàticament en aquest navegador.",
 saved:"Desat",impOk:"Programa importat. Les teves marques i notes s'han conservat."},
 es:{t1:"Ficha del alumnado",t2:"Fisiología aplicada a la danza · 2026-27",name:"Mi nombre",spec:"Especialidad",imp:"📂 Importar programa del profesorado",print:"🖨 Imprimir",
-objT:"Objetivos",actT:"Actividades",resT:"Recursos online",avT:"Medios audiovisuales",compT:"Trabajo complementario",evT:"Evidencias",notes:"Mis notas",notesPh:"Escribe aquí tus notas de la sesión (a mano en el cuaderno y aquí si quieres)…",
+objT:"Objetivos",actT:"Actividades",resT:"Recursos online",avT:"Medios audiovisuales",compT:"Trabajo complementario",evT:"Evidencias",notes:"Mis notas",notesPh:"Escribe aquí tus notas de la sesión (a mano en el cuaderno y aquí si quieres)...",
 noData:"<b>Todavía no tienes ningún programa.</b><br>1. Pide el archivo <i>fitxa-alumne-dades.json</i> al profesorado.<br>2. Pulsa «Importar programa del profesorado» y selecciónalo.<br>3. Marca las actividades que hagas y escribe tus notas: se guardan automáticamente en este navegador.",
 saved:"Guardado",impOk:"Programa importado. Tus marcas y notas se han conservado."},
 en:{t1:"Student sheet",t2:"Physiology Applied to Dance · 2026-27",name:"My name",spec:"Specialisation",imp:"📂 Import teacher's programme",print:"🖨 Print",
-objT:"Objectives",actT:"Activities",resT:"Online resources",avT:"Audiovisual media",compT:"Complementary work",evT:"Evidence",notes:"My notes",notesPh:"Write your session notes here (by hand in your notebook, and here if you wish)…",
+objT:"Objectives",actT:"Activities",resT:"Online resources",avT:"Audiovisual media",compT:"Complementary work",evT:"Evidence",notes:"My notes",notesPh:"Write your session notes here (by hand in your notebook, and here if you wish)...",
 noData:"<b>No programme yet.</b><br>1. Ask your teacher for the file <i>fitxa-alumne-dades.json</i>.<br>2. Press \"Import teacher's programme\" and select it.<br>3. Tick the activities you complete and write your notes: everything saves automatically in this browser.",
 saved:"Saved",impOk:"Programme imported. Your ticks and notes have been kept."}};
-let lang=localStorage.getItem('fa_lang')||'ca';
-let prog=null;try{prog=JSON.parse(localStorage.getItem(KP));}catch(e){}
-let me=JSON.parse(localStorage.getItem(KM)||'null')||{name:'',spec:'',done:{},notes:{}};
-const $=s=>document.querySelector(s);
-const t=k=>I18N[lang][k]||k;
-const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-function save(){localStorage.setItem(KM,JSON.stringify(me));$('#savestate').textContent=t('saved')+' · '+new Date().toLocaleTimeString();}
-let tm;function scheduleSave(){clearTimeout(tm);tm=setTimeout(save,500);}
-window.addEventListener('beforeunload',save);
-function toast(m){const x=$('#toast');x.textContent=m;x.classList.add('show');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('show'),2600);}
-function fmt(iso){if(!iso)return'—';try{return new Date(iso+'T12:00:00').toLocaleDateString(lang==='ca'?'ca-ES':lang==='es'?'es-ES':'en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});}catch(e){return iso;}}
-const linkify=s=>esc(s).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
 
-function sec(title,body){return body?`<h3>${title}</h3>${body}`:'';}
-function sessHTML(Sx){
- if(Sx.noLectiva)return `<section class="card"><h2>${fmt(Sx.date)} <small>${esc(Sx.topic)}</small><span class="badge">—</span></h2></section>`;
- const key=(txt)=>Sx.date+'||'+txt;
- const acts=(Sx.acts||[]).map((a,i)=>{
-   const k=key(a.txt||('a'+i)),on=!!me.done[k];
-   return `<div class="act ${on?'done':''}" data-k="${esc(k)}"><input type="checkbox" ${on?'checked':''}><span class="tm">${esc(a.time||'')}</span><span>${esc(a.txt)}</span></div>`;}).join('');
- const lst=(arr)=>`<ul class="plain">${(arr||[]).map(x=>`<li>${linkify(x.txt)}</li>`).join('')}</ul>`;
- const nt=(me.notes[Sx.date]||'');
- return `<section class="card" data-date="${Sx.date}">
-  <h2>${fmt(Sx.date)} <small>${esc(Sx.topic)}</small></h2>
-  ${sec(t('objT'),`<p style="white-space:pre-wrap;font-size:.9rem">${esc(Sx.obj)}</p>`)}
-  ${sec(t('actT'),acts)}
-  ${sec(t('resT'),lst(Sx.res))}${sec(t('avT'),lst(Sx.av))}
-  ${sec(t('compT'),`<p style="white-space:pre-wrap;font-size:.9rem">${esc(Sx.comp)}</p>`)}
-  ${sec(t('evT'),`<p style="white-space:pre-wrap;font-size:.9rem">${esc(Sx.ev)}</p>`)}
-  <h3>${t('notes')}</h3><textarea data-note="${Sx.date||''}" placeholder="${t('notesPh')}">${esc(nt)}</textarea>
- </section>`;
+var WD={
+ ca:['diumenge','dilluns','dimarts','dimecres','dijous','divendres','dissabte'],
+ es:['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
+ en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']};
+var MO={
+ ca:['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'],
+ es:['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],
+ en:['January','February','March','April','May','June','July','August','September','October','November','December']};
+
+/* ================== ESTAT ================== */
+var lang=ST.getItem('fa_lang')||'ca';
+var prog=null;
+try{prog=JSON.parse(ST.getItem(KP));}catch(e){prog=null;}
+var me=null;
+try{me=JSON.parse(ST.getItem(KM));}catch(e){me=null;}
+if(!me||typeof me!=='object')me={name:'',spec:'',done:{},notes:{}};
+if(!me.done)me.done={};
+if(!me.notes)me.notes={};
+var saveTimer=null;
+
+/* ================== UTILITATS ================== */
+function $(id){return document.getElementById(id);}
+function t(k){return (I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;}
+function esc(s){s=(s==null)?'':String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function linkify(s){return esc(s).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
+function fmtLong(iso){
+ if(!iso)return '—';
+ var p=String(iso).split('-');
+ if(p.length<3)return String(iso);
+ var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));
+ var i=(I18N[lang])?lang:'ca';
+ return WD[i][d.getDay()]+' '+p[2]+' '+MO[i][parseInt(p[1],10)-1]+' '+p[0];
+}
+function save(){
+ try{ST.setItem(KM,JSON.stringify(me));}catch(e){}
+ var el=$('savestate');
+ if(el)el.textContent=t('saved')+' · '+new Date().toLocaleTimeString();
+}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(save,500);}
+window.onbeforeunload=save;
+function toast(m){var x=$('toast');x.textContent=m;x.className='show';clearTimeout(x._t);x._t=setTimeout(function(){x.className='';},3000);}
+
+/* ================== RENDER ================== */
+function sec(title,body){return '<h3>'+title+'</h3>'+body;}
+function ptext(s){return '<p style="white-space:pre-wrap;font-size:.9rem">'+esc(s)+'</p>';}
+function lst(arr){
+ if(!arr||!arr.length)return '';
+ var s='<ul class="plain">',n;
+ for(n=0;n<arr.length;n++)s+='<li>'+linkify(arr[n].txt)+'</li>';
+ return s+'</ul>';
+}
+function sessHTML(x){
+ var h,i,a,k,on,acts='';
+ if(x.noLectiva){
+  return '<section class="card"><h2>'+fmtLong(x.date)+' <small>'+esc(x.topic||'')+'</small><span class="badge">—</span></h2></section>';
+ }
+ for(i=0;i<(x.acts||[]).length;i++){
+  a=x.acts[i];
+  k=(x.date||'')+'||'+(a.txt||('a'+i));
+  on=!!me.done[k];
+  acts+='<div class="act'+(on?' done':'')+'" data-k="'+esc(k)+'">'
+   +'<input type="checkbox"'+(on?' checked':'')+'>'
+   +'<span class="tm">'+esc(a.time||'')+'</span>'
+   +'<span>'+esc(a.txt)+'</span></div>';
+ }
+ h='<section class="card" data-date="'+esc(x.date||'')+'">'
+  +'<h2>'+fmtLong(x.date)+' <small>'+esc(x.topic||'')+'</small></h2>'
+  +(x.obj?sec(t('objT'),ptext(x.obj)):'')
+  +(acts?sec(t('actT'),acts):'')
+  +(x.res&&x.res.length?sec(t('resT'),lst(x.res)):'')
+  +(x.av&&x.av.length?sec(t('avT'),lst(x.av)):'')
+  +(x.comp?sec(t('compT'),ptext(x.comp)):'')
+  +(x.ev?sec(t('evT'),ptext(x.ev)):'')
+  +'<h3>'+t('notes')+'</h3>'
+  +'<textarea data-note="'+esc(x.date||'')+'" placeholder="'+esc(t('notesPh'))+'">'+esc(me.notes[x.date]||'')+'</textarea>'
+  +'</section>';
+ return h;
 }
 function render(){
- const d=I18N[lang];
- $('#t1').textContent='🩰 '+d.t1;$('#t2').textContent=d.t2;$('#bImp').textContent=d.imp;$('#bPrint').textContent=d.print;
- document.querySelectorAll('#langBox button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
- if(!prog){$('#main').innerHTML=`<div class="hint">${d.noData}</div>`;return;}
- const ss=[...prog.sessions].sort((a,b)=>(a.date||'9999')<(b.date||'9999')?-1:1);
- $('#main').innerHTML=`
-  <section class="card"><label class="fld"><span>${d.name}</span><input type="text" id="meName" value="${esc(me.name)}"></label>
-  <label class="fld"><span>${d.spec}</span><input type="text" id="meSpec" value="${esc(me.spec)}"></label></section>
-  ${ss.map(sessHTML).join('')}`;
+ var d=I18N[lang],i,bs;
+ $('t1').textContent=d.t1;$('t2').textContent=d.t2;
+ $('bImp').textContent=d.imp;$('bPrint').textContent=d.print;
+ bs=document.querySelectorAll('#langBox button');
+ for(i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute('data-lang')===lang)?'on':'';
+ if(window.__memMode)$('memwarn').style.display='block';
+ if(!prog||!prog.sessions||!prog.sessions.length){
+  $('main').innerHTML='<div class="hint">'+d.noData+'</div>';
+  return;
+ }
+ var ss=prog.sessions.slice(0);
+ ss.sort(function(a,b){return (a.date||'9999')<(b.date||'9999')?-1:1;});
+ var h='<section class="card">'
+  +'<label class="fld"><span>'+d.name+'</span><input type="text" id="meName" value="'+esc(me.name)+'"></label>'
+  +'<label class="fld"><span>'+d.spec+'</span><input type="text" id="meSpec" value="'+esc(me.spec)+'"></label>'
+  +'</section>';
+ for(i=0;i<ss.length;i++)h+=sessHTML(ss[i]);
+ $('main').innerHTML=h;
 }
- $('#main').addEventListener('input',e=>{
- if(e.target.id==='meName'){me.name=e.target.value;scheduleSave();return;}
- if(e.target.id==='meSpec'){me.spec=e.target.value;scheduleSave();return;}
- if(e.target.dataset.note!==undefined){me.notes[e.target.dataset.note]=e.target.value;scheduleSave();return;}
+
+/* ================== ESDEVENIMENTS ================== */
+var main=$('main');
+main.addEventListener('input',function(e){
+ var el=e.target;
+ if(el.id==='meName'){me.name=el.value;scheduleSave();return;}
+ if(el.id==='meSpec'){me.spec=el.value;scheduleSave();return;}
+ var nt=el.getAttribute?el.getAttribute('data-note'):null;
+ if(nt!==null&&nt!==undefined){me.notes[nt]=el.value;scheduleSave();return;}
 });
- $('#main').addEventListener('change',e=>{
- if(e.target.type==='checkbox'&&e.target.closest('.act')){
-   const row=e.target.closest('.act');const k=row.dataset.k;
-   if(e.target.checked)me.done[k]=true;else delete me.done[k];
-   row.classList.toggle('done',e.target.checked);scheduleSave();
+main.addEventListener('change',function(e){
+ var el=e.target;
+ if(el.type==='checkbox'){
+  var row=el.parentNode;
+  while(row&&!(row.className&&row.className.indexOf('act')>=0))row=row.parentNode;
+  if(row){
+   var k=row.getAttribute('data-k');
+   if(el.checked){me.done[k]=true;row.className='act done';}
+   else{delete me.done[k];row.className='act';}
+   scheduleSave();
+  }
  }
 });
- $('#langBox').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;lang=b.dataset.lang;localStorage.setItem('fa_lang',lang);render();});
- $('#bPrint').onclick=()=>window.print();
- $('#bImp').onclick=()=>$('#fImp').click();
- $('#fImp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
- r.onload=ev=>{try{const j=JSON.parse(
-ev.target.result);
-   if(j.sessions){prog={sessions:j.sessions};localStorage.setItem(KP,JSON.stringify(prog));render();toast(t('impOk'));}
-   else toast('JSON no vàlid');
- }catch(x){toast('JSON no vàlid');}};
- r.readAsText(f);e.target.value='';};
+
+ $('langBox').addEventListener('click',function(e){
+ var b=e.target;
+ while(b&&b.tagName!=='BUTTON')b=b.parentNode;
+ if(!b||!b.getAttribute('data-lang'))return;
+ lang=b.getAttribute('data-lang');
+ ST.setItem('fa_lang',lang);
+ render();
+});
+ $('bPrint').onclick=function(){window.print();};
+ $('bImp').onclick=function(){$('fImp').click();};
+ $('fImp').onchange=function(e){
+ var f=e.target.files[0];
+ if(!f)return;
+ var r=new FileReader();
+ r.onload=function(ev){
+  try{
+   var j=JSON.parse(ev.target.result);
+   if(j&&j.sessions){
+    prog={sessions:j.sessions};
+    ST.setItem(KP,JSON.stringify(prog));
+    render();
+    toast(t('impOk'));
+   }else toast('JSON no vàlid');
+  }catch(x){toast('JSON no vàlid');}
+ };
+ r.readAsText(f);
+ e.target.value='';
+};
+
+/* ================== INICI ================== */
 render();
 </script>
 </body>
