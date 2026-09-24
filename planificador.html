@@ -23,7 +23,7 @@
   main{max-width:1100px;margin:1.2rem auto;padding:0 1rem}
   .card{background:var(--card);border:1px solid var(--bord);border-radius:14px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden}
   .card.nl{background:#f4f4f5}
-  .chead{display:flex;gap:.7rem;align-items:center;padding:.7rem .9rem;cursor:pointer;flex-wrap:wrap}
+  .chead{display:flex;gap:.5rem;align-items:center;padding:.7rem .9rem;cursor:pointer;flex-wrap:wrap}
   .chead:hover{background:#f7f3fc}
   .tw{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--pri);width:1.4rem}
   .cmeta{flex:1;min-width:220px}
@@ -32,6 +32,8 @@
   .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;vertical-align:middle}
   .nlb{background:var(--grisc);color:#fff;margin-left:.5rem}
   .ccounts{font-size:.72rem;color:var(--gris);background:#f4eefb;border-radius:10px;padding:.25rem .6rem}
+  .mini{background:none;border:none;cursor:pointer;opacity:.4;font-size:.82rem;padding:0 .15rem;line-height:1}
+  .mini:hover{opacity:1}
   .del{background:none;border:none;cursor:pointer;opacity:.45;font-size:.9rem}
   .del:hover{opacity:1}
   .del.ses:hover{color:var(--vermell)}
@@ -62,7 +64,7 @@
   #toast{position:fixed;bottom:18px;left:50%;margin-left:-120px;width:240px;text-align:center;background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
   #toast.show{opacity:1}
   @media print{
-    .topbar,#toast,.add,.del,.tw,.chk,.hint,.tools,#errbox,#memwarn{display:none!important}
+    .topbar,#toast,.add,.del,.tw,.chk,.hint,.tools,#errbox,#memwarn,.mini{display:none!important}
     .card{border:none;box-shadow:none;page-break-inside:avoid}
     .sbody{display:block!important;border-top:1px solid #ccc}
     input,textarea,select{border:none!important;background:none!important}
@@ -72,11 +74,10 @@
 </head>
 <body>
 <div id="errbox" style="display:none;background:#a52834;color:#fff;padding:.6rem 1rem;font:12px monospace;position:relative;z-index:100"></div>
-<div id="memwarn">⚠ <b>Mode memòria</b> · Els canvis no es desaran en tancar. Obre el fitxer directament al navegador (doble clic) per desar-los. · <b>Modo memoria</b>: abre el archivo directamente en el navegador para guardar. · <b>Memory mode</b>: open the file directly in a browser to save data.</div>
+<div id="memwarn">&#9888; <b>Mode mem&ograve;ria</b> &middot; Obre el fitxer directament al navegador (doble clic) perqu&egrave; els canvis es desin. &middot; <b>Modo memoria</b>: abre el archivo directamente en el navegador. &middot; <b>Memory mode</b>: open the file directly in a browser.</div>
 <script>
-window.onerror=function(m,s,l){var e=document.getElementById('errbox');if(e){e.style.display='block';e.innerHTML='<strong>Error JS (l\u00ednia '+l+'):</strong> '+m;}};
+window.onerror=function(m,s,l){var e=document.getElementById('errbox');if(e){e.style.display='block';e.innerHTML='<strong>Error JS (linia '+l+'):</strong> '+m;}};
 
-/* Almacenament segur: usa localStorage si es pot; si est\u00e0 bloquejat (sandbox), usa mem\u00f2ria */
 var ST=(function(){
   try{
     localStorage.setItem('__test','1');
@@ -94,7 +95,7 @@ var ST=(function(){
 })();
 </script>
 <header class="topbar">
-  <div class="brand">🗂 <span id="t1"></span><small id="t2"></small></div>
+  <div class="brand">&#128652; <span id="t1"></span><small id="t2"></small></div>
   <div class="lang" id="langBox">
     <button type="button" data-lang="ca">CA</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
   </div>
@@ -114,41 +115,44 @@ var ST=(function(){
 <input type="file" id="fImp" accept=".json" style="display:none">
 
 <script>
-/* ================== DADES I IDIOMES ================== */
-var KEY='planificador_celia_v3';
+/* ================== IDIOMES ================== */
+var KEY='planificador_celia_v5';
 
 var I18N={
-ca:{t1:"Planificador de sessions · Fisiologia",t2:"Cèlia Painous Martí · Fisiologia aplicada a la dansa · 2026-27",
-openStu:"👩‍🎓 Fitxa de l'alumne",bNew:"＋ Afegeix sessió",bExpStu:"⬇ Exporta per a l'alumnat",bExp:"💾 Exporta còpia",bImp:"📂 Importa còpia",bPrint:"🖨 Imprimeix",
+ca:{t1:"Planificador de sessions - Fisiologia",t2:"C&egrave;lia Painous Mart&iacute; - Fisiologia aplicada a la dansa - 2026-27",
+openStu:"&#127891; Fitxa de l'alumne",bNew:"+ Afegeix sessi&oacute;",bExpStu:"Exporta per a l'alumnat",bExp:"Exporta c&ograve;pia",bImp:"Importa c&ograve;pia",bPrint:"Imprimeix",
 saved:"Desat",fltAll:"Totes les activitats",stPlan:"Prevista",stDone:"Feta",stPause:"En pausa",stDrop:"Descartada",
-fDate:"Data",fTopic:"Tema de la sessió",objTitle:"Objectius de la sessió",actTitle:"Activitats a desenvolupar",resTitle:"Recursos online (1 per línia)",avTitle:"Mitjans audiovisuals",compTitle:"Treball complementari",evTitle:"Evidències de la sessió",
-visStudent:"👁 Visible per l'alumnat",addAct:"Afegeix activitat",addLine:"Afegeix línia",del:"Esborra",delSes:"Esborra la sessió (2 clics)",
-noLectiva:"No lectiu",noTopic:"(sense títol)",noActs:"Encara no hi ha activitats.",noItems:"Encara no hi ha elements.",
-phAct:"Descripció de l'activitat",phTime:"Horari (ex. 10:00-11:30)",phObj:"Un objectiu per línia o text lliure...",phComp:"Què ha de treballar l'alumnat fora de l'aula...",phEv:"Quadern, registre, producte...",phRes:"Títol + enllaç (https://...)",phAv:"Vídeo, presentació, àudio... (+ enllaç si n'hi ha)",
-cActs:"Activitats",cVis:"visibles",cRes:"Recursos",cLinks:"Enllaços",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
-impOk:"Pla importat i substituït.",dlFail:"La descàrrega s'ha bloquejat en aquest entorn. Obre el fitxer directament al navegador.",
-studentNote:"Fitxer per a l'alumnat generat. Envia'l perquè l'importin a la seva Fitxa de l'alumne.",
+fDate:"Data",fTopic:"Tema de la sessi&oacute;",objTitle:"Objectius de la sessi&oacute;",actTitle:"Activitats a desenvolupar",resTitle:"Recursos online (1 per l&iacute;nia)",avTitle:"Mitjans audiovisuals",compTitle:"Treball complementari",evTitle:"Evid&egrave;ncies de la sessi&oacute;",
+visStudent:"Visible per l'alumnat",addAct:"Afegeix activitat",addLine:"Afegeix l&iacute;nia",del:"Esborra",delSes:"Esborra la sessi&oacute; (2 clics)",
+mvUp:"Mou la sessi&oacute; amunt",mvDown:"Mou la sessi&oacute; avall",dupT:"Duplica la sessi&oacute; com a plantilla",
+noLectiva:"No lectiu",noTopic:"(sense t&iacute;tol)",noActs:"Encara no hi ha activitats.",noItems:"Encara no hi ha elements.",
+phAct:"Descripci&oacute; de l'activitat",phTime:"Horari (ex. 10:00-11:30)",phObj:"Un objectiu per l&iacute;nia o text lliure...",phComp:"Qu&egrave; ha de treballar l'alumnat fora de l'aula...",phEv:"Quadern, registre, producte...",phRes:"T&iacute;tol + enlla&ccedil; (https://...)",phAv:"V&iacute;deo, presentaci&oacute;, &agrave;udio... (+ enlla&ccedil; si n'hi ha)",
+cActs:"Act.",cVis:"vis.",cRes:"Rec.",cLinks:"Enll.",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+impOk:"Pla importat i substitu&iuml;t.",dlFail:"La desc&agrave;rrega s'ha bloquejat en aquest entorn.",
+studentNote:"Fitxer per a l'alumnat generat. Envia'l perqu&egrave; l'importin a la seva Fitxa de l'alumne.",
 filterHint:"Estat: prevista / feta / en pausa / descartada. El filtre superior amaga o mostra les activitats segons l'estat."},
-es:{t1:"Planificador de sesiones · Fisiología",t2:"Cèlia Painous Martí · Fisiología aplicada a la danza · 2026-27",
-openStu:"👩‍🎓 Ficha del alumnado",bNew:"＋ Añadir sesión",bExpStu:"⬇ Exportar para el alumnado",bExp:"💾 Exportar copia",bImp:"📂 Importar copia",bPrint:"🖨 Imprimir",
+es:{t1:"Planificador de sesiones - Fisiologia",t2:"C&egrave;lia Painous Mart&iacute; - Fisiolog&iacute;a aplicada a la danza - 2026-27",
+openStu:"&#127891; Ficha del alumnado",bNew:"+ A&ntilde;adir sesi&oacute;n",bExpStu:"Exportar para el alumnado",bExp:"Exportar copia",bImp:"Importar copia",bPrint:"Imprimir",
 saved:"Guardado",fltAll:"Todas las actividades",stPlan:"Prevista",stDone:"Hecha",stPause:"En pausa",stDrop:"Descartada",
-fDate:"Fecha",fTopic:"Tema de la sesión",objTitle:"Objetivos de la sesión",actTitle:"Actividades a desarrollar",resTitle:"Recursos online (1 por línea)",avTitle:"Medios audiovisuales",compTitle:"Trabajo complementario",evTitle:"Evidencias de la sesión",
-visStudent:"👁 Visible para el alumnado",addAct:"Añadir actividad",addLine:"Añadir línea",del:"Borrar",delSes:"Borrar la sesión (2 clics)",
-noLectiva:"No lectivo",noTopic:"(sin título)",noActs:"Todavía no hay actividades.",noItems:"Todavía no hay elementos.",
-phAct:"Descripción de la actividad",phTime:"Horario (ej. 10:00-11:30)",phObj:"Un objetivo por línea o texto libre...",phComp:"Qué debe trabajar el alumnado fuera del aula...",phEv:"Cuaderno, registro, producto...",phRes:"Título + enlace (https://...)",phAv:"Vídeo, presentación, audio... (+ enlace si lo hay)",
-cActs:"Actividades",cVis:"visibles",cRes:"Recursos",cLinks:"Enlaces",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
-impOk:"Plan importado y sustituido.",dlFail:"La descarga se ha bloqueado en este entorno. Abre el archivo directamente en el navegador.",
-studentNote:"Archivo para el alumnado generado. Envíalo para que lo importen en su Ficha.",
-filterHint:"Estado: prevista / hecha / en pausa / descartada. El filtro superior oculta o muestra las actividades según el estado."},
-en:{t1:"Session planner · Physiology",t2:"Celia Painous Marti · Physiology Applied to Dance · 2026-27",
-openStu:"👩‍🎓 Student sheet",bNew:"＋ Add session",bExpStu:"⬇ Export for students",bExp:"💾 Export backup",bImp:"📂 Import backup",bPrint:"🖨 Print",
+fDate:"Fecha",fTopic:"Tema de la sesi&oacute;n",objTitle:"Objetivos de la sesi&oacute;n",actTitle:"Actividades a desarrollar",resTitle:"Recursos online (1 por l&iacute;nea)",avTitle:"Medios audiovisuales",compTitle:"Trabajo complementario",evTitle:"Evidencias de la sesi&oacute;n",
+visStudent:"Visible para el alumnado",addAct:"A&ntilde;adir actividad",addLine:"A&ntilde;adir l&iacute;nea",del:"Borrar",delSes:"Borrar la sesi&oacute;n (2 clics)",
+mvUp:"Mover la sesi&oacute;n arriba",mvDown:"Mover la sesi&oacute;n abajo",dupT:"Duplicar la sesi&oacute;n como plantilla",
+noLectiva:"No lectivo",noTopic:"(sin t&iacute;tulo)",noActs:"Todav&iacute;a no hay actividades.",noItems:"Todav&iacute;a no hay elementos.",
+phAct:"Descripci&oacute;n de la actividad",phTime:"Horario (ej. 10:00-11:30)",phObj:"Un objetivo por l&iacute;nea o texto libre...",phComp:"Qu&eacute; debe trabajar el alumnado fuera del aula...",phEv:"Cuaderno, registro, producto...",phRes:"T&iacute;tulo + enlace (https://...)",phAv:"V&iacute;deo, presentaci&oacute;n, audio... (+ enlace si lo hay)",
+cActs:"Act.",cVis:"vis.",cRes:"Rec.",cLinks:"Enl.",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+impOk:"Plan importado y sustituido.",dlFail:"La descarga se ha bloqueado en este entorno.",
+studentNote:"Archivo para el alumnado generado. Env&iacute;alo para que lo importen en su Ficha.",
+filterHint:"Estado: prevista / hecha / en pausa / descartada. El filtro superior oculta o muestra las actividades seg&uacute;n el estado."},
+en:{t1:"Session planner - Physiology",t2:"Celia Painous Marti - Physiology Applied to Dance - 2026-27",
+openStu:"&#127891; Student sheet",bNew:"+ Add session",bExpStu:"Export for students",bExp:"Export backup",bImp:"Import backup",bPrint:"Print",
 saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
 fDate:"Date",fTopic:"Session topic",objTitle:"Session objectives",actTitle:"Activities to carry out",resTitle:"Online resources (1 per line)",avTitle:"Audiovisual media",compTitle:"Complementary work",evTitle:"Session evidence",
-visStudent:"👁 Visible to students",addAct:"Add activity",addLine:"Add line",del:"Delete",delSes:"Delete session (2 clicks)",
+visStudent:"Visible to students",addAct:"Add activity",addLine:"Add line",del:"Delete",delSes:"Delete session (2 clicks)",
+mvUp:"Move session up",mvDown:"Move session down",dupT:"Duplicate session as template",
 noLectiva:"Non-teaching",noTopic:"(untitled)",noActs:"No activities yet.",noItems:"No items yet.",
 phAct:"Activity description",phTime:"Time slot (e.g. 10:00-11:30)",phObj:"One objective per line or free text...",phComp:"What students must work on outside class...",phEv:"Notebook, record, product...",phRes:"Title + link (https://...)",phAv:"Video, slides, audio... (+ link if any)",
-cActs:"Activities",cVis:"visible",cRes:"Resources",cLinks:"Links",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
-impOk:"Plan imported and replaced.",dlFail:"Download blocked in this environment. Open the file directly in a browser.",
+cActs:"Act.",cVis:"vis.",cRes:"Res.",cLinks:"Links",cAv:"A/V",cComp:"Compl.",cEv:"Evid.",
+impOk:"Plan imported and replaced.",dlFail:"Download blocked in this environment.",
 studentNote:"Student file generated. Send it so they can import it into their Student Sheet.",
 filterHint:"Status: planned / done / on hold / discarded. The top filter shows or hides activities by status."}};
 
@@ -161,34 +165,91 @@ var saveTimer=null;
 
 /* ================== UTILITATS ================== */
 function $(id){return document.getElementById(id);}
-function t(k){return (I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;}
+function t(k){var s=(I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;
+  var d=document.createElement('div');d.innerHTML=s;return d.textContent;}
 function uid(){return 'x'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);}
 function esc(s){s=(s==null)?'':String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmt(iso){if(!iso)return '—';var p=String(iso).split('-');if(p.length<3)return String(iso);return p[2]+'/'+p[1]+'/'+p[0];}
+function fmt(iso){if(!iso)return '-';var p=String(iso).split('-');if(p.length<3)return String(iso);return p[2]+'/'+p[1]+'/'+p[0];}
 
 /* ================== MODEL ================== */
-function S(date,topic,nl){return {id:uid(),date:date||'',topic:topic||'',noLectiva:!!nl,objVis:true,obj:'',acts:[],res:[],av:[],compVis:true,comp:'',evVis:true,ev:''};}
+function S(date,topic,obj,nl){
+ return {id:uid(),date:date||'',topic:topic||'',noLectiva:!!nl,objVis:true,obj:obj||'',acts:[],res:[],av:[],compVis:true,comp:'',evVis:true,ev:''};
+}
 
+/* Objectius orientatius del pla C: llistes de linies curtes, unides en executar-se */
 function seed(){
  var a=[
-  ['2026-10-09','Presentació. Homeòstasi i fisiologia cel·lular'],
-  ['2026-10-16','Sistema musculoesquelètic I'],
-  ['2026-10-23','Sistema musculoesquelètic II'],
-  ['2026-10-30','Festiu de lliure disposició CSD',true],
-  ['2026-11-06','Sistema nerviós I'],
-  ['2026-11-13','Preparació i enviament de treballs orals'],
-  ['2026-11-20','Sistema nerviós II / Son'],
-  ['2026-11-27','Presentacions de treballs orals / La sang'],
-  ['2026-12-04','Sistema hormonal'],
-  ['2026-12-11','Nutrició (nutricionista + pràctica)'],
-  ['2026-12-18','Avaluació parcial'],
-  ['2027-01-08','Aparell cardiovascular'],
-  ['2027-01-15','Aparell respiratori'],
-  ['2027-01-22','Examen final']
+  ['2026-10-09','Presentacio. Homeostasi i fisiologia cel-lular',[
+    "Presentar l'assignatura, l'avaluacio i l'eix global (l'equip de la companyia).",
+    "Introduir l'homeostasi i el sistema de control (sensors, centre, efectors).",
+    "Introduir les bases de fisiologia cel-lular: membrana, transports i ATP.",
+    "Fer la primera mesura del propi cos i iniciar el Quadern."]],
+  ['2026-10-16','Sistema musculoesqueletic I',[
+    "Descriure l'estructura del muscul esqueletic i el sarcomer.",
+    "Explicar el mecanisme de la contraccio (filaments, Ca2+, ATP).",
+    "Diferenciar tipus de fibres i la unitat motriu.",
+    "Identificar contraccions en moviments basics de dansa."]],
+  ['2026-10-23','Sistema musculoesqueletic II',[
+    "Diferenciar contraccions isometrica, concentrica i excentrica.",
+    "Relacionar cada tipus de contraccio amb moviments dansats.",
+    "Explicar la fatiga muscular i les agulletes (DOMS).",
+    "Introduir la prevencio de lesions des de la fisiologia (CECI 3)."]],
+  ['2026-10-30','Festiu de lliure disposicio CSD',[
+    "Treball autonom orientatiu: lectures i repas del bloc anterior.",
+    "Inici del treball del producte de la SdA."],true],
+  ['2026-11-06','Sistema nervios I',[
+    "Repasar el muscul amb un diagrama de memoria.",
+    "Descriure la neurona i la sinapsi.",
+    "Explicar el control motor (cortex, cerebel, ganglis basals).",
+    "Introduir la memoria motora i l'aprenentatge motor."]],
+  ['2026-11-13','Preparacio i enviament de treballs orals',[
+    "Estructurar una exposicio cientifica: pregunta-evidencia-conclusio.",
+    "Cercar fonts fiables i citar-les correctament.",
+    "Assajar la comunicacio oral adaptada al public.",
+    "Tutoritzar els grups i resoldre dubtes."]],
+  ['2026-11-20','Sistema nervios II / Son',[
+    "Explicar l'equilibri i el sistema vestibular (spotting, vertigen).",
+    "Introduir el sistema autonomic i la resposta de por escenica.",
+    "Relacionar el son amb la consolidacio motora i la recuperacio.",
+    "Proposar estrategies d'higiene del son del ballari."]],
+  ['2026-11-27','Presentacions de treballs orals / La sang',[
+    "Exposar els treballs orals amb coavaluacio entre grups.",
+    "Introduir la composicio de la sang i el transport d'O2.",
+    "Explicar l'anemia ferropenica en ballarins.",
+    "Connectar la sang amb el rendiment aerobic."]],
+  ['2026-12-04','Sistema hormonal',[
+    "Explicar l'eix hipotalam-hipofisi i la retroalimentacio hormonal.",
+    "Relacionar adrenalina i cortisol amb l'estres escenic.",
+    "Introduir insulina/glucago i la regulacio de la glucemia.",
+    "Sensibilitzar sobre RED-S i salut ossia."]],
+  ['2026-12-11','Nutricio (nutricionista + practica)',[
+    "Introduir la demanda energetica de la dansa (sistemes energetics).",
+    "Treballar hidratacio i timing nutricional amb el nutricionista.",
+    "Resoldre els casos reals aportats pels grups.",
+    "Tractar imatge corporal i prevencio de TCA amb llenguatge professional."]],
+  ['2026-12-18','Avaluacio parcial',[
+    "Fer el repas integrador del primer trimestre.",
+    "Administrar la prova escrita parcial.",
+    "Donar retroalimentacio immediata.",
+    "Explicar el repte de Nadal (registre de FC)."]],
+  ['2027-01-08','Aparell cardiovascular',[
+    "Explicar el cor, el cicle cardiac i el gasto cardiac.",
+    "Descriure la resposta de la FC a l'esforc i les zones d'intensitat.",
+    "Interpretar dades propies de FC recollides en classe.",
+    "Integrar les dades als productes de la SdA."]],
+  ['2027-01-15','Aparell respiratori',[
+    "Explicar la mecanica ventilatoria i els volumes pulmonars.",
+    "Relacionar la respiracio amb l'eficiencia i l'estres escenic.",
+    "Tancar la cadena O2: pulmo-sang-cor-muscul.",
+    "Repasar la integracio del curs i preparar el tancament de productes."]],
+  ['2027-01-22','Examen final',[
+    "Administrar la prova escrita final amb pregunta integradora.",
+    "Recollir els productes finals de la SdA.",
+    "Tancar el curs amb una reflexio metacognitiva."]]
  ];
- var out=[],i;
- for(i=0;i<a.length;i++)out.push(S(a[i][0],a[i][1],a[i][2]));
- return {v:3,sessions:out};
+ var out=[],i,topics=['Presentacio. Homeostasi i fisiologia cel-lular','Sistema musculoesqueletic I','Sistema musculoesqueletic II','Festiu de lliure disposicio CSD','Sistema nervios I','Preparacio i enviament de treballs orals','Sistema nervios II / Son','Presentacions de treballs orals / La sang','Sistema hormonal','Nutricio (nutricionista + practica)','Avaluacio parcial','Aparell cardiovascular','Aparell respiratori','Examen final'];
+ for(i=0;i<a.length;i++){a[i][1]=topics[i];out.push(S(a[i][0],a[i][1],(a[i][2]||[]).join('\n'),a[i][3]));}
+ return {v:5,sessions:out};
 }
 
 function norm(x){
@@ -214,7 +275,7 @@ function loadPlan(){
 function save(){
  try{ST.setItem(KEY,JSON.stringify(plan));}catch(e){}
  var el=$('savestate');
- if(el)el.textContent=t('saved')+' · '+new Date().toLocaleTimeString();
+ if(el)el.textContent=t('saved')+' - '+new Date().toLocaleTimeString();
 }
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(save,500);}
 window.onbeforeunload=save;
@@ -234,8 +295,8 @@ function counts(x){
  return c;
 }
 function countsHTML(c){
- return t('cActs')+' '+c.at+' · '+t('cVis')+' '+c.av+' · '+t('cRes')+' '+c.rt+' · '+t('cLinks')+' '+c.links+
-  ' · '+t('cAv')+' '+c.vt+' · '+t('cComp')+' '+(c.comp?'✔':'—')+' · '+t('cEv')+' '+(c.ev?'✔':'—');
+ return t('cActs')+' '+c.at+' / '+t('cVis')+' '+c.av+' | '+t('cRes')+' '+c.rt+' | '+t('cLinks')+' '+c.links+
+  ' | '+t('cAv')+' '+c.vt+' | '+t('cComp')+' '+(c.comp?'si':'-')+' | '+t('cEv')+' '+(c.ev?'si':'-');
 }
 function metaHTML(x){
  var h='<b>'+fmt(x.date)+'</b><span class="topic">'+(esc(x.topic)||t('noTopic'))+'</span>';
@@ -248,43 +309,46 @@ function actRow(a){
  return '<div class="row act st-'+a.st+'" data-st="'+a.st+'">'
  +'<input type="text" data-aid="'+a.id+'" data-k="txt" value="'+esc(a.txt)+'" placeholder="'+esc(t('phAct'))+'">'
  +'<input type="text" class="time" data-aid="'+a.id+'" data-k="time" value="'+esc(a.time)+'" placeholder="'+esc(t('phTime'))+'">'
- +'<label class="chk" title="'+esc(t('visStudent'))+'"><input type="checkbox" data-aid="'+a.id+'" data-k="vis"'+(a.vis?' checked':'')+'>👁</label>'
+ +'<label class="chk" title="'+esc(t('visStudent'))+'"><input type="checkbox" data-aid="'+a.id+'" data-k="vis"'+(a.vis?' checked':'')+'> &#128065;</label>'
  +'<select class="st" data-aid="'+a.id+'" data-k="st">'
- +'<option value="plan"'+(a.st==='plan'?' selected':'')+'>'+t('stPlan')+'</option>'
- +'<option value="done"'+(a.st==='done'?' selected':'')+'>'+t('stDone')+'</option>'
- +'<option value="pause"'+(a.st==='pause'?' selected':'')+'>'+t('stPause')+'</option>'
- +'<option value="drop"'+(a.st==='drop'?' selected':'')+'>'+t('stDrop')+'</option>'
+ +'<option value="plan"'+(a.st==='plan'?' selected':'')+'>'+esc(t('stPlan'))+'</option>'
+ +'<option value="done"'+(a.st==='done'?' selected':'')+'>'+esc(t('stDone'))+'</option>'
+ +'<option value="pause"'+(a.st==='pause'?' selected':'')+'>'+esc(t('stPause'))+'</option>'
+ +'<option value="drop"'+(a.st==='drop'?' selected':'')+'>'+esc(t('stDrop'))+'</option>'
  +'</select>'
- +'<button type="button" class="del" data-del-act="'+a.id+'" title="'+esc(t('del'))+'">✕</button>'
+ +'<button type="button" class="del" data-del-act="'+a.id+'" title="'+esc(t('del'))+'"> &#10005;</button>'
  +'</div>';
 }
 function resRow(r){
  return '<div class="row mini-row">'
  +'<input type="text" data-rid="'+r.id+'" data-k="txt" value="'+esc(r.txt)+'" placeholder="'+esc(t('phRes'))+'">'
- +'<label class="chk"><input type="checkbox" data-rid="'+r.id+'" data-k="vis"'+(r.vis?' checked':'')+'>👁</label>'
- +'<button type="button" class="del" data-del-res="'+r.id+'" title="'+esc(t('del'))+'">✕</button></div>';
+ +'<label class="chk"><input type="checkbox" data-rid="'+r.id+'" data-k="vis"'+(r.vis?' checked':'')+'> &#128065;</label>'
+ +'<button type="button" class="del" data-del-res="'+r.id+'" title="'+esc(t('del'))+'"> &#10005;</button></div>';
 }
 function avRow(v){
  return '<div class="row mini-row">'
  +'<input type="text" data-vid="'+v.id+'" data-k="txt" value="'+esc(v.txt)+'" placeholder="'+esc(t('phAv'))+'">'
- +'<label class="chk"><input type="checkbox" data-vid="'+v.id+'" data-k="vis"'+(v.vis?' checked':'')+'>👁</label>'
- +'<button type="button" class="del" data-del-av="'+v.id+'" title="'+esc(t('del'))+'">✕</button></div>';
+ +'<label class="chk"><input type="checkbox" data-vid="'+v.id+'" data-k="vis"'+(v.vis?' checked':'')+'> &#128065;</label>'
+ +'<button type="button" class="del" data-del-av="'+v.id+'" title="'+esc(t('del'))+'"> &#10005;</button></div>';
 }
 function block(title,key,val,inner){
  return '<div class="sect"><div class="secth"><h3>'+title+'</h3>'
- +'<label class="chk"><input type="checkbox" data-f="'+key+'"'+(val?' checked':'')+'>'+t('visStudent')+'</label></div>'
+ +'<label class="chk"><input type="checkbox" data-f="'+key+'"'+(val?' checked':'')+'>'+esc(t('visStudent'))+'</label></div>'
  +inner+'</div>';
 }
 
-/* ================== TARGETA DE SESSIÓ ================== */
+/* ================== TARGETA DE SESSIO ================== */
 function cardHTML(x){
  var c=counts(x),open=!!EXP[x.id],h;
  h='<section class="card'+(x.noLectiva?' nl':'')+'" id="c-'+x.id+'" data-sid="'+x.id+'">'
  +'<div class="chead" data-toggle="'+x.id+'">'
- +'<button type="button" class="tw" tabindex="-1">'+(open?'▾':'▸')+'</button>'
+ +'<button type="button" class="tw" tabindex="-1">'+(open?'&#9660;':'&#9656;')+'</button>'
  +'<div class="cmeta">'+metaHTML(x)+'</div>'
  +'<div class="ccounts" id="k-'+x.id+'">'+countsHTML(c)+'</div>'
- +'<button type="button" class="del ses" data-del-ses="'+x.id+'" title="'+esc(t('delSes'))+'">🗑</button>'
+ +'<button type="button" class="mini" data-up="'+x.id+'" title="'+esc(t('mvUp'))+'">&#9650;</button>'
+ +'<button type="button" class="mini" data-down="'+x.id+'" title="'+esc(t('mvDown'))+'">&#9660;</button>'
+ +'<button type="button" class="mini" data-dup="'+x.id+'" title="'+esc(t('dupT'))+'">&#10697;</button>'
+ +'<button type="button" class="del ses" data-del-ses="'+x.id+'" title="'+esc(t('delSes'))+'">&#128465;</button>'
  +'</div>';
  if(open){
   h+='<div class="sbody">'
@@ -292,13 +356,13 @@ function cardHTML(x){
   +'<label class="fld"><span>'+t('fDate')+'</span><input type="date" data-f="date" value="'+esc(x.date)+'"></label>'
   +'<label class="fld"><span>'+t('fTopic')+'</span><input type="text" data-f="topic" value="'+esc(x.topic)+'"></label>'
   +'</div>'
-  +block(t('objTitle'),'objVis',x.objVis,'<textarea rows="3" data-f="obj" placeholder="'+esc(t('phObj'))+'">'+esc(x.obj)+'</textarea>')
-  +'<div class="sect"><div class="secth"><h3>'+t('actTitle')+'</h3><button type="button" class="add" data-add="acts">＋ '+t('addAct')+'</button></div>'
+  +block(t('objTitle'),'objVis',x.objVis,'<textarea rows="4" data-f="obj" placeholder="'+esc(t('phObj'))+'">'+esc(x.obj)+'</textarea>')
+  +'<div class="sect"><div class="secth"><h3>'+t('actTitle')+'</h3><button type="button" class="add" data-add="acts">+ '+esc(t('addAct'))+'</button></div>'
   +'<div class="rows">'+(x.acts.length?x.acts.map(actRow).join(''):'<p class="hint">'+t('noActs')+'</p>')+'</div>'
   +'<p class="hint">'+t('filterHint')+'</p></div>'
-  +'<div class="sect"><div class="secth"><h3>'+t('resTitle')+'</h3><button type="button" class="add" data-add="res">＋ '+t('addLine')+'</button></div>'
+  +'<div class="sect"><div class="secth"><h3>'+t('resTitle')+'</h3><button type="button" class="add" data-add="res">+ '+esc(t('addLine'))+'</button></div>'
   +'<div class="rows">'+(x.res.length?x.res.map(resRow).join(''):'<p class="hint">'+t('noItems')+'</p>')+'</div></div>'
-  +'<div class="sect"><div class="secth"><h3>'+t('avTitle')+'</h3><button type="button" class="add" data-add="av">＋ '+t('addLine')+'</button></div>'
+  +'<div class="sect"><div class="secth"><h3>'+t('avTitle')+'</h3><button type="button" class="add" data-add="av">+ '+esc(t('addLine'))+'</button></div>'
   +'<div class="rows">'+(x.av.length?x.av.map(avRow).join(''):'<p class="hint">'+t('noItems')+'</p>')+'</div></div>'
   +block(t('compTitle'),'compVis',x.compVis,'<textarea rows="2" data-f="comp" placeholder="'+esc(t('phComp'))+'">'+esc(x.comp)+'</textarea>')
   +block(t('evTitle'),'evVis',x.evVis,'<textarea rows="2" data-f="ev" placeholder="'+esc(t('phEv'))+'">'+esc(x.ev)+'</textarea>')
@@ -310,7 +374,7 @@ function cardHTML(x){
 
 /* ================== RENDER ================== */
 function applyRowFilter(row){row.style.display=(filter==='all'||row.getAttribute('data-st')===filter)?'':'none';}
-function updateCounts(x){var k=$('k-'+x.id);if(k)k.textContent=countsHTML(counts(x));}
+function updateCounts(x){var k=$('k-'+x.id);if(k)k.innerHTML=countsHTML(counts(x));}
 
 function render(){
  var y=window.pageYOffset,h='',i;
@@ -337,17 +401,17 @@ function renderCard(x){
 
 function applyStatic(){
  var d=I18N[lang];
- $('t1').textContent=d.t1;$('t2').textContent=d.t2;
- $('lnkStu').textContent=d.openStu;$('bNew').textContent=d.bNew;
- $('bExpStu').textContent=d.bExpStu;$('bExp').textContent=d.bExp;$('bImp').textContent=d.bImp;$('bPrint').textContent=d.bPrint;
- $('flt').innerHTML='<option value="all">'+d.fltAll+'</option><option value="plan">'+d.stPlan+'</option><option value="done">'+d.stDone+'</option><option value="pause">'+d.stPause+'</option><option value="drop">'+d.stDrop+'</option>';
+ $('t1').textContent=t('t1');$('t2').textContent=t('t2');
+ $('lnkStu').innerHTML=t('openStu');$('bNew').textContent=t('bNew');
+ $('bExpStu').textContent=t('bExpStu');$('bExp').textContent=t('bExp');$('bImp').textContent=t('bImp');$('bPrint').textContent=t('bPrint');
+ $('flt').innerHTML='<option value="all">'+esc(t('fltAll'))+'</option><option value="plan">'+esc(t('stPlan'))+'</option><option value="done">'+esc(t('stDone'))+'</option><option value="pause">'+esc(t('stPause'))+'</option><option value="drop">'+esc(t('stDrop'))+'</option>';
  $('flt').value=filter;
  var bs=document.querySelectorAll('#langBox button');
  for(var i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute('data-lang')===lang)?'on':'';
  if(window.__memMode)$('memwarn').style.display='block';
 }
 
-/* ================== EDICIÓ ================== */
+/* ================== EDICIO ================== */
 function ancestorWithSid(el){
  var n=el;
  while(n&&n!==document.body){
@@ -362,6 +426,35 @@ function findSession(cardEl){
  return null;
 }
 function removeById(arr,id){var out=[],i;for(i=0;i<arr.length;i++)if(arr[i].id!==id)out.push(arr[i]);return out;}
+function idxOf(id){var i;for(i=0;i<plan.sessions.length;i++)if(plan.sessions[i].id===id)return i;return -1;}
+
+function moveSession(id,dir){
+ var i=idxOf(id);
+ if(i<0)return;
+ var j=i+dir;
+ if(j<0||j>=plan.sessions.length)return;
+ var tmp=plan.sessions[i];plan.sessions[i]=plan.sessions[j];plan.sessions[j]=tmp;
+ render();scheduleSave();
+}
+
+function dupSession(id){
+ var i=idxOf(id);
+ if(i<0)return;
+ var src=plan.sessions[i];
+ var c;
+ try{c=JSON.parse(JSON.stringify(src));}catch(e){return;}
+ c.id=uid();
+ c.topic=(src.topic?src.topic+' ':'')+'(copia)';
+ var j;
+ for(j=0;j<c.acts.length;j++)c.acts[j].id=uid();
+ for(j=0;j<c.res.length;j++)c.res[j].id=uid();
+ for(j=0;j<c.av.length;j++)c.av[j].id=uid();
+ plan.sessions.splice(i+1,0,c);
+ EXP[c.id]=true;
+ render();scheduleSave();
+ var el=$('c-'+c.id);
+ if(el&&el.scrollIntoView)el.scrollIntoView();
+}
 
 function onEdit(e){
  var el=e.target;
@@ -402,7 +495,7 @@ function onEdit(e){
 
 function onClick(e){
  var el=e.target,node=el;
- var toggleEl=null,addEl=null,delAct=null,delRes=null,delAv=null,delSes=null;
+ var toggleEl=null,addEl=null,upEl=null,downEl=null,dupEl=null,delAct=null,delRes=null,delAv=null,delSes=null;
  while(node&&node!==document.body){
   if(node.getAttribute){
    if(!delSes&&node.getAttribute('data-del-ses'))delSes=node;
@@ -410,17 +503,19 @@ function onClick(e){
    if(!delRes&&node.getAttribute('data-del-res'))delRes=node;
    if(!delAv&&node.getAttribute('data-del-av'))delAv=node;
    if(!addEl&&node.getAttribute('data-add'))addEl=node;
+   if(!upEl&&node.getAttribute('data-up'))upEl=node;
+   if(!downEl&&node.getAttribute('data-down'))downEl=node;
+   if(!dupEl&&node.getAttribute('data-dup'))dupEl=node;
    if(!toggleEl&&node.getAttribute('data-toggle'))toggleEl=node;
   }
   node=node.parentNode;
  }
  if(delSes){
-  /* confirmació en 2 clics (sense diàlegs, compatible amb sandbox) */
   if(delSes.className.indexOf('confirm')<0){
    delSes.className='del ses confirm';
-   delSes.innerHTML='⚠';
+   delSes.innerHTML='&#9888;';
    if(delSes._to)clearTimeout(delSes._to);
-   delSes._to=setTimeout(function(){delSes.className='del ses';delSes.innerHTML='🗑';},3000);
+   delSes._to=setTimeout(function(){delSes.className='del ses';delSes.innerHTML='&#128465;';},3000);
    return;
   }
   if(delSes._to)clearTimeout(delSes._to);
@@ -452,6 +547,9 @@ function onClick(e){
   renderCard(y);scheduleSave();
   return;
  }
+ if(upEl){moveSession(upEl.getAttribute('data-up'),-1);return;}
+ if(downEl){moveSession(downEl.getAttribute('data-down'),1);return;}
+ if(dupEl){dupSession(dupEl.getAttribute('data-dup'));return;}
  if(toggleEl){
   var tid=toggleEl.getAttribute('data-toggle');
   if(EXP[tid])delete EXP[tid];else EXP[tid]=true;
@@ -459,7 +557,7 @@ function onClick(e){
  }
 }
 
-/* ================== EXPORTACIÓ ================== */
+/* ================== EXPORTACIO ================== */
 function download(name,txt){
  try{
   var a=document.createElement('a');
@@ -494,7 +592,7 @@ main.addEventListener('click',onClick);
 };
 
  $('bNew').onclick=function(){
- var s=S('','');
+ var s=S('','','');
  plan.sessions.push(s);
  EXP[s.id]=true;
  render();
@@ -538,12 +636,12 @@ main.addEventListener('click',onClick);
   try{
    var j=JSON.parse(ev.target.result);
    if(j&&j.sessions){
-    plan={v:3,sessions:j.sessions};
+    plan={v:5,sessions:j.sessions};
     for(var i=0;i<plan.sessions.length;i++)norm(plan.sessions[i]);
     render();save();
     toast(t('impOk'));
-   }else toast('JSON no vàlid');
-  }catch(x){toast('JSON no vàlid');}
+   }else toast('JSON no valid');
+  }catch(x){toast('JSON no valid');}
  };
  r.readAsText(f);
  e.target.value='';
