@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<title>Taller de redacció — Fisiologia</title>
+<style>
+ *{box-sizing:border-box}
+ body{font-family:Arial,sans-serif;background:#f4f1ee;margin:0;color:#333}
+ header{background:#7a2048;color:#fff;padding:14px 18px;display:flex;
+        justify-content:space-between;align-items:center;flex-wrap:wrap}
+ header h1{font-size:1.15em;margin:0}
+ .llengues button{background:rgba(255,255,255,.2);color:#fff;border:1px solid #fff;
+        border-radius:4px;padding:4px 10px;margin-left:6px;cursor:pointer}
+ .llengues button.actiu{background:#fff;color:#7a2048;font-weight:bold}
+ nav{display:flex;flex-wrap:wrap;background:#5d1836}
+ nav button{flex:1;background:none;border:0;color:#e8d5e0;padding:12px 4px;
+        cursor:pointer;font-size:.88em;min-width:92px}
+ nav button.actiu{background:#f4f1ee;color:#7a2048;font-weight:bold}
+ #barra-prog{height:8px;background:#d8cdd3}
+ #barra-prog>div{height:100%;background:#2e7d32;width:0%;transition:width .4s}
+ section{display:none;max-width:880px;margin:18px auto;padding:0 14px}
+ section.vis{display:block}
+ .targeta{background:#fff;border-radius:10px;padding:20px;margin-bottom:16px;
+        box-shadow:0 2px 6px rgba(0,0,0,.1)}
+ h2{color:#7a2048;margin-top:0}
+ label{display:block;margin:12px 0 4px;font-weight:bold;font-size:.92em}
+ input,select,textarea{width:100%;padding:9px;border:1px solid #ccc;
+        border-radius:6px;font-size:1em;font-family:inherit}
+ textarea{min-height:110px;resize:vertical}
+ .fila{display:flex;gap:14px;flex-wrap:wrap}.fila>div{flex:1;min-width:180px}
+ button.accio{background:#7a2048;color:#fff;border:0;padding:10px 18px;
+        border-radius:6px;cursor:pointer;font-size:.95em;margin:8px 6px 0 0}
+ button.accio.sec{background:#888}
+ .resum{background:#efe7ec;border-radius:8px;padding:12px 16px;font-size:.95em}
+ .resum b{color:#7a2048}
+ .fitxa-tip{background:#eef4ee;border-left:5px solid #2e7d32;border-radius:8px;
+        padding:12px 14px;font-size:.95em;margin-top:10px}
+ .bloc-plant{border:1px solid #ddd;border-radius:8px;padding:14px;margin-top:12px;
+        background:#fbfaf9}
+ .bloc-plant h3{margin:0 0 4px;color:#7a2048;font-size:1em}
+ .bloc-plant .ajuda{font-size:.88em;color:#555;margin-bottom:6px}
+ .pc{font-weight:normal;color:#888;font-size:.85em;margin-left:6px}
+ .conn{background:#fff8e1;border-radius:6px;padding:8px 12px;font-size:.9em;margin-top:10px}
+ .check{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+        border-bottom:1px dotted #ddd}
+ .check input{width:auto;margin-top:3px}
+ .vocab-item{display:flex;gap:8px;align-items:baseline;padding:5px 0;
+        border-bottom:1px dotted #ddd;font-size:.95em}
+ .vocab-item input{width:auto}
+ .vocab-item.usat{color:#2e7d32;font-weight:bold}
+ details.detalls{background:#f5eff3;border-radius:8px;padding:10px 14px;margin-top:10px;
+        font-size:.92em}
+ details.detalls summary{cursor:pointer;font-weight:bold;color:#7a2048}
+ details.detalls ul{margin:8px 0 2px;padding-left:20px}
+ details.detalls li{margin:4px 0}
+ .prog-txt{font-size:.9em;color:#555;margin-top:4px}
+ .guardat{color:#2e7d32;font-size:.85em;font-weight:bold;margin-left:8px}
+ .criteris td{padding:4px 10px;border-bottom:1px solid #eee}
+ .nota{font-size:.88em;color:#555}
+ .gran{background:#fff8e1;border:1px solid #e0a800;border-radius:8px;
+        padding:12px 16px;font-size:.92em;margin-top:14px}
+ .enllac-web{display:inline-block;background:#2e7d32;color:#fff;text-decoration:none;
+        padding:10px 18px;border-radius:6px;margin:8px 0 0;font-weight:bold}
+ .enllac-web:hover{background:#1b5e20}
+ #js-error{display:none;background:#b71c1c;color:#fff;padding:8px;
+        text-align:center;font-size:.9em}
+ .pas{display:inline-block;background:#7a2048;color:#fff;border-radius:50%;
+        width:22px;height:22px;text-align:center;line-height:22px;
+        font-size:.8em;margin-right:6px}
+</style>
+</head>
+<body>
+
+<header>
+ <div><h1 data-i18n="titol">Taller de redacció · Fisiologia i dansa</h1>
+ <small data-i18n="subtitol">Escriu la teva redacció pas a pas</small></div>
+ <div class="llengues">
+  <button type="button" onclick="setLang('ca')" id="btn-ca">CA</button>
+  <button type="button" onclick="setLang('es')" id="btn-es">ES</button>
+  <button type="button" onclick="setLang('en')" id="btn-en">EN</button>
+ </div>
+</header>
+
+<div id="js-error"></div>
+<div id="barra-prog"><div id="prog-fill"></div></div>
+
+<nav>
+ <button type="button" onclick="mostra('inici')" id="nav-inici" data-i18n="nav_inici">Inici</button>
+ <button type="button" onclick="mostra('tema')" id="nav-tema" data-i18n="nav_tema">1 · Tema</button>
+ <button type="button" onclick="mostra('esquema')" id="nav-esquema" data-i18n="nav_esquema">2 · Esquema</button>
+ <button type="button" onclick="mostra('plantilla')" id="nav-plantilla" data-i18n="nav_plantilla">3 · Redacció</button>
+ <button type="button" onclick="mostra('vocab')" id="nav-vocab" data-i18n="nav_vocab">4 · Vocabulari</button>
+ <button type="button" onclick="mostra('checks')" id="nav-checks" data-i18n="nav_checks">5 · Comprovacions</button>
+ <button type="button" onclick="mostra('eines')" id="nav-eines" data-i18n="nav_eines">6 · Eines</button>
+ <button type="button" onclick="mostra('entrega')" id="nav-entrega" data-i18n="nav_entrega">7 · Entrega</button>
+</nav>
+
+<!-- INICI -->
+<section id="inici" class="vis">
+ <div class="targeta">
+  <h2 data-i18n="ini_t">Instruccions comunes</h2>
+  <p><b data-i18n="ini_ext"></b> <span data-i18n="ini_ext_x"></span></p>
+  <p><b data-i18n="ini_for"></b> <span data-i18n="ini_for_x"></span></p>
+  <p><b data-i18n="ini_reg"></b> <span data-i18n="ini_reg_x"></span></p>
+  <table class="criteris"><caption style="text-align:left;font-weight:bold;padding:6px 0" data-i18n="ini_ava"></caption>
+   <tr><td>40%</td><td data-i18n="ini_c1"></td></tr>
+   <tr><td>25%</td><td data-i18n="ini_c2"></td></tr>
+   <tr><td>20%</td><td data-i18n="ini_c3"></td></tr>
+   <tr><td>15%</td><td data-i18n="ini_c4"></td></tr>
+  </table>
+ </div>
+ <div class="targeta">
+  <h2 data-i18n="ini_flux"></h2>
+  <p><span class="pas">1</span><span data-i18n="f1"></span></p>
+  <p><span class="pas">2</span><span data-i18n="f2"></span></p>
+  <p><span class="pas">3</span><span data-i18n="f3"></span></p>
+  <p><span class="pas">4</span><span data-i18n="f4"></span></p>
+  <p><span class="pas">5</span><span data-i18n="f5"></span></p>
+  <p><span class="pas">6</span><span data-i18n="f6"></span></p>
+  <p><span class="pas">7</span><span data-i18n="f7"></span></p>
+ </div>
+ <div class="targeta">
+  <label data-i18n="ini_nom"></label><input id="cfg-nom" placeholder="Cognom, Nom">
+  <button class="accio" onclick="guardaNom()" data-i18n="ini_guardar"></button>
+  <span class="guardat" id="ms-nom"></span>
+ </div>
+ <div class="prog-txt" id="prog-txt-inici"></div>
+</section>
+
+<!-- 1 · TEMA -->
+<section id="tema">
+ <div class="targeta">
+  <h2><span class="pas">1</span><span data-i18n="tem_t"></span></h2>
+  <label data-i18n="tem_tria"></label>
+  <select id="sel-tema"></select>
+  <div class="fitxa-tip" id="fitxa-tema"></div>
+  <label style="font-weight:normal;margin-top:14px">
+   <input type="checkbox" id="cfg-pistes" checked style="width:auto">
+   <span data-i18n="tem_pistes"></span></label>
+ </div>
+</section>
+
+<!-- 2 · ESQUEMA -->
+<section id="esquema">
+ <div class="targeta">
+  <h2><span class="pas">2</span><span data-i18n="esq_t"></span></h2>
+  <p data-i18n="esq_x"></p>
+  <details class="detalls"><summary id="pistes-summary"></summary>
+   <ul id="llista-pistes"></ul></details>
+  <label data-i18n="esq_label"></label>
+  <textarea id="txt-esquema" rows="9"></textarea>
+  <span class="pc" id="pc-esquema"></span>
+  <span class="guardat" id="ms-esquema"></span>
+  <div class="conn"><b data-i18n="esq_guia_t"></b>
+   <ol><li data-i18n="esq_g1"></li><li data-i18n="esq_g2"></li>
+   <li data-i18n="esq_g3"></li><li data-i18n="esq_g4"></li></ol>
+  </div>
+ </div>
+</section>
+
+<!-- 3 · REDACCIÓ -->
+<section id="plantilla">
+ <div class="targeta">
+  <h2><span class="pas">3</span><span data-i18n="pl_t"></span></h2>
+  <div class="resum" id="pl-resum"></div>
+  <label data-i18n="pl_titol"></label><input id="txt-titol">
+  <span class="guardat" id="ms-titol"></span>
+  <div id="blocs"></div>
+  <span class="guardat" id="ms-plantilla"></span>
+  <div class="conn" id="pl-connectors"></div>
+  <p class="prog-txt" id="pl-total"></p>
+ </div>
+</section>
+
+<!-- 4 · VOCABULARI -->
+<section id="vocab">
+ <div class="targeta">
+  <h2><span class="pas">4</span><span data-i18n="voc_t"></span></h2>
+  <p data-i18n="voc_x"></p>
+  <button class="accio" onclick="detectaVocab()" data-i18n="voc_det"></button>
+  <span class="prog-txt" id="voc-compte"></span>
+  <div id="llista-vocab" style="margin-top:10px"></div>
+  <label data-i18n="voc_altres"></label><input id="txt-altres">
+  <span class="guardat" id="ms-altres"></span>
+ </div>
+</section>
+
+<!-- 5 · COMPROVACIONS -->
+<section id="checks">
+ <div class="targeta">
+  <h2><span class="pas">5</span><span data-i18n="ck_t"></span></h2>
+  <p data-i18n="ck_x"></p>
+  <div id="llista-checks"></div>
+  <div class="prog-txt" id="ck-compte"></div>
+ </div>
+</section>
+
+<!-- 6 · EINES -->
+<section id="eines">
+ <div class="targeta">
+  <h2><span class="pas">6</span><span data-i18n="ei_t"></span></h2>
+  <p data-i18n="ei_x"></p>
+  <label data-i18n="ei_prog"></label><textarea id="eines-prog" rows="2"></textarea>
+  <label data-i18n="ei_ia"></label><textarea id="eines-ia" rows="2"></textarea>
+  <label data-i18n="ei_ajut"></label><textarea id="eines-ajut" rows="2"></textarea>
+  <label data-i18n="ei_altres"></label><textarea id="eines-altres" rows="2"></textarea>
+  <span class="guardat" id="ms-eines"></span>
+ </div>
+</section>
+
+<!-- 7 · ENTREGA -->
+<section id="entrega">
+ <div class="targeta">
+  <h2><span class="pas">7</span><span data-i18n="en_t"></span></h2>
+  <div class="resum" id="en-resum"></div>
+  <label data-i18n="en_format"></label>
+  <select id="sel-format"></select>
+  <div class="fitxa-tip" id="fitxa-format"></div>
+  <div class="gran" data-i18n="en_rec"></div>
+  <button class="accio" onclick="descarregaTxt()" data-i18n="en_desc"></button>
+  <p class="nota" data-i18n="en_puja" style="margin-top:10px"></p>
+  <label data-i18n="en_web"></label><br>
+  <a class="enllac-web" href="https://ja.cat/dansa_entregar_treballs" target="_blank" rel="noopener">https://ja.cat/dansa_entregar_treballs</a>
+ </div>
+</section>
+
+<script>
+/* ===== emmagatzematge segur ===== */
+const _mem={};
+function sGet(kk){try{return window.localStorage.getItem(kk)}catch(e){return _mem[kk]||null}}
+function sSet(kk,v){try{window.localStorage.setItem(kk,v)}catch(e){_mem[kk]=v}}
+
+/* ===== mapes ===== */
+const TEMES={1:"metafora",2:"argumentativa",3:"explicativa",4:"analogia",
+ 5:"proces",6:"comparativa",7:"analogia",8:"reflexiva",9:"reflexiva",10:"mixta"};
+const FORMATES=["redaccio","web","info","teatre","comic","pod","vid"];
+const CAMPSE=["prog","ia","ajut","altres"];
+
+/* ===== traduccions ===== */
+const I18N={
+ca:{
+titol:"Taller de redacció · Fisiologia i dansa",subtitol:"Escriu la teva redacció pas a pas",
+nav_inici:"Inici",nav_tema:"1 · Tema",nav_esquema:"2 · Esquema",nav_plantilla:"3 · Redacció",
+nav_vocab:"4 · Vocabulari",nav_checks:"5 · Comprovacions",nav_eines:"6 · Eines",nav_entrega:"7 · Entrega",
+ini_t:"Instruccions comunes",ini_ext:"Extensió:",ini_ext_x:"màxim 2 folis escrits a mà (aprox. 400–500 paraules).",
+ini_for:"Format:",ini_for_x:"text continu en paràgrafs (no puntualismes), títol creatiu (no el títol del tema), 4–6 paràgrafs, lletra llegible. S'admet 1 esquema o dibuix senzill integrat.",
+ini_reg:"Registre:",ini_reg_x:"divulgatiu-acadèmic. El vocabulari fisiològic s'ha d'explicar amb paraules pròpies: les definicions copiades es penalitzaran.",
+ini_ava:"Criteris d'avaluació:",ini_c1:"Domini dels continguts",ini_c2:"Estructura i cohesió",
+ini_c3:"Ús correcte del vocabulari",ini_c4:"Originalitat de l'enfocament",
+ini_flux:"El procés, pas a pas",f1:"Tria el tema i llegeix la fitxa (tipologia i enfocament).",
+f2:"Esquematitza el procés abans d'escriure: què diràs a cada bloc.",
+f3:"Escriu la redacció omplint la plantilla de la teva tipologia textual.",
+f4:"Marca el vocabulari fisiològic que vas usant (hi ha detecció automàtica).",
+f5:"Repàs final amb les comprovacions generals i específiques del tema.",
+f6:"Declara les eines utilitzades, tria el format de sortida i descarrega el treball.",
+f7:"Entrega: puja el fitxer a la web d'entregues del taller.",
+ini_nom:"El teu nom (Cognom, Nom) — apareixerà al fitxer descarregat",
+ini_guardar:"Guardar el nom",
+tem_t:"Escull el tema",tem_tria:"Tema de la redacció",
+tem_pistes:"Mostrar pistes del professorat (desmarca per al mode examen)",
+tip_nom:"Tipologia textual:",tip_enf:"Enfocament:",tip_con:"Consell:",
+esq_t:"Esquema del procés (abans d'escriure!)",
+esq_x:"El treball previ obligatori: organitza el que diràs a cada bloc de la plantilla. No escriguis encara paràgrafs complets: punts, fletxes, paraules clau.",
+esq_label:"El meu esquema:",
+esq_guia_t:"Guia ràpida:",esq_g1:"Què diré a cada bloc de la plantilla?",
+esq_g2:"Quins exemples o escenes usaré?",esq_g3:"Quins termes del vocabulari entraran a cada bloc?",
+esq_g4:"Quin títol creatiu posaré al treball?",
+pistas:"Pistes per a aquest tema",
+pl_t:"Redacció per blocs",pl_titol:"Títol creatiu del treball (no el títol del tema!)",
+pl_total:"Total redacció: {n} paraules (objectiu 400–500)",
+connectors:"Connectors recomanats per a aquesta tipologia:",
+voc_t:"Vocabulari fisiològic del tema",voc_x:"Marca cada terme quan l'hagis usat a la redacció (explicat amb les teves paraules). El botó el detecta automàticament al text.",
+voc_det:"Detecta al text",voc_compte:"Usats: {u} de {t}",voc_altres:"Altres termes que has afegit:",
+ck_t:"Comprovacions finals",ck_x:"Marca-ho quan ho tinguis comprovat a la redacció.",
+ck_compte:"Completades: {c} de {t}",
+ei_t:"Eines i ajuts utilitzats",
+ei_x:"Declaració de transparència: escriu què has fet servir per elaborar el treball. Usar eines no penalitza, però cal declarar-ho tot.",
+ei_prog:"Programes i apps (internet o ordinador): editor de text, Canva, CapCut, Audacity...",
+ei_ia:"Intel·ligència artificial (quines i per a què): chatbots, correctors, generadors d'imatges...",
+ei_ajut:"Ajut de persones (qui i en què): companyia, família, professorat...",
+ei_altres:"Altres materials (apunts, llibres, vídeos, gravacions...)",
+r_eines:"Eines declarades:",
+en_t:"Format de sortida i entrega",en_format:"Format de presentació triat:",
+en_rec:"Recorda: la redacció és el cor i el format és el vestit. El format adapta el text, no el substitueix: hauràs d'entregar també aquest text escrit.",
+en_desc:"Descarregar el treball (.txt)",
+en_puja:"El fitxer ja surt nomenat (TemaXX_Nom_Redaccio.txt). Puja'l a la web d'entregues:",
+en_web:"Enllaç a la web d'entregues del taller:",
+en_resum_t:"Resum del treball:",
+r_tem:"Tema:",r_tip:"Tipologia:",r_tit:"Títol creatiu:",r_par:"Paraules:",r_voc:"Vocabulari usat:",
+r_ck:"Comprovacions:",r_for:"Format de sortida:",
+fk_redaccio:"Redacció típica (text escrit)",fkx_redaccio:"El producte és la redacció mateixa: text continu amb títol creatiu, 4–6 paràgrafs, 400–500 paraules; escrita a mà o digitalitzada (PDF/foto).",
+fk_web:"Pàgina web",fk_info:"Organigrama / Infografia",fk_teatre:"Obra de teatre / escena",
+fk_comic:"Còmic",fk_pod:"Pòdcast",fk_vid:"Vídeo",
+fkx_web:"El text es divideix en 4–6 seccions navegables amb glossari i fonts.",
+fkx_info:"El text es condensa en blocs visuals: jerarquia, icones i 1 diagrama central.",
+fkx_teatre:"El text es converteix en diàlegs entre 2–5 personatges; guió escrit entregat.",
+fkx_comic:"El text es narra en 8–12 vinyetes amb glossari al peu.",
+fkx_pod:"El text es llegeix/interpreta en àudio amb sintonia i 3 blocs.",
+fkx_vid:"El text es converteix en guió audiovisual: veu en off, imatges i moviment.",
+guardat:"Guardat",paraules:"paraules",
+t_1:"El cos com a escenari: anatomia i fisiologia",t_2:"Convèncer un company escèptic: per a què serveix la fisiologia?",
+t_3:"Equilibri interior: la homeòstasi mentre balles",t_4:"De la cèl·lula a l'obra mestra",
+t_5:"El viatge d'una ordre: del nervi a la planta del peu",t_6:"Concèntrica, isomètrica i excèntrica",
+t_7:"Cap múscul balla sol: l'equip invisible del moviment",t_8:"L'os no és una pedra",
+t_9:"El sisè sentit del ballarí: la propiocepció",t_10:"Quan el cos demana pausa",
+foc_1:"Explica què és anatomia i què és fisiologia desenvolupant la metàfora de classe: l'escenari i la coreografia. Pregunta clau: per què no poden existir l'una sense l'altra?",
+foc_2:"Un company talentós diu «jo ja balla, no necessito teoria». Convence'l amb arguments: rendiment i resiliència.",
+foc_3:"Explica com el cos manté constant el medi intern tot i que la dansa el desestabilitza. Idea força: l'esforç el trenca; el repòs el restaura.",
+foc_4:"Explica els nivells d'organització del cos A TRAVÉS de l'analogia: la cèl·lula és el pas bàsic, el teixit la frase, l'òrgan la variació, el sistema la gran obra.",
+foc_5:"Relata el recorregut d'una ordre de moviment, del nervi a la contracció, com un viatge per etapes en mil·lisegons.",
+foc_6:"Analitza un gest dansat fase a fase (relevé o grand jeté) i mostra que cada fase demana una contracció diferent.",
+foc_7:"Presenta la cadena biomecànica com una companyia de dansa: cada component té un rol, i cap no balla sol.",
+foc_8:"Desmunta el mite de l'esquelet rígid: l'os es remodela, s'adapta a la càrrega i pateix si l'hi sobra. Tanca amb el RED-S.",
+foc_9:"Explica com el cos sap on és sense mirar: els tres receptors i la seva integració. Connecta-ho amb la pirueta i el mirall.",
+foc_10:"Comença amb una rampa a mig assaig i explica'n la fisiologia, els factors de risc i la recuperació. Escoltar el cos és competència professional.",
+consell_1:"Evita el diccionari: les definicions han de sortir dels exemples.",
+consell_2:"Primera persona admesa; practica els connectors argumentatius.",
+consell_3:"Es valorarà incloure un esquema senzill del bucle de retroalimentació.",
+consell_4:"Mantén l'analogia durant tot el text; no l'abandonis a mig camí.",
+consell_5:"Connectors de seqüència obligatoris a cada etapa.",
+consell_6:"Estructura comparativa clara: per blocs o alternada.",
+consell_7:"L'analogia ha de tenir sentit a cada component, no ser decorativa.",
+consell_8:"És el tema amb més consciència professional: la reflexió final hi pesa.",
+consell_9:"Mescla descripció objectiva i primera persona a la part final.",
+consell_10:"L'inici narratiu és breu (1 paràgraf); el pes és explicatiu.",
+pist_1:"Mira un ballarí: què veus (estructura) i què no veus (funció)|Anatomia = què és; fisiologia = com funciona|Exemples: el bíceps, el cor (5 L/min), l'equilibri en pirueta|La metàfora: una coreografia sense escenari? Un escenari buit?|Tanca: per què necessites les dues mirades",
+pist_2:"Presenta l'opinió a desmuntar|Argument 1: optimització tècnica (rendiment)|Argument 2: prevenció i recuperació (resiliència)|Argument 3: parlar amb fisios i metges|Contraargument: «aprendre ballant n'hi ha prou» i la rèplica|Valoració personal final",
+pist_3:"El cos com a sistema que es defensa del canvi|El medi intern: LEC i valors de referència (pH, glucosa, temperatura, pressió)|Què trenca l'equilibri quan balles|Retroalimentació negativa: sensor → centre → efector (suor, vasodilatació)|Contrast breu: retroalimentació positiva (part, coagulació)|Pràctica: escalfament, hidratació, tornada a la calma",
+pist_4:"Cap obra es sosté només amb el gran gest|La cèl·lula: 100 bilions, el mitocondri com a central d'ATP|Els 4 teixits amb exemples dansables|El cor i el múscul esquelètic com a òrgans|Un error cel·lular (manca d'ATP) es nota a escala de ball",
+pist_5:"Context: passa en mil·lisegons, milers de vegades per classe|Etapa 1: motoneurona i axó|Etapa 2: unió neuromuscular en 4 passos (acetilcolina)|Etapa 3: el calci com a senyal interior (túbuls T, troponina)|Etapa 4: cicle de la miosina amb ATP|Reflexió: la màquina invisible darrere del gest|Unitat motora: precisió (mà) vs força (quàdriceps)",
+pist_6:"Un sol gest, tres mecanismes|Defineix les 3 contraccions (tensió vs resistència)|Pujada del relevé: concèntrica|Sosteniment: isomètrica|Baixada i aterratge: excèntrica (amortir)|Matisos: depèn del múscul i la fase; l'excèntrica fatiga|Entrenament i prevenció (demi-plié)",
+pist_7:"Mira un salt: qui treballa de veritat?|Els 5 components: múscul (motor), tendó (molla), os (palanca), articulació (càrregues), lligament (guia)|Rols: agonista, antagonista, sinergista, estabilitzador|Coactivació: estabilitat vs rigidesa|El moviment com a treball en equip",
+pist_8:"El mite de la columna rígida|Cèl·lules òssies: osteoblasts, osteoclasts, osteòcits|Cicle: activació → resorció → formació → mineralització (~10 anys)|Càrrega adequada enforteix; sobrecàrrega fa microdanys|Salut òssia i RED-S: col·lectiu de risc|Reflexió: com cuidaràs els teus ossos",
+pist_9:"Escena: pirueta amb els ulls tancats|Què és la propiocepció i com es diferencia dels altres sentits|Fus muscular (longitud), òrgan de Golgi (tensió), receptors articulars (posició)|Integració nerviosa: ajustos automàtics|Reflexió: mirall vs treball propioceptiu|Conclusió: seguretat i qualitat de moviment",
+pist_10:"Escena breu: una rampa a mig assaig|Què és fisiològicament: hiperexcitabilitat de la motoneurona alfa|Factors: calor, deshidratació, pèrdua de Na⁺, K⁺, Mg²⁺|La fatiga com a senyal homeostàtic|Prevenció: hidratació, electròlits, descans, calma|Escoltar el cos = competència professional",
+voc_1:"anatomia|fisiologia|estructura|funció|cèl·lula|teixit|òrgan|bíceps|contracció|cor|bombeig|equilibri|pirueta",
+voc_2:"rendiment|resiliència|fatiga|recuperació|tècnica|adaptació|prevenció de lesions|entrenament segur|capacitats",
+voc_3:"homeòstasi|medi intern|líquid extracel·lular|pH|glucosa|temperatura|pressió arterial|retroalimentació negativa|sensor|centre d'integració|efector|vasodilatació|sudoració|retroalimentació positiva",
+voc_4:"cèl·lula|teixit|òrgan|sistema|organisme|mitocondri|ATP|epitelial|connectiu|muscular|nerviós|eritròcits|jerarquia",
+voc_5:"motoneurona|axó|unitat motora|unió neuromuscular|acetilcolina|potencial d'acció|calci|túbuls T|troponina|actina|miosina|cicle contràctil|precisió|força",
+voc_6:"concèntrica|isomètrica|excèntrica|tensió|resistència|acurtament|allargament|amortir|propulsió|suspensió|aterratge|fatiga|relevé|grand jeté",
+voc_7:"cadena biomecànica|múscul|tendó|os|articulació|ligament|agonista|antagonista|sinergista|estabilitzador|coactivació|palanca",
+voc_8:"remodelació|osteoblast|osteoclast|osteòcit|resorció|mineralització|càrrega|microdanys|RED-S|salut òssia|càlci",
+voc_9:"propiocepció|fus muscular|òrgan tendinós de Golgi|receptors articulars|mecanorreceptors|integració nerviosa|equilibri|postural|mirall",
+voc_10:"rampa muscular|hiperexcitabilitat|motoneurona alfa|deshidratació|electròlits|sodi|potassi|magnesi|fatiga|recuperació|tornada a la calma|hidratació",
+ck_1:"Les definicions surten dels exemples, no del diccionari|La metàfora escenari/coreografia es manté fins al final",
+ck_2:"S'usa la primera persona|Hi ha contraargument i rèplica|Connectors argumentatius presents",
+ck_3:"Hi ha el bucle sensor → centre → efector|Es menciona la idea: l'esforç trenca, el repòs restaura",
+ck_4:"L'analogia es manté durant tot el text|Els 4 teixits tenen exemples dansables",
+ck_5:"Connectors de seqüència a cada etapa|Es menciona la unitat motora (precisió vs força)",
+ck_6:"Estructura comparativa clara (blocs o alternada)|Connectors comparatius presents",
+ck_7:"Cada component té la seva línia d'analogia|Són els 4 rols musculars + coactivació",
+ck_8:"La reflexió personal ocupa el final|Es menciona el RED-S",
+ck_9:"Els 3 receptors estan explicats|Hi ha part escrita en primera persona",
+ck_10:"L'inici narratiu dura com a màxim 1 paràgraf|Hi ha estratègies de prevenció i recuperació",
+ckg:"Títol creatiu (no el títol del tema)|Text continu en paràgrafs, sense puntualismes|Entre 4 i 6 paràgrafs|Entre 400 i 500 paraules|Vocabulari explicat amb paraules pròpies|Registre divulgatiu-acadèmic|(Opcional) 1 esquema o dibuix senzill integrat",
+tip_metafora_n:"Expositiva amb metàfora",tip_argumentativa_n:"Argumentativa (article d'opinió)",
+tip_explicativa_n:"Expositiva explicativa (causa-efecte)",tip_analogia_n:"Expositiva amb analogia",
+tip_proces_n:"Expositiva de procés",tip_comparativa_n:"Comparativa",
+tip_reflexiva_n:"Expositiva amb reflexió",tip_mixta_n:"Explicativa + argumentativa",
+tip_metafora_c:"com si fos…, és com…, tal com…, de la mateixa manera…",
+tip_argumentativa_c:"en primer lloc, a més, tanmateix, no obstant, per tant, finalment…",
+tip_explicativa_c:"a causa de…, gràcies a…, com a conseqüència…, per tant…, d'aquesta manera…",
+tip_analogia_c:"com si fos…, així com…, de la mateixa manera…, igual que…",
+tip_proces_c:"primer, un cop fet això…, a continuació, després, finalment…",
+tip_comparativa_c:"en canvi, a diferència de…, igual que…, mentre que…, tant… com…",
+tip_reflexiva_c:"personalment, segons el meu punt de vista, m'ha fet veure que…, d'ara endavant…",
+tip_mixta_c:"primer, a més, a causa de…, per això…, en definitiva…",
+tip_metafora_b:"Escena inicial||Mira un ballarí: què veus (estructura) i què no veus (funció).|Definició||Anatomia vs fisiologia: la pregunta «què és?» davant «com funciona?».|Exemples||El bíceps, el cor (5 L/min), l'equilibri en una pirueta.|La metàfora||Desenvolupa escenari i coreografia: què passa si en falta una?|Conclusió||Per què un intèrpret necessita les dues mirades.",
+tip_argumentativa_b:"Introducció||Presenta l'opinió que vols desmuntar.|Argument 1||Optimització tècnica: entendre les capacitats per millorar.|Argument 2||Prevenció de lesions i recuperació (resiliència).|Argument 3||Saber parlar amb fisios i metges: comunicació professional.|Contraargument i rèplica||«Aprenent ballant n'hi ha prou» → els estancaments i les lesions diuen el contrari.|Conclusió||Valoració personal.",
+tip_explicativa_b:"Introducció||El cos com a sistema que es defensa del canvi.|El fenomen||El medi intern: líquid extracel·lular i valors de referència (pH, glucosa, temperatura, pressió).|La causa||Què desestabilitza el medi intern quan balles.|El mecanisme||Retroalimentació negativa: sensor → centre d'integració → efector (suor, vasodilatació).|El contrast||Retroalimentació positiva: quan el cos amplifica (part, coagulació).|Conclusió||Implicacions pràctiques: escalfament, hidratació, tornada a la calma.",
+tip_analogia_b:"Introducció||Cap obra es sosté només amb el gran gest: tot comença al detall.|L'analogia||Presenta la teva analogia i les seves correspondències.|Desenvolupament||Recorre els nivells o components un per un dins de l'analogia.|Correspondències||Fes explícit què correspon a què entre analogia i cos.|Conclusió||Què ens ensenya l'analogia sobre el cos que balla.",
+tip_proces_b:"Introducció||Context temporal: passa en mil·lisegons, milers de vegades per classe.|Etapa 1||La motoneurona espinal i l'axó cap al múscul.|Etapa 2||La unió neuromuscular en 4 passos (arribada del potencial, acetilcolina, receptors, potencial muscular).|Etapa 3||El calci com a senyal interior: túbuls T i troponina.|Etapa 4||El cicle de la miosina i l'ATP: unió, arrossegament, acurtament, desprendiment.|Conclusió||Reflexió sobre la màquina invisible darrere de cada gest.",
+tip_comparativa_b:"Introducció||Un sol gest, tres mecanismes musculars.|Els elements||Defineix les tres contraccions amb tensió vs resistència.|Comparació||Analitza el gest fase a fase (o per blocs): el protagonista de cada fase.|Matisos||Depèn del múscul analitzat i de la fase; l'excèntrica com a frenada i fatiga.|Conclusió||Implicacions d'entrenament i prevenció (aterratges, demi-plié).",
+tip_reflexiva_b:"Introducció||El mite a desmuntar o l'escena inicial (pirueta amb ulls tancats).|Explicació||El fonament científic: cicle ossi o els tres receptors.|Desenvolupament||Adaptació i risc (os) o integració i ajustos (propiocepció).|Reflexió personal||Primera persona: què canviarà en la teva manera de treballar.|Conclusió||Per al teu futur com a intèrpret.",
+tip_mixta_b:"Escena narrativa||Una rampa a mig assaig. Breu: com a màxim 1 paràgraf.|Explicació||Què és fisiològicament una rampa: hiperexcitabilitat de la motoneurona alfa.|Factors||Per què els ballarins hi estan exposats: calor, hores, hidratació, electròlits.|Argumentació||La fatiga com a senyal: escoltar el cos és competència professional.|Conclusió||Prevenció i recuperació: el repòs restaura el medi intern."
+},
+es:{
+titol:"Taller de redacción · Fisiología y danza",subtitol:"Escribe tu redacción paso a paso",
+nav_inici:"Inicio",nav_tema:"1 · Tema",nav_esquema:"2 · Esquema",nav_plantilla:"3 · Redacción",
+nav_vocab:"4 · Vocabulario",nav_checks:"5 · Comprobaciones",nav_eines:"6 · Herramientas",nav_entrega:"7 · Entrega",
+ini_t:"Instrucciones comunes",ini_ext:"Extensión:",ini_ext_x:"máximo 2 folios escritos a mano (aprox. 400–500 palabras).",
+ini_for:"Formato:",ini_for_x:"texto continuo en párrafos (no puntualismos), título creativo (no el título del tema), 4–6 párrafos, letra legible. Se admite 1 esquema o dibujo sencillo integrado.",
+ini_reg:"Registro:",ini_reg_x:"divulgativo-académico. El vocabulario fisiológico debe explicarse con palabras propias: las definiciones copiadas se penalizarán.",
+ini_ava:"Criterios de evaluación:",ini_c1:"Dominio de los contenidos",ini_c2:"Estructura y cohesión",
+ini_c3:"Uso correcto del vocabulario",ini_c4:"Originalidad del enfoque",
+ini_flux:"El proceso, paso a paso",f1:"Elige el tema y lee la ficha (tipología y enfoque).",
+f2:"Esquematiza el proceso antes de escribir: qué dirás en cada bloque.",
+f3:"Escribe la redacción rellenando la plantilla de tu tipología textual.",
+f4:"Marca el vocabulario fisiológico que vayas usando (hay detección automática).",
+f5:"Repaso final con las comprobaciones generales y específicas del tema.",
+f6:"Declara las herramientas utilizadas, elige el formato de salida y descarga el trabajo.",
+f7:"Entrega: sube el archivo a la web de entregas del taller.",
+ini_nom:"Tu nombre (Apellido, Nombre) — aparecerá en el archivo descargado",
+ini_guardar:"Guardar el nombre",
+tem_t:"Elige el tema",tem_tria:"Tema de la redacción",
+tem_pistes:"Mostrar pistas del profesorado (desmarca para el modo examen)",
+tip_nom:"Tipología textual:",tip_enf:"Enfoque:",tip_con:"Consejo:",
+esq_t:"Esquema del proceso (¡antes de escribir!)",
+esq_x:"El trabajo previo obligatorio: organiza lo que dirás en cada bloque de la plantilla. No escribas aún párrafos completos: puntos, flechas, palabras clave.",
+esq_label:"Mi esquema:",
+esq_guia_t:"Guía rápida:",esq_g1:"¿Qué diré en cada bloque de la plantilla?",
+esq_g2:"¿Qué ejemplos o escenas usaré?",esq_g3:"¿Qué términos del vocabulario entrarán en cada bloque?",
+esq_g4:"¿Qué título creativo pondré al trabajo?",
+pistas:"Pistas para este tema",
+pl_t:"Redacción por bloques",pl_titol:"Título creativo del trabajo (¡no el título del tema!)",
+pl_total:"Total redacción: {n} palabras (objetivo 400–500)",
+connectors:"Conectores recomendados para esta tipología:",
+voc_t:"Vocabulario fisiológico del tema",voc_x:"Marca cada término cuando lo hayas usado en la redacción (explicado con tus palabras). El botón lo detecta automáticamente en el texto.",
+voc_det:"Detectar en el texto",voc_compte:"Usados: {u} de {t}",voc_altres:"Otros términos que has añadido:",
+ck_t:"Comprobaciones finales",ck_x:"Márcalo cuando lo tengas comprobado en la redacción.",
+ck_compte:"Completadas: {c} de {t}",
+ei_t:"Herramientas y ayudas utilizadas",
+ei_x:"Declaración de transparencia: escribe qué has usado para elaborar el trabajo. Usar herramientas no penaliza, pero hay que declararlo todo.",
+ei_prog:"Programas y apps (internet u ordenador): editor de texto, Canva, CapCut, Audacity...",
+ei_ia:"Inteligencia artificial (cuáles y para qué): chatbots, correctores, generadores de imágenes...",
+ei_ajut:"Ayuda de personas (quién y en qué): compañía, familia, profesorado...",
+ei_altres:"Otros materiales (apuntes, libros, vídeos, grabaciones...)",
+r_eines:"Herramientas declaradas:",
+en_t:"Formato de salida y entrega",en_format:"Formato de presentación elegido:",
+en_rec:"Recuerda: la redacción es el corazón y el formato es el vestido. El formato adapta el texto, no lo sustituye: deberás entregar también este texto escrito.",
+en_desc:"Descargar el trabajo (.txt)",
+en_puja:"El archivo ya sale nombrado (TemaXX_Nombre_Redaccion.txt). Súbelo a la web de entregas:",
+en_web:"Enlace a la web de entregas del taller:",
+en_resum_t:"Resumen del trabajo:",
+r_tem:"Tema:",r_tip:"Tipología:",r_tit:"Título creativo:",r_par:"Palabras:",r_voc:"Vocabulario usado:",
+r_ck:"Comprobaciones:",r_for:"Formato de salida:",
+fk_redaccio:"Redacción típica (texto escrito)",fkx_redaccio:"El producto es la redacción misma: texto continuo con título creativo, 4–6 párrafos, 400–500 palabras; escrita a mano o digitalizada (PDF/foto).",
+fk_web:"Página web",fk_info:"Organigrama / Infografía",fk_teatre:"Obra de teatro / escena",
+fk_comic:"Cómic",fk_pod:"Pódcast",fk_vid:"Vídeo",
+fkx_web:"El texto se divide en 4–6 secciones navegables con glosario y fuentes.",
+fkx_info:"El texto se condensa en bloques visuales: jerarquía, iconos y 1 diagrama central.",
+fkx_teatre:"El texto se convierte en diálogos entre 2–5 personajes; guion escrito entregado.",
+fkx_comic:"El texto se narra en 8–12 viñetas con glosario al pie.",
+fkx_pod:"El texto se lee/interpreta en audio con sintonía y 3 bloques.",
+fkx_vid:"El texto se convierte en guion audiovisual: voz en off, imágenes y movimiento.",
+guardat:"Guardado",paraules:"palabras",
+t_1:"El cuerpo como escenario: anatomía y fisiología",t_2:"Convencer a un compañero escéptico: ¿para qué sirve la fisiología?",
+t_3:"Equilibrio interior: la homeostasis mientras bailas",t_4:"De la célula a la obra maestra",
+t_5:"El viaje de una orden: del nervio a la planta del pie",t_6:"Concéntrica, isométrica y excéntrica",
+t_7:"Ningún músculo baila solo: el equipo invisible del movimiento",t_8:"El hueso no es una piedra",
+t_9:"El sexto sentido del bailarín: la propiocepción",t_10:"Cuando el cuerpo pide pausa",
+foc_1:"Explica qué es anatomía y qué es fisiología desarrollando la metáfora de clase: el escenario y la coreografía. Pregunta clave: ¿por qué no pueden existir la una sin la otra?",
+foc_2:"Un compañero talentoso dice «yo ya bailo, no necesito teoría». Convéncelo con argumentos: rendimiento y resiliencia.",
+foc_3:"Explica cómo el cuerpo mantiene constante el medio interno aunque la danza lo desestabiliza. Idea fuerza: el esfuerzo lo rompe; el reposo lo restaura.",
+foc_4:"Explica los niveles de organización del cuerpo A TRAVÉS de la analogía: la célula es el paso básico, el tejido la frase, el órgano la variación, el sistema la gran obra.",
+foc_5:"Relata el recorrido de una orden de movimiento, del nervio a la contracción, como un viaje por etapas en milisegundos.",
+foc_6:"Analiza un gesto danzado fase a fase (relevé o grand jeté) y muestra que cada fase pide una contracción diferente.",
+foc_7:"Presenta la cadena biomecánica como una compañía de danza: cada componente tiene un rol, y ninguno baila solo.",
+foc_8:"Desmonta el mito del esqueleto rígido: el hueso se remodela, se adapta a la carga y sufre si le sobra. Cierra con el RED-S.",
+foc_9:"Explica cómo el cuerpo sabe dónde está sin mirar: los tres receptores y su integración. Conéctalo con la pirueta y el espejo.",
+foc_10:"Empieza con un calambre a mitad de ensayo y explica su fisiología, los factores de riesgo y la recuperación. Escuchar al cuerpo es competencia profesional.",
+consell_1:"Evita el diccionario: las definiciones deben salir de los ejemplos.",
+consell_2:"Primera persona admitida; practica los conectores argumentativos.",
+consell_3:"Se valorará incluir un esquema sencillo del bucle de retroalimentación.",
+consell_4:"Mantén la analogía durante todo el texto; no la abandones a medio camino.",
+consell_5:"Conectores de secuencia obligatorios en cada etapa.",
+consell_6:"Estructura comparativa clara: por bloques o alternada.",
+consell_7:"La analogía debe tener sentido en cada componente, no ser decorativa.",
+consell_8:"Es el tema con más conciencia profesional: la reflexión final pesa.",
+consell_9:"Mezcla descripción objetiva y primera persona en la parte final.",
+consell_10:"El inicio narrativo es breve (1 párrafo); el peso es explicativo.",
+pist_1:"Mira a un bailarín: qué ves (estructura) y qué no ves (función)|Anatomía = qué es; fisiología = cómo funciona|Ejemplos: el bíceps, el corazón (5 L/min), el equilibrio en pirueta|La metáfora: ¿una coreografía sin escenario? ¿Un escenario vacío?|Cierra: por qué necesitas las dos miradas",
+pist_2:"Presenta la opinión a desmontar|Argumento 1: optimización técnica (rendimiento)|Argumento 2: prevención y recuperación (resiliencia)|Argumento 3: hablar con fisios y médicos|Contraargumento: «aprendiendo bailando basta» y la réplica|Valoración personal final",
+pist_3:"El cuerpo como sistema que se defiende del cambio|El medio interno: LEC y valores de referencia (pH, glucosa, temperatura, presión)|Qué rompe el equilibrio cuando bailas|Retroalimentación negativa: sensor → centro → efector (sudor, vasodilatación)|Contraste breve: retroalimentación positiva (parto, coagulación)|Práctica: calentamiento, hidratación, vuelta a la calma",
+pist_4:"Ninguna obra se sostiene solo con el gran gesto|La célula: 100 billones, la mitocondria como central de ATP|Los 4 tejidos con ejemplos danzables|El corazón y el músculo esquelético como órganos|Un error celular (falta de ATP) se nota a escala de baile",
+pist_5:"Contexto: pasa en milisegundos, miles de veces por clase|Etapa 1: motoneurona y axón|Etapa 2: unión neuromuscular en 4 pasos (acetilcolina)|Etapa 3: el calcio como señal interior (túbulos T, troponina)|Etapa 4: ciclo de la miosina con ATP|Reflexión: la máquina invisible tras el gesto|Unidad motora: precisión (mano) vs fuerza (cuádriceps)",
+pist_6:"Un solo gesto, tres mecanismos|Define las 3 contracciones (tensión vs resistencia)|Subida del relevé: concéntrica|Sostenimiento: isométrica|Bajada y aterrizaje: excéntrica (amortiguar)|Matices: depende del músculo y la fase; la excéntrica fatiga|Entrenamiento y prevención (demi-plié)",
+pist_7:"Mira un salto: ¿quién trabaja de verdad?|Los 5 componentes: músculo (motor), tendón (muelle), hueso (palanca), articulación (cargas), ligamento (guía)|Roles: agonista, antagonista, sinergista, estabilizador|Coactivación: estabilidad vs rigidez|El movimiento como trabajo en equipo",
+pist_8:"El mito de la columna rígida|Células óseas: osteoblastos, osteoclastos, osteocitos|Ciclo: activación → reabsorción → formación → mineralización (~10 años)|Carga adecuada fortalece; sobrecarga hace microdaños|Salud ósea y RED-S: colectivo de riesgo|Reflexión: cómo cuidarás tus huesos",
+pist_9:"Escena: pirueta con los ojos cerrados|Qué es la propiocepción y cómo se diferencia de los otros sentidos|Fuso muscular (longitud), órgano de Golgi (tensión), receptores articulares (posición)|Integración nerviosa: ajustes automáticos|Reflexión: espejo vs trabajo propioceptivo|Conclusión: seguridad y calidad de movimiento",
+pist_10:"Escena breve: un calambre a mitad de ensayo|Qué es fisiológicamente: hiperexcitabilidad de la motoneurona alfa|Factores: calor, deshidratación, pérdida de Na⁺, K⁺, Mg²⁺|La fatiga como señal homeostática|Prevención: hidratación, electrólitos, descanso, calma|Escuchar al cuerpo = competencia profesional",
+voc_1:"anatomía|fisiología|estructura|función|célula|tejido|órgano|bíceps|contracción|corazón|bombeo|equilibrio|pirueta",
+voc_2:"rendimiento|resiliencia|fatiga|recuperación|técnica|adaptación|prevención de lesiones|entrenamiento seguro|capacidades",
+voc_3:"homeostasis|medio interno|líquido extracelular|pH|glucosa|temperatura|presión arterial|retroalimentación negativa|sensor|centro de integración|efector|vasodilatación|sudoración|retroalimentación positiva",
+voc_4:"célula|tejido|órgano|sistema|organismo|mitocondria|ATP|epitelial|conectivo|muscular|nervioso|eritrocitos|jerarquía",
+voc_5:"motoneurona|axón|unidad motora|unión neuromuscular|acetilcolina|potencial de acción|calcio|túbulos T|troponina|actina|miosina|ciclo contráctil|precisión|fuerza",
+voc_6:"concéntrica|isométrica|excéntrica|tensión|resistencia|acortamiento|alargamiento|amortiguar|propulsión|suspensión|aterrizaje|fatiga|relevé|grand jeté",
+voc_7:"cadena biomecánica|músculo|tendón|hueso|articulación|ligamento|agonista|antagonista|sinergista|estabilizador|coactivación|palanca",
+voc_8:"remodelación|osteoblasto|osteoclasto|osteocito|reabsorción|mineralización|carga|microdaños|RED-S|salud ósea|calcio",
+voc_9:"propiocepción|fuso muscular|órgano tendinoso de Golgi|receptores articulares|mecanorreceptores|integración nerviosa|equilibrio|postural|espejo",
+voc_10:"calambre|hiperexcitabilidad|motoneurona alfa|deshidratación|electrólitos|sodio|potasio|magnesio|fatiga|recuperación|vuelta a la calma|hidratación",
+ck_1:"Las definiciones salen de los ejemplos, no del diccionario|La metáfora escenario/coreografía se mantiene hasta el final",
+ck_2:"Se usa la primera persona|Hay contraargumento y réplica|Conectores argumentativos presentes",
+ck_3:"Hay el bucle sensor → centro → efector|Se menciona la idea: el esfuerzo rompe, el reposo restaura",
+ck_4:"La analogía se mantiene durante todo el texto|Los 4 tejidos tienen ejemplos danzables",
+ck_5:"Conectores de secuencia en cada etapa|Se menciona la unidad motora (precisión vs fuerza)",
+ck_6:"Estructura comparativa clara (bloques o alternada)|Conectores comparativos presentes",
+ck_7:"Cada componente tiene su línea de analogía|Están los 4 roles musculares + coactivación",
+ck_8:"La reflexión personal ocupa el final|Se menciona el RED-S",
+ck_9:"Los 3 receptores están explicados|Hay parte escrita en primera persona",
+ck_10:"El inicio narrativo dura como máximo 1 párrafo|Hay estrategias de prevención y recuperación",
+ckg:"Título creativo (no el título del tema)|Texto continuo en párrafos, sin puntualismos|Entre 4 y 6 párrafos|Entre 400 y 500 palabras|Vocabulario explicado con palabras propias|Registro divulgativo-académico|(Opcional) 1 esquema o dibujo sencillo integrado",
+tip_metafora_n:"Expositiva con metáfora",tip_argumentativa_n:"Argumentativa (artículo de opinión)",
+tip_explicativa_n:"Expositiva explicativa (causa-efecto)",tip_analogia_n:"Expositiva con analogía",
+tip_proces_n:"Expositiva de proceso",tip_comparativa_n:"Comparativa",
+tip_reflexiva_n:"Expositiva con reflexión",tip_mixta_n:"Explicativa + argumentativa",
+tip_metafora_c:"como si fuera…, es como…, tal como…, de la misma manera…",
+tip_argumentativa_c:"en primer lugar, además, sin embargo, no obstante, por tanto, finalmente…",
+tip_explicativa_c:"debido a…, gracias a…, como consecuencia…, por tanto…, de esta manera…",
+tip_analogia_c:"como si fuera…, así como…, de la misma manera…, igual que…",
+tip_proces_c:"primero, una vez hecho esto…, a continuación, después, finalmente…",
+tip_comparativa_c:"en cambio, a diferencia de…, igual que…, mientras que…, tanto… como…",
+tip_reflexiva_c:"personalmente, según mi punto de vista, me ha hecho ver que…, de ahora en adelante…",
+tip_mixta_c:"primero, además, debido a…, por eso…, en definitiva…",
+tip_metafora_b:"Escena inicial||Mira a un bailarín: qué ves (estructura) y qué no ves (función).|Definición||Anatomía vs fisiología: la pregunta «qué es» frente a «cómo funciona».|Ejemplos||El bíceps, el corazón (5 L/min), el equilibrio en una pirueta.|La metáfora||Desarrolla escenario y coreografía: ¿qué pasa si falta una?|Conclusión||Por qué un intérprete necesita las dos miradas.",
+tip_argumentativa_b:"Introducción||Presenta la opinión que quieres desmontar.|Argumento 1||Optimización técnica: entender las capacidades para mejorar.|Argumento 2||Prevención de lesiones y recuperación (resiliencia).|Argumento 3||Saber hablar con fisios y médicos: comunicación profesional.|Contraargumento y réplica||«Aprendiendo bailando basta» → los estancamientos y las lesiones dicen lo contrario.|Conclusión||Valoración personal.",
+tip_explicativa_b:"Introducción||El cuerpo como sistema que se defiende del cambio.|El fenómeno||El medio interno: líquido extracelular y valores de referencia (pH, glucosa, temperatura, presión).|La causa||Qué desestabiliza el medio interno cuando bailas.|El mecanismo||Retroalimentación negativa: sensor → centro de integración → efector (sudor, vasodilatación).|El contraste||Retroalimentación positiva: cuando el cuerpo amplifica (parto, coagulación).|Conclusión||Implicaciones prácticas: calentamiento, hidratación, vuelta a la calma.",
+tip_analogia_b:"Introducción||Ninguna obra se sostiene solo con el gran gesto: todo empieza en el detalle.|La analogía||Presenta tu analogía y sus correspondencias.|Desarrollo||Recorre los niveles o componentes uno a uno dentro de la analogía.|Correspondencias||Haz explícito qué corresponde a qué entre analogía y cuerpo.|Conclusión||Qué nos enseña la analogía sobre el cuerpo que baila.",
+tip_proces_b:"Introducción||Contexto temporal: pasa en milisegundos, miles de veces por clase.|Etapa 1||La motoneurona espinal y el axón hacia el músculo.|Etapa 2||La unión neuromuscular en 4 pasos (llegada del potencial, acetilcolina, receptores, potencial muscular).|Etapa 3||El calcio como señal interior: túbulos T y troponina.|Etapa 4||El ciclo de la miosina y el ATP: unión, arrastre, acortamiento, desprendimiento.|Conclusión||Reflexión sobre la máquina invisible tras cada gesto.",
+tip_comparativa_b:"Introducción||Un solo gesto, tres mecanismos musculares.|Los elementos||Define las tres contracciones con tensión vs resistencia.|Comparación||Analiza el gesto fase a fase (o por bloques): el protagonista de cada fase.|Matices||Depende del músculo analizado y de la fase; la excéntrica como frenada y fatiga.|Conclusión||Implicaciones de entrenamiento y prevención (aterrizajes, demi-plié).",
+tip_reflexiva_b:"Introducción||El mito a desmontar o la escena inicial (pirueta con ojos cerrados).|Explicación||El fundamento científico: ciclo óseo o los tres receptores.|Desarrollo||Adaptación y riesgo (hueso) o integración y ajustes (propiocepción).|Reflexión personal||Primera persona: qué cambiará en tu manera de trabajar.|Conclusión||Para tu futuro como intérprete.",
+tip_mixta_b:"Escena narrativa||Un calambre a mitad de ensayo. Breve: como máximo 1 párrafo.|Explicación||Qué es fisiológicamente un calambre: hiperexcitabilidad de la motoneurona alfa.|Factores||Por qué los bailarines están expuestos: calor, horas, hidratación, electrólitos.|Argumentación||La fatiga como señal: escuchar al cuerpo es competencia profesional.|Conclusión||Prevención y recuperación: el reposo restaura el medio interno."
+},
+en:{
+titol:"Essay Workshop · Physiology & Dance",subtitol:"Write your essay step by step",
+nav_inici:"Home",nav_tema:"1 · Topic",nav_esquema:"2 · Outline",nav_plantilla:"3 · Essay",
+nav_vocab:"4 · Vocabulary",nav_checks:"5 · Checkpoints",nav_eines:"6 · Tools",nav_entrega:"7 · Submit",
+ini_t:"Common instructions",ini_ext:"Length:",ini_ext_x:"max 2 handwritten pages (approx. 400–500 words).",
+ini_for:"Format:",ini_for_x:"continuous prose in paragraphs (no bullet points), creative title (not the topic title), 4–6 paragraphs, legible handwriting. 1 simple diagram or drawing may be included.",
+ini_reg:"Register:",ini_reg_x:"divulgative-academic. Physiological vocabulary must be explained in your own words: copied definitions will be penalised.",
+ini_ava:"Assessment criteria:",ini_c1:"Command of content",ini_c2:"Structure and cohesion",
+ini_c3:"Correct use of vocabulary",ini_c4:"Originality of the approach",
+ini_flux:"The process, step by step",f1:"Choose the topic and read the card (text type and approach).",
+f2:"Outline the process before writing: what you will say in each block.",
+f3:"Write the essay by filling in the template of your text type.",
+f4:"Tick the physiological vocabulary as you use it (auto-detection included).",
+f5:"Final review with the general and topic-specific checkpoints.",
+f6:"Declare the tools used, choose the output format and download your work.",
+f7:"Submit: upload the file to the workshop submission website.",
+ini_nom:"Your name (Surname, Name) — it will appear in the downloaded file",
+ini_guardar:"Save name",
+tem_t:"Choose your topic",tem_tria:"Essay topic",
+tem_pistes:"Show teacher hints (untick for exam mode)",
+tip_nom:"Text type:",tip_enf:"Approach:",tip_con:"Tip:",
+esq_t:"Process outline (before writing!)",
+esq_x:"The compulsory prior work: organise what you will say in each block of the template. Do not write full paragraphs yet: points, arrows, key words.",
+esq_label:"My outline:",
+esq_guia_t:"Quick guide:",esq_g1:"What will I say in each template block?",
+esq_g2:"Which examples or scenes will I use?",esq_g3:"Which vocabulary terms go into each block?",
+esq_g4:"What creative title will I give the work?",
+pistas:"Hints for this topic",
+pl_t:"Essay block by block",pl_titol:"Creative title of the work (not the topic title!)",
+pl_total:"Essay total: {n} words (target 400–500)",
+connectors:"Recommended linkers for this text type:",
+voc_t:"Physiological vocabulary of the topic",voc_x:"Tick each term once you have used it in the essay (explained in your own words). The button detects them automatically in your text.",
+voc_det:"Detect in text",voc_compte:"Used: {u} of {t}",voc_altres:"Other terms you have added:",
+ck_t:"Final checkpoints",ck_x:"Tick when you have checked it in your essay.",
+ck_compte:"Completed: {c} of {t}",
+ei_t:"Tools and help used",
+ei_x:"Transparency declaration: state what you used to produce the work. Using tools is not penalised, but everything must be declared.",
+ei_prog:"Programs and apps (internet or computer): text editor, Canva, CapCut, Audacity...",
+ei_ia:"Artificial intelligence (which ones and for what): chatbots, spellcheckers, image generators...",
+ei_ajut:"Help from people (who and in what): classmates, family, teachers...",
+ei_altres:"Other materials (notes, books, videos, recordings...)",
+r_eines:"Tools declared:",
+en_t:"Output format and submission",en_format:"Chosen presentation format:",
+en_rec:"Remember: the essay is the heart and the format is the outfit. The format adapts the text, it does not replace it: you must also hand in this written text.",
+en_desc:"Download your work (.txt)",
+en_puja:"The file comes pre-named (TemaXX_Name_Essay.txt). Upload it to the submission website:",
+en_web:"Link to the workshop submission website:",
+en_resum_t:"Work summary:",
+r_tem:"Topic:",r_tip:"Text type:",r_tit:"Creative title:",r_par:"Words:",r_voc:"Vocabulary used:",
+r_ck:"Checkpoints:",r_for:"Output format:",
+fk_redaccio:"Standard essay (written text)",fkx_redaccio:"The product is the essay itself: continuous prose with a creative title, 4–6 paragraphs, 400–500 words; handwritten or digitised (PDF/photo).",
+fk_web:"Web page",fk_info:"Chart / Infographic",fk_teatre:"Theatre scene",
+fk_comic:"Comic",fk_pod:"Podcast",fk_vid:"Video",
+fkx_web:"The text is split into 4–6 navigable sections with glossary and sources.",
+fkx_info:"The text condenses into visual blocks: hierarchy, icons and 1 central diagram.",
+fkx_teatre:"The text becomes dialogue between 2–5 characters; written script handed in.",
+fkx_comic:"The text is told in 8–12 panels with a foot glossary.",
+fkx_pod:"The text is read/performed in audio with jingle and 3 blocks.",
+fkx_vid:"The text becomes an audiovisual script: voice-over, images and movement.",
+guardat:"Saved",paraules:"words",
+t_1:"The body as a stage: anatomy and physiology",t_2:"Convincing a sceptical classmate: what is physiology for?",
+t_3:"Inner balance: homeostasis while you dance",t_4:"From cell to masterpiece",
+t_5:"The journey of a signal: from nerve to sole of the foot",t_6:"Concentric, isometric and eccentric",
+t_7:"No muscle dances alone: the invisible team of movement",t_8:"Bone is not a stone",
+t_9:"The dancer's sixth sense: proprioception",t_10:"When the body asks for a pause",
+foc_1:"Explain what anatomy and physiology are by developing the class metaphor: the stage and the choreography. Key question: why can neither exist without the other?",
+foc_2:"A talented classmate says 'I already dance, I don't need theory'. Convince them with arguments: performance and resilience.",
+foc_3:"Explain how the body keeps its inner environment constant even though dance destabilises it. Key idea: effort breaks it; rest restores it.",
+foc_4:"Explain the body's levels of organisation THROUGH the analogy: the cell is the basic step, the tissue the phrase, the organ the whole variation, the system the grand work.",
+foc_5:"Tell the journey of a movement command, from nerve to contraction, as a staged trip in milliseconds.",
+foc_6:"Analyse a danced gesture phase by phase (relevé or grand jeté) and show that each phase demands a different contraction.",
+foc_7:"Present the biomechanical chain as a dance company: every component has a role, and none dances alone.",
+foc_8:"Demolish the myth of the rigid skeleton: bone remodels itself, adapts to load and suffers when overloaded. Close with RED-S.",
+foc_9:"Explain how the body knows where it is without looking: the three receptors and their integration. Link it to the pirouette and the mirror.",
+foc_10:"Start with a cramp mid-rehearsal and explain its physiology, risk factors and recovery. Listening to the body is professional competence.",
+consell_1:"Avoid the dictionary: definitions must emerge from the examples.",
+consell_2:"First person allowed; practise argumentative linkers.",
+consell_3:"Including a simple feedback-loop diagram will be valued.",
+consell_4:"Keep the analogy through the whole text; do not drop it halfway.",
+consell_5:"Sequence linkers are compulsory in every stage.",
+consell_6:"Clear comparative structure: by blocks or alternating.",
+consell_7:"The analogy must make sense for every component, not be decorative.",
+consell_8:"The topic with the most professional awareness: the final reflection weighs.",
+consell_9:"Mix objective description and first person in the final part.",
+consell_10:"The narrative opening is brief (1 paragraph); the weight is explanatory.",
+pist_1:"Watch a dancer: what you see (structure) and what you don't (function)|Anatomy = what it is; physiology = how it works|Examples: biceps, heart (5 L/min), balance in a pirouette|The metaphor: a choreography without a stage? An empty stage?|Close: why you need both views",
+pist_2:"Present the opinion to demolish|Argument 1: technical optimisation (performance)|Argument 2: injury prevention and recovery (resilience)|Argument 3: talking to physios and doctors|Counter-argument: 'learning by dancing is enough' and the reply|Personal closing assessment",
+pist_3:"The body as a system that defends itself from change|The inner environment: ECF and reference values (pH, glucose, temperature, pressure)|What breaks the balance when you dance|Negative feedback: sensor → centre → effector (sweat, vasodilation)|Brief contrast: positive feedback (birth, clotting)|Practice: warm-up, hydration, cool-down",
+pist_4:"No work stands on the grand gesture alone|The cell: 100 trillion, mitochondria as the ATP power plant|The 4 tissues with danceable examples|Heart and skeletal muscle as organs|A cellular error (lack of ATP) shows at the scale of the whole dance",
+pist_5:"Context: it happens in milliseconds, thousands of times per class|Stage 1: motoneuron and axon|Stage 2: neuromuscular junction in 4 steps (acetylcholine)|Stage 3: calcium as the inner signal (T tubules, troponin)|Stage 4: the myosin cycle with ATP|Reflection: the invisible machine behind the gesture|Motor unit: precision (hand) vs force (quadriceps)",
+pist_6:"One gesture, three mechanisms|Define the 3 contractions (tension vs resistance)|Rising of the relevé: concentric|Holding: isometric|Lowering and landing: eccentric (cushioning)|Nuances: depends on muscle and phase; eccentric causes fatigue|Training and prevention (demi-plié)",
+pist_7:"Watch a jump: who really works?|The 5 components: muscle (engine), tendon (spring), bone (lever), joint (loads), ligament (guide)|Roles: agonist, antagonist, synergist, stabiliser|Co-activation: stability vs stiffness|Movement as teamwork",
+pist_8:"The myth of the rigid spine|Bone cells: osteoblasts, osteoclasts, osteocytes|Cycle: activation → resorption → formation → mineralisation (~10 years)|Adequate load strengthens; overload causes microdamage|Bone health and RED-S: an at-risk group|Reflection: how you will care for your bones",
+pist_9:"Scene: a pirouette with closed eyes|What proprioception is and how it differs from other senses|Muscle spindle (length), Golgi tendon organ (tension), joint receptors (position)|Nervous integration: automatic adjustments|Reflection: mirror vs proprioceptive work|Conclusion: safety and quality of movement",
+pist_10:"Brief scene: a cramp mid-rehearsal|What it is physiologically: hyperexcitability of the alpha motoneuron|Factors: heat, dehydration, loss of Na⁺, K⁺, Mg²⁺|Fatigue as a homeostatic signal|Prevention: hydration, electrolytes, rest, cool-down|Listening to the body = professional competence",
+voc_1:"anatomy|physiology|structure|function|cell|tissue|organ|biceps|contraction|heart|pumping|balance|pirouette",
+voc_2:"performance|resilience|fatigue|recovery|technique|adaptation|injury prevention|safe training|capacities",
+voc_3:"homeostasis|internal environment|extracellular fluid|pH|glucose|temperature|blood pressure|negative feedback|sensor|integration centre|effector|vasodilation|sweating|positive feedback",
+voc_4:"cell|tissue|organ|system|organism|mitochondrion|ATP|epithelial|connective|muscular|nervous|red blood cells|hierarchy",
+voc_5:"motoneuron|axon|motor unit|neuromuscular junction|acetylcholine|action potential|calcium|T tubules|troponin|actin|myosin|cross-bridge cycle|precision|force",
+voc_6:"concentric|isometric|eccentric|tension|resistance|shortening|lengthening|cushioning|propulsion|suspension|landing|fatigue|relevé|grand jeté",
+voc_7:"biomechanical chain|muscle|tendon|bone|joint|ligament|agonist|antagonist|synergist|stabiliser|co-activation|lever",
+voc_8:"remodelling|osteoblast|osteoclast|osteocyte|resorption|mineralisation|load|microdamage|RED-S|bone health|calcium",
+voc_9:"proprioception|muscle spindle|Golgi tendon organ|joint receptors|mechanoreceptors|nervous integration|balance|postural|mirror",
+voc_10:"muscle cramp|hyperexcitability|alpha motoneuron|dehydration|electrolytes|sodium|potassium|magnesium|fatigue|recovery|cool-down|hydration",
+ck_1:"Definitions come from the examples, not the dictionary|The stage/choreography metaphor holds to the end",
+ck_2:"First person is used|Counter-argument and reply are present|Argumentative linkers present",
+ck_3:"The sensor → centre → effector loop appears|The idea is mentioned: effort breaks, rest restores",
+ck_4:"The analogy holds through the whole text|The 4 tissues have danceable examples",
+ck_5:"Sequence linkers in every stage|The motor unit is mentioned (precision vs force)",
+ck_6:"Clear comparative structure (blocks or alternating)|Comparative linkers present",
+ck_7:"Every component has its analogy line|The 4 muscle roles + co-activation are there",
+ck_8:"The personal reflection closes the essay|RED-S is mentioned",
+ck_9:"The 3 receptors are explained|Part of the text is in first person",
+ck_10:"The narrative opening lasts 1 paragraph at most|Prevention and recovery strategies appear",
+ckg:"Creative title (not the topic title)|Continuous prose, no bullet points|Between 4 and 6 paragraphs|Between 400 and 500 words|Vocabulary explained in your own words|Divulgative-academic register|(Optional) 1 simple diagram or drawing included",
+tip_metafora_n:"Expository with metaphor",tip_argumentativa_n:"Argumentative (opinion article)",
+tip_explicativa_n:"Explanatory expository (cause-effect)",tip_analogia_n:"Expository with analogy",
+tip_proces_n:"Process expository",tip_comparativa_n:"Comparative",
+tip_reflexiva_n:"Expository with reflection",tip_mixta_n:"Explanatory + argumentative",
+tip_metafora_c:"as if it were…, it is like…, just as…, in the same way…",
+tip_argumentativa_c:"first of all, moreover, however, nevertheless, therefore, finally…",
+tip_explicativa_c:"due to…, thanks to…, as a consequence…, therefore…, in this way…",
+tip_analogia_c:"as if it were…, just as…, in the same way…, like…",
+tip_proces_c:"first, once this is done…, next, afterwards, finally…",
+tip_comparativa_c:"whereas, unlike…, just like…, while…, both… and…",
+tip_reflexiva_c:"personally, from my point of view, this has shown me that…, from now on…",
+tip_mixta_c:"first, moreover, due to…, that is why…, in short…",
+tip_metafora_b:"Opening scene||Watch a dancer: what you see (structure) and what you don't (function).|Definition||Anatomy vs physiology: 'what is it?' versus 'how does it work?'.|Examples||The biceps, the heart (5 L/min), balance in a pirouette.|The metaphor||Develop stage and choreography: what if one is missing?|Conclusion||Why a performer needs both views.",
+tip_argumentativa_b:"Introduction||Present the opinion you want to demolish.|Argument 1||Technical optimisation: understanding capacities to improve.|Argument 2||Injury prevention and recovery (resilience).|Argument 3||Being able to talk to physios and doctors: professional communication.|Counter-argument and reply||'Learning by dancing is enough' → plateaus and injuries say otherwise.|Conclusion||Personal assessment.",
+tip_explicativa_b:"Introduction||The body as a system that defends itself from change.|The phenomenon||The internal environment: extracellular fluid and reference values (pH, glucose, temperature, pressure).|The cause||What destabilises the internal environment when you dance.|The mechanism||Negative feedback: sensor → integration centre → effector (sweat, vasodilation).|The contrast||Positive feedback: when the body amplifies (birth, clotting).|Conclusion||Practical implications: warm-up, hydration, cool-down.",
+tip_analogia_b:"Introduction||No work stands on the grand gesture alone: everything starts in the detail.|The analogy||Present your analogy and its correspondences.|Development||Go through the levels or components one by one inside the analogy.|Correspondences||Make explicit what maps to what between analogy and body.|Conclusion||What the analogy teaches us about the dancing body.",
+tip_proces_b:"Introduction||Time context: it happens in milliseconds, thousands of times per class.|Stage 1||The spinal motoneuron and the axon towards the muscle.|Stage 2||The neuromuscular junction in 4 steps (potential arrival, acetylcholine, receptors, muscle potential).|Stage 3||Calcium as the inner signal: T tubules and troponin.|Stage 4||The myosin-ATP cycle: binding, pull, shortening, release.|Conclusion||Reflection on the invisible machine behind every gesture.",
+tip_comparativa_b:"Introduction||One gesture, three muscular mechanisms.|The elements||Define the three contractions with tension vs resistance.|Comparison||Analyse the gesture phase by phase (or by blocks): the leading muscle of each phase.|Nuances||It depends on the muscle and the phase; eccentric as braking and fatigue.|Conclusion||Training and prevention implications (landings, demi-plié).",
+tip_reflexiva_b:"Introduction||The myth to demolish or the opening scene (pirouette with closed eyes).|Explanation||The scientific basis: bone cycle or the three receptors.|Development||Adaptation and risk (bone) or integration and adjustments (proprioception).|Personal reflection||First person: what will change in the way you work.|Conclusion||For your future as a performer.",
+tip_mixta_b:"Narrative scene||A cramp mid-rehearsal. Brief: 1 paragraph at most.|Explanation||What a cramp is physiologically: hyperexcitability of the alpha motoneuron.|Factors||Why dancers are exposed: heat, hours, hydration, electrolytes.|Argumentation||Fatigue as a signal: listening to the body is professional competence.|Conclusion||Prevention and recovery: rest restores the internal environment."
+}};
+
+/* ===== estat ===== */
+let LANG=sGet("lang")||"ca";
+let CFG; try{ CFG=JSON.parse(sGet("taller_cfg")||"{}")||{}; }catch(e){ CFG={}; }
+if(typeof CFG.pistes!=="boolean") CFG.pistes=true;
+const T=()=>I18N[LANG]||I18N.ca;
+const tema=()=>CFG.tema||1;
+const tip=()=>TEMES[tema()];
+
+/* ===== utilitats ===== */
+function $(id){return document.getElementById(id)}
+function mostra(id){
+ document.querySelectorAll("section").forEach(s=>s.classList.remove("vis"));
+ const sec=$(id); if(sec) sec.classList.add("vis");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("actiu"));
+ const nb=$("nav-"+id); if(nb) nb.classList.add("actiu");
+ window.scrollTo(0,0);
+}
+function setLang(l){LANG=l;sSet("lang",l);aplicaIdioma();}
+function paraules(t){t=(t||"").trim();return t?t.split(/\s+/).length:0;}
+function blocos(){return (T()["tip_"+tip()+"_b"]||"").split("|").map(function(b){
+ const p=b.split("||");return {t:p[0],a:p[1]||""};});}
+function checkItems(){const i=T();
+ return (i.ckg||"").split("|").concat((i["ck_"+tema()]||"").split("|"));}
+function vocabItems(){return (T()["voc_"+tema()]||"").split("|");}
+function k(c){return "tw_t"+tema()+"_"+c;}
+function getText(c){return sGet(k(c))||"";}
+function getString(c){return sGet(k(c))||"";}
+function setText(c,v){sSet(k(c),v);}
+function getBoolArr(c,n){
+ let a; try{a=JSON.parse(sGet(k(c))||"[]");}catch(e){a=[];}
+ if(!Array.isArray(a)) a=[];
+ for(let i=0;i<n;i++) if(typeof a[i]!=="boolean") a[i]=false;
+ return a;
+}
+function compt(textId,pcId){
+ const el=$(textId), pc=$(pcId);
+ if(!el||!pc) return;
+ pc.textContent=paraules(el.value)+" "+T().paraules;
+}
+function marca(msId){
+ const el=$(msId); if(el) el.textContent=T().guardat+" "+new Date().toLocaleTimeString().slice(0,5);
+}
+
+/* ===== renders ===== */
+function renderSelects(){
+ const i=T();
+ const st=$("sel-tema");
+ let h=""; for(let n=1;n<=10;n++) h+='<option value="'+n+'">'+n+' · '+i["t_"+n]+'</option>';
+ st.innerHTML=h; st.value=String(tema());
+ const sf=$("sel-format");
+ let f=""; FORMATES.forEach(function(x){f+='<option value="'+x+'">'+i["fk_"+x]+'</option>';});
+ sf.innerHTML=f; sf.value=CFG.format||"redaccio";
+}
+function renderFitxaTema(){
+ const i=T(), t=tema();
+ $("fitxa-tema").innerHTML=
+  '<b>'+i.tip_nom+'</b> '+i["tip_"+tip()+"_n"]+'<br><br>'+
+  '<b>'+i.tip_enf+'</b> '+i["foc_"+t]+'<br><br>'+
+  '<b>'+i.tip_con+'</b> '+i["consell_"+t];
+ const det=document.querySelector("#esquema details.detalls");
+ if(det){
+  det.style.display=CFG.pistes?"block":"none";
+  $("pistes-summary").textContent=i.pistas;
+  $("llista-pistes").innerHTML=(i["pist_"+t]||"").split("|")
+   .map(function(p){return "<li>"+p+"</li>"}).join("");
+ }
+}
+function renderEsquema(){
+ $("txt-esquema").value=getString("esquema");
+ compt("txt-esquema","pc-esquema");
+}
+function renderPlantilla(){
+ const i=T(), bs=blocos();
+ $("pl-resum").innerHTML='<b>'+i.r_tip+'</b> '+i["tip_"+tip()+"_n"]+
+  ' &nbsp;·&nbsp; <b>'+i.r_tem+'</b> '+tema()+' · '+i["t_"+tema()];
+ $("txt-titol").value=getString("titol");
+ let h="";
+ bs.forEach(function(b,idx){
+  h+='<div class="bloc-plant"><h3>'+(idx+1)+'. '+b.t+'</h3>'+
+     '<div class="ajuda">'+b.a+'</div>'+
+     '<textarea id="bloc-'+idx+'" rows="4"></textarea>'+
+     '<span class="pc" id="pc-bloc-'+idx+'"></span></div>';
+ });
+ $("blocs").innerHTML=h;
+ bs.forEach(function(b,idx){
+  const el=$("bloc-"+idx);
+  el.value=getString("b"+idx);
+  el.addEventListener("input",function(){
+    setText("b"+idx,el.value);
+    compt("bloc-"+idx,"pc-bloc-"+idx);
+    compteTotal(); marca("ms-plantilla"); progr();
+  });
+  compt("bloc-"+idx,"pc-bloc-"+idx);
+ });
+ $("pl-connectors").innerHTML="<b>"+i.connectors+"</b> "+i["tip_"+tip()+"_c"];
+ compteTotal();
+}
+function compteTotal(){
+ let n=0;
+ blocos().forEach(function(b,idx){const el=$("bloc-"+idx); if(el) n+=paraules(el.value);});
+ $("pl-total").textContent=T().pl_total.replace("{n}",n);
+ return n;
+}
+function totalParaules(){
+ let n=0;
+ blocos().forEach(function(b,idx){n+=paraules(getString("b"+idx));});
+ return n;
+}
+function renderVocab(){
+ const i=T(), terms=vocabItems(), arr=getBoolArr("vocab",terms.length);
+ let h="";
+ terms.forEach(function(t,idx){
+  h+='<div class="vocab-item'+(arr[idx]?" usat":"")+'">'+
+     '<input type="checkbox" '+(arr[idx]?"checked":"")+
+     ' onchange="toggleVocab('+idx+')"><span>'+t+'</span></div>';
+ });
+ $("llista-vocab").innerHTML=h;
+ $("txt-altres").value=getString("altres");
+ const u=arr.filter(Boolean).length;
+ $("voc-compte").textContent=i.voc_compte.replace("{u}",u).replace("{t}",terms.length);
+}
+function toggleVocab(idx){
+ const terms=vocabItems(), arr=getBoolArr("vocab",terms.length);
+ arr[idx]=!arr[idx]; setText("vocab",JSON.stringify(arr));
+ renderVocab(); progr();
+}
+function detectaVocab(){
+ const terms=vocabItems();
+ let tot=getString("esquema").toLowerCase()+" "+getString("titol").toLowerCase();
+ blocos().forEach(function(b,idx){tot+=" "+getString("b"+idx).toLowerCase();});
+ const arr=terms.map(function(t){return tot.indexOf(t.toLowerCase())>-1;});
+ setText("vocab",JSON.stringify(arr));
+ renderVocab(); progr();
+}
+function renderChecks(){
+ const items=checkItems(), arr=getBoolArr("checks",items.length);
+ let h="";
+ items.forEach(function(c,idx){
+  h+='<div class="check"><input type="checkbox" '+(arr[idx]?"checked":"")+
+     ' onchange="toggleCheck('+idx+')"><span>'+c+'</span></div>';
+ });
+ $("llista-checks").innerHTML=h;
+ const u=arr.filter(Boolean).length;
+ $("ck-compte").textContent=T().ck_compte.replace("{c}",u).replace("{t}",items.length);
+}
+function toggleCheck(idx){
+ const items=checkItems(), arr=getBoolArr("checks",items.length);
+ arr[idx]=!arr[idx]; setText("checks",JSON.stringify(arr));
+ renderChecks(); progr();
+}
+function renderEines(){
+ CAMPSE.forEach(function(c){const el=$("eines-"+c); if(el) el.value=getString("eines_"+c);});
+}
+function einesPlens(){
+ let n=0; CAMPSE.forEach(function(c){if(getString("eines_"+c).trim()) n++;}); return n;
+}
+function renderFormat(){
+ const i=T(), f=CFG.format||"redaccio";
+ $("fitxa-format").innerHTML="<b>"+i["fk_"+f]+"</b><br>"+i["fkx_"+f];
+}
+function renderEntrega(){
+ const i=T();
+ const items=checkItems(), arr=getBoolArr("checks",items.length);
+ const terms=vocabItems(), va=getBoolArr("vocab",terms.length);
+ $("en-resum").innerHTML=
+  "<b>"+i.en_resum_t+"</b><br>"+
+  i.r_tem+" "+tema()+" · "+i["t_"+tema()]+"<br>"+
+  i.r_tip+" "+i["tip_"+tip()+"_n"]+"<br>"+
+  i.r_tit+" "+(getString("titol")||"—")+"<br>"+
+  i.r_par+" "+totalParaules()+"<br>"+
+  i.r_voc+" "+va.filter(Boolean).length+" / "+terms.length+"<br>"+
+  i.r_ck+" "+arr.filter(Boolean).length+" / "+items.length+"<br>"+
+  i.r_eines+" "+einesPlens()+" / "+CAMPSE.length+"<br>"+
+  i.r_for+" "+i["fk_"+(CFG.format||"redaccio")];
+}
+function progr(){
+ const items=checkItems(), arr=getBoolArr("checks",items.length);
+ const terms=vocabItems(), va=getBoolArr("vocab",terms.length);
+ const bs=blocos(); let plens=0;
+ bs.forEach(function(b,idx){if(getString("b"+idx).trim()) plens++;});
+ const parts=[
+  getString("esquema").trim()?1:0,
+  getString("titol").trim()?1:0,
+  bs.length? plens/bs.length:0,
+  terms.length? va.filter(Boolean).length/terms.length:0,
+  items.length? arr.filter(Boolean).length/items.length:0,
+  CFG.format?1:0,
+  CAMPSE.length? einesPlens()/CAMPSE.length:0
+ ];
+ const pct=Math.round(100*parts.reduce(function(a,b){return a+b;},0)/parts.length);
+ $("prog-fill").style.width=pct+"%";
+ $("prog-txt-inici").textContent="Progress: "+pct+"%";
+}
+function refrescaTot(){
+ renderSelects(); renderFitxaTema(); renderEsquema(); renderPlantilla();
+ renderVocab(); renderChecks(); renderEines(); renderFormat(); renderEntrega(); progr();
+ $("cfg-nom").value=CFG.nom||"";
+ $("cfg-pistes").checked=!!CFG.pistes;
+}
+function aplicaIdioma(){
+ const i=T();
+ document.querySelectorAll("[data-i18n]").forEach(function(el){
+  const kk=el.dataset.i18n; if(i[kk]) el.textContent=i[kk]; });
+ document.documentElement.lang=LANG;
+ ["ca","es","en"].forEach(function(l){
+  const b=$("btn-"+l); if(b) b.classList.toggle("actiu",l===LANG); });
+ refrescaTot();
+}
+
+/* ===== accions ===== */
+function guardaNom(){
+ CFG.nom=$("cfg-nom").value.trim(); sSet("taller_cfg",JSON.stringify(CFG));
+ marca("ms-nom");
+}
+function descarregaTxt(){
+ const i=T(), bs=blocos();
+ const items=checkItems(), arr=getBoolArr("checks",items.length);
+ const terms=vocabItems(), va=getBoolArr("vocab",terms.length);
+ let x="=== "+i.titol+" ===\n\n";
+ x+="* "+i.r_tem+" "+tema()+" · "+i["t_"+tema()]+"\n";
+ x+="* "+i.r_tip+" "+i["tip_"+tip()+"_n"]+"\n";
+ x+="* "+i.r_tit+" "+(getString("titol")||"—")+"\n";
+ x+="* "+i.r_for+" "+i["fk_"+(CFG.format||"redaccio")]+"\n";
+ x+="* "+i.r_par+" "+totalParaules()+"\n\n";
+ x+="=== "+i.esq_t.toUpperCase()+" ===\n"+(getString("esquema")||"—")+"\n\n";
+ x+="=== "+i.pl_t.toUpperCase()+" ===\n";
+ bs.forEach(function(b,idx){
+  x+="\n["+b.t+"]\n"+(getString("b"+idx)||"—")+"\n"; });
+ x+="\n=== "+i.voc_t.toUpperCase()+" ("+va.filter(Boolean).length+"/"+terms.length+") ===\n";
+ x+=terms.map(function(t,idx){return (va[idx]?"[x] ":"[ ] ")+t;}).join("\n");
+ if(getString("altres")) x+="\n"+i.voc_altres+" "+getString("altres");
+ x+="\n\n=== "+i.ck_t.toUpperCase()+" ("+arr.filter(Boolean).length+"/"+items.length+") ===\n";
+ x+=items.map(function(c,idx){return (arr[idx]?"[x] ":"[ ] ")+c;}).join("\n");
+ x+="\n\n=== "+i.ei_t.toUpperCase()+" ===\n";
+ x+="* "+i.ei_prog+" "+(getString("eines_prog")||"—")+"\n";
+ x+="* "+i.ei_ia+" "+(getString("eines_ia")||"—")+"\n";
+ x+="* "+i.ei_ajut+" "+(getString("eines_ajut")||"—")+"\n";
+ x+="* "+i.ei_altres+" "+(getString("eines_altres")||"—")+"\n";
+ const nom="Tema"+("0"+tema()).slice(-2)+"_"+
+   (CFG.nom||"Alumne").replace(/[\\\/:*?"<>|]/g,"").replace(/\s+/g,"_")+"_Redaccio.txt";
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([x],{type:"text/plain;charset=utf-8"}));
+ a.download=nom;
+ document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+/* ===== escoltadors (registrats UN cop) ===== */
+ $("sel-tema").addEventListener("change",function(){
+ CFG.tema=parseInt(this.value,10)||1; sSet("taller_cfg",JSON.stringify(CFG)); refrescaTot(); });
+ $("sel-format").addEventListener("change",function(){
+ CFG.format=this.value; sSet("taller_cfg",JSON.stringify(CFG));
+ renderFormat(); renderEntrega(); progr(); });
+ $("cfg-pistes").addEventListener("change",function(){
+ CFG.pistes=this.checked; sSet("taller_cfg",JSON.stringify(CFG)); renderFitxaTema(); });
+ $("txt-esquema").addEventListener("input",function(){
+ setText("esquema",this.value); compt("txt-esquema","pc-esquema");
+ marca("ms-esquema"); progr(); });
+ $("txt-titol").addEventListener("input",function(){
+ setText("titol",this.value); marca("ms-titol"); progr(); });
+ $("txt-altres").addEventListener("input",function(){
+ setText("altres",this.value); marca("ms-altres"); });
+CAMPSE.forEach(function(c){
+ const el=$("eines-"+c);
+ el.addEventListener("input",function(){
+   setText("eines_"+c,el.value); marca("ms-eines"); progr(); });
+});
+
+/* ===== inici ===== */
+try{
+ mostra("inici"); aplicaIdioma();
+}catch(e){
+ const b=$("js-error");
+ if(b){ b.style.display="block"; b.textContent="Error: "+e.message; }
+}
+</script>
+</body>
+</html>
