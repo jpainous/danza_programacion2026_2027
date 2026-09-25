@@ -3,80 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
 <title>Fitxa de l'alumne · Fisiologia</title>
 <style>
-  :root{--pri:#1f5f8b;--pri2:#2a7aab;--crema:#f4f8fa;--tinta:#252a2e;--bord:#d8e2e7;--verd:#2e7d4f;--gris:#6b6570;--vermell:#a52834;--oro:#b8912f;--taronja:#c05621}
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.5}
-  .topbar{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;padding:.6rem 1rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-  .brand{font-family:Georgia,serif;font-weight:bold;font-size:1rem}
-  .brand small{display:block;font-weight:normal;font-size:.7rem;opacity:.85}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f4f8fa;color:#252a2e;line-height:1.55;font-size:16px}
+  .topbar{position:sticky;top:0;z-index:50;background:#1f5f8b;color:#fff;padding:.6rem 1rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+  .brand{font-family:Georgia,serif;font-weight:bold;font-size:1.05rem}
+  .brand small{display:block;font-weight:normal;font-size:.75rem;opacity:.9}
   .lang{display:flex;gap:.25rem}
-  .lang button,.tools button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;padding:.3rem .6rem;border-radius:20px;cursor:pointer;font-weight:600;font-size:.78rem}
-  .lang button.on{background:#fff;color:var(--pri)}
+  .lang button,.tools button{background:#3a7ca8;border:1px solid #6ba3c4;color:#ffffff;padding:.42rem .8rem;border-radius:8px;cursor:pointer;font-weight:700;font-size:.95rem;font-family:inherit}
+  .lang button.on{background:#ffffff;color:#1f5f8b}
   .tools{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center}
-  .tools button{border-radius:8px}
-  .tools button.warn{background:#f3d9de;color:var(--vermell);border-color:#f3d9de}
-  #savestate{font-size:.7rem;opacity:.9}
-  #memwarn{display:none;background:#fff3cd;color:#7a5b00;padding:.5rem 1rem;font-size:.8rem;border-bottom:1px solid #e6d9a2}
-  main{max-width:900px;margin:1.2rem auto;padding:0 1rem}
-  .card{background:#fff;border:1px solid var(--bord);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-  .card h2{margin:0 0 .6rem;color:var(--pri);font-size:1.15rem;font-family:Georgia,serif}
-  .card h2 small{color:var(--gris);font-weight:normal;font-size:.85rem}
-  h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.4px;color:var(--pri2);margin:1.1rem 0 .35rem;border-bottom:1px solid var(--bord);padding-bottom:.2rem}
+  .tools button.warn{background:#c86a78;border-color:#e3a3ad;color:#ffffff}
+  #savestate{font-size:.8rem;opacity:.95;color:#fff}
+  #memwarn{display:none;background:#fff3cd;color:#6b5300;padding:.55rem 1rem;font-size:.9rem;border-bottom:1px solid #e6d9a2}
+  main{max-width:920px;margin:1.2rem auto;padding:0 1rem}
+  .card{background:#fff;border:1px solid #d8e2e7;border-radius:14px;padding:1.15rem 1.35rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .card h2{margin:0 0 .6rem;color:#1f5f8b;font-size:1.25rem;font-family:Georgia,serif}
+  .card h2 small{color:#6b6570;font-weight:normal;font-size:.9rem}
+  h3{font-size:.86rem;text-transform:uppercase;letter-spacing:.4px;color:#2a7aab;margin:1.15rem 0 .4rem;border-bottom:1px solid #d8e2e7;padding-bottom:.22rem}
   .fld{display:block;margin:.55rem 0}
-  .fld span{display:block;font-size:.72rem;font-weight:700;color:var(--pri);margin-bottom:.15rem}
+  .fld span{display:block;font-size:.78rem;font-weight:700;color:#1f5f8b;margin-bottom:.18rem}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem}
-  @media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
-  input[type=text],input[type=email],input[type=date],textarea,select{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.42rem .5rem;font:inherit;font-size:.87rem;background:#fbfdfe}
-  textarea{resize:vertical;min-height:44px}
-  input:focus,textarea:focus,select:focus{outline:2px solid var(--pri2)}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  input[type=text],input[type=email],input[type=date],textarea,select{width:100%;border:1px solid #c4d3da;border-radius:8px;padding:.5rem .55rem;font:inherit;font-size:.95rem;background:#fbfdfe;color:#252a2e}
+  textarea{resize:vertical;min-height:48px}
+  input:focus,textarea:focus,select:focus{outline:2px solid #2a7aab}
   .selrow{display:flex;gap:.6rem;align-items:flex-end;flex-wrap:wrap}
-  .selrow .fld{flex:1;min-width:240px;margin:0}
-  .info{background:#f2f7fa;border-left:4px solid var(--pri2);padding:.6rem .8rem;border-radius:0 8px 8px 0;margin:.5rem 0;font-size:.88rem}
+  .selrow .fld{flex:1;min-width:260px;margin:0}
+  .selrow select{font-weight:600}
+  .info{background:#f2f7fa;border-left:4px solid #2a7aab;padding:.6rem .85rem;border-radius:0 8px 8px 0;margin:.5rem 0;font-size:.93rem}
   .info p{margin:.3rem 0;white-space:pre-wrap}
   .info ul{margin:.3rem 0;padding-left:1.2rem}
-  .info a{color:var(--pri)}
-  .nlb{display:inline-block;font-size:.68rem;font-weight:700;padding:.05rem .45rem;border-radius:10px;background:var(--gris);color:#fff;margin-left:.4rem}
-  .actbox{border:1px solid var(--bord);border-radius:10px;padding:.6rem .7rem;margin:.45rem 0;background:#fdfefe}
-  .actbox .top{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-  .actbox .top .tm{font-variant-numeric:tabular-nums;color:var(--pri2);font-size:.78rem;min-width:100px;font-weight:700}
-  .actbox .top .tx{flex:1;min-width:200px;font-size:.9rem}
-  .actbox select{max-width:180px;font-size:.8rem}
-  .actbox textarea{margin-top:.4rem;font-size:.84rem}
-  .actbox.st-done{border-left:4px solid var(--verd)}
-  .actbox.st-pend{border-left:4px solid var(--oro)}
-  .actbox.st-nof{border-left:4px solid var(--gris)}
-  .actbox.st-full{border-left:4px solid var(--verd)}
-  .actbox.st-partial{border-left:4px solid var(--pri2)}
+  .info a{color:#1f5f8b}
+  .nlb{display:inline-block;font-size:.72rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;background:#6b6570;color:#fff;margin-left:.4rem}
+  .actbox{border:1px solid #d8e2e7;border-radius:10px;padding:.65rem .75rem;margin:.5rem 0;background:#fdfefe}
+  .actbox .top{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
+  .actbox .top .tm{font-variant-numeric:tabular-nums;color:#2a7aab;font-size:.85rem;min-width:105px;font-weight:700}
+  .actbox .top .tx{flex:1;min-width:200px;font-size:.95rem}
+  .actbox select{max-width:200px;font-size:.85rem;font-weight:600}
+  .actbox textarea{margin-top:.45rem;font-size:.9rem}
+  .actbox.st-done{border-left:5px solid #2e7d4f}
+  .actbox.st-pend{border-left:5px solid #b8912f}
+  .actbox.st-nof{border-left:5px solid #6b6570}
+  .actbox.st-full{border-left:5px solid #2e7d4f}
+  .actbox.st-partial{border-left:5px solid #2a7aab}
   .stats{display:flex;gap:.5rem;flex-wrap:wrap}
-  .stat{background:#f2f7fa;border:1px solid var(--bord);border-radius:10px;padding:.4rem .7rem;font-size:.8rem}
-  .stat b{color:var(--pri)}
+  .stat{background:#f2f7fa;border:1px solid #d8e2e7;border-radius:10px;padding:.45rem .75rem;font-size:.88rem}
+  .stat b{color:#1f5f8b}
   .btnrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
-  .btn{border:none;border-radius:8px;padding:.45rem .8rem;font-weight:600;font-size:.82rem;cursor:pointer;background:var(--pri);color:#fff}
-  .btn.sec{background:#eef4f8;color:var(--pri)}
-  .btn.warn{background:var(--vermell);color:#fff}
-  .btn.mini{padding:.3rem .6rem;font-size:.75rem}
-  #logbox{max-height:260px;overflow:auto;font:11.5px/1.6 monospace;background:#fafbfd;border:1px solid var(--bord);border-radius:8px;padding:.5rem .7rem}
-  #logbox div{border-bottom:1px dashed #eef1f4;padding:.1rem 0}
-  #logbox .lg-t{color:var(--gris)}
-  #resetpanel{display:none;background:#fdf2f3;border:1px solid #f3cdd3;border-radius:10px;padding:.8rem;margin-top:.6rem}
-  #resetpanel .fld{margin:.4rem 0}
-  .hint{background:#fdf6e7;border-left:4px solid var(--oro);padding:.7rem .9rem;border-radius:0 8px 8px 0;font-size:.88rem}
-  #toast{position:fixed;bottom:18px;left:50%;margin-left:-130px;width:260px;text-align:center;background:var(--tinta);color:#fff;padding:.6rem 1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
+  .btn{border:none;border-radius:8px;padding:.5rem .9rem;font-weight:700;font-size:.9rem;cursor:pointer;background:#1f5f8b;color:#ffffff;font-family:inherit}
+  .btn.mini{padding:.4rem .7rem;font-size:.85rem}
+  #logbox{max-height:270px;overflow:auto;font:12.5px/1.65 monospace;background:#fafbfd;border:1px solid #d8e2e7;border-radius:8px;padding:.55rem .75rem}
+  #logbox div{border-bottom:1px dashed #eef1f4;padding:.12rem 0}
+  #logbox .lg-t{color:#6b6570}
+  #resetpanel{display:none;background:#fdf2f3;border:1px solid #f3cdd3;border-radius:10px;padding:.85rem;margin-top:.6rem}
+  .hint{background:#fdf6e7;border-left:4px solid #b8912f;padding:.8rem 1rem;border-radius:0 8px 8px 0;font-size:.95rem}
+  #toast{position:fixed;bottom:18px;left:50%;margin-left:-140px;width:280px;text-align:center;background:#252a2e;color:#fff;padding:.65rem 1rem;border-radius:10px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
   #toast.show{opacity:1}
   @media print{
-    .topbar,#toast,#errbox,#memwarn,.btn,.btnrow,#resetpanel,#logbox{display:none!important}
+    .topbar,#toast,#errbox,#memwarn,.btn,.btnrow,#resetpanel,#logbox,.selrow{display:none!important}
     body{background:#fff}
     .card{border:none;box-shadow:none;page-break-inside:avoid}
     input,textarea,select{border:none!important;background:none!important}
-    .selrow{display:none}
   }
 </style>
 </head>
 <body>
-<div id="errbox" style="display:none;background:#a52834;color:#fff;padding:.6rem 1rem;font:12px monospace;position:relative;z-index:100"></div>
+<div id="errbox" style="display:none;background:#a52834;color:#fff;padding:.6rem 1rem;font:13px monospace;position:relative;z-index:100"></div>
 <div id="memwarn">&#9888; <b>Mode mem&ograve;ria</b> &middot; Obre el fitxer directament al navegador (doble clic) perqu&egrave; les dades es desin. &middot; <b>Modo memoria</b>: abre el archivo directamente en el navegador. &middot; <b>Memory mode</b>: open the file directly in a browser.</div>
 <script>
 window.onerror=function(m,s,l){var e=document.getElementById('errbox');if(e){e.style.display='block';e.innerHTML='<strong>Error JS (linia '+l+'):</strong> '+m;}};
@@ -124,88 +119,79 @@ var KP='fitxa_alumne_prog_v6', KM='fitxa_alumne_me_v6';
 var I18N={
 ca:{t1:"Fitxa de l'alumne",t2:"Fisiologia aplicada a la dansa - Institut del Teatre",
  bSave:"Guardar fitxa",bPrint:"Imprimir PDF",bSend:"Enviar a professora",bImpP:"Importar programa",bBak:"C\u00f2pia de seguretat",bClrLog:"Netejar log",bReset:"Reiniciar fitxa",
+ bakConfirm:"Copia? (2n clic confirma)",clrConfirm:"Netejar? (2n clic confirma)",
  sData:"1. Dades personals",sName:"Nom complert",sMail:"Email alumne",sStart:"Data inici",sTeach:"Correu professora",sCourse:"Curs acad\u00e8mic",
- sSel:"2. Sessi\u00f3 de treball",pick:"Tria una sessi\u00f3...",sInfo:"Informaci\u00f3 general de la sessi\u00f3",sObj:"Objectius",sRes:"Recursos online",sAv:"Mitjans audiovisuals",sEv:"Evid\u00e8ncies de la sessi\u00f3",
+ sSel:"2. Sessi\u00f3 de treball",sSelLbl:"Tria la sessi\u00f3",pick:"Tria una sessi\u00f3...",nonTeach:"no lectiu",
+ sInfo:"Informaci\u00f3 general de la sessi\u00f3",sObj:"Objectius",sRes:"Recursos online",sAv:"Mitjans audiovisuals",sEv:"Evid\u00e8ncies de la sessi\u00f3",
  sActs:"3. Activitats en horari presencial",sComp:"4. Activitats fora de l'horari presencial",sGen:"5. Observacions generals de la sessi\u00f3",sCtrl:"6. Control",sLog:"7. Log d'accions",
  stEmpty:"(sense estat)",stDone:"Feta",stPend:"Pendent",stNof:"No feta",
  ctFull:"S\u00ed, complerta",ctPartial:"S\u00ed, parcial",ctPend:"Pendent",ctNof:"No feta",
  phActObs:"Observacions d'aquesta activitat...",phCompObs:"Observacions d'aquesta tasca...",phGen:"Observacions generals de la sessi\u00f3 (qu\u00e8 he apr\u00e8s, dubtes, incid\u00e8ncies...)",
  noComp:"La professora no ha enviat activitats fora de l'horari presencial per aquesta sessi\u00f3.",
  noActs:"Aquesta sessi\u00f3 encara no t\u00e9 activitats presencials.",
- noProg:"<b>Encara no tens cap programa.</b><br>1. Demana el fitxer <i>fitxa-alumne-dades.json</i> al professorat.<br>2. Prem \u00abImportar programa\u00bb i selecciona'l.<br>3. Treballa: tot es guarda autom\u00e0ticament en aquest navegador.",
- saved:"Desat",openLogged:"Programa obert",langChg:"Idioma canviat",selChg:"Sessi\u00f3 seleccionada",actSt:"Estat d'activitat",actNote:"Observacions d'activitat",compSt:"Estat de tasca fora d'aula",compNote:"Observacions de tasca",genNote:"Observacions generals",profSaved:"Dades personals",manSaved:"Guardar fitxa",impPrg:"Programa del professorat importat",impBak:"C\u00f2pia de seguretat restaurada",expTea:"Fitxa enviada (fitxer generat)",clrLog:"Log netejat",reseted:"Fitxa reiniciada",printed:"Impressi\u00f3",
- L_OPEN:"Obertura del programa",L_LANG:"Canvi d'idioma",L_SEL:"Sessi\u00f3 seleccionada",L_ACTST:"Estat d'activitat",L_ACTNOTE:"Observacions d'activitat",
- L_COMPST:"Estat de tasca fora d'aula",L_COMPNOTE:"Observacions de tasca",L_GENNOTE:"Observacions generals",L_PROF:"Dades personals modificades",
- L_SAVE:"Guardar fitxa",L_IMPPROG:"Importat programa del professorat",L_IMPBAK:"Restaurada c\u00f2pia de seguretat",L_EXPTEA:"Enviament a professora (fitxer)",L_PRINT:"Impressi\u00f3 PDF",
- L_CLRLOG:"Log netejat",L_RESET:"Fitxa reiniciada",L_MEMMODE:"Av\u00eds: mode mem\u00f2ria (sense desament)",
+ noProg:"<b>Encara no tens cap programa.</b><br>1. Demana el fitxer <i>fitxa-alumne-dades.json</i> al professorat (bot\u00f3 \u00abExporta per a l'alumnat\u00bb del planificador).<br>2. Prem \u00abImportar programa\u00bb aqu\u00ed dalt i selecciona'l.<br>3. Treballa: tot es guarda autom\u00e0ticament en aquest navegador.",
+ saved:"Desat",impOk:"Importaci\u00f3 completada.",statOk:"Dades personals desades.",manSaved:"Fitxa guardada.",clrLog:"Log netejat.",reseted:"Fitxa reiniciada.",bakOk:"2 fitxers generats: c\u00f2pia datada + fitxa-alumne-copia.json",
+ sendHow:"Fitxer d'entrega generat. Adjunta'l a un correu per a la professora.",sendNone:"No hi ha cap sessi\u00f3 amb dades per enviar.",
+ resetBad:"La paraula no coincideix. Escriu REINICIA exactament.",
  sessNew:"sessions noves",sessUpd:"sessions actualitzades",
- statsSes:"Aquesta sessi\u00f3",statsAll:"Tot el curs",pres:"Presencials",comp:"Fora d'aula",
- done:"Fetes",pend:"Pendents",nof:"No fetes",full:"Complertes",partial:"Parcials",total:"Total",noData:"-",
+ statsAll:"Resum de tot el curs",pres:"Presencials",comp:"Fora d'aula",
+ done:"Fetes",pend:"Pendents",nof:"No fetes",full:"Complertes",partial:"Parcials",total:"Total",
  resetTitle:"Reinici de la fitxa (acci\u00f3 protegida)",resetInfo:"Per confirmar, escriu la paraula <b>REINICIA</b> al camp i prem el bot\u00f3.",
  resetKeep:"Mant\u00e9n les meves dades personals (nom, email, curs...)",resetGo:"REINICIA LA FITXA",resetCancel:"Cancel\u00b7la",
- resetWord:"REINICIA",resetBad:"La paraula no coincideix. Escriu REINICIA exactament.",
- sendHow:"Fitxer d'entrega generat. Adjunta'l a un correu per a la professora (s'ha obert el teu gestor de correu si el navegador ho permet).",
- sendNone:"No hi ha cap sessi\u00f3 amb dades per enviar.",
- confirmClr:"Netejar el log? (2n clic per confirmar)",
- loggedAt:"a les",
- importOk:"Importaci\u00f3 completada.",
- statOk:"Dades personals desades."},
+ L_OPEN:"Obertura del programa",L_LANG:"Canvi d'idioma",L_SEL:"Sessi\u00f3 seleccionada",L_ACTST:"Estat d'activitat",L_ACTNOTE:"Observacions d'activitat",
+ L_COMPST:"Estat de tasca fora d'aula",L_COMPNOTE:"Observacions de tasca",L_GENNOTE:"Observacions generals",L_PROF:"Dades personals modificades",
+ L_SAVE:"Guardar fitxa",L_IMPPROG:"Importat programa del professorat",L_IMPBAK:"C\u00f2pia de seguretat (export)",L_EXPTEA:"Enviament a professora (fitxer)",L_PRINT:"Impressi\u00f3 PDF",
+ L_CLRLOG:"Log netejat",L_RESET:"Fitxa reiniciada",L_MEMMODE:"Av\u00eds: mode mem\u00f2ria (sense desament)"},
 es:{t1:"Ficha del alumnado",t2:"Fisiolog\u00eda aplicada a la danza - Institut del Teatre",
  bSave:"Guardar ficha",bPrint:"Imprimir PDF",bSend:"Enviar a profesora",bImpP:"Importar programa",bBak:"Copia de seguridad",bClrLog:"Limpiar log",bReset:"Reiniciar ficha",
+ bakConfirm:"\u00bfCopia? (2\u00ba clic confirma)",clrConfirm:"\u00bfLimpiar? (2\u00ba clic confirma)",
  sData:"1. Datos personales",sName:"Nombre completo",sMail:"Email alumno/a",sStart:"Fecha inicio",sTeach:"Correo profesora",sCourse:"Curso acad\u00e9mico",
- sSel:"2. Sesi\u00f3n de trabajo",pick:"Elige una sesi\u00f3n...",sInfo:"Informaci\u00f3n general de la sesi\u00f3n",sObj:"Objetivos",sRes:"Recursos online",sAv:"Medios audiovisuales",sEv:"Evidencias de la sesi\u00f3n",
+ sSel:"2. Sesi\u00f3n de trabajo",sSelLbl:"Elige la sesi\u00f3n",pick:"Elige una sesi\u00f3n...",nonTeach:"no lectivo",
+ sInfo:"Informaci\u00f3n general de la sesi\u00f3n",sObj:"Objetivos",sRes:"Recursos online",sAv:"Medios audiovisuales",sEv:"Evidencias de la sesi\u00f3n",
  sActs:"3. Actividades en horario presencial",sComp:"4. Actividades fuera del horario presencial",sGen:"5. Observaciones generales de la sesi\u00f3n",sCtrl:"6. Control",sLog:"7. Log de acciones",
  stEmpty:"(sin estado)",stDone:"Hecha",stPend:"Pendiente",stNof:"No hecha",
  ctFull:"S\u00ed, completa",ctPartial:"S\u00ed, parcial",ctPend:"Pendiente",ctNof:"No hecha",
  phActObs:"Observaciones de esta actividad...",phCompObs:"Observaciones de esta tarea...",phGen:"Observaciones generales de la sesi\u00f3n (qu\u00e9 he aprendido, dudas, incidencias...)",
  noComp:"El profesorado no ha enviado actividades fuera del horario presencial para esta sesi\u00f3n.",
  noActs:"Esta sesi\u00f3n todav\u00eda no tiene actividades presenciales.",
- noProg:"<b>Todav\u00eda no tienes ning\u00fan programa.</b><br>1. Pide el archivo <i>fitxa-alumne-dades.json</i> al profesorado.<br>2. Pulsa \u00abImportar programa\u00bb y selecciona el archivo.<br>3. Trabaja: todo se guarda autom\u00e1ticamente en este navegador.",
- saved:"Guardado",openLogged:"Programa abierto",langChg:"Idioma cambiado",selChg:"Sesi\u00f3n seleccionada",actSt:"Estado de actividad",actNote:"Observaciones de actividad",compSt:"Estado de tarea fuera de aula",compNote:"Observaciones de tarea",genNote:"Observaciones generales",profSaved:"Datos personales",manSaved:"Guardar ficha",impPrg:"Programa del profesorado importado",impBak:"Copia de seguridad restaurada",expTea:"Ficha enviada (archivo generado)",clrLog:"Log limpiado",reseted:"Ficha reiniciada",printed:"Impresi\u00f3n",
- L_OPEN:"Apertura del programa",L_LANG:"Cambio de idioma",L_SEL:"Sesi\u00f3n seleccionada",L_ACTST:"Estado de actividad",L_ACTNOTE:"Observaciones de actividad",
- L_COMPST:"Estado de tarea fuera de aula",L_COMPNOTE:"Observaciones de tarea",L_GENNOTE:"Observaciones generales",L_PROF:"Datos personales modificados",
- L_SAVE:"Guardar ficha",L_IMPPROG:"Importado programa del profesorado",L_IMPBAK:"Restaurada copia de seguridad",L_EXPTEA:"Env\u00edo a profesora (archivo)",L_PRINT:"Impresi\u00f3n PDF",
- L_CLRLOG:"Log limpiado",L_RESET:"Ficha reiniciada",L_MEMMODE:"Aviso: modo memoria (sin guardado)",
+ noProg:"<b>Todav\u00eda no tienes ning\u00fan programa.</b><br>1. Pide el archivo <i>fitxa-alumne-dades.json</i> al profesorado (bot\u00f3n \u00abExportar para el alumnado\u00bb del planificador).<br>2. Pulsa \u00abImportar programa\u00bb aqu\u00ed arriba y selecci\u00f3nalo.<br>3. Trabaja: todo se guarda autom\u00e1ticamente en este navegador.",
+ saved:"Guardado",impOk:"Importaci\u00f3n completada.",statOk:"Datos personales guardados.",manSaved:"Ficha guardada.",clrLog:"Log limpiado.",reseted:"Ficha reiniciada.",bakOk:"2 archivos generados: copia datada + fitxa-alumne-copia.json",
+ sendHow:"Archivo de entrega generado. Adj\u00fantalo a un correo para la profesora.",sendNone:"No hay ninguna sesi\u00f3n con datos para enviar.",
+ resetBad:"La palabra no coincide. Escribe REINICIA exactamente.",
  sessNew:"sesiones nuevas",sessUpd:"sesiones actualizadas",
- statsSes:"Esta sesi\u00f3n",statsAll:"Todo el curso",pres:"Presenciales",comp:"Fuera de aula",
- done:"Hechas",pend:"Pendientes",nof:"No hechas",full:"Completas",partial:"Parciales",total:"Total",noData:"-",
+ statsAll:"Resumen de todo el curso",pres:"Presenciales",comp:"Fuera de aula",
+ done:"Hechas",pend:"Pendientes",nof:"No hechas",full:"Completas",partial:"Parciales",total:"Total",
  resetTitle:"Reinicio de la ficha (acci\u00f3n protegida)",resetInfo:"Para confirmar, escribe la palabra <b>REINICIA</b> en el campo y pulsa el bot\u00f3n.",
  resetKeep:"Mant\u00e9n mis datos personales (nombre, email, curso...)",resetGo:"REINICIA LA FICHA",resetCancel:"Cancelar",
- resetWord:"REINICIA",resetBad:"La palabra no coincidece. Escribe REINICIA exactamente.",
- sendHow:"Archivo de entrega generado. Adj\u00fantalo a un correo para la profesora (se ha abierto tu gestor de correo si el navegador lo permite).",
- sendNone:"No hay ninguna sesi\u00f3n con datos para enviar.",
- confirmClr:"\u00bfLimpiar el log? (2\u00ba clic para confirmar)",
- loggedAt:"a las",
- importOk:"Importaci\u00f3n completada.",
- statOk:"Datos personales guardados."},
+ L_OPEN:"Apertura del programa",L_LANG:"Cambio de idioma",L_SEL:"Sesi\u00f3n seleccionada",L_ACTST:"Estado de actividad",L_ACTNOTE:"Observaciones de actividad",
+ L_COMPST:"Estado de tarea fuera de aula",L_COMPNOTE:"Observaciones de tarea",L_GENNOTE:"Observaciones generales",L_PROF:"Datos personales modificados",
+ L_SAVE:"Guardar ficha",L_IMPPROG:"Importado programa del profesorado",L_IMPBAK:"Copia de seguridad (export)",L_EXPTEA:"Env\u00edo a profesora (archivo)",L_PRINT:"Impresi\u00f3n PDF",
+ L_CLRLOG:"Log limpiado",L_RESET:"Ficha reiniciada",L_MEMMODE:"Aviso: modo memoria (sin guardado)"},
 en:{t1:"Student sheet",t2:"Physiology Applied to Dance - Institut del Teatre",
  bSave:"Save sheet",bPrint:"Print PDF",bSend:"Send to teacher",bImpP:"Import programme",bBak:"Backup copy",bClrLog:"Clear log",bReset:"Reset sheet",
+ bakConfirm:"Copy? (2nd click confirms)",clrConfirm:"Clear? (2nd click confirms)",
  sData:"1. Personal data",sName:"Full name",sMail:"Student email",sStart:"Start date",sTeach:"Teacher's email",sCourse:"Academic year",
- sSel:"2. Working session",pick:"Choose a session...",sInfo:"Session general information",sObj:"Objectives",sRes:"Online resources",sAv:"Audiovisual media",sEv:"Session evidence",
+ sSel:"2. Working session",sSelLbl:"Choose the session",pick:"Choose a session...",nonTeach:"non-teaching",
+ sInfo:"Session general information",sObj:"Objectives",sRes:"Online resources",sAv:"Audiovisual media",sEv:"Session evidence",
  sActs:"3. In-class activities",sComp:"4. Out-of-class activities",sGen:"5. General observations of the session",sCtrl:"6. Control",sLog:"7. Action log",
  stEmpty:"(no status)",stDone:"Done",stPend:"Pending",stNof:"Not done",
  ctFull:"Yes, complete",ctPartial:"Yes, partial",ctPend:"Pending",ctNof:"Not done",
  phActObs:"Observations on this activity...",phCompObs:"Observations on this task...",phGen:"General observations of the session (what I learned, doubts, incidents...)",
  noComp:"The teacher has not sent out-of-class activities for this session.",
  noActs:"This session has no in-class activities yet.",
- noProg:"<b>No programme yet.</b><br>1. Ask your teacher for the file <i>fitxa-alumne-dades.json</i>.<br>2. Press \u201cImport programme\u201d and select it.<br>3. Work on it: everything saves automatically in this browser.",
- saved:"Saved",openLogged:"Programme opened",langChg:"Language changed",selChg:"Session selected",actSt:"Activity status",actNote:"Activity observations",compSt:"Out-of-class task status",compNote:"Task observations",genNote:"General observations",profSaved:"Personal data",manSaved:"Sheet saved",impPrg:"Teacher's programme imported",impBak:"Backup restored",expTea:"Sheet sent (file generated)",clrLog:"Log cleared",reseted:"Sheet reset",printed:"Print",
+ noProg:"<b>No programme yet.</b><br>1. Ask your teacher for the file <i>fitxa-alumne-dades.json</i> (\u201cExport for students\u201d button in the planner).<br>2. Press \u201cImport programme\u201d above and select it.<br>3. Work on it: everything saves automatically in this browser.",
+ saved:"Saved",impOk:"Import completed.",statOk:"Personal data saved.",manSaved:"Sheet saved.",clrLog:"Log cleared.",reseted:"Sheet reset.",bakOk:"2 files generated: dated copy + fitxa-alumne-copia.json",
+ sendHow:"Delivery file generated. Attach it to an email for the teacher.",sendNone:"No session with data to send.",
+ resetBad:"The word does not match. Type REINICIA exactly.",
+ sessNew:"new sessions",sessUpd:"updated sessions",
+ statsAll:"Whole-course summary",pres:"In-class",comp:"Out-of-class",
+ done:"Done",pend:"Pending",nof:"Not done",full:"Complete",partial:"Partial",total:"Total",
+ resetTitle:"Sheet reset (protected action)",resetInfo:"To confirm, type the word <b>REINICIA</b> in the field and press the button.",
+ resetKeep:"Keep my personal data (name, email, year...)",resetGo:"RESET THE SHEET",resetCancel:"Cancel",
  L_OPEN:"Programme opened",L_LANG:"Language changed",L_SEL:"Session selected",L_ACTST:"Activity status",L_ACTNOTE:"Activity observations",
  L_COMPST:"Out-of-class task status",L_COMPNOTE:"Task observations",L_GENNOTE:"General observations",L_PROF:"Personal data changed",
- L_SAVE:"Sheet saved",L_IMPPROG:"Teacher's programme imported",L_IMPBAK:"Backup restored",L_EXPTEA:"Sent to teacher (file)",L_PRINT:"PDF print",
- L_CLRLOG:"Log cleared",L_RESET:"Sheet reset",L_MEMMODE:"Warning: memory mode (no saving)",
- sessNew:"new sessions",sessUpd:"updated sessions",
- statsSes:"This session",statsAll:"Whole course",pres:"In-class",comp:"Out-of-class",
- done:"Done",pend:"Pending",nof:"Not done",full:"Complete",partial:"Partial",total:"Total",noData:"-",
- resetTitle:"Sheet reset (protected action)",resetInfo:"To confirm, type the word <b>RESET-WORD</b> in the field and press the button.",
- resetKeep:"Keep my personal data (name, email, year...)",resetGo:"RESET THE SHEET",resetCancel:"Cancel",
- resetWord:"REINICIA",resetBad:"The word does not match. Type it exactly.",
- sendHow:"Delivery file generated. Attach it to an email for the teacher (your mail app has been opened if the browser allows it).",
- sendNone:"No session with data to send.",
- confirmClr:"Clear the log? (2nd click to confirm)",
- loggedAt:"at",
- importOk:"Import completed.",
- statOk:"Personal data saved."}};
+ L_SAVE:"Sheet saved",L_IMPPROG:"Teacher's programme imported",L_IMPBAK:"Backup copy (export)",L_EXPTEA:"Sent to teacher (file)",L_PRINT:"PDF print",
+ L_CLRLOG:"Log cleared",L_RESET:"Sheet reset",L_MEMMODE:"Warning: memory mode (no saving)"}};
 
 /* ================== ESTAT ================== */
 var lang=ST.getItem('fa_lang')||'ca';
@@ -226,15 +212,12 @@ var saveTimer=null;
 
 /* ================== UTILITATS ================== */
 function $(id){return document.getElementById(id);}
-function t(k){
- var s=(I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;
- s=s.replace('RESET-WORD',I18N[lang]?I18N[lang].resetWord:'REINICIA');
- var d=document.createElement('div');d.innerHTML=s;return d.textContent;
-}
+function t(k){return (I18N[lang]&&I18N[lang][k])?I18N[lang][k]:k;}
 function esc(s){s=(s==null)?'':String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function linkify(s){return esc(s).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
 function nowISO(){return new Date().toISOString();}
 function clock(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return p(d.getDate())+'/'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
+function dtStamp(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
 function fmtD(iso){if(!iso)return '-';var p=String(iso).split('-');if(p.length<3)return String(iso);return p[2]+'/'+p[1]+'/'+p[0];}
 
 function log(a,d){
@@ -252,7 +235,7 @@ function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(function(){
 window.onbeforeunload=function(){save(true);};
 function toast(m){var x=$('toast');x.textContent=m;x.className='show';clearTimeout(x._t);x._t=setTimeout(function(){x.className='';},3200);}
 
-/* ================== SESSIONS ================== */
+/* ================== SESSIO ================== */
 function sorted(){
  if(!prog||!prog.sessions)return [];
  var ss=prog.sessions.slice(0);
@@ -275,7 +258,54 @@ function compLines(s){
  return out;
 }
 
-/* ================== RENDER: PROFILE ================== */
+/* ================== BARRETA ================== */
+function applyBar(){
+ $('t1').textContent=t('t1');
+ $('t2').textContent=t('t2');
+ $('bSave').textContent=t('bSave');
+ $('bPrint').textContent=t('bPrint');
+ $('bSend').textContent=t('bSend');
+ $('bImpP').textContent=t('bImpP');
+ $('bBak').textContent=t('bBak');
+ $('bClrLog').textContent=t('bClrLog');
+ $('bReset').textContent=t('bReset');
+ var bs=document.querySelectorAll('#langBox button');
+ var i;
+ for(i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute('data-lang')===lang)?'on':'';
+ if(window.__memMode)$('memwarn').style.display='block';
+}
+
+/* ================== CONFIRMACIO EN 2 CLICS (exclusiva per boto) ================== */
+function clickOnce(btnId,confirmKey,action){
+ var b=$(btnId);
+ if(!b)return;
+ /* desarma qualsevol ALTRE boto que estigui armat */
+ var armed=document.querySelectorAll('button[data-arm="1"]');
+ var i;
+ for(i=0;i<armed.length;i++){
+  if(armed[i]!==b){
+   armed[i].removeAttribute('data-arm');
+   if(armed[i]._normal)armed[i].textContent=armed[i]._normal;
+  }
+ }
+ if(b.getAttribute('data-arm')!=='1'){
+  b.setAttribute('data-arm','1');
+  if(!b._normal)b._normal=b.textContent;
+  b.textContent=t(confirmKey);
+  if(b._to)clearTimeout(b._to);
+  b._to=setTimeout(function(){
+   b.removeAttribute('data-arm');
+   if(b._normal)b.textContent=b._normal;
+  },6000);
+  return;
+ }
+ clearTimeout(b._to);
+ b.removeAttribute('data-arm');
+ if(b._normal)b.textContent=b._normal;
+ action();
+}
+
+/* ================== RENDER ================== */
 function profileHTML(){
  var p=me.profile;
  return '<section class="card"><h2>'+t('sData')+'</h2>'
@@ -287,22 +317,18 @@ function profileHTML(){
  +'<label class="fld"><span>'+t('sCourse')+'</span><input type="text" id="pCourse" value="'+esc(p.course)+'"></label>'
  +'</div></section>';
 }
-
-/* ================== RENDER: SELECTOR ================== */
 function selectorHTML(){
  var ss=sorted(),h='',i,s;
- h+='<section class="card"><h2>'+t('sSel')+'</h2><div class="selrow"><label class="fld"><span>'+t('sSel')+'</span>';
+ h+='<section class="card"><h2>'+t('sSel')+'</h2><div class="selrow"><label class="fld"><span>'+t('sSelLbl')+'</span>';
  h+='<select id="selSes"><option value="">'+t('pick')+'</option>';
  for(i=0;i<ss.length;i++){
   s=ss[i];
   h+='<option value="'+esc(s.date||'')+'"'+((me.lastSes===(s.date||''))?' selected':'')+'>'
-   +fmtD(s.date)+' - '+esc(s.topic||'')+(s.noLectiva?' ('+t('noData')+')':'')+'</option>';
+   +fmtD(s.date)+' - '+esc(s.topic||'')+(s.noLectiva?' ('+t('nonTeach')+')':'')+'</option>';
  }
- h+='</select></label></div><div id="sesspanel"></div></section>';
+ h+='</select></label></div></section>';
  return h;
 }
-
-/* ================== RENDER: PANELL DE SESSIO ================== */
 function infoHTML(s){
  var h='',i;
  if(s.obj){h+='<h3>'+t('sObj')+'</h3><div class="info"><p>'+esc(s.obj)+'</p></div>';}
@@ -351,13 +377,13 @@ function compHTML(s){
  }
  return h;
 }
-function statsHTML(s){
+function sessStats(s){
  var i,done=0,pend=0,nof=0,n=(s.acts?s.acts.length:0),k,st;
  for(i=0;i<n;i++){k=actKey(s.date,s.acts[i].txt,i);st=me.done[k]||'';
   if(st==='done')done++;else if(st==='pend')pend++;else if(st==='nof')nof++;}
- var cd=0,cp=0,cn=0,lines=compLines(s),ck,cst;
+ var cd=0,cp=0,lines=compLines(s),ck,cst;
  for(i=0;i<lines.length;i++){ck=(s.date||'')+'|c|'+i;cst=me.compStatus[ck]||'';
-  if(cst==='full')cd++;else if(cst==='partial')cp++;else if(cst==='nof')cn++;}
+  if(cst==='full')cd++;else if(cst==='partial')cp++;}
  return '<div class="stats">'
  +'<span class="stat">'+t('pres')+': <b>'+n+'</b></span>'
  +'<span class="stat">'+t('done')+': <b>'+done+'</b></span>'
@@ -368,7 +394,7 @@ function statsHTML(s){
  +'<span class="stat">'+t('partial')+': <b>'+cp+'</b></span>'
  +'</div>';
 }
-function globalStatsHTML(){
+function globalStats(){
  var ss=sorted(),tot=0,dn=0,i,j,s,k,st,lines,ck,cst;
  for(i=0;i<ss.length;i++){
   s=ss[i];
@@ -380,34 +406,37 @@ function globalStatsHTML(){
  return '<div class="stats">'
  +'<span class="stat">'+t('total')+': <b>'+tot+'</b></span>'
  +'<span class="stat">'+t('done')+': <b>'+dn+'</b></span>'
- +'<span class="stat">'+pc+'%</span>'
+ +'<span class="stat"><b>'+pc+'%</b></span>'
  +'</div>';
 }
 function sessPanelHTML(s){
- var h='<h3>'+t('sInfo')+'</h3>';
- h+=infoHTML(s);
- h+='<h3>'+t('sActs')+'</h3>'+actHTML(s);
- h+='<h3>'+t('sComp')+'</h3>'+compHTML(s);
- h+='<h3>'+t('sGen')+'</h3><textarea data-gn="'+esc(s.date||'')+'" rows="3" placeholder="'+t('phGen')+'">'+esc(me.genNotes[s.date]||'')+'</textarea>';
- h+='<h3>'+t('sCtrl')+'</h3>'+statsHTML(s);
- h+='<div class="btnrow"><button type="button" class="btn mini" onclick="window.print()">'+t('bPrint')+'</button></div>';
+ var h='<h3>'+t('sInfo')+'</h3>'+infoHTML(s)
+ +'<h3>'+t('sActs')+'</h3>'+actHTML(s)
+ +'<h3>'+t('sComp')+'</h3>'+compHTML(s)
+ +'<h3>'+t('sGen')+'</h3><textarea data-gn="'+esc(s.date||'')+'" rows="3" placeholder="'+t('phGen')+'">'+esc(me.genNotes[s.date]||'')+'</textarea>'
+ +'<h3>'+t('sCtrl')+'</h3>'+sessStats(s)
+ +'<div class="btnrow"><button type="button" class="btn mini" onclick="window.print()">'+t('bPrint')+'</button></div>';
  return h;
 }
-
-/* ================== RENDER: LOG ================== */
 function logHTML(){
- var h='<section class="card"><h2>'+t('sLog')+'</h2><div id="logbox">',i,e,dsc;
+ var h='<section class="card" id="logcard"><h2>'+t('sLog')+'</h2><div id="logbox">',i,e,dsc,d,p=function(n){return (n<10?'0':'')+n;};
  for(i=me.log.length-1;i>=0;i--){
   e=me.log[i];
   dsc=(I18N[lang]&&I18N[lang][e.a])?I18N[lang][e.a]:e.a;
-  var d=new Date(e.ts),p=function(n){return (n<10?'0':'')+n;};
+  d=new Date(e.ts);
   h+='<div><span class="lg-t">'+p(d.getDate())+'/'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())+'</span> - '+esc(dsc)+(e.d?(' - '+esc(e.d)):'')+'</div>';
  }
- h+='</div></section>';
+ h+='</div>';
+ h+='<div id="resetpanel" style="display:none">'
+  +'<b>'+t('resetTitle')+'</b><p>'+t('resetInfo')+'</p>'
+  +'<label class="fld"><input type="checkbox" id="rpKeep" checked> '+t('resetKeep')+'</label>'
+  +'<input type="text" id="rpWord" placeholder="REINICIA">'
+  +'<div class="btnrow"><button type="button" class="btn" id="rpGo">'+t('resetGo')+'</button>'
+  +'<button type="button" class="btn" id="rpCancel" style="background:#6b6570;color:#ffffff">'+t('resetCancel')+'</button></div>'
+  +'</div>';
+ h+='</section>';
  return h;
 }
-
-/* ================== RENDER GLOBAL ================== */
 function render(){
  applyBar();
  var ss=sorted(),s=findSes(me.lastSes),h='';
@@ -415,8 +444,8 @@ function render(){
  h+=selectorHTML();
  if(prog&&ss.length){
   if(s){
-   h+='<section class="card" id="spanel"><h2>'+fmtD(s.date)+' <small>'+esc(s.topic||'')+'</small>'+(s.noLectiva?'<span class="nlb">-</span>':'')+'</h2>'+sessPanelHTML(s)+'</section>';
-   h+='<section class="card"><h2>'+t('statsAll')+'</h2>'+globalStatsHTML()+'</section>';
+   h+='<section class="card" id="spanel"><h2>'+fmtD(s.date)+' <small>'+esc(s.topic||'')+'</small>'+(s.noLectiva?'<span class="nlb">'+t('nonTeach')+'</span>':'')+'</h2>'+sessPanelHTML(s)+'</section>';
+   h+='<section class="card" id="gstats"><h2>'+t('statsAll')+'</h2>'+globalStats()+'</section>';
   }
  }else if(!prog){
   h+='<div class="hint">'+t('noProg')+'</div>';
@@ -424,47 +453,50 @@ function render(){
  h+=logHTML();
  $('main').innerHTML=h;
 }
-
-/* ================== LOG VISIBLE EN CANVI DE SESSIO ================== */
 function renderLog(){
  var box=$('logbox');
  if(!box)return;
- var h='',i,e,dsc;
+ var h='',i,e,dsc,d,p=function(n){return (n<10?'0':'')+n;};
  for(i=me.log.length-1;i>=0;i--){
   e=me.log[i];
   dsc=(I18N[lang]&&I18N[lang][e.a])?I18N[lang][e.a]:e.a;
-  var d=new Date(e.ts),p=function(n){return (n<10?'0':'')+n;};
+  d=new Date(e.ts);
   h+='<div><span class="lg-t">'+p(d.getDate())+'/'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())+'</span> - '+esc(dsc)+(e.d?(' - '+esc(e.d)):'')+'</div>';
  }
  box.innerHTML=h;
 }
+function refreshSessionUI(){
+ var s=findSes(me.lastSes);
+ if(!s)return;
+ var sp=$('spanel');
+ if(sp)sp.innerHTML='<h2>'+fmtD(s.date)+' <small>'+esc(s.topic||'')+'</small>'+(s.noLectiva?'<span class="nlb">'+t('nonTeach')+'</span>':'')+'</h2>'+sessPanelHTML(s);
+ var gs=$('gstats');
+ if(gs)gs.innerHTML='<h2>'+t('statsAll')+'</h2>'+globalStats();
+}
 
-/* ================== ESDEVENIMENTS ================== */
+/* ================== ESDEVENIMENTS FORMULARI ================== */
  $('main').addEventListener('input',function(e){
- var el=e.target,old;
+ var el=e.target;
  if(el.id==='pName'||el.id==='pMail'||el.id==='pStart'||el.id==='pTeach'||el.id==='pCourse'){
   var map={pName:'name',pMail:'email',pStart:'start',pTeach:'teacher',pCourse:'course'};
-  me.profile[map[el.id]]=el.value;
-  log('L_PROF',me.profile.name||'');
-  scheduleSave();return;
+  me.profile[map[el.id]]=el.value;scheduleSave();return;
  }
- var ak=el.getAttribute?el.getAttribute('data-ak'):null;
- if(ak!==null){me.actNotes[ak]=el.value;log('L_ACTNOTE');scheduleSave();return;}
  var an=el.getAttribute?el.getAttribute('data-an'):null;
- if(an!==null){me.actNotes[an]=el.value;log('L_ACTNOTE');scheduleSave();return;}
- var ck=el.getAttribute?el.getAttribute('data-ck'):null;
- if(ck!==null){me.compNotes[ck]=el.value;log('L_COMPNOTE');scheduleSave();return;}
+ if(an!==null){me.actNotes[an]=el.value;scheduleSave();return;}
  var cn=el.getAttribute?el.getAttribute('data-cn'):null;
- if(cn!==null){me.compNotes[cn]=el.value;log('L_COMPNOTE');scheduleSave();return;}
+ if(cn!==null){me.compNotes[cn]=el.value;scheduleSave();return;}
  var gn=el.getAttribute?el.getAttribute('data-gn'):null;
- if(gn!==null){me.genNotes[gn]=el.value;log('L_GENNOTE');scheduleSave();return;}
+ if(gn!==null){me.genNotes[gn]=el.value;scheduleSave();return;}
 });
  $('main').addEventListener('change',function(e){
- var el=e.target;
+ var el=e.target,old;
+ if(el.id==='pName'||el.id==='pMail'||el.id==='pStart'||el.id==='pTeach'||el.id==='pCourse'){
+  log('L_PROF',me.profile.name||'');save();return;
+ }
  if(el.id==='selSes'){
   me.lastSes=el.value||'';
   var s=findSes(me.lastSes);
-  log('L_SEL',s?(fmtD(s.date)+' '+ (s.topic||'')):'');
+  log('L_SEL',s?(fmtD(s.date)+' '+(s.topic||'')):'');
   save(true);render();return;
  }
  var ak=el.getAttribute?el.getAttribute('data-ak'):null;
@@ -472,21 +504,39 @@ function renderLog(){
   old=me.done[ak]||'';
   me.done[ak]=el.value;
   log('L_ACTST',(old||'-')+' > '+(el.value||'-'));
-  if(me.lastSes){var s=findSes(me.lastSes);if(s){var sp=document.getElementById('spanel');if(sp&&s){sp.innerHTML='<h2>'+fmtD(s.date)+' <small>'+esc(s.topic||'')+'</small></h2>'+sessPanelHTML(s);}}}
-  scheduleSave();return;
+  refreshSessionUI();
+  save();return;
  }
  var ck=el.getAttribute?el.getAttribute('data-ck'):null;
  if(ck!==null){
   old=me.compStatus[ck]||'';
   me.compStatus[ck]=el.value;
   log('L_COMPST',(old||'-')+' > '+(el.value||'-'));
-  var s2=findSes(me.lastSes);
-  if(s2){var sp2=document.getElementById('spanel');if(sp2){sp2.innerHTML='<h2>'+fmtD(s2.date)+' <small>'+esc(s2.topic||'')+'</small></h2>'+sessPanelHTML(s2);}}
-  scheduleSave();return;
+  refreshSessionUI();
+  save();return;
  }
+ var an2=el.getAttribute?el.getAttribute('data-an'):null;
+ if(an2!==null){log('L_ACTNOTE');save();return;}
+ var cn2=el.getAttribute?el.getAttribute('data-cn'):null;
+ if(cn2!==null){log('L_COMPNOTE');save();return;}
+ var gn2=el.getAttribute?el.getAttribute('data-gn'):null;
+ if(gn2!==null){log('L_GENNOTE');save();return;}
+});
+ $('main').addEventListener('click',function(e){
+ var el=e.target;
+ if(el.id==='rpGo'){
+  var w=($('rpWord').value||'').toUpperCase();
+  if(w!=='REINICIA'){toast(t('resetBad'));return;}
+  var keep=$('rpKeep').checked;
+  var prof=keep?me.profile:{name:'',email:'',start:me.profile.start,teacher:me.profile.teacher,course:me.profile.course};
+  me={profile:prof,done:{},compStatus:{},actNotes:{},compNotes:{},genNotes:{},log:[],lastSes:''};
+  log('L_RESET');save();render();toast(t('reseted'));
+  return;
+ }
+ if(el.id==='rpCancel'){var pn=$('resetpanel');if(pn)pn.style.display='none';}
 });
 
-/* ================== IMPORTACIO CONTROLADA ================== */
+/* ================== IMPORTACIO ================== */
 function mergeProgram(inc){
  var existing={},i,j,nNew=0,nUpd=0;
  if(!prog)prog={sessions:[]};
@@ -495,7 +545,8 @@ function mergeProgram(inc){
   var s=inc.sessions[i],key=s.date||'';
   s.noLectiva=!!s.noLectiva;
   if(!s.acts)s.acts=[];
-  for(j=0;j<s.acts.length;j++){if(!s.acts[j].txt)s.acts[j].txt='';}
+  if(!s.res)s.res=[];
+  if(!s.av)s.av=[];
   if(existing[key]!==undefined){prog.sessions[existing[key]]=s;nUpd++;}
   else{prog.sessions.push(s);nNew++;}
  }
@@ -511,11 +562,14 @@ function handleFile(f){
     var res=mergeProgram(j);
     log('L_IMPPROG',res);
     save(true);render();
-    toast(t('importOk')+' '+res);
+    toast(t('impOk')+' ('+res+')');
    }else if(j&&j.app==='fitxa-alumne-backup'&&j.me){
     prog=j.prog||null;me=j.me;
     if(!me.profile)me.profile={name:'',email:'',start:'',teacher:'cpainous@institutdelteatre.cat',course:'2026-2027'};
-    log('L_IMPBAK');save(true);render();toast(t('importOk'));
+    if(!me.done)me.done={};if(!me.compStatus)me.compStatus={};
+    if(!me.actNotes)me.actNotes={};if(!me.compNotes)me.compNotes={};
+    if(!me.genNotes)me.genNotes={};if(!me.log)me.log=[];
+    log('L_IMPPROG','(backup)');save(true);render();toast(t('impOk'));
    }else{toast('JSON no valid');}
   }catch(x){toast('JSON no valid');}
  };
@@ -542,7 +596,7 @@ function download(name,txt){
 }
 function safeName(s){return String(s||'alumne').replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
 
-/* ================== CABLEJAT BARRETA ================== */
+/* ================== BOTONS ================== */
  $('langBox').addEventListener('click',function(e){
  var b=e.target;
  while(b&&b.tagName!=='BUTTON')b=b.parentNode;
@@ -554,39 +608,39 @@ function safeName(s){return String(s||'alumne').replace(/[^a-zA-Z0-9_-]+/g,'-').
 });
  $('bSave').onclick=function(){log('L_SAVE');save();toast(t('manSaved'));};
  $('bPrint').onclick=function(){log('L_PRINT');save(true);window.print();};
+
+/* Copia de seguretat: 2 fitxers (datat + nom fix) */
+ $('bBak').onclick=function(){
+ clickOnce('bBak','bakConfirm',function(){
+  var data=JSON.stringify({app:'fitxa-alumne-backup',prog:prog,me:me});
+  download('fitxa-alumne-seguretat-'+dtStamp()+'.json',data);
+  setTimeout(function(){download('fitxa-alumne-copia.json',data);},600);
+  log('L_IMPBAK','(export)');save(true);
+  toast(t('bakOk'));
+ });
+};
+
+/* Netejar log: 2 clics */
  $('bClrLog').onclick=function(){
- var b=$('bClrLog');
- if(b.getAttribute('data-arm')!=='1'){
-  b.setAttribute('data-arm','1');
-  b.textContent=t('confirmClr');
-  toast(t('confirmClr'));
-  b._to=setTimeout(function(){b.removeAttribute('data-arm');b.textContent=t('bClrLog');},4000);
-  return;
- }
- clearTimeout(b._to);b.removeAttribute('data-arm');b.textContent=t('bClrLog');
- me.log=[];log('L_CLRLOG');save();toast(t('clrLog'));
+ clickOnce('bClrLog','clrConfirm',function(){
+  me.log=[];
+  log('L_CLRLOG');
+  save();
+  toast(t('clrLog'));
+ });
 };
+
+/* Reiniciar fitxa: obre el panell amb la paraula REINICIA */
  $('bReset').onclick=function(){
- var p=$('resetpanel');
- if(!p)return;
- if(p.style.display==='block'){p.style.display='none';return;}
- p.style.display='block';
- $('rpWord').value='';
- $('rpWord').focus();
-};
- $('main').addEventListener('click',function(e){
- var el=e.target;
- if(el.id==='rpGo'){
-  var w=($('rpWord').value||'').toUpperCase();
-  if(w!==t('resetWord')){toast(t('resetBad'));return;}
-  var keep=$('rpKeep').checked;
-  var prof=keep?me.profile:{name:'',email:'',start:me.profile.start,teacher:me.profile.teacher,course:me.profile.course};
-  me={profile:prof,done:{},compStatus:{},actNotes:{},compNotes:{},genNotes:{},log:[],lastSes:''};
-  log('L_RESET');save();render();toast(t('reseted'));
-  return;
+ var pn=$('resetpanel');
+ if(!pn)return;
+ pn.style.display=(pn.style.display==='block')?'none':'block';
+ if(pn.style.display==='block'){
+  $('rpWord').value='';
+  try{$('rpWord').focus();}catch(e){}
  }
- if(el.id==='rpCancel'){$('resetpanel').style.display='none';}
-});
+};
+
  $('bSend').onclick=function(){
  var ss=sorted(),out=[],i,j,s,had=false;
  for(i=0;i<ss.length;i++){
@@ -606,7 +660,8 @@ function safeName(s){return String(s||'alumne').replace(/[^a-zA-Z0-9_-]+/g,'-').
   out.push(o);
  }
  if(!had){toast(t('sendNone'));return;}
- var pack={app:'fitxa-alumne-entrega',student:me.profile,exported:nowISO(),sessions:out,stats:globalStatsHTML().replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),log:me.log.slice(-100)};
+ var statsTxt=globalStats().replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+ var pack={app:'fitxa-alumne-entrega',student:me.profile,exported:nowISO(),sessions:out,stats:statsTxt,log:me.log.slice(-100)};
  var fn='fitxa-'+safeName(me.profile.name)+'-'+safeName(me.profile.course)+'.json';
  var ok=download(fn,JSON.stringify(pack,null,1));
  log('L_EXPTEA',fn);save(true);
@@ -620,35 +675,8 @@ function safeName(s){return String(s||'alumne').replace(/[^a-zA-Z0-9_-]+/g,'-').
  }
 };
  $('bImpP').onclick=function(){$('fImp').click();};
- function dtStamp(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
- $('bBak').onclick=function(){
- var b=$('bBak');
- if(b.getAttribute('data-arm')!=='1'){
-  b.setAttribute('data-arm','1');
-  b.textContent=t('confirmClr');
-  b._to=setTimeout(function(){b.removeAttribute('data-arm');b.textContent=t('bBak');},4000);
-  return;
- }
- clearTimeout(b._to);b.removeAttribute('data-arm');b.textContent=t('bBak');
- var data=JSON.stringify({app:'fitxa-alumne-backup',prog:prog,me:me});
- download('fitxa-alumne-seguretat-'+dtStamp()+'.json',data);
- setTimeout(function(){download('fitxa-alumne-copia.json',data);},500);
- log('L_IMPBAK','(export)');save(true);
-};
 
 /* ================== INICI ================== */
-/* Omple els textos de la barra superior (botons i titol) */
-function applyBar(){
- $('t1').textContent=t('t1');
- $('t2').textContent=t('t2');
- $('bSave').textContent=t('bSave');
- $('bPrint').textContent=t('bPrint');
- $('bSend').textContent=t('bSend');
- $('bImpP').textContent=t('bImpP');
- $('bBak').textContent=t('bBak');
- $('bClrLog').textContent=t('bClrLog');
- $('bReset').textContent=t('bReset');
-}
 log('L_OPEN');
 if(window.__memMode){log('L_MEMMODE');}
 save(true);
