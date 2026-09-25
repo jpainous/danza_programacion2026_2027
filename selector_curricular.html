@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="titol">📚 Biblioteca Curricular</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+.container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px 40px;
+    text-align: center;
+    position: relative;
+}
+header h1 { font-size: 2.2em; margin-bottom: 8px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+header h2 { font-size: 1.2em; font-weight: 300; margin-bottom: 8px; }
+.subtitle { font-size: 0.95em; opacity: 0.9; }
+
+.language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+.language-selector label { color: white; font-size: 1.2em; }
+.language-selector select {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: inherit;
+    cursor: pointer;
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+}
+
+.controls {
+    padding: 15px 40px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    font-family: inherit;
+}
+.btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; }
+.btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
+.btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4); }
+.btn-danger { background: #dc3545; color: white; }
+.btn-danger:hover { background: #c82333; }
+.btn-small { padding: 6px 12px; font-size: 0.85em; }
+
+/* LAYOUT DE 3 PANELLS */
+.workspace {
+    display: grid;
+    grid-template-columns: 280px 1fr 380px;
+    gap: 0;
+    min-height: 600px;
+}
+
+/* PANELL 1: ÀREES */
+.panel-areas {
+    background: #f8f9fa;
+    border-right: 2px solid #e9ecef;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 700px;
+}
+.panel-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+.area-item {
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 2px solid transparent;
+}
+.area-item:hover { border-color: #667eea; transform: translateX(3px); }
+.area-item.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+}
+.area-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f1f3f5;
+}
+.area-item.disabled:hover { transform: none; border-color: transparent; }
+.area-icon { font-size: 1.2em; }
+.area-badge {
+    margin-left: auto;
+    background: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    font-weight: 700;
+}
+.area-badge.properament { background: #6c757d; }
+
+/* PANELL 2: ELEMENTS A ESCOLLIR */
+.panel-elements {
+    padding: 25px;
+    overflow-y: auto;
+    max-height: 700px;
+    background: white;
+}
+.tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+    flex-wrap: wrap;
+}
+.tab {
+    padding: 10px 18px;
+    background: #f8f9fa;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    font-family: inherit;
+    transition: all 0.2s;
+    color: #666;
+}
+.tab:hover { background: #e9ecef; }
+.tab.active {
+    background: #667eea;
+    color: white;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* FILTRES */
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+.filter-btn {
+    padding: 6px 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.filter-btn.active-preceptiu { background: #d4edda; color: #155724; border-color: #28a745; }
+.filter-btn.active-transversal { background: #cfe2ff; color: #084298; border-color: #2196F3; }
+.filter-btn.active-optatiu { background: #fff3cd; color: #856404; border-color: #ffc107; }
+.filter-btn.active-tots { background: #667eea; color: white; border-color: #667eea; }
+
+/* ELEMENTS */
+.element-group {
+    margin-bottom: 20px;
+}
+.element-group-title {
+    font-size: 1em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #667eea;
+}
+.element-item {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+.element-item:hover { border-color: #667eea; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15); }
+.element-item.selected {
+    border-color: #28a745;
+    background: #f0fdf4;
+}
+.element-item input[type="checkbox"] {
+    margin-top: 3px;
+    transform: scale(1.3);
+    cursor: pointer;
+}
+.element-content { flex: 1; }
+.element-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+.element-code {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 0.9em;
+}
+.element-title { font-weight: 600; color: #333; font-size: 0.95em; }
+.element-desc { color: #666; font-size: 0.85em; line-height: 1.5; margin-top: 4px; }
+.element-badge {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.badge-preceptiu { background: #d4edda; color: #155724; }
+.badge-transversal { background: #cfe2ff; color: #084298; }
+.badge-optatiu { background: #fff3cd; color: #856404; }
+
+.empty-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-style: italic;
+}
+
+/* PANELL 3: LLISTAT GENERAT */
+.panel-output {
+    background: #f8f9fa;
+    border-left: 2px solid #e9ecef;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 700px;
+}
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.output-counter {
+    background: #667eea;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 700;
+}
+.output-content {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-wrap;
+    max-height: 500px;
+    overflow-y: auto;
+}
+.output-section {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e9ecef;
+}
+.output-section:last-child { border-bottom: none; }
+.output-section-title {
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 8px;
+    font-family: 'Segoe UI', sans-serif;
+}
+.output-item {
+    padding: 4px 0;
+    color: #333;
+}
+
+.output-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+}
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #17a2b8; }
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+    font-size: 0.85em;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+@media (max-width: 1100px) {
+    .workspace { grid-template-columns: 1fr; }
+    .panel-areas, .panel-elements, .panel-output {
+        max-height: none;
+        border: none;
+        border-bottom: 2px solid #e9ecef;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1 data-i18n="titol">📚 Biblioteca Curricular</h1>
+        <h2 data-i18n="subtitol">Selecciona, combina i trasllada continguts a la teva programació</h2>
+        <p class="subtitle" data-i18n="subtitol2">Eina de suport per a la programació didàctica · Curs 2026-2027</p>
+        <div class="language-selector">
+            <label>🌐</label>
+            <select id="selectorIdioma" onchange="aplicarIdioma(this.value)">
+                <option value="ca">Català</option>
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="controls">
+        <button class="btn btn-secondary" onclick="exportarSeleccio()" data-i18n="btn_exportar">📥 Exportar selecció</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('fileImport').click()" data-i18n="btn_importar">📤 Importar selecció</button>
+        <input type="file" id="fileImport" accept=".json" style="display:none" onchange="importarSeleccio(event)">
+        <button class="btn btn-danger" onclick="netejarSeleccio()" data-i18n="btn_netejar">🗑️ Netejar tot</button>
+        <div style="margin-left:auto;font-size:0.85em;color:#666;" data-i18n="guardat">💾 Guardat automàticament</div>
+    </div>
+
+    <div class="workspace">
+        <!-- PANELL 1: ÀREES -->
+        <div class="panel-areas">
+            <div class="panel-title" data-i18n="panel_areas">📚 Àrees / Matèries</div>
+            <div id="areasList"></div>
+        </div>
+
+        <!-- PANELL 2: ELEMENTS -->
+        <div class="panel-elements">
+            <div class="tabs">
+                <button class="tab active" data-tab="competencies" data-i18n="tab_competencies">🎯 Competències</button>
+                <button class="tab" data-tab="objectius" data-i18n="tab_objectius">🏆 Objectius</button>
+                <button class="tab" data-tab="continguts" data-i18n="tab_continguts">📖 Continguts</button>
+                <button class="tab" data-tab="transversals" data-i18n="tab_transversals">🔄 Transversals</button>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active-tots" data-filter="tots" data-i18n="filter_tots">Tots</button>
+                <button class="filter-btn" data-filter="preceptiu" data-i18n="filter_preceptiu">🟢 Preceptius</button>
+                <button class="filter-btn" data-filter="transversal" data-i18n="filter_transversal">🔵 Transversals</button>
+                <button class="filter-btn" data-filter="optatiu" data-i18n="filter_optatiu">🟡 Optatius</button>
+            </div>
+
+            <div id="elementsContainer"></div>
+        </div>
+
+        <!-- PANELL 3: SORTIDA -->
+        <div class="panel-output">
+            <div class="output-header">
+                <div class="panel-title" style="margin:0;border:none;padding:0;" data-i18n="panel_sortida">📋 Llistat generat</div>
+                <div class="output-counter" id="outputCounter">0</div>
+            </div>
+            <div class="output-content" id="outputContent">
+                <div class="empty-message" data-i18n="output_buit">Selecciona elements del panell central per generar el llistat</div>
+            </div>
+            <div class="output-actions">
+                <button class="btn btn-success btn-small" onclick="copiarAlPortapapers()" data-i18n="btn_copiar">📋 Copiar</button>
+                <button class="btn btn-primary btn-small" onclick="copiarFormatMarkdown()" data-i18n="btn_copiar_md">📝 Copiar Markdown</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer">📚 Biblioteca Curricular · Eina de suport per a la programació didàctica</p>
+    </footer>
+</div>
+
+<script>
+// ==========================================
+// MOTOR DE TRADUCCIÓ
+// ==========================================
+const diccionario = {
+    ca: {
+        titol: "📚 Biblioteca Curricular",
+        subtitol: "Selecciona, combina i trasllada continguts a la teva programació",
+        subtitol2: "Eina de suport per a la programació didàctica · Curs 2026-2027",
+        btn_exportar: "📥 Exportar selecció",
+        btn_importar: "📤 Importar selecció",
+        btn_netejar: "🗑️ Netejar tot",
+        guardat: "💾 Guardat automàticament",
+        panel_areas: "📚 Àrees / Matèries",
+        tab_competencies: "🎯 Competències",
+        tab_objectius: "🏆 Objectius",
+        tab_continguts: "📖 Continguts",
+        tab_transversals: "🔄 Transversals",
+        filter_tots: "Tots",
+        filter_preceptiu: "🟢 Preceptius",
+        filter_transversal: "🔵 Transversals",
+        filter_optatiu: "🟡 Optatius",
+        panel_sortida: "📋 Llistat generat",
+        output_buit: "Selecciona elements del panell central per generar el llistat",
+        btn_copiar: "📋 Copiar",
+        btn_copiar_md: "📝 Copiar Markdown",
+        footer: "📚 Biblioteca Curricular · Eina de suport per a la programació didàctica",
+        properament: "Properament",
+        desenvolupat: "Actiu",
+        toast_copiat: "📋 Copiat al portapapers!",
+        toast_md_copiat: "📝 Markdown copiat!",
+        toast_exportat: "📥 Selecció exportada",
+        toast_importat: "📤 Selecció importada",
+        toast_netejat: "🗑️ Selecció netejada",
+        toast_error: "❌ Error",
+        confirm_netejar: "Segur que vols netejar tota la selecció?",
+        sortida_competencies: "🎯 COMPETÈNCIES",
+        sortida_objectius: "🏆 OBJECTIUS ESPECÍFICS",
+        sortida_continguts: "📖 CONTINGUTS",
+        sortida_transversals: "🔄 ELEMENTS TRANSVERSALS",
+        preceptiu: "Preceptiu",
+        transversal: "Transversal",
+        optatiu: "Optatiu"
+    },
+    es: {
+        titol: "📚 Biblioteca Curricular",
+        subtitol: "Selecciona, combina y traslada contenidos a tu programación",
+        subtitol2: "Herramienta de apoyo para la programación didáctica · Curso 2026-2027",
+        btn_exportar: "📥 Exportar selección",
+        btn_importar: "📤 Importar selección",
+        btn_netejar: "🗑️ Limpiar todo",
+        guardat: "💾 Guardado automáticamente",
+        panel_areas: "📚 Áreas / Materias",
+        tab_competencies: "🎯 Competencias",
+        tab_objectius: "🏆 Objetivos",
+        tab_continguts: "📖 Contenidos",
+        tab_transversals: "🔄 Transversales",
+        filter_tots: "Todos",
+        filter_preceptiu: "🟢 Preceptivos",
+        filter_transversal: "🔵 Transversales",
+        filter_optatiu: "🟡 Optativos",
+        panel_sortida: "📋 Listado generado",
+        output_buit: "Selecciona elementos del panel central para generar el listado",
+        btn_copiar: "📋 Copiar",
+        btn_copiar_md: "📝 Copiar Markdown",
+        footer: "📚 Biblioteca Curricular · Herramienta de apoyo para la programación didáctica",
+        properament: "Próximamente",
+        desenvolupat: "Activo",
+        toast_copiat: "📋 ¡Copiado al portapapeles!",
+        toast_md_copiat: "📝 ¡Markdown copiado!",
+        toast_exportat: "📥 Selección exportada",
+        toast_importat: "📤 Selección importada",
+        toast_netejat: "🗑️ Selección limpiada",
+        toast_error: "❌ Error",
+        confirm_netejar: "¿Seguro que quieres limpiar toda la selección?",
+        sortida_competencies: "🎯 COMPETENCIAS",
+        sortida_objectius: "🏆 OBJETIVOS ESPECÍFICOS",
+        sortida_continguts: "📖 CONTENIDOS",
+        sortida_transversals: "🔄 ELEMENTOS TRANSVERSALES",
+        preceptiu: "Preceptivo",
+        transversal: "Transversal",
+        optatiu: "Optativo"
+    },
+    en: {
+        titol: "📚 Curricular Library",
+        subtitol: "Select, combine and transfer contents to your syllabus",
+        subtitol2: "Support tool for didactic programming · Course 2026-2027",
+        btn_exportar: "📥 Export selection",
+        btn_importar: "📤 Import selection",
+        btn_netejar: "🗑️ Clear all",
+        guardat: "💾 Auto-saved",
+        panel_areas: "📚 Areas / Subjects",
+        tab_competencies: "🎯 Competencies",
+        tab_objectius: "🏆 Objectives",
+        tab_continguts: "📖 Contents",
+        tab_transversals: "🔄 Cross-curricular",
+        filter_tots: "All",
+        filter_preceptiu: "🟢 Mandatory",
+        filter_transversal: "🔵 Cross-curricular",
+        filter_optatiu: "🟡 Optional",
+        panel_sortida: "📋 Generated list",
+        output_buit: "Select elements from the central panel to generate the list",
+        btn_copiar: "📋 Copy",
+        btn_copiar_md: "📝 Copy Markdown",
+        footer: "📚 Curricular Library · Support tool for didactic programming",
+        properament: "Coming soon",
+        desenvolupat: "Active",
+        toast_copiat: "📋 Copied to clipboard!",
+        toast_md_copiat: "📝 Markdown copied!",
+        toast_exportat: "📥 Selection exported",
+        toast_importat: "📤 Selection imported",
+        toast_netejat: "🗑️ Selection cleared",
+        toast_error: "❌ Error",
+        confirm_netejar: "Are you sure you want to clear the entire selection?",
+        sortida_competencies: "🎯 COMPETENCIES",
+        sortida_objectius: "🏆 SPECIFIC OBJECTIVES",
+        sortida_continguts: "📖 CONTENTS",
+        sortida_transversals: "🔄 CROSS-CURRICULAR ELEMENTS",
+        preceptiu: "Mandatory",
+        transversal: "Cross-curricular",
+        optatiu: "Optional"
+    }
+};
+
+function aplicarIdioma(lang) {
+    localStorage.setItem('idioma_preferit', lang);
+    document.documentElement.lang = lang;
+    const sel = document.getElementById('selectorIdioma');
+    if (sel) sel.value = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clau = el.getAttribute('data-i18n');
+        if (diccionario[lang] && diccionario[lang][clau]) el.innerHTML = diccionario[lang][clau];
+    });
+    renderitzarAreas();
+    renderitzarElements();
+    renderitzarSortida();
+}
+
+function t(key) {
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    return (diccionario[lang] && diccionario[lang][key]) || (diccionario.ca[key]) || key;
+}
+
+// ==========================================
+// DADES CURRICULARS
+// ==========================================
+const DADES_AREES = {
+    fisiologia: {
+        id: 'fisiologia',
+        icona: '🫀',
+        nom: { ca: 'Fisiologia aplicada a la dansa', es: 'Fisiología aplicada a la danza', en: 'Physiology applied to dance' },
+        desenvolupat: true,
+        competencies: [
+            { id: 'CG3', codi: 'CG3', titol: { ca: 'Coneixement integral del cos humà', es: 'Conocimiento integral del cuerpo humano', en: 'Comprehensive knowledge of the human body' }, descripcio: { ca: "Conèixer els principis bàsics, tant teòrics com pràctics, del funcionament del cos humà, amb l'objecte de proporcionar una visió global i integradora del mateix.", es: "Conocer los principios básicos, tanto teóricos como prácticos, del funcionamiento del cuerpo humano, con el objeto de proporcionar una visión global e integradora del mismo.", en: "Know the basic principles, both theoretical and practical, of the functioning of the human body, in order to provide a global and integrative vision of it." }, tipus: 'preceptiu' },
+            { id: 'CECI3', codi: 'CECI 3', titol: { ca: 'Anatomia, fisiologia i biomecànica', es: 'Anatomía, fisiología y biomecánica', en: 'Anatomy, physiology and biomechanics' }, descripcio: { ca: "Conèixer l'anatomia, fisiologia i biomecànica del cos humà, les seves capacitats i limitacions com a vehicle d'expressió artística, així com les patologies més freqüents i la seva prevenció per a poder optimitzar la seva interpretació i la seva labor creativa.", es: "Conocer la anatomía, fisiología y biomecánica del cuerpo humano, sus capacidades y limitaciones como vehículo de expresión artística, así como las patologías más frecuentes y su prevención para poder optimizar su interpretación y su labor creativa.", en: "Know the anatomy, physiology and biomechanics of the human body, its capacities and limitations as a vehicle of artistic expression, as well as the most frequent pathologies and their prevention to be able to optimize its interpretation and its creative work." }, tipus: 'preceptiu' }
+        ],
+        objectius: [
+            { id: 'C1', codi: 'C1', titol: { ca: 'Estructura i bases funcionals', es: 'Estructura y bases funcionales', en: 'Structure and functional bases' }, descripcio: { ca: "Conèixer l'estructura i les bases funcionals dels sistemes orgànics de l'ésser humà.", es: "Conocer la estructura y las bases funcionales de los sistemas orgánicos del ser humano.", en: "Know the structure and functional bases of the organic systems of the human being." }, tipus: 'preceptiu', ambit: 'Coneixements' },
+            { id: 'C2', codi: 'C2', titol: { ca: 'Adaptacions a l\'activitat física', es: 'Adaptaciones a la actividad física', en: 'Adaptations to physical activity' }, descripcio: { ca: "Conèixer les adaptacions d'aquests sistemes a l'activitat física.", es: "Conocer las adaptaciones de estos sistemas a la actividad física.", en: "Know the adaptations of these systems to physical activity." }, tipus: 'preceptiu', ambit: 'Coneixements' },
+            { id: 'H1', codi: 'H1', titol: { ca: 'Relacionar sistemes com un tot', es: 'Relacionar sistemas como un todo', en: 'Relate systems as a whole' }, descripcio: { ca: "Relacionar els diferents sistemes en el funcionament de l'organisme com un tot.", es: "Relacionar los diferentes sistemas en el funcionamiento del organismo como un todo.", en: "Relate the different systems in the functioning of the organism as a whole." }, tipus: 'preceptiu', ambit: 'Habilitats' },
+            { id: 'H2', codi: 'H2', titol: { ca: 'Aplicar al camp de treball', es: 'Aplicar al campo de trabajo', en: 'Apply to the field of work' }, descripcio: { ca: "Aplicar els coneixements adquirits al seu camp de treball.", es: "Aplicar los conocimientos adquiridos a su campo de trabajo.", en: "Apply the knowledge acquired to their field of work." }, tipus: 'preceptiu', ambit: 'Habilitats' },
+            { id: 'A1', codi: 'A1', titol: { ca: 'Interès pel propi cos', es: 'Interés por el propio cuerpo', en: 'Interest in one\'s own body' }, descripcio: { ca: "Interès pel funcionament del propi cos.", es: "Interés por el funcionamiento del propio cuerpo.", en: "Interest in the functioning of one's own body." }, tipus: 'preceptiu', ambit: 'Actituds' },
+            { id: 'A2', codi: 'A2', titol: { ca: 'Actitud positiva', es: 'Actitud positiva', en: 'Positive attitude' }, descripcio: { ca: "Actitud positiva davant un camp de coneixement que no sempre lliga amb els seus interessos artístics.", es: "Actitud positiva ante un campo de conocimiento que no siempre encaja con sus intereses artísticos.", en: "Positive attitude towards a field of knowledge that does not always match their artistic interests." }, tipus: 'preceptiu', ambit: 'Actituds' },
+            { id: 'A3', codi: 'A3', titol: { ca: 'Importància per a l\'execució', es: 'Importancia para la ejecución', en: 'Importance for execution' }, descripcio: { ca: "Adonar-se de la importància d'aquests coneixements per a una millor execució de la seva feina.", es: "Darse cuenta de la importancia de estos conocimientos para una mejor ejecución de su trabajo.", en: "Realize the importance of this knowledge for a better execution of their work." }, tipus: 'preceptiu', ambit: 'Actituds' }
+        ],
+        continguts: [
+            { id: 'CONT1', codi: 'T1', titol: { ca: 'Homeostasi i fisiologia cel·lular', es: 'Homeostasis y fisiología celular', en: 'Homeostasis and cellular physiology' }, descripcio: { ca: "Nivells d'organització, líquids corporals, mecanismes de regulació i retroalimentació durant el moviment.", es: "Niveles de organización, líquidos corporales, mecanismos de regulación y retroalimentación durante el movimiento.", en: "Levels of organization, body fluids, regulation and feedback mechanisms during movement." }, tipus: 'preceptiu' },
+            { id: 'CONT2', codi: 'T2', titol: { ca: 'Sistema musculoesquelètic I', es: 'Sistema musculoesquelético I', en: 'Musculoskeletal system I' }, descripcio: { ca: "Estructura muscular, sarcòmer, unitat motora, mecanisme de contracció (Ca²⁺/ATP), tipus de contracció.", es: "Estructura muscular, sarcómero, unidad motora, mecanismo de contracción (Ca²⁺/ATP), tipos de contracción.", en: "Muscle structure, sarcomere, motor unit, contraction mechanism (Ca²⁺/ATP), types of contraction." }, tipus: 'preceptiu' },
+            { id: 'CONT3', codi: 'T3', titol: { ca: 'Sistema musculoesquelètic II', es: 'Sistema musculoesquelético II', en: 'Musculoskeletal system II' }, descripcio: { ca: "Cadena biomecànica, classificació òssia, remodelació, articulacions, plans de moviment i propiocepció.", es: "Cadena biomecánica, clasificación ósea, remodelación, articulaciones, planos de movimiento y propiocepción.", en: "Biomechanical chain, bone classification, remodeling, joints, planes of movement and proprioception." }, tipus: 'preceptiu' },
+            { id: 'CONT4', codi: 'T5', titol: { ca: 'Sistema nerviós I', es: 'Sistema nervioso I', en: 'Nervous system I' }, descripcio: { ca: "Organització del sistema nerviós, neurona, sinapsi, unitat motora, control voluntari del moviment.", es: "Organización del sistema nervioso, neurona, sinapsis, unidad motora, control voluntario del movimiento.", en: "Organization of the nervous system, neuron, synapse, motor unit, voluntary control of movement." }, tipus: 'preceptiu' },
+            { id: 'CONT5', codi: 'T7', titol: { ca: 'Sistema nerviós II / Son', es: 'Sistema nervioso II / Sueño', en: 'Nervous system II / Sleep' }, descripcio: { ca: "Sistema nerviós autònom, fases del son, recuperació muscular i aprenentatge motor.", es: "Sistema nervioso autónomo, fases del sueño, recuperación muscular y aprendizaje motor.", en: "Autonomous nervous system, sleep phases, muscle recovery and motor learning." }, tipus: 'preceptiu' },
+            { id: 'CONT6', codi: 'T8', titol: { ca: 'La sang', es: 'La sangre', en: 'Blood' }, descripcio: { ca: "Composició, funcions, transport d'O₂ i CO₂ durant l'esforç.", es: "Composición, funciones, transporte de O₂ y CO₂ durante el esfuerzo.", en: "Composition, functions, transport of O₂ and CO₂ during effort." }, tipus: 'preceptiu' },
+            { id: 'CONT7', codi: 'T9', titol: { ca: 'Sistema hormonal', es: 'Sistema hormonal', en: 'Hormonal system' }, descripcio: { ca: "Hormones relacionades amb l'exercici, adaptació i remodelació òssia/muscular.", es: "Hormonas relacionadas con el ejercicio, adaptación y remodelación ósea/muscular.", en: "Hormones related to exercise, bone/muscle adaptation and remodeling." }, tipus: 'preceptiu' },
+            { id: 'CONT8', codi: 'T10', titol: { ca: 'Nutrició', es: 'Nutrición', en: 'Nutrition' }, descripcio: { ca: "Necessitats nutricionals del ballarí, hidratació, recuperació, homeostasi de la glucosa.", es: "Necesidades nutricionales del bailarín, hidratación, recuperación, homeostasis de la glucosa.", en: "Nutritional needs of the dancer, hydration, recovery, glucose homeostasis." }, tipus: 'preceptiu' },
+            { id: 'CONT9', codi: 'T12', titol: { ca: 'Aparell cardiovascular', es: 'Aparato cardiovascular', en: 'Cardiovascular system' }, descripcio: { ca: "Estructura del cor, circulació, transport de gasos, adaptacions a l'exercici.", es: "Estructura del corazón, circulación, transporte de gases, adaptaciones al ejercicio.", en: "Heart structure, circulation, gas transport, adaptations to exercise." }, tipus: 'preceptiu' },
+            { id: 'CONT10', codi: 'T13', titol: { ca: 'Aparell respiratori', es: 'Aparato respiratorio', en: 'Respiratory system' }, descripcio: { ca: "Mecànica ventilatòria, intercanvi gasós, pH sanguini, respiració en la dansa.", es: "Mecánica ventilatoria, intercambio gaseoso, pH sanguíneo, respiración en la danza.", en: "Ventilatory mechanics, gas exchange, blood pH, breathing in dance." }, tipus: 'preceptiu' }
+        ]
+    },
+    dansa_classica: { id: 'dansa_classica', icona: '🩰', nom: { ca: 'Dansa clàssica', es: 'Danza clásica', en: 'Classical dance' }, desenvolupat: false },
+    dansa_contemporania: { id: 'dansa_contemporania', icona: '💃', nom: { ca: 'Dansa contemporània', es: 'Danza contemporánea', en: 'Contemporary dance' }, desenvolupat: false },
+    musica: { id: 'musica', icona: '🎵', nom: { ca: 'Música', es: 'Música', en: 'Music' }, desenvolupat: false },
+    historia_dansa: { id: 'historia_dansa', icona: '📜', nom: { ca: 'Història de la dansa', es: 'Historia de la danza', en: 'History of dance' }, desenvolupat: false },
+    repertori: { id: 'repertori', icona: '🎭', nom: { ca: 'Repertori', es: 'Repertorio', en: 'Repertoire' }, desenvolupat: false },
+    analisi_musical: { id: 'analisi_musical', icona: '🎼', nom: { ca: 'Anàlisi musical', es: 'Análisis musical', en: 'Musical analysis' }, desenvolupat: false },
+    expressio_corporal: { id: 'expressio_corporal', icona: '🤸', nom: { ca: 'Expressió corporal', es: 'Expresión corporal', en: 'Body expression' }, desenvolupat: false },
+    dansa_espanyola: { id: 'dansa_espanyola', icona: '💃', nom: { ca: 'Dansa espanyola', es: 'Danza española', en: 'Spanish dance' }, desenvolupat: false }
+};
+
+// ELEMENTS TRANSVERSALS (comuns a totes les àrees)
+const DADES_TRANSVERSALES = [
+    { id: 'TR1', codi: 'TR1', titol: { ca: 'Pensament científic i crític', es: 'Pensamiento científico y crítico', en: 'Scientific and critical thinking' }, descripcio: { ca: "Desenvolupar la capacitat d'analitzar, qüestionar i buscar evidències.", es: "Desarrollar la capacidad de analizar, cuestionar y buscar evidencias.", en: "Develop the ability to analyze, question and seek evidence." }, tipus: 'transversal' },
+    { id: 'TR2', codi: 'TR2', titol: { ca: 'Educació per a la salut', es: 'Educación para la salud', en: 'Health education' }, descripcio: { ca: "Promoure hàbits que afavoreixin el benestar físic i mental.", es: "Promover hábitos que favorezcan el bienestar físico y mental.", en: "Promote habits that favor physical and mental well-being." }, tipus: 'transversal' },
+    { id: 'TR3', codi: 'TR3', titol: { ca: 'Educació emocional', es: 'Educación emocional', en: 'Emotional education' }, descripcio: { ca: "Reconèixer i gestionar les pròpies emocions i les dels altres.", es: "Reconocer y gestionar las propias emociones y las de los demás.", en: "Recognize and manage one's own emotions and those of others." }, tipus: 'transversal' },
+    { id: 'TR4', codi: 'TR4', titol: { ca: 'Igualtat i diversitat corporal', es: 'Igualdad y diversidad corporal', en: 'Equality and body diversity' }, descripcio: { ca: "Promoure la igualtat real i valorar la diversitat.", es: "Promover la igualdad real y valorar la diversidad.", en: "Promote real equality and value diversity." }, tipus: 'transversal' },
+    { id: 'TR5', codi: 'TR5', titol: { ca: 'Competència digital', es: 'Competencia digital', en: 'Digital competence' }, descripcio: { ca: "Utilitzar les tecnologies de manera crítica i creativa.", es: "Utilizar las tecnologías de manera crítica y creativa.", en: "Use technologies critically and creatively." }, tipus: 'transversal' },
+    { id: 'TR6', codi: 'TR6', titol: { ca: 'Aprenentatge cooperatiu', es: 'Aprendizaje cooperativo', en: 'Cooperative learning' }, descripcio: { ca: "Treballar en equip, assumir responsabilitats i comunicar idees.", es: "Trabajar en equipo, asumir responsabilidades y comunicar ideas.", en: "Work in a team, assume responsibilities and communicate ideas." }, tipus: 'transversal' },
+    { id: 'TR7', codi: 'TR7', titol: { ca: 'Prevenció de riscos', es: 'Prevención de riesgos', en: 'Risk prevention' }, descripcio: { ca: "Identificar perills i aplicar mesures per evitar-los.", es: "Identificar peligros y aplicar medidas para evitarlos.", en: "Identify dangers and apply measures to avoid them." }, tipus: 'transversal' },
+    { id: 'TR8', codi: 'TR8', titol: { ca: 'Sostenibilitat', es: 'Sostenibilidad', en: 'Sustainability' }, descripcio: { ca: "Fer un ús responsable dels recursos per garantir el futur.", es: "Hacer un uso responsable de los recursos para garantizar el futuro.", en: "Make responsible use of resources to ensure the future." }, tipus: 'transversal' }
+];
+
+// ==========================================
+// ESTAT
+// ==========================================
+let estat = {
+    areaActiva: 'fisiologia',
+    tabActiva: 'competencies',
+    filtreActiu: 'tots',
+    seleccionats: [] // Array d'IDs seleccionats
+};
+
+const STORAGE_KEY = 'bibliotecaCurricular';
+
+// ==========================================
+// GUARDAT
+// ==========================================
+function guardarEstat() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(estat));
+        return true;
+    } catch (e) { return false; }
+}
+
+function carregarEstat() {
+    try {
+        const dades = localStorage.getItem(STORAGE_KEY);
+        if (dades) estat = { ...estat, ...JSON.parse(dades) };
+    } catch (e) {}
+}
+
+// ==========================================
+// RENDERITZAT ÀREES
+// ==========================================
+function renderitzarAreas() {
+    const container = document.getElementById('areasList');
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    let html = '';
+    Object.values(DADES_AREES).forEach(area => {
+        const activa = estat.areaActiva === area.id ? 'active' : '';
+        const disabled = !area.desenvolupat ? 'disabled' : '';
+        const badge = area.desenvolupat 
+            ? `<span class="area-badge">${t('desenvolupat')}</span>` 
+            : `<span class="area-badge properament">${t('properament')}</span>`;
+        html += `<div class="area-item ${activa} ${disabled}" onclick="${area.desenvolupat ? `seleccionarArea('${area.id}')` : ''}">
+            <span class="area-icon">${area.icona}</span>
+            <span>${area.nom[lang]}</span>
+            ${badge}
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function seleccionarArea(id) {
+    estat.areaActiva = id;
+    guardarEstat();
+    renderitzarAreas();
+    renderitzarElements();
+}
+
+// ==========================================
+// RENDERITZAT ELEMENTS
+// ==========================================
+function renderitzarElements() {
+    const container = document.getElementById('elementsContainer');
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    const area = DADES_AREES[estat.areaActiva];
+    
+    if (!area || !area.desenvolupat) {
+        container.innerHTML = `<div class="empty-message">${t('output_buit')}</div>`;
+        return;
+    }
+    
+    let elements = [];
+    let titolGrup = '';
+    
+    if (estat.tabActiva === 'competencies') {
+        elements = area.competencies || [];
+    } else if (estat.tabActiva === 'objectius') {
+        elements = area.objectius || [];
+    } else if (estat.tabActiva === 'continguts') {
+        elements = area.continguts || [];
+    } else if (estat.tabActiva === 'transversals') {
+        elements = DADES_TRANSVERSALES;
+    }
+    
+    // Aplicar filtre
+    if (estat.filtreActiu !== 'tots') {
+        elements = elements.filter(e => e.tipus === estat.filtreActiu);
+    }
+    
+    if (elements.length === 0) {
+        container.innerHTML = `<div class="empty-message">${t('output_buit')}</div>`;
+        return;
+    }
+    
+    // Agrupar per tipus
+    const grups = {};
+    elements.forEach(e => {
+        if (!grups[e.tipus]) grups[e.tipus] = [];
+        grups[e.tipus].push(e);
+    });
+    
+    let html = '';
+    const ordreGrups = ['preceptiu', 'transversal', 'optatiu'];
+    ordreGrups.forEach(tipus => {
+        if (grups[tipus] && grups[tipus].length > 0) {
+            const titolBadge = tipus === 'preceptiu' ? '🟢 ' + t('preceptiu') : (tipus === 'transversal' ? '🔵 ' + t('transversal') : '🟡 ' + t('optatiu'));
+            html += `<div class="element-group"><div class="element-group-title">${titolBadge}</div>`;
+            grups[tipus].forEach(e => {
+                const seleccionat = estat.seleccionats.includes(e.id) ? 'selected' : '';
+                const checked = estat.seleccionats.includes(e.id) ? 'checked' : '';
+                html += `<div class="element-item ${seleccionat}" onclick="toggleElement('${e.id}')">
+                    <input type="checkbox" ${checked} onclick="event.stopPropagation(); toggleElement('${e.id}')">
+                    <div class="element-content">
+                        <div class="element-header">
+                            <span class="element-code">${e.codi}</span>
+                            <span class="element-title">${e.titol[lang]}</span>
+                        </div>
+                        <div class="element-desc">${e.descripcio[lang]}</div>
+                    </div>
+                </div>`;
+            });
+            html += `</div>`;
+        }
+    });
+    
+    container.innerHTML = html;
+}
+
+function toggleElement(id) {
+    const idx = estat.seleccionats.indexOf(id);
+    if (idx > -1) estat.seleccionats.splice(idx, 1);
+    else estat.seleccionats.push(id);
+    guardarEstat();
+    renderitzarElements();
+    renderitzarSortida();
+}
+
+// ==========================================
+// RENDERITZAT SORTIDA
+// ==========================================
+function renderitzarSortida() {
+    const container = document.getElementById('outputContent');
+    const counter = document.getElementById('outputCounter');
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    
+    if (estat.seleccionats.length === 0) {
+        container.innerHTML = `<div class="empty-message">${t('output_buit')}</div>`;
+        counter.textContent = '0';
+        return;
+    }
+    
+    // Recollir tots els elements seleccionats agrupats per tipus
+    const agrupats = { competencies: [], objectius: [], continguts: [], transversals: [] };
+    
+    estat.seleccionats.forEach(id => {
+        // Buscar a totes les àrees i transversals
+        Object.values(DADES_AREES).forEach(area => {
+            if (area.competencies) {
+                const e = area.competencies.find(x => x.id === id);
+                if (e) agrupats.competencies.push(e);
+            }
+            if (area.objectius) {
+                const e = area.objectius.find(x => x.id === id);
+                if (e) agrupats.objectius.push(e);
+            }
+            if (area.continguts) {
+                const e = area.continguts.find(x => x.id === id);
+                if (e) agrupats.continguts.push(e);
+            }
+        });
+        const eT = DADES_TRANSVERSALES.find(x => x.id === id);
+        if (eT) agrupats.transversals.push(eT);
+    });
+    
+    let html = '';
+    let total = 0;
+    
+    if (agrupats.competencies.length > 0) {
+        html += `<div class="output-section"><div class="output-section-title">${t('sortida_competencies')}</div>`;
+        agrupats.competencies.forEach(e => {
+            html += `<div class="output-item">📋 <strong>${e.codi}:</strong> ${e.titol[lang]}</div>`;
+            total++;
+        });
+        html += `</div>`;
+    }
+    
+    if (agrupats.objectius.length > 0) {
+        html += `<div class="output-section"><div class="output-section-title">${t('sortida_objectius')}</div>`;
+        agrupats.objectius.forEach(e => {
+            html += `<div class="output-item">📋 <strong>${e.codi}:</strong> ${e.titol[lang]}</div>`;
+            total++;
+        });
+        html += `</div>`;
+    }
+    
+    if (agrupats.continguts.length > 0) {
+        html += `<div class="output-section"><div class="output-section-title">${t('sortida_continguts')}</div>`;
+        agrupats.continguts.forEach(e => {
+            html += `<div class="output-item">📋 <strong>${e.codi}:</strong> ${e.titol[lang]}</div>`;
+            total++;
+        });
+        html += `</div>`;
+    }
+    
+    if (agrupats.transversals.length > 0) {
+        html += `<div class="output-section"><div class="output-section-title">${t('sortida_transversals')}</div>`;
+        agrupats.transversals.forEach(e => {
+            html += `<div class="output-item">📋 <strong>${e.codi}:</strong> ${e.titol[lang]}</div>`;
+            total++;
+        });
+        html += `</div>`;
+    }
+    
+    container.innerHTML = html;
+    counter.textContent = total;
+}
+
+// ==========================================
+// COPIAR AL PORTAPAPERS
+// ==========================================
+function generarTextSortida(format = 'pla') {
+    const lang = localStorage.getItem('idioma_preferit') || 'ca';
+    const agrupats = { competencies: [], objectius: [], continguts: [], transversals: [] };
+    
+    estat.seleccionats.forEach(id => {
+        Object.values(DADES_AREES).forEach(area => {
+            if (area.competencies) { const e = area.competencies.find(x => x.id === id); if (e) agrupats.competencies.push(e); }
+            if (area.objectius) { const e = area.objectius.find(x => x.id === id); if (e) agrupats.objectius.push(e); }
+            if (area.continguts) { const e = area.continguts.find(x => x.id === id); if (e) agrupats.continguts.push(e); }
+        });
+        const eT = DADES_TRANSVERSALES.find(x => x.id === id);
+        if (eT) agrupats.transversals.push(eT);
+    });
+    
+    let text = '';
+    
+    if (format === 'markdown') {
+        if (agrupats.competencies.length > 0) {
+            text += `## ${t('sortida_competencies')}\n\n`;
+            agrupats.competencies.forEach(e => { text += `- **${e.codi}:** ${e.titol[lang]}\n  ${e.descripcio[lang]}\n\n`; });
+        }
+        if (agrupats.objectius.length > 0) {
+            text += `## ${t('sortida_objectius')}\n\n`;
+            agrupats.objectius.forEach(e => { text += `- **${e.codi}:** ${e.titol[lang]}\n  ${e.descripcio[lang]}\n\n`; });
+        }
+        if (agrupats.continguts.length > 0) {
+            text += `## ${t('sortida_continguts')}\n\n`;
+            agrupats.continguts.forEach(e => { text += `- **${e.codi}:** ${e.titol[lang]}\n  ${e.descripcio[lang]}\n\n`; });
+        }
+        if (agrupats.transversals.length > 0) {
+            text += `## ${t('sortida_transversals')}\n\n`;
+            agrupats.transversals.forEach(e => { text += `- **${e.codi}:** ${e.titol[lang]}\n  ${e.descripcio[lang]}\n\n`; });
+        }
+    } else {
+        if (agrupats.competencies.length > 0) {
+            text += `${t('sortida_competencies')}\n`;
+            agrupats.competencies.forEach(e => { text += `• ${e.codi}: ${e.titol[lang]}\n  ${e.descripcio[lang]}\n`; });
+            text += '\n';
+        }
+        if (agrupats.objectius.length > 0) {
+            text += `${t('sortida_objectius')}\n`;
+            agrupats.objectius.forEach(e => { text += `• ${e.codi}: ${e.titol[lang]}\n  ${e.descripcio[lang]}\n`; });
+            text += '\n';
+        }
+        if (agrupats.continguts.length > 0) {
+            text += `${t('sortida_continguts')}\n`;
+            agrupats.continguts.forEach(e => { text += `• ${e.codi}: ${e.titol[lang]}\n  ${e.descripcio[lang]}\n`; });
+            text += '\n';
+        }
+        if (agrupats.transversals.length > 0) {
+            text += `${t('sortida_transversals')}\n`;
+            agrupats.transversals.forEach(e => { text += `• ${e.codi}: ${e.titol[lang]}\n  ${e.descripcio[lang]}\n`; });
+            text += '\n';
+        }
+    }
+    
+    return text;
+}
+
+function copiarAlPortapapers() {
+    if (estat.seleccionats.length === 0) { mostrarToast(t('output_buit'), 'info'); return; }
+    const text = generarTextSortida('pla');
+    navigator.clipboard.writeText(text).then(() => {
+        mostrarToast(t('toast_copiat'), 'success');
+    }).catch(() => {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        mostrarToast(t('toast_copiat'), 'success');
+    });
+}
+
+function copiarFormatMarkdown() {
+    if (estat.seleccionats.length === 0) { mostrarToast(t('output_buit'), 'info'); return; }
+    const text = generarTextSortida('markdown');
+    navigator.clipboard.writeText(text).then(() => {
+        mostrarToast(t('toast_md_copiat'), 'success');
+    }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        mostrarToast(t('toast_md_copiat'), 'success');
+    });
+}
+
+// ==========================================
+// EXPORTAR / IMPORTAR / NETEJAR
+// ==========================================
+function exportarSeleccio() {
+    if (estat.seleccionats.length === 0) { mostrarToast(t('output_buit'), 'info'); return; }
+    const blob = new Blob([JSON.stringify(estat, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `seleccio_curricular_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    mostrarToast(t('toast_exportat'), 'success');
+}
+
+function importarSeleccio(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const dades = JSON.parse(e.target.result);
+            if (dades.seleccionats) {
+                estat = { ...estat, ...dades };
+                guardarEstat();
+                renderitzarAreas();
+                renderitzarElements();
+                renderitzarSortida();
+                mostrarToast(t('toast_importat'), 'success');
+            }
+        } catch (err) { mostrarToast(t('toast_error'), 'error'); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+function netejarSeleccio() {
+    if (!confirm(t('confirm_netejar'))) return;
+    estat.seleccionats = [];
+    guardarEstat();
+    renderitzarElements();
+    renderitzarSortida();
+    mostrarToast(t('toast_netejat'), 'info');
+}
+
+// ==========================================
+// UTILITATS
+// ==========================================
+function mostrarToast(msg, tipo = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        estat.tabActiva = this.getAttribute('data-tab');
+        guardarEstat();
+        renderitzarElements();
+    });
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active-tots', 'active-preceptiu', 'active-transversal', 'active-optatiu');
+        });
+        const filtre = this.getAttribute('data-filter');
+        this.classList.add('active-' + filtre);
+        estat.filtreActiu = filtre;
+        guardarEstat();
+        renderitzarElements();
+    });
+});
+
+// ==========================================
+// INICIALITZACIÓ
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    carregarEstat();
+    aplicarIdioma(localStorage.getItem('idioma_preferit') || 'ca');
+    renderitzarAreas();
+    renderitzarElements();
+    renderitzarSortida();
+    console.log('✅ Biblioteca Curricular carregada');
+});
+</script>
+</body>
+</html>
