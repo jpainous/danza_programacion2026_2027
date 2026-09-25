@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<style>
+ *{box-sizing:border-box}
+ body{font-family:Arial,sans-serif;background:#f4f1ee;margin:0;color:#333}
+ header{background:#7a2048;color:#fff;padding:14px 18px;display:flex;
+        justify-content:space-between;align-items:center;flex-wrap:wrap}
+ header h1{font-size:1.15em;margin:0}
+ .llengues button{background:rgba(255,255,255,.2);color:#fff;border:1px solid #fff;
+        border-radius:4px;padding:4px 10px;margin-left:6px;cursor:pointer}
+ .llengues button.actiu{background:#fff;color:#7a2048;font-weight:bold}
+ nav{display:flex;flex-wrap:wrap;background:#5d1836}
+ nav button{flex:1;background:none;border:0;color:#e8d5e0;padding:12px 6px;
+        cursor:pointer;font-size:.9em;min-width:110px}
+ nav button.actiu{background:#f4f1ee;color:#7a2048;font-weight:bold}
+ section{display:none;max-width:900px;margin:18px auto;padding:0 14px}
+ section.vis{display:block}
+ .targeta{background:#fff;border-radius:10px;padding:20px;margin-bottom:16px;
+        box-shadow:0 2px 6px rgba(0,0,0,.1)}
+ h2{color:#7a2048;margin-top:0}
+ label{display:block;margin:10px 0 4px;font-weight:bold;font-size:.92em}
+ input,select,textarea{width:100%;padding:9px;border:1px solid #ccc;border-radius:6px;font-size:1em}
+ textarea{min-height:120px;resize:vertical}
+ .fila{display:flex;gap:14px;flex-wrap:wrap}.fila>div{flex:1;min-width:180px}
+ button.accio{background:#7a2048;color:#fff;border:0;padding:10px 18px;border-radius:6px;
+        cursor:pointer;font-size:.95em;margin:8px 6px 0 0}
+ button.accio.sec{background:#888}
+ .fitxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+ .fitxa{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,.1);
+        border:3px solid transparent;font-size:.93em}
+ .fitxa h3{color:#7a2048;margin:0 0 8px}
+ .fitxa p{margin:6px 0}
+ .fitxa.destacada{border-color:#2e7d32;background:#f2f8f2}
+ .capsa-voc{background:#fff;border-left:5px solid #7a2048;border-radius:8px;padding:12px 14px;
+        box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:.93em}
+ #llista-vocab{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.capsa-voc .eines{margin-top:8px;font-size:.88em}
+.capsa-voc .eines a{color:#7a2048;font-weight:bold} 
+.resum{background:#efe7ec;border-radius:8px;padding:12px 16px;font-size:.95em}
+ .resum b{color:#7a2048}
+ .gran{background:#fff8e1;border:1px solid #e0a800;border-radius:8px;padding:14px 18px;
+        font-size:.92em;margin-top:14px}
+ .gran ol{margin:8px 0 0;padding-left:20px}.gran li{margin:5px 0}
+ .missatge{margin-top:10px;font-weight:bold}
+ .ok{color:#1b5e20}.err{color:#b71c1c}
+ .pc{font-weight:normal;color:#888;font-size:.85em;margin-left:6px}
+ .suggeriment{background:#eef4ee;border-radius:6px;padding:8px 12px;font-size:.9em;margin-top:4px}
+ .nota{font-size:.85em;color:#666;margin-top:4px}
+ #carregant{display:none;color:#7a2048;font-weight:bold;margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+ <div><h1 data-i18n="titol">Taller de Fisiologia · De la redacció a la presentació</h1>
+ <small data-i18n="subtitol">1r curs de dansa — Fisiologia</small></div>
+ <div class="llengues">
+  <button type="button" onclick="setLang('ca')" id="btn-ca">CA</button>
+  <button type="button" onclick="setLang('es')" id="btn-es">ES</button>
+  <button type="button" onclick="setLang('en')" id="btn-en">EN</button>
+ </div>
+</header>
+
+<noscript><div style="background:#b71c1c;color:#fff;padding:10px;text-align:center">
+Aquesta pàgina necessita JavaScript activat.</div></noscript>
+<div id="js-error" style="display:none;background:#b71c1c;color:#fff;padding:8px;
+ text-align:center;font-size:.9em"></div>
+
+<nav>
+ <button type="button" onclick="mostra('inici')" id="nav-inici" data-i18n="nav_inici">Inici</button>
+ <button type="button" onclick="mostra('config')" id="nav-config" data-i18n="nav_config">Configura</button>
+ <button type="button" onclick="mostra('formats')" id="nav-formats" data-i18n="nav_formats">Formats</button>
+ <button type="button" onclick="mostra('vocab')" id="nav-vocab" data-i18n="nav_vocab">Vocabulari</button>
+ <button type="button" onclick="mostra('decideix')" id="nav-decideix" data-i18n="nav_decideix">Decideix</button>
+ <button type="button" onclick="mostra('escriptori')" id="nav-escriptori" data-i18n="nav_escriptori">Escriptori</button>
+ <button type="button" onclick="mostra('entrega')" id="nav-entrega" data-i18n="nav_entrega">Entrega</button>
+</nav>
+
+<!-- INICI -->
+<section id="inici" class="vis">
+ <div class="targeta">
+  <h2 data-i18n="ini_t">La redacció és el cor, el format és el vestit</h2>
+  <p data-i18n="ini_x">El teu text aporta el contingut científic; el format triat només el vesteix
+  per comunicar-lo millor. En tots els casos hauràs d'entregar també el text escrit.</p>
+ </div>
+ <div class="targeta">
+  <p><b data-i18n="p1_t">1 · Decide — </b><span data-i18n="p1_x">tria tema, format i si treballes individualment o en equip.</span></p>
+  <p><b data-i18n="p2_t">2 · Prepara — </b><span data-i18n="p2_x">escriu l'esquema i el guió a l'Escriptori; els esborranys es guarden sols.</span></p>
+  <p><b data-i18n="p3_t">3 · Entrega — </b><span data-i18n="p3_x">puja l'arxiu o enganxa un enllaç; la professora rebrà un avís automàtic.</span></p>
+ </div>
+</section>
+
+<!-- CONFIGURA -->
+<section id="config">
+ <div class="targeta">
+  <h2 data-i18n="cfg_t">El meu projecte</h2>
+  <p data-i18n="cfg_x">Aquesta configuració personalitza totes les seccions i es guarda en aquest navegador.</p>
+  <div class="fila">
+   <div><label data-i18n="cfg_tipus">Tipus de treball</label>
+    <select id="cfg-tipus">
+     <option value="ind" data-i18n="cfg_ind">Individual</option>
+     <option value="grup" data-i18n="cfg_grup">En equip</option>
+    </select></div>
+   <div><label data-i18n="cfg_data">Data d'entrega</label><input type="date" id="cfg-data"></div>
+  </div>
+  <div id="fila-membres" style="display:none">
+   <label data-i18n="cfg_membres">Membres de l'equip (separats per comes)</label>
+   <input id="cfg-membres">
+  </div>
+  <div class="fila">
+   <div><label data-i18n="cfg_tema">Tema de la redacció</label>
+    <select id="cfg-tema">
+     <option value="1">1 · Anatomia i fisiologia: l'escenari i la coreografia</option>
+     <option value="2">2 · Per a què serveix la fisiologia a un ballarí?</option>
+     <option value="3">3 · La homeòstasi mentre balles</option>
+     <option value="4">4 · De la cèl·lula a l'obra mestra</option>
+     <option value="5">5 · El viatge d'una ordre nerviosa</option>
+     <option value="6">6 · Tres maneres de contraure's</option>
+     <option value="7">7 · Cap múscul balla sol</option>
+     <option value="8">8 · L'os no és una pedra</option>
+     <option value="9">9 · El sisè sentit del ballarí</option>
+     <option value="10">10 · Quan el cos demana pausa</option>
+    </select></div>
+   <div><label data-i18n="cfg_format">Format de presentació</label>
+    <select id="cfg-format">
+     <option value="web">Pàgina web</option>
+     <option value="info">Organigrama / Infografia</option>
+     <option value="teatre">Obra de teatre / escena</option>
+     <option value="comic">Còmic</option>
+     <option value="pod">Pòdcast</option>
+     <option value="vid">Vídeo</option>
+    </select></div>
+  </div>
+  <div class="suggeriment" id="cfg-recomana"></div>
+  <button class="accio" onclick="saveCfg()" data-i18n="cfg_guardar">Guardar configuració</button>
+  <span class="missatge ok" id="cfg-gardat"></span>
+ </div>
+</section>
+
+<!-- FORMATS -->
+<section id="formats">
+ <h2 data-i18n="nav_formats">Formats</h2>
+ <div class="fitxes" id="llista-formats"></div>
+</section>
+
+<!-- VOCABULARI -->
+<section id="vocab">
+ <h2 data-i18n="gl_t">Vocabulari</h2>
+ <div id="llista-vocab"></div>
+</section>
+
+<!-- DECIDEIX -->
+<section id="decideix">
+ <div class="targeta">
+  <h2 data-i18n="d_t">Full de decisió</h2>
+  <div class="resum" id="d-resum">—</div>
+  <label data-i18n="d_perque">Per què aquest format? (2–3 línies: què guanya el contingut)</label>
+  <textarea id="txt-decissio" rows="4"></textarea>
+  <span class="pc" id="pc-decissio"></span>
+  <button class="accio" onclick="guardaAra('decissio')" data-i18n="d_guardar">Guardar esborrany</button>
+  <button class="accio sec" onclick="descarregaTxt()" data-i18n="d_desc">Descarregar .txt</button>
+  <span class="missatge ok" id="ms-decissio"></span>
+ </div>
+</section>
+
+<!-- ESCRIPTORI -->
+<section id="escriptori">
+ <div class="targeta">
+  <h2 data-i18n="e_t">Escriptori de treball</h2>
+  <p data-i18n="e_x">Escriu aquí: els esborranys es guarden automàticament en aquest navegador.
+  Pots descarregar-los en .txt i s'adjuntaran a l'entrega si marques la casella corresponent.</p>
+  <label><span data-i18n="e_esq">Esquema</span> · <span class="pc" id="pc-esquema"></span></label>
+  <textarea id="txt-esquema"></textarea>
+  <label><span data-i18n="e_guio">Guió</span> · <span class="pc" id="pc-guio"></span></label>
+  <textarea id="txt-guio"></textarea>
+  <div id="bloc-tasques">
+   <label><span data-i18n="e_tasq">Repartiment de tasques (equip)</span> · <span class="pc" id="pc-tasques"></span></label>
+   <textarea id="txt-tasques"></textarea>
+   <div class="suggeriment" id="suggeriment-tasques"></div>
+  </div>
+  <div id="bloc-notes">
+   <label><span data-i18n="e_notes">Notes individuals</span> · <span class="pc" id="pc-notes"></span></label>
+   <textarea id="txt-notes"></textarea>
+  </div>
+  <button class="accio" onclick="guardaTot()" data-i18n="e_guardar">Guardar ara</button>
+  <button class="accio sec" onclick="descarregaTxt()" data-i18n="e_desc">Descarregar .txt</button>
+  <button class="accio sec" onclick="esborraTot()" data-i18n="e_esb">Esborrar tot</button>
+  <span class="missatge ok" id="ms-escriptori"></span>
+ </div>
+</section>
+
+<!-- ENTREGA -->
+<section id="entrega">
+ <div class="targeta">
+  <h2 data-i18n="en_t">Entrega del treball</h2>
+  <h3 data-i18n="en_resum">Resum del projecte</h3>
+  <div class="resum" id="en-resum">—</div>
+  <div class="fila">
+   <div><label data-i18n="en_alumnes">Alumne/s (Cognom, Nom)</label><input id="en-alumnes"></div>
+   <div><label data-i18n="en_curs">Curs / grup</label><input id="en-curs"></div>
+  </div>
+  <label data-i18n="en_titol">Títol del treball</label><input id="en-titol">
+  <label data-i18n="en_arxiu">Arxiu (PDF, imatge, àudio, vídeo — màx. 25 MB)</label><input type="file" id="en-arxiu">
+  <p class="nota" data-i18n="nota_max">Més de 25 MB? Mira la caixa «Arxius grans» de sota.</p>
+  <label data-i18n="en_enllac">Enllaç (web, vídeo o pòdcast publicat en línia)</label>
+  <input type="url" id="en-enllac" placeholder="https://...">
+  <label data-i18n="en_com">Comentaris (opcional)</label><textarea id="en-com" rows="2"></textarea>
+  <label style="font-weight:normal"><input type="checkbox" id="en-esb" checked>
+   <span data-i18n="en_esb">Adjuntar esborranys (decisió, esquema, guió, tasques) com a arxiu de text</span></label>
+  <button class="accio" onclick="enviar()" data-i18n="en_boto">Enviar entrega</button>
+  <div id="carregant" data-i18n="en_carregant">⏳ Pujant... no tanquis la pàgina.</div>
+  <div class="missatge ok" id="en-ok" style="display:none"></div>
+  <div class="missatge err" id="en-err" style="display:none"></div>
+
+  <div class="gran">
+   <b data-i18n="ag_t">⚠ Arxius grans (vídeo, pòdcast) — com fer-ho pas a pas</b>
+   <ol>
+    <li data-i18n="ag_1">Si l'arxiu pesa més de 25 MB, no el pugis aquí: puja'l primer al teu Drive (arrossega'l a drive.google.com).</li>
+    <li data-i18n="ag_2">Clic dret sobre l'arxiu → Comparteix → «Qualsevol persona amb l'enllaç» (Lector) → Copia l'enllaç.</li>
+    <li data-i18n="ag_3">Enganxa l'enllaç al camp «Enllaç» de dalt. També pots usar YouTube (visibilitat oculta) o SoundCloud per a l'àudio.</li>
+    <li data-i18n="ag_4">Comprova l'enllaç en un navegador on no hagis iniciat sessió.</li>
+   </ol>
+  </div>
+ </div>
+</section>
+
+<script>
+/* ============ EMMAGATZEMATGE SEGUR (no falla mai) ============ */
+const _mem = {};
+function sGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return _mem[k]||null; } }
+function sSet(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ _mem[k]=v; } }
+function sDel(k){ try{ window.localStorage.removeItem(k); }catch(e){ delete _mem[k]; } }
+
+/* ============ TRADUCCIONS ============ */
+const I18N = {
+ca: {
+ titol:"Taller de Fisiologia · De la redacció a la presentació", subtitol:"1r curs de dansa — Fisiologia",
+ nav_inici:"Inici", nav_config:"Configura", nav_formats:"Formats", nav_vocab:"Vocabulari",
+ nav_decideix:"Decideix", nav_escriptori:"Escriptori", nav_entrega:"Entrega",
+ ini_t:"La redacció és el cor, el format és el vestit",
+ ini_x:"El teu text aporta el contingut científic; el format triat només el vesteix per comunicar-lo millor. En tots els casos hauràs d'entregar també el text escrit.",
+ p1_t:"1 · Decide — ", p1_x:"tria tema, format i si treballes individualment o en equip.",
+ p2_t:"2 · Prepara — ", p2_x:"escriu l'esquema i el guió a l'Escriptori; els esborranys es guarden sols.",
+ p3_t:"3 · Entrega — ", p3_x:"puja l'arxiu o enganxa un enllaç; la professora rebrà un avís automàtic.",
+ cfg_t:"El meu projecte", cfg_x:"Aquesta configuració personalitza totes les seccions i es guarda en aquest navegador.",
+ cfg_tipus:"Tipus de treball", cfg_ind:"Individual", cfg_grup:"En equip",
+ cfg_membres:"Membres de l'equip (separats per comes)",
+ cfg_tema:"Tema de la redacció", cfg_format:"Format de presentació", cfg_data:"Data d'entrega",
+ cfg_guardar:"Guardar configuració", cfg_gardat:"✔ Configuració guardada",
+ recomana:"Recomanació per a aquest tema:", tasques_sug:"Repartiment suggerit:",
+ f_quee:"Què és:", f_prod:"Producte final:", f_imp:"Imprescindible:", f_eines:"Eines:",
+ d_t:"Full de decisió", d_perque:"Per què aquest format? (2–3 línies: què guanya el contingut)",
+ d_guardar:"Guardar esborrany", d_desc:"Descarregar .txt",
+ e_t:"Escriptori de treball",
+ e_x:"Escriu aquí: els esborranys es guarden automàticament en aquest navegador. Pots descarregar-los en .txt i s'adjuntaran a l'entrega si marques la casella corresponent.",
+ e_esq:"Esquema", e_guio:"Guió", e_tasq:"Repartiment de tasques (equip)", e_notes:"Notes individuals",
+ e_guardar:"Guardar ara", e_desc:"Descarregar .txt", e_esb:"Esborrar tot",
+ paraules:"paraules", guardat_h:"Guardat",
+ en_t:"Entrega del treball", en_resum:"Resum del projecte",
+ en_alumnes:"Alumne/s (Cognom, Nom)", en_curs:"Curs / grup", en_titol:"Títol del treball",
+ en_arxiu:"Arxiu (PDF, imatge, àudio, vídeo — màx. 25 MB)",
+ en_enllac:"Enllaç (web, vídeo o pòdcast publicat en línia)", en_com:"Comentaris (opcional)",
+ en_esb:"Adjuntar esborranys (decisió, esquema, guió, tasques) com a arxiu de text",
+ en_boto:"Enviar entrega", en_carregant:"⏳ Pujant... no tanquis la pàgina.",
+ en_ok:"✅ Entrega enviada. La professora ha rebut un avís automàtic amb el nom i el format de l'arxiu.",
+ en_err:"No s'ha pogut completar: ",
+ ag_t:"⚠ Arxius grans (vídeo, pòdcast) — com fer-ho pas a pas",
+ ag_1:"Si l'arxiu pesa més de 25 MB, no el pugis aquí: puja'l primer al teu Drive (arrossega'l a drive.google.com).",
+ ag_2:"Clic dret sobre l'arxiu → Comparteix → «Qualsevol persona amb l'enllaç» (Lector) → Copia l'enllaç.",
+ ag_3:"Enganxa l'enllaç al camp «Enllaç» de dalt. També pots usar YouTube (visibilitat oculta) o SoundCloud per a l'àudio.",
+ ag_4:"Comprova l'enllaç en un navegador on no hagis iniciat sessió.",
+ nota_max:"Més de 25 MB? Mira la caixa «Arxius grans» de sota.",
+ dies_falten:"Falten {n} dies per a l'entrega", dies_avui:"L'entrega és avui!", dies_passada:"La data d'entrega ha passat fa {n} dies",
+ demo:"(mode demostració: sense backend no s'envia res, però pots provar la web)",
+ t_1:"Anatomia i fisiologia: l'escenari i la coreografia", t_2:"Per a què serveix la fisiologia a un ballarí?",
+ t_3:"La homeòstasi mentre balles", t_4:"De la cèl·lula a l'obra mestra", t_5:"El viatge d'una ordre nerviosa",
+ t_6:"Tres maneres de contraure's", t_7:"Cap múscul balla sol", t_8:"L'os no és una pedra",
+ t_9:"El sisè sentit del ballarí", t_10:"Quan el cos demana pausa",
+ rec_1:"Infografia comparativa · altres: web, monòleg", rec_2:"Debat teatral · altres: pòdcast d'opinió",
+ rec_3:"Vídeo demostratiu · altres: teatre, infografia", rec_4:"Web (una secció per nivell) · altres: organigrama, còmic",
+ rec_5:"Teatre de rols · altres: còmic, vídeo", rec_6:"Vídeo demostratiu · altres: infografia, pòdcast",
+ rec_7:"Teatre de rols · altres: còmic, vídeo", rec_8:"Pòdcast entrevista · altres: web, infografia",
+ rec_9:"Vídeo amb proves · altres: pòdcast, infografia", rec_10:"Pòdcast entrevista · altres: cartell, vídeo",
+ rk_2:"A favor · En contra · Moderació", rk_3:"Sensor · Centre d'integració · Efector · Narració",
+ rk_4:"Cèl·lula · Teixit · Òrgan · Edició conjunta", rk_5:"Motoneurona · Acetilcolina · Calci · Miosina · ATP",
+ rk_6:"Concèntrica · Isomètrica · Excèntrica", rk_7:"Múscul · Tendó · Os · Articulació · Lligament",
+ rk_8:"Entrevistador · Ballarí · Expert", rk_10:"Ballarí · Fisioterapeuta · Fisiòleg",
+ rk_gen:"Coordinació · Responsable científic · Guió i disseny · Producció i portaveu",
+ fmt_web_n:"Pàgina web", fmt_web_d:"Lloc web amb diverses seccions navegables.",
+ fmt_web_p:"Pàgina amb 4–6 seccions", fmt_web_r:"Portada amb títol creatiu, contingut, 1 diagrama, glossari, fonts", fmt_web_e:"Google Sites",
+ fmt_info_n:"Organigrama / Infografia", fmt_info_d:"Cartell visual que organitza la informació amb jerarquia.",
+ fmt_info_p:"Cartell digital o foli gran", fmt_info_r:"Jerarquia clara, màx. 60 paraules per bloc, 1 diagrama central, icones", fmt_info_e:"Canva, paper",
+ fmt_teatre_n:"Obra de teatre / escena", fmt_teatre_d:"Escena representada amb personatges que expliquen el contingut.",
+ fmt_teatre_p:"Escena de 3–5 minuts", fmt_teatre_r:"Guió escrit, 2–5 personatges, rigor científic dels diàlegs", fmt_teatre_e:"Guió a mà o digital",
+ fmt_comic_n:"Còmic", fmt_comic_d:"Història dibuixada en vinyetes seqüencials.",
+ fmt_comic_p:"8–12 vinyetes", fmt_comic_r:"Títol, glossari al peu, personatges coherents amb el contingut", fmt_comic_e:"Storyboard That, dibuix a mà",
+ fmt_pod_n:"Pòdcast", fmt_pod_d:"Programa d'àudio gravat amb blocs parlats.",
+ fmt_pod_p:"Àudio de 5–8 minuts", fmt_pod_r:"Sintonia, guió previ, 3 blocs, crèdits", fmt_pod_e:"Mòbil, Audacity",
+ fmt_vid_n:"Vídeo", fmt_vid_d:"Peça audiovisual gravada i muntada.",
+ fmt_vid_p:"Vídeo de 3–5 minuts", fmt_vid_r:"Guió, veu en off o càmera, moviment si escau, crèdits", fmt_vid_e:"Mòbil, CapCut, iMovie",
+ gl_t:"Vocabulari",
+ eina_gratis:"On fer-ho (gratuït):",
+ gl_comic:"Còmic: narració visual amb vinyetes dibuixades que es llegeixen en seqüència.",
+ gl_pod:"Pòdcast: programa d'àudio per escoltar; pot tenir seccions, entrevistes i sintonia.",
+ gl_vid:"Vídeo: peça amb imatge i so; pot incloure gravacions, veu en off i textos.",
+ gl_web:"Pàgina web: conjunt de pàgines en línia navegables amb enllaços.",
+ gl_info:"Infografia: representació visual de dades o processos amb icones i esquemes.",
+ gl_tea:"Escena: text dramatitzat per representar, amb personatges, diàleg i acció.",
+ gl_guio:"Guió: text previ que ordena què es diu i què passa en cada moment.",
+ gl_story:"Storyboard: còmic esquemàtic que planifica pla a pla un vídeo.",
+ gl_vin:"Vinyeta: cada quadre o escena dibuixada d'un còmic.",
+ gl_sin:"Sintonia: música d'entrada i sortida d'un pòdcast o vídeo.",
+ gl_vo:"Veu en off: veu que narra sense que es vegi qui parla.",
+ gl_cre:"Crèdits: llista final amb qui ha fet cada tasca i les fonts.",
+ gl_esb:"Esborrany: versió de treball que encara es pot editar abans de l'entrega.",
+ gl_enll:"Enllaç compartit: adreça que permet obrir un arxiu del Drive sense compartir el compte."
+},
+es: {
+ titol:"Taller de Fisiología · De la redacción a la presentación", subtitol:"1er curso de danza — Fisiología",
+ nav_inici:"Inicio", nav_config:"Configura", nav_formats:"Formatos", nav_vocab:"Vocabulario",
+ nav_decideix:"Decide", nav_escriptori:"Escritorio", nav_entrega:"Entrega",
+ ini_t:"La redacción es el corazón, el formato es el vestido",
+ ini_x:"Tu texto aporta el contenido científico; el formato elegido solo lo viste para comunicarlo mejor. En todos los casos deberás entregar también el texto escrito.",
+ p1_t:"1 · Decide — ", p1_x:"elige tema, formato y si trabajas individualmente o en equipo.",
+ p2_t:"2 · Prepara — ", p2_x:"escribe el esquema y el guion en el Escritorio; los borradores se guardan solos.",
+ p3_t:"3 · Entrega — ", p3_x:"sube el archivo o pega un enlace; la profesora recibirá un aviso automático.",
+ cfg_t:"Mi proyecto", cfg_x:"Esta configuración personaliza todas las secciones y se guarda en este navegador.",
+ cfg_tipus:"Tipo de trabajo", cfg_ind:"Individual", cfg_grup:"En equipo",
+ cfg_membres:"Miembros del equipo (separados por comas)",
+ cfg_tema:"Tema de la redacción", cfg_format:"Formato de presentación", cfg_data:"Fecha de entrega",
+ cfg_guardar:"Guardar configuración", cfg_gardat:"✔ Configuración guardada",
+ recomana:"Recomendación para este tema:", tasques_sug:"Reparto sugerido:",
+ f_quee:"Qué es:", f_prod:"Producto final:", f_imp:"Imprescindible:", f_eines:"Herramientas:",
+ d_t:"Hoja de decisión", d_perque:"¿Por qué este formato? (2–3 líneas: qué gana el contenido)",
+ d_guardar:"Guardar borrador", d_desc:"Descargar .txt",
+ e_t:"Escritorio de trabajo",
+ e_x:"Escribe aquí: los borradores se guardan automáticamente en este navegador. Puedes descargarlos en .txt y se adjuntarán a la entrega si marcas la casilla correspondiente.",
+ e_esq:"Esquema", e_guio:"Guion", e_tasq:"Reparto de tareas (equipo)", e_notes:"Notas individuales",
+ e_guardar:"Guardar ahora", e_desc:"Descargar .txt", e_esb:"Borrar todo",
+ paraules:"palabras", guardat_h:"Guardado",
+ en_t:"Entrega del trabajo", en_resum:"Resumen del proyecto",
+ en_alumnes:"Alumno/s (Apellido, Nombre)", en_curs:"Curso / grupo", en_titol:"Título del trabajo",
+ en_arxiu:"Archivo (PDF, imagen, audio, vídeo — máx. 25 MB)",
+ en_enllac:"Enlace (web, vídeo o pódcast publicado en línea)", en_com:"Comentarios (opcional)",
+ en_esb:"Adjuntar borradores (decisión, esquema, guion, tareas) como archivo de texto",
+ en_boto:"Enviar entrega", en_carregant:"⏳ Subiendo... no cierres la página.",
+ en_ok:"✅ Entrega enviada. La profesora ha recibido un aviso automático con el nombre y el formato del archivo.",
+ en_err:"No se ha podido completar: ",
+ ag_t:"⚠ Archivos grandes (vídeo, pódcast) — cómo hacerlo paso a paso",
+ ag_1:"Si el archivo pesa más de 25 MB, no lo subas aquí: súbelo primero a tu Drive (arrástralo a drive.google.com).",
+ ag_2:"Clic derecho sobre el archivo → Compartir → «Cualquier persona con el enlace» (Lector) → Copiar enlace.",
+ ag_3:"Pega el enlace en el campo «Enlace» de arriba. También puedes usar YouTube (visibilidad oculta) o SoundCloud para el audio.",
+ ag_4:"Comprueba el enlace en un navegador donde no hayas iniciado sesión.",
+ nota_max:"¿Más de 25 MB? Mira la caja «Archivos grandes» de abajo.",
+ dies_falten:"Faltan {n} días para la entrega", dies_avui:"¡La entrega es hoy!", dies_passada:"La fecha de entrega ha pasado hace {n} días",
+ demo:"(modo demostración: sin backend no se envía nada, pero puedes probar la web)",
+ t_1:"Anatomía y fisiología: el escenario y la coreografía", t_2:"¿Para qué sirve la fisiología a un bailarín?",
+ t_3:"La homeostasis mientras bailas", t_4:"De la célula a la obra maestra", t_5:"El viaje de una orden nerviosa",
+ t_6:"Tres maneras de contraerse", t_7:"Ningún músculo baila solo", t_8:"El hueso no es una piedra",
+ t_9:"El sexto sentido del bailarín", t_10:"Cuando el cuerpo pide pausa",
+ rec_1:"Infografía comparativa · otras: web, monólogo", rec_2:"Debate teatral · otras: pódcast de opinión",
+ rec_3:"Vídeo demostrativo · otras: teatro, infografía", rec_4:"Web (una sección por nivel) · otras: organigrama, cómic",
+ rec_5:"Teatro de roles · otras: cómic, vídeo", rec_6:"Vídeo demostrativo · otras: infografía, pódcast",
+ rec_7:"Teatro de roles · otras: cómic, vídeo", rec_8:"Pódcast entrevista · otras: web, infografía",
+ rec_9:"Vídeo con pruebas · otras: pódcast, infografía", rec_10:"Pódcast entrevista · otras: cartel, vídeo",
+ rk_2:"A favor · En contra · Moderación", rk_3:"Sensor · Centro de integración · Efector · Narración",
+ rk_4:"Célula · Tejido · Órgano · Edición conjunta", rk_5:"Motoneurona · Acetilcolina · Calcio · Miosina · ATP",
+ rk_6:"Concéntrica · Isométrica · Excéntrica", rk_7:"Músculo · Tendón · Hueso · Articulación · Ligamento",
+ rk_8:"Entrevistador · Bailarín · Experto", rk_10:"Bailarín · Fisioterapeuta · Fisiólogo",
+ rk_gen:"Coordinación · Responsable científico · Guion y diseño · Producción y portavoz",
+ fmt_web_n:"Página web", fmt_web_d:"Sitio web con varias secciones navegables.",
+ fmt_web_p:"Página con 4–6 secciones", fmt_web_r:"Portada con título creativo, contenido, 1 diagrama, glosario, fuentes", fmt_web_e:"Google Sites",
+ fmt_info_n:"Organigrama / Infografía", fmt_info_d:"Cartel visual que organiza la información con jerarquía.",
+ fmt_info_p:"Cartel digital o folio grande", fmt_info_r:"Jerarquía clara, máx. 60 palabras por bloque, 1 diagrama central, iconos", fmt_info_e:"Canva, papel",
+ fmt_teatre_n:"Obra de teatro / escena", fmt_teatre_d:"Escena representada con personajes que explican el contenido.",
+ fmt_teatre_p:"Escena de 3–5 minutos", fmt_teatre_r:"Guion escrito, 2–5 personajes, rigor científico de los diálogos", fmt_teatre_e:"Guion a mano o digital",
+ fmt_comic_n:"Cómic", fmt_comic_d:"Historia dibujada en viñetas secuenciales.",
+ fmt_comic_p:"8–12 viñetas", fmt_comic_r:"Título, glosario al pie, personajes coherentes con el contenido", fmt_comic_e:"Storyboard That, dibujo a mano",
+ fmt_pod_n:"Pódcast", fmt_pod_d:"Programa de audio grabado con bloques hablados.",
+ fmt_pod_p:"Audio de 5–8 minutos", fmt_pod_r:"Sintonía, guion previo, 3 bloques, créditos", fmt_pod_e:"Móvil, Audacity",
+ fmt_vid_n:"Vídeo", fmt_vid_d:"Pieza audiovisual grabada y montada.",
+ fmt_vid_p:"Vídeo de 3–5 minutos", fmt_vid_r:"Guion, voz en off o cámara, movimiento si procede, créditos", fmt_vid_e:"Móvil, CapCut, iMovie",
+ gl_t:"Vocabulario",
+ eina_gratis:"Dónde hacerlo (gratis):",
+ gl_comic:"Cómic: narración visual con viñetas dibujadas que se leen en secuencia.",
+ gl_pod:"Pódcast: programa de audio para escuchar; puede tener secciones, entrevistas y sintonía.",
+ gl_vid:"Vídeo: pieza con imagen y sonido; puede incluir grabaciones, voz en off y textos.",
+ gl_web:"Página web: conjunto de páginas en línea navegables con enlaces.",
+ gl_info:"Infografía: representación visual de datos o procesos con iconos y esquemas.",
+ gl_tea:"Escena: texto dramatizado para representar, con personajes, diálogo y acción.",
+ gl_guio:"Guion: texto previo que ordena qué se dice y qué pasa en cada momento.",
+ gl_story:"Storyboard: cómic esquemático que planifica plano a plano un vídeo.",
+ gl_vin:"Viñeta: cada cuadro o escena dibujada de un cómic.",
+ gl_sin:"Sintonía: música de entrada y salida de un pódcast o vídeo.",
+ gl_vo:"Voz en off: voz que narra sin que se vea quién habla.",
+ gl_cre:"Créditos: lista final con quién ha hecho cada tarea y las fuentes.",
+ gl_esb:"Borrador: versión de trabajo que aún se puede editar antes de la entrega.",
+ gl_enll:"Enlace compartido: dirección que permite abrir un archivo del Drive sin compartir la cuenta."
+},
+en: {
+ titol:"Physiology Workshop · From essay to presentation", subtitol:"1st year Dance — Physiology",
+ nav_inici:"Home", nav_config:"Setup", nav_formats:"Formats", nav_vocab:"Vocabulary",
+ nav_decideix:"Decision", nav_escriptori:"Workbench", nav_entrega:"Submit",
+ ini_t:"The essay is the heart, the format is the outfit",
+ ini_x:"Your text provides the scientific content; the chosen format only dresses it up to communicate better. In every case you must also submit the written text.",
+ p1_t:"1 · Decide — ", p1_x:"choose topic, format, and whether you work alone or in a team.",
+ p2_t:"2 · Prepare — ", p2_x:"write your outline and script in the Workbench; drafts save themselves.",
+ p3_t:"3 · Submit — ", p3_x:"upload a file or paste a link; your teacher gets an automatic notice.",
+ cfg_t:"My project", cfg_x:"This setup customizes every section and is saved in this browser.",
+ cfg_tipus:"Type of work", cfg_ind:"Individual", cfg_grup:"Team",
+ cfg_membres:"Team members (comma separated)",
+ cfg_tema:"Essay topic", cfg_format:"Presentation format", cfg_data:"Due date",
+ cfg_guardar:"Save setup", cfg_gardat:"✔ Setup saved",
+ recomana:"Recommendation for this topic:", tasques_sug:"Suggested task split:",
+ f_quee:"What is it:", f_prod:"Final product:", f_imp:"Must include:", f_eines:"Tools:",
+ d_t:"Decision sheet", d_perque:"Why this format? (2–3 lines: what it adds to the content)",
+ d_guardar:"Save draft", d_desc:"Download .txt",
+ e_t:"Workbench",
+ e_x:"Write here: drafts save automatically in this browser. You can download them as .txt and they will be attached to your submission if you tick the box.",
+ e_esq:"Outline", e_guio:"Script", e_tasq:"Task split (team)", e_notes:"Personal notes",
+ e_guardar:"Save now", e_desc:"Download .txt", e_esb:"Clear all",
+ paraules:"words", guardat_h:"Saved",
+ en_t:"Submit your work", en_resum:"Project summary",
+ en_alumnes:"Student(s) (Surname, Name)", en_curs:"Course / group", en_titol:"Work title",
+ en_arxiu:"File (PDF, image, audio, video — max 25 MB)",
+ en_enllac:"Link (published web, video or podcast)", en_com:"Comments (optional)",
+ en_esb:"Attach drafts (decision, outline, script, tasks) as a text file",
+ en_boto:"Submit", en_carregant:"⏳ Uploading... do not close this page.",
+ en_ok:"✅ Submitted. Your teacher has received an automatic notice with the file name and format.",
+ en_err:"Could not submit: ",
+ ag_t:"⚠ Large files (video, podcast) — how to do it step by step",
+ ag_1:"If the file is larger than 25 MB, do not upload it here: first upload it to your own Drive (drag it into drive.google.com).",
+ ag_2:"Right-click the file → Share → 'Anyone with the link' (Viewer) → Copy link.",
+ ag_3:"Paste the link in the 'Link' field above. You can also use YouTube (unlisted) or SoundCloud for audio.",
+ ag_4:"Test the link in a browser where you are not signed in.",
+ nota_max:"Bigger than 25 MB? See the 'Large files' box below.",
+ dies_falten:"{n} days left until the due date", dies_avui:"Due today!", dies_passada:"The due date passed {n} days ago",
+ demo:"(demo mode: without backend nothing is sent, but you can try the website)",
+ t_1:"Anatomy & physiology: stage and choreography", t_2:"What is physiology for, for a dancer?",
+ t_3:"Homeostasis while you dance", t_4:"From cell to masterpiece", t_5:"The journey of a nerve signal",
+ t_6:"Three ways of contracting", t_7:"No muscle dances alone", t_8:"Bone is not a stone",
+ t_9:"The dancer's sixth sense", t_10:"When the body asks for a pause",
+ rec_1:"Comparative infographic · others: web, monologue", rec_2:"Theatre debate · others: opinion podcast",
+ rec_3:"Demo video · others: theatre, infographic", rec_4:"Website (one section per level) · others: chart, comic",
+ rec_5:"Role-play theatre · others: comic, video", rec_6:"Demo video · others: infographic, podcast",
+ rec_7:"Role-play theatre · others: comic, video", rec_8:"Interview podcast · others: web, infographic",
+ rec_9:"Demo video with tests · others: podcast, infographic", rec_10:"Interview podcast · others: poster, video",
+ rk_2:"For · Against · Moderator", rk_3:"Sensor · Integration centre · Effector · Narrator",
+ rk_4:"Cell · Tissue · Organ · Joint editing", rk_5:"Motoneuron · Acetylcholine · Calcium · Myosin · ATP",
+ rk_6:"Concentric · Isometric · Eccentric", rk_7:"Muscle · Tendon · Bone · Joint · Ligament",
+ rk_8:"Interviewer · Dancer · Expert", rk_10:"Dancer · Physiotherapist · Physiologist",
+ rk_gen:"Coordination · Science checker · Script & design · Production & spokesperson",
+ fmt_web_n:"Web page", fmt_web_d:"A website with several navigable sections.",
+ fmt_web_p:"Page with 4–6 sections", fmt_web_r:"Creative title, content, 1 diagram, glossary, sources", fmt_web_e:"Google Sites",
+ fmt_info_n:"Infographic / Chart", fmt_info_d:"A visual poster that organizes information hierarchically.",
+ fmt_info_p:"Digital poster or large sheet", fmt_info_r:"Clear hierarchy, max 60 words per block, 1 central diagram, icons", fmt_info_e:"Canva, paper",
+ fmt_teatre_n:"Theatre scene", fmt_teatre_d:"An acted scene where characters explain the content.",
+ fmt_teatre_p:"3–5 minute scene", fmt_teatre_r:"Written script, 2–5 characters, scientific accuracy", fmt_teatre_e:"Handwritten or digital script",
+ fmt_comic_n:"Comic", fmt_comic_d:"A story told through sequenced drawn panels.",
+ fmt_comic_p:"8–12 panels", fmt_comic_r:"Title, foot glossary, characters consistent with the content", fmt_comic_e:"Storyboard That, drawing",
+ fmt_pod_n:"Podcast", fmt_pod_d:"A recorded audio programme with spoken blocks.",
+ fmt_pod_p:"5–8 minute audio", fmt_pod_r:"Jingle, prior script, 3 blocks, credits", fmt_pod_e:"Phone, Audacity",
+ fmt_vid_n:"Video", fmt_vid_d:"An audiovisual piece, recorded and edited.",
+ fmt_vid_p:"3–5 minute video", fmt_vid_r:"Script, voice-over or camera, movement if relevant, credits", fmt_vid_e:"Phone, CapCut, iMovie",
+ gl_t:"Vocabulary",
+ eina_gratis:"Where to make it (free):",
+ gl_comic:"Comic: visual narration in drawn panels read in sequence.",
+ gl_pod:"Podcast: audio programme to listen to; may have sections, interviews and a jingle.",
+ gl_vid:"Video: piece with image and sound; may include recordings, voice-over and captions.",
+ gl_web:"Website: set of online pages navigable through links.",
+ gl_info:"Infographic: visual representation of data or processes with icons and diagrams.",
+ gl_tea:"Scene: dramatised text to be performed — characters, dialogue, action.",
+ gl_guio:"Script: prior text ordering what is said and what happens at each moment.",
+ gl_story:"Storyboard: sketch comic that plans a video shot by shot.",
+ gl_vin:"Panel: each drawn frame of a comic.",
+ gl_sin:"Jingle: opening and closing music of a podcast or video.",
+ gl_vo:"Voice-over: narrating voice whose speaker is not seen.",
+ gl_cre:"Credits: final list of who did each task and the sources used.",
+ gl_esb:"Draft: working version that can still be edited before submission.",
+ gl_enll:"Shared link: address that opens a Drive file without sharing the account."
+}};
+/* ============ RECURSOS GRATUÏTS ============ */
+const RECURSOS = {
+ comic: [ {nom:'Storyboard That', url:'https://www.storyboardthat.com/'},
+          {nom:'MakeBeliefsComix (sense compte)', url:'https://www.makebeliefscomix.com/'} ],
+ pod:   [ {nom:'Vocaroo (gravar en línia)', url:'https://vocaroo.com/'},
+          {nom:'Audacity (editar so)', url:'https://www.audacityteam.org/'} ],
+ vid:   [ {nom:'CapCut', url:'https://www.capcut.com/'},
+          {nom:'Clipchamp', url:'https://clipchamp.com/'} ],
+ web:   [ {nom:'Google Sites', url:'https://sites.google.com/'} ],
+ info:  [ {nom:'Canva', url:'https://www.canva.com/'},
+          {nom:'draw.io (organigrames)', url:'https://app.diagrams.net/'} ],
+ tea:   [ {nom:'Google Docs (escriure el guió)', url:'https://docs.google.com/'} ],
+ guio:  [ {nom:'Google Docs', url:'https://docs.google.com/'},
+          {nom:'WriterDuet (guió audiovisual)', url:'https://www.writerduet.com/'} ],
+ story: [ {nom:'Storyboard That', url:'https://www.storyboardthat.com/'},
+          {nom:'Canva (plantilles storyboard)', url:'https://www.canva.com/'} ],
+ vin:   [ {nom:'MakeBeliefsComix', url:'https://www.makebeliefscomix.com/'},
+          {nom:'Canva', url:'https://www.canva.com/'} ],
+ sin:   [ {nom:'Chrome Music Lab – Song Maker', url:'https://musiclab.chromeexperiments.com/Song-Maker/'},
+          {nom:'Pixabay Music (música lliure)', url:'https://pixabay.com/music/'} ],
+ vo:    [ {nom:'Vocaroo', url:'https://vocaroo.com/'},
+          {nom:'Audacity', url:'https://www.audacityteam.org/'} ],
+ cre:   [ {nom:'Canva (plantilles de crèdits)', url:'https://www.canva.com/'} ],
+ esb:   [ {nom:'Google Docs (es guarda sol)', url:'https://docs.google.com/'} ],
+ enll:  [ {nom:'Google Drive (compartir amb enllaç)', url:'https://drive.google.com/'} ]
+};
+/* ============ DADES I ESTAT ============ */
+const FORMATS_K = ['web','info','teatre','comic','pod','vid'];
+const GLS = ['comic','pod','vid','web','info','tea','guio','story','vin','sin','vo','cre','esb','enll'];
+const TEMES = [1,2,3,4,5,6,7,8,9,10];
+const RKS = {2:'rk_2',3:'rk_3',4:'rk_4',5:'rk_5',6:'rk_6',7:'rk_7',8:'rk_8',10:'rk_10'};
+let LANG = sGet('lang') || 'ca';
+let CFG; try { CFG = JSON.parse(sGet('cfg') || '{}') || {}; } catch(e){ CFG = {}; }
+const HiHaBackend = (typeof google !== 'undefined' && google.script && google.script.run);
+const T = () => I18N[LANG] || I18N.ca;
+
+/* ============ IDIOMA ============ */
+function setLang(l){ LANG = l; sSet('lang', l); aplicaIdioma(); }
+function aplicaIdioma(){
+ const i = T();
+ document.querySelectorAll('[data-i18n]').forEach(el => {
+   const k = el.dataset.i18n; if (i[k]) el.textContent = i[k]; });
+ document.documentElement.lang = LANG;
+ ['ca','es','en'].forEach(l => {
+   const b = document.getElementById('btn-'+l);
+   if (b) b.classList.toggle('actiu', l===LANG); });
+ renderSelectors(); renderFormats(); renderVocab(); refrescaTot();
+}
+function renderSelectors(){
+ const i = T();
+ const sT = document.getElementById('cfg-tema'); if (!sT) return;
+ const vT = sT.value;
+ sT.innerHTML = TEMES.map(n =>
+   '<option value="'+n+'">'+n+' · '+i['t_'+n]+'</option>').join('');
+ sT.value = vT || String(CFG.tema || 1);
+ const sF = document.getElementById('cfg-format');
+ const vF = sF.value;
+ sF.innerHTML = FORMATS_K.map(k =>
+   '<option value="'+k+'">'+i['fmt_'+k+'_n']+'</option>').join('');
+ sF.value = vF || CFG.format || 'web';
+}
+function renderFormats(){
+ const i = T(); const dest = document.getElementById('llista-formats'); if (!dest) return;
+ dest.innerHTML = FORMATS_K.map(k =>
+  '<div class="fitxa '+(CFG.format===k?'destacada':'')+'">'+
+  '<h3>'+i['fmt_'+k+'_n']+'</h3>'+
+  '<p><b>'+i.f_quee+'</b> '+i['fmt_'+k+'_d']+'</p>'+
+  '<p><b>'+i.f_prod+'</b> '+i['fmt_'+k+'_p']+'</p>'+
+  '<p><b>'+i.f_imp+'</b> '+i['fmt_'+k+'_r']+'</p>'+
+  '<p><b>'+i.f_eines+'</b> '+i['fmt_'+k+'_e']+'</p></div>').join('');
+}
+function renderVocab(){
+ const i = T(); const dest = document.getElementById('llista-vocab'); if (!dest) return;
+ dest.innerHTML = GLS.map(function(k){
+   const links = (RECURSOS[k] || []).map(function(r){
+     return '<a href="'+r.url+'" target="_blank" rel="noopener">'+r.nom+'</a>';
+   }).join(' · ');
+   return '<div class="capsa-voc">'+i['gl_'+k]+
+     (links ? '<div class="eines">'+i.eina_gratis+' '+links+'</div>' : '')+
+     '</div>';
+ }).join('');
+}
+/* ============ CONFIGURACIÓ ============ */
+function saveCfg(){
+ CFG = { tipus: document.getElementById('cfg-tipus').value,
+   membres: document.getElementById('cfg-membres').value,
+   tema: parseInt(document.getElementById('cfg-tema').value, 10),
+   format: document.getElementById('cfg-format').value,
+   data: document.getElementById('cfg-data').value };
+ sSet('cfg', JSON.stringify(CFG));
+ document.getElementById('cfg-gardat').textContent = T().cfg_gardat;
+ refrescaTot();
+}
+function diesRestants(){
+ if (!CFG.data) return null;
+ const d = new Date(CFG.data + 'T00:00:00'); const avui = new Date(); avui.setHours(0,0,0,0);
+ return Math.round((d - avui) / 86400000);
+}
+function txtData(){
+ const n = diesRestants(); const i = T();
+ if (n === null) return '';
+ if (n > 0) return i.dies_falten.replace('{n}', n);
+ if (n === 0) return i.dies_avui;
+ return i.dies_passada.replace('{n}', -n);
+}
+function temaNom(){ return CFG.tema ? (T()['t_'+CFG.tema] || '') : '—'; }
+function formatNom(){ return CFG.format ? (T()['fmt_'+CFG.format+'_n'] || '—') : '—'; }
+
+/* ============ REFRESC GLOBAL ============ */
+function refrescaTot(){
+ const i = T();
+ const fm = document.getElementById('fila-membres');
+ if (fm) fm.style.display = CFG.tipus==='grup' ? 'block' : 'none';
+ const ct = document.getElementById('cfg-tipus'); if (ct) ct.value = CFG.tipus || 'ind';
+ const cm = document.getElementById('cfg-membres'); if (cm) cm.value = CFG.membres || '';
+ const cd = document.getElementById('cfg-data'); if (cd) cd.value = CFG.data || '';
+ const cr = document.getElementById('cfg-recomana');
+ if (cr) cr.innerHTML = CFG.tema ? '<b>'+i.recomana+'</b> '+i['rec_'+CFG.tema] : '';
+
+ const dr = document.getElementById('d-resum');
+ if (dr) dr.innerHTML =
+  '<b>'+i.cfg_tema+':</b> '+(CFG.tema ? CFG.tema+' · '+temaNom() : '—')+'<br>'+
+  '<b>'+i.cfg_format+':</b> '+formatNom()+'<br>'+
+  '<b>'+i.cfg_tipus+':</b> '+(CFG.tipus==='grup' ? i.cfg_grup+(CFG.membres?' ('+CFG.membres+')':'') : i.cfg_ind)+'<br>'+
+  '<b>'+i.cfg_data+':</b> '+(CFG.data || '—')+(txtData() ? ' · '+txtData() : '');
+
+ const bt = document.getElementById('bloc-tasques');
+ if (bt) bt.style.display = CFG.tipus==='grup' ? 'block' : 'none';
+ const bn = document.getElementById('bloc-notes');
+ if (bn) bn.style.display = CFG.tipus==='grup' ? 'none' : 'block';
+ const st = document.getElementById('suggeriment-tasques');
+ if (st){ const rk = CFG.tema ? (RKS[CFG.tema] || 'rk_gen') : 'rk_gen';
+   st.innerHTML = '<b>'+i.tasques_sug+'</b> '+i[rk]; }
+
+ const er = document.getElementById('en-resum');
+ if (er) er.innerHTML =
+  '<b>'+i.cfg_tema+':</b> '+(CFG.tema ? 'Tema'+('0'+CFG.tema).slice(-2)+' · '+temaNom() : '—')+'<br>'+
+  '<b>'+i.cfg_format+':</b> '+formatNom()+'<br>'+
+  '<b>'+i.cfg_tipus+':</b> '+(CFG.tipus==='grup' ? i.cfg_grup+(CFG.membres?' · '+CFG.membres:'') : i.cfg_ind)+'<br>'+
+  '<b>'+i.cfg_data+':</b> '+(CFG.data || '—')+(txtData() ? ' · '+txtData() : '');
+
+ renderFormats();
+}
+
+/* ============ NAVEGACIÓ ============ */
+function mostra(id){
+ document.querySelectorAll('section').forEach(s => s.classList.remove('vis'));
+ const sec = document.getElementById(id); if (sec) sec.classList.add('vis');
+ document.querySelectorAll('nav button').forEach(b => b.classList.remove('actiu'));
+ const nb = document.getElementById('nav-'+id); if (nb) nb.classList.add('actiu');
+ window.scrollTo(0,0);
+}
+
+/* ============ ESCRIPTORI (esborranys) ============ */
+const CAMPS = ['decissio','esquema','guio','tasques','notes'];
+function comptador(id){
+ const el = document.getElementById('txt-'+id);
+ const pc = document.getElementById('pc-'+id);
+ if (!el || !pc) return;
+ const n = el.value.trim();
+ pc.textContent = (n ? n.split(/\s+/).length : 0) + ' ' + T().paraules;
+}
+function autosave(id){
+ const el = document.getElementById('txt-'+id); if (!el) return;
+ sSet('bor_'+id, el.value);
+ const ms = document.getElementById(id==='decissio' ? 'ms-decissio' : 'ms-escriptori');
+ if (ms) ms.textContent = T().guardat_h + ' ' + new Date().toLocaleTimeString().slice(0,5);
+ comptador(id);
+}
+function guardaAra(id){ autosave(id); }
+function guardaTot(){ CAMPS.forEach(function(id){ autosave(id); }); }
+function restauraBorranys(){
+ CAMPS.forEach(function(id){
+   const el = document.getElementById('txt-'+id); if (!el) return;
+   el.value = sGet('bor_'+id) || '';
+   el.addEventListener('input', function(){ autosave(id); });
+   comptador(id);
+ });
+}
+function descarregaTxt(){
+ let txt = '';
+ CAMPS.forEach(function(id){
+   const el = document.getElementById('txt-'+id);
+   const v = el ? el.value.trim() : '';
+   if (v) txt += '=== '+id.toUpperCase()+' ===\n'+v+'\n\n';
+ });
+ if (!txt){ alert(T().e_t + ': sense contingut'); return; }
+ const nom = 'esborranys' + (CFG.tema ? '_tema'+('0'+CFG.tema).slice(-2) : '') + '.txt';
+ const a = document.createElement('a');
+ a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain'}));
+ a.download = nom;
+ document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function esborraTot(){
+ if (!confirm(T().e_esb + '?')) return;
+ CAMPS.forEach(function(id){
+   sDel('bor_'+id);
+   const el = document.getElementById('txt-'+id);
+   if (el) el.value = '';
+   comptador(id);
+ });
+ const m1 = document.getElementById('ms-escriptori'); if (m1) m1.textContent = '';
+ const m2 = document.getElementById('ms-decissio'); if (m2) m2.textContent = '';
+}
+
+/* ============ ENTREGA ============ */
+function enviar(){
+ const i = T();
+ const errBox = document.getElementById('en-err');
+ const okBox  = document.getElementById('en-ok');
+ const err = function(m){ errBox.style.display='block'; errBox.textContent = i.en_err + m; };
+ errBox.style.display='none'; okBox.style.display='none';
+
+ const alumnes = document.getElementById('en-alumnes').value.trim();
+ const titol   = document.getElementById('en-titol').value.trim();
+ const enllac  = document.getElementById('en-enllac').value.trim();
+ const arxiu   = document.getElementById('en-arxiu').files[0];
+
+ if (!alumnes) return err(i.en_alumnes);
+ if (!titol)   return err(i.en_titol);
+ if (!arxiu && !enllac) return err(i.en_arxiu + ' / ' + i.en_enllac);
+ if (arxiu && arxiu.size > 25*1024*1024) return err(i.nota_max);
+
+ document.getElementById('carregant').style.display = 'block';
+
+ const d = {
+   alumnes: alumnes, curs: document.getElementById('en-curs').value,
+   modalitat: CFG.tipus==='grup' ? i.cfg_grup : i.cfg_ind,
+   membres: CFG.membres || '',
+   temaNum: CFG.tema || 0,
+   tema: CFG.tema ? ('Tema'+('0'+CFG.tema).slice(-2)+' — '+temaNom()) : '—',
+   format: formatNom(),
+   dataEntrega: CFG.data || '',
+   titol: titol, enllac: enllac,
+   comentaris: document.getElementById('en-com').value,
+   inclouEsborranys: document.getElementById('en-esb').checked,
+   decissio: document.getElementById('txt-decissio').value,
+   esquema: document.getElementById('txt-esquema').value,
+   guio: document.getElementById('txt-guio').value,
+   tasques: document.getElementById('txt-tasques').value,
+   notes: document.getElementById('txt-notes').value,
+   idioma: LANG,
+   base64: '', mime: '', mida: 0, nomOriginal: ''
+ };
+
+ const acabat = function(r){
+   document.getElementById('carregant').style.display = 'none';
+   if (!HiHaBackend){
+     okBox.style.display='block'; okBox.textContent = i.en_ok + ' ' + i.demo; return;
+   }
+   if (r && r.ok){
+     okBox.style.display='block';
+     okBox.innerHTML = i.en_ok + '<br><b>' + r.nomArxiu + '</b>' +
+       (r.nomTxt ? '<br>' + r.nomTxt : '');
+   } else { err((r && r.missatge) || '—'); }
+ };
+ const fallada = function(e){
+   document.getElementById('carregant').style.display = 'none';
+   err(e && e.message ? e.message : '—');
+ };
+
+ if (arxiu){
+   d.nomOriginal = arxiu.name;
+   d.mime = arxiu.type || 'application/octet-stream';
+   d.mida = arxiu.size;
+   const lector = new FileReader();
+   lector.onload = function(e){
+     d.base64 = e.target.result.split(',')[1];
+     if (HiHaBackend){
+       google.script.run.withSuccessHandler(acabat).withFailureHandler(fallada).enviarEntrega(d);
+     } else { acabat(null); }
+   };
+   lector.readAsDataURL(arxiu);
+ } else {
+   if (HiHaBackend){
+     google.script.run.withSuccessHandler(acabat).withFailureHandler(fallada).enviarEntrega(d);
+   } else { acabat(null); }
+ }
+}
+
+/* ============ INICI ============ */
+function init(){
+ try {
+   restauraBorranys();
+   mostra('inici');
+   aplicaIdioma();
+ } catch(e){
+   const b = document.getElementById('js-error');
+   if (b){ b.style.display='block'; b.textContent = 'Error: ' + e.message; }
+ }
+}
+init();
+</script>
+</body>
+</html>
