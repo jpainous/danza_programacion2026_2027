@@ -155,12 +155,12 @@ header h2 { font-size: 1.2em; font-weight: 300; margin-bottom: 8px; }
     flex-wrap: wrap;
 }
 .tab {
-    padding: 10px 18px;
+    padding: 10px 16px;
     background: #f8f9fa;
     border: none;
     border-radius: 8px 8px 0 0;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: 600;
     font-family: inherit;
     transition: all 0.2s;
@@ -201,9 +201,7 @@ header h2 { font-size: 1.2em; font-weight: 300; margin-bottom: 8px; }
 .filter-btn.active-tots { background: #667eea; color: white; border-color: #667eea; }
 
 /* ELEMENTS */
-.element-group {
-    margin-bottom: 20px;
-}
+.element-group { margin-bottom: 20px; }
 .element-group-title {
     font-size: 1em;
     font-weight: 700;
@@ -251,16 +249,25 @@ header h2 { font-size: 1.2em; font-weight: 300; margin-bottom: 8px; }
 }
 .element-title { font-weight: 600; color: #333; font-size: 0.95em; }
 .element-desc { color: #666; font-size: 0.85em; line-height: 1.5; margin-top: 4px; }
+.element-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 0.8em;
+}
 .element-badge {
     padding: 2px 8px;
     border-radius: 10px;
-    font-size: 0.7em;
+    font-size: 0.75em;
     font-weight: 700;
     white-space: nowrap;
 }
 .badge-preceptiu { background: #d4edda; color: #155724; }
 .badge-transversal { background: #cfe2ff; color: #084298; }
 .badge-optatiu { background: #fff3cd; color: #856404; }
+.badge-instrument { background: #f3e5f5; color: #6a1b9a; }
+.badge-vinculat { background: #e7f3ff; color: #0c5460; }
 
 .empty-message {
     text-align: center;
@@ -269,7 +276,7 @@ header h2 { font-size: 1.2em; font-weight: 300; margin-bottom: 8px; }
     font-style: italic;
 }
 
-/* PANELL 3: LLISTAT GENERAT */
+/* PANELL 3: SORTIDA */
 .panel-output {
     background: #f8f9fa;
     border-left: 2px solid #e9ecef;
@@ -321,6 +328,11 @@ header h2 { font-size: 1.2em; font-weight: 300; margin-bottom: 8px; }
 .output-item {
     padding: 4px 0;
     color: #333;
+}
+.output-item-detail {
+    font-size: 0.85em;
+    color: #666;
+    padding-left: 20px;
 }
 
 .output-actions {
@@ -408,6 +420,7 @@ footer {
                 <button class="tab active" data-tab="competencies" data-i18n="tab_competencies">🎯 Competències</button>
                 <button class="tab" data-tab="objectius" data-i18n="tab_objectius">🏆 Objectius</button>
                 <button class="tab" data-tab="continguts" data-i18n="tab_continguts">📖 Continguts</button>
+                <button class="tab" data-tab="avaluacio" data-i18n="tab_avaluacio">📝 Avaluació</button>
                 <button class="tab" data-tab="transversals" data-i18n="tab_transversals">🔄 Transversals</button>
             </div>
 
@@ -459,6 +472,7 @@ const diccionario = {
         tab_competencies: "🎯 Competències",
         tab_objectius: "🏆 Objectius",
         tab_continguts: "📖 Continguts",
+        tab_avaluacio: "📝 Avaluació",
         tab_transversals: "🔄 Transversals",
         filter_tots: "Tots",
         filter_preceptiu: "🟢 Preceptius",
@@ -481,10 +495,13 @@ const diccionario = {
         sortida_competencies: "🎯 COMPETÈNCIES",
         sortida_objectius: "🏆 OBJECTIUS ESPECÍFICS",
         sortida_continguts: "📖 CONTINGUTS",
+        sortida_avaluacio: "📝 CRITERIS D'AVALUACIÓ",
         sortida_transversals: "🔄 ELEMENTS TRANSVERSALS",
         preceptiu: "Preceptiu",
         transversal: "Transversal",
-        optatiu: "Optatiu"
+        optatiu: "Optatiu",
+        lbl_instrument: "🎯 Instrument:",
+        lbl_vinculat: "🔗 Vinculat a:"
     },
     es: {
         titol: "📚 Biblioteca Curricular",
@@ -498,6 +515,7 @@ const diccionario = {
         tab_competencies: "🎯 Competencias",
         tab_objectius: "🏆 Objetivos",
         tab_continguts: "📖 Contenidos",
+        tab_avaluacio: "📝 Evaluación",
         tab_transversals: "🔄 Transversales",
         filter_tots: "Todos",
         filter_preceptiu: "🟢 Preceptivos",
@@ -520,10 +538,13 @@ const diccionario = {
         sortida_competencies: "🎯 COMPETENCIAS",
         sortida_objectius: "🏆 OBJETIVOS ESPECÍFICOS",
         sortida_continguts: "📖 CONTENIDOS",
+        sortida_avaluacio: "📝 CRITERIOS DE EVALUACIÓN",
         sortida_transversals: "🔄 ELEMENTOS TRANSVERSALES",
         preceptiu: "Preceptivo",
         transversal: "Transversal",
-        optatiu: "Optativo"
+        optatiu: "Optativo",
+        lbl_instrument: "🎯 Instrumento:",
+        lbl_vinculat: "🔗 Vinculado a:"
     },
     en: {
         titol: "📚 Curricular Library",
@@ -537,6 +558,7 @@ const diccionario = {
         tab_competencies: "🎯 Competencies",
         tab_objectius: "🏆 Objectives",
         tab_continguts: "📖 Contents",
+        tab_avaluacio: "📝 Assessment",
         tab_transversals: "🔄 Cross-curricular",
         filter_tots: "All",
         filter_preceptiu: "🟢 Mandatory",
@@ -559,10 +581,13 @@ const diccionario = {
         sortida_competencies: "🎯 COMPETENCIES",
         sortida_objectius: "🏆 SPECIFIC OBJECTIVES",
         sortida_continguts: "📖 CONTENTS",
+        sortida_avaluacio: "📝 ASSESSMENT CRITERIA",
         sortida_transversals: "🔄 CROSS-CURRICULAR ELEMENTS",
         preceptiu: "Mandatory",
         transversal: "Cross-curricular",
-        optatiu: "Optional"
+        optatiu: "Optional",
+        lbl_instrument: "🎯 Instrument:",
+        lbl_vinculat: "🔗 Linked to:"
     }
 };
 
@@ -618,6 +643,21 @@ const DADES_AREES = {
             { id: 'CONT8', codi: 'T10', titol: { ca: 'Nutrició', es: 'Nutrición', en: 'Nutrition' }, descripcio: { ca: "Necessitats nutricionals del ballarí, hidratació, recuperació, homeostasi de la glucosa.", es: "Necesidades nutricionales del bailarín, hidratación, recuperación, homeostasis de la glucosa.", en: "Nutritional needs of the dancer, hydration, recovery, glucose homeostasis." }, tipus: 'preceptiu' },
             { id: 'CONT9', codi: 'T12', titol: { ca: 'Aparell cardiovascular', es: 'Aparato cardiovascular', en: 'Cardiovascular system' }, descripcio: { ca: "Estructura del cor, circulació, transport de gasos, adaptacions a l'exercici.", es: "Estructura del corazón, circulación, transporte de gases, adaptaciones al ejercicio.", en: "Heart structure, circulation, gas transport, adaptations to exercise." }, tipus: 'preceptiu' },
             { id: 'CONT10', codi: 'T13', titol: { ca: 'Aparell respiratori', es: 'Aparato respiratorio', en: 'Respiratory system' }, descripcio: { ca: "Mecànica ventilatòria, intercanvi gasós, pH sanguini, respiració en la dansa.", es: "Mecánica ventilatoria, intercambio gaseoso, pH sanguíneo, respiración en la danza.", en: "Ventilatory mechanics, gas exchange, blood pH, breathing in dance." }, tipus: 'preceptiu' }
+        ],
+        // 🆕 NOVA SECCIÓ: CRITERIS D'AVALUACIÓ
+        avaluacio: [
+            { id: 'CA1', codi: 'CA1', titol: { ca: 'Identifica nivells d\'organització i mecanismes homeostàtics', es: 'Identifica niveles de organización y mecanismos homeostáticos', en: 'Identifies levels of organization and homeostatic mechanisms' }, descripcio: { ca: "Identifica els nivells d'organització del cos humà i explica els mecanismes homeostàtics durant el moviment.", es: "Identifica los niveles de organización del cuerpo humano y explica los mecanismos homeostáticos durante el movimiento.", en: "Identifies the levels of organization of the human body and explains homeostatic mechanisms during movement." }, tipus: 'preceptiu', instrument: { ca: 'Prova escrita', es: 'Prueba escrita', en: 'Written test' }, vinculats: ['C1', 'CG3'] },
+            { id: 'CA2', codi: 'CA2', titol: { ca: 'Descriu l\'estructura muscular i el mecanisme de contracció', es: 'Describe la estructura muscular y el mecanismo de contracción', en: 'Describes muscle structure and contraction mechanism' }, descripcio: { ca: "Descriu l'estructura muscular des de la fibra fins al sarcòmer i explica el mecanisme de contracció (Ca²⁺/ATP).", es: "Describe la estructura muscular desde la fibra hasta el sarcómero y explica el mecanismo de contracción (Ca²⁺/ATP).", en: "Describes the muscle structure from the fiber to the sarcomere and explains the contraction mechanism (Ca²⁺/ATP)." }, tipus: 'preceptiu', instrument: { ca: 'Prova escrita / Casos pràctics', es: 'Prueba escrita / Casos prácticos', en: 'Written test / Case studies' }, vinculats: ['C1', 'CECI3'] },
+            { id: 'CA3', codi: 'CA3', titol: { ca: 'Classifica els components de la cadena biomecànica', es: 'Clasifica los componentes de la cadena biomecánica', en: 'Classifies the components of the biomechanical chain' }, descripcio: { ca: "Classifica els components de la cadena biomecànica i analitza la seva funció en gestos de dansa.", es: "Clasifica los componentes de la cadena biomecánica y analiza su función en gestos de danza.", en: "Classifies the components of the biomechanical chain and analyzes their function in dance gestures." }, tipus: 'preceptiu', instrument: { ca: 'Casos pràctics', es: 'Casos prácticos', en: 'Case studies' }, vinculats: ['C1', 'H1'] },
+            { id: 'CA4', codi: 'CA4', titol: { ca: 'Analitza fisiològicament una seqüència de dansa', es: 'Analiza fisiológicamente una secuencia de danza', en: 'Physiologically analyzes a dance sequence' }, descripcio: { ca: "Analitza fisiològicament una seqüència de dansa identificant plans de moviment, rols musculars i tipus de contracció.", es: "Analiza fisiológicamente una secuencia de danza identificando planos de movimiento, roles musculares y tipos de contracción.", en: "Physiologically analyzes a dance sequence identifying movement planes, muscle roles and types of contraction." }, tipus: 'preceptiu', instrument: { ca: 'Treball oral', es: 'Trabajo oral', en: 'Oral presentation' }, vinculats: ['H1', 'H2', 'CECI3'] },
+            { id: 'CA5', codi: 'CA5', titol: { ca: 'Relaciona sistemes orgànics durant l\'esforç', es: 'Relaciona sistemas orgánicos durante el esfuerzo', en: 'Relates organic systems during effort' }, descripcio: { ca: "Relaciona els diferents sistemes orgànics en el funcionament del cos durant l'esforç físic.", es: "Relaciona los diferentes sistemas orgánicos en el funcionamiento del cuerpo durante el esfuerzo físico.", en: "Relates the different organic systems in the functioning of the body during physical effort." }, tipus: 'preceptiu', instrument: { ca: 'Prova escrita', es: 'Prueba escrita', en: 'Written test' }, vinculats: ['H1', 'CG3'] },
+            { id: 'CA6', codi: 'CA6', titol: { ca: 'Aplica la fisiologia a la pràctica de la dansa', es: 'Aplica la fisiología a la práctica de la danza', en: 'Applies physiology to dance practice' }, descripcio: { ca: "Aplica els coneixements de fisiologia a la pràctica de la dansa per optimitzar la tècnica i prevenir lesions.", es: "Aplica los conocimientos de fisiología a la práctica de la danza para optimizar la técnica y prevenir lesiones.", en: "Applies knowledge of physiology to dance practice to optimize technique and prevent injuries." }, tipus: 'preceptiu', instrument: { ca: 'Observació directa / Portafoli', es: 'Observación directa / Portafolio', en: 'Direct observation / Portfolio' }, vinculats: ['H2', 'A3', 'CECI3'] },
+            { id: 'CA7', codi: 'CA7', titol: { ca: 'Mostra interès pel propi cos i participa activament', es: 'Muestra interés por el propio cuerpo y participa activamente', en: 'Shows interest in one\'s own body and participates actively' }, descripcio: { ca: "Mostra interès pel funcionament del propi cos i participa activament en les pràctiques.", es: "Muestra interés por el funcionamiento del propio cuerpo y participa activamente en las prácticas.", en: "Shows interest in the functioning of one's own body and participates actively in the practices." }, tipus: 'preceptiu', instrument: { ca: 'Observació directa / Autoavaluació', es: 'Observación directa / Autoevaluación', en: 'Direct observation / Self-assessment' }, vinculats: ['A1', 'A2'] },
+            { id: 'CA8', codi: 'CA8', titol: { ca: 'Valora la importància de la fisiologia per al ballarí', es: 'Valora la importancia de la fisiología para el bailarín', en: 'Values the importance of physiology for the dancer' }, descripcio: { ca: "Valora la importància dels coneixements fisiològics per a la carrera professional del ballarí.", es: "Valora la importancia de los conocimientos fisiológicos para la carrera profesional del bailarín.", en: "Values the importance of physiological knowledge for the professional career of the dancer." }, tipus: 'preceptiu', instrument: { ca: 'Reflexió escrita / Autoavaluació', es: 'Reflexión escrita / Autoevaluación', en: 'Written reflection / Self-assessment' }, vinculats: ['A3'] },
+            { id: 'CA9', codi: 'CA9', titol: { ca: 'Utilitza recursos digitals per a l\'anàlisi del moviment', es: 'Utiliza recursos digitales para el análisis del movimiento', en: 'Uses digital resources for movement analysis' }, descripcio: { ca: "Utilitza recursos digitals per a l'anàlisi del moviment i la visualització d'estructures anatòmiques.", es: "Utiliza recursos digitales para el análisis del movimiento y la visualización de estructuras anatómicas.", en: "Uses digital resources for the analysis of movement and the visualization of anatomical structures." }, tipus: 'optatiu', instrument: { ca: 'Casos pràctics / Portafoli', es: 'Casos prácticos / Portafolio', en: 'Case studies / Portfolio' }, vinculats: ['TR5', 'H2'] },
+            { id: 'CA10', codi: 'CA10', titol: { ca: 'Treballa col·laborativament en l\'anàlisi grupal', es: 'Trabaja colaborativamente en el análisis grupal', en: 'Works collaboratively in group analysis' }, descripcio: { ca: "Treballa col·laborativament en l'anàlisi grupal de seqüències coreogràfiques.", es: "Trabaja colaborativamente en el análisis grupal de secuencias coreográficas.", en: "Works collaboratively in the group analysis of choreographic sequences." }, tipus: 'preceptiu', instrument: { ca: 'Coavaluació / Rúbrica', es: 'Coevaluación / Rúbrica', en: 'Peer assessment / Rubric' }, vinculats: ['TR6', 'H1'] },
+            { id: 'CA11', codi: 'CA11', titol: { ca: 'Identifica factors de risc i proposa mesures preventives', es: 'Identifica factores de riesgo y propone medidas preventivas', en: 'Identifies risk factors and proposes preventive measures' }, descripcio: { ca: "Identifica factors de risc de lesions i proposa mesures preventives basades en la biomecànica.", es: "Identifica factores de riesgo de lesiones y propone medidas preventivas basadas en la biomecánica.", en: "Identifies risk factors for injuries and proposes preventive measures based on biomechanics." }, tipus: 'preceptiu', instrument: { ca: 'Casos pràctics', es: 'Casos prácticos', en: 'Case studies' }, vinculats: ['TR7', 'CECI3'] },
+            { id: 'CA12', codi: 'CA12', titol: { ca: 'Relaciona hàbits saludables amb el rendiment', es: 'Relaciona hábitos saludables con el rendimiento', en: 'Relates healthy habits with performance' }, descripcio: { ca: "Relaciona hàbits de vida saludable (nutrició, son, hidratació) amb el rendiment en la dansa.", es: "Relaciona hábitos de vida saludable (nutrición, sueño, hidratación) con el rendimiento en la danza.", en: "Relates healthy lifestyle habits (nutrition, sleep, hydration) with performance in dance." }, tipus: 'preceptiu', instrument: { ca: 'Reflexió escrita', es: 'Reflexión escrita', en: 'Written reflection' }, vinculats: ['TR2', 'C2'] }
         ]
     },
     dansa_classica: { id: 'dansa_classica', icona: '🩰', nom: { ca: 'Dansa clàssica', es: 'Danza clásica', en: 'Classical dance' }, desenvolupat: false },
@@ -649,7 +689,7 @@ let estat = {
     areaActiva: 'fisiologia',
     tabActiva: 'competencies',
     filtreActiu: 'tots',
-    seleccionats: [] // Array d'IDs seleccionats
+    seleccionats: []
 };
 
 const STORAGE_KEY = 'bibliotecaCurricular';
@@ -714,7 +754,6 @@ function renderitzarElements() {
     }
     
     let elements = [];
-    let titolGrup = '';
     
     if (estat.tabActiva === 'competencies') {
         elements = area.competencies || [];
@@ -722,6 +761,8 @@ function renderitzarElements() {
         elements = area.objectius || [];
     } else if (estat.tabActiva === 'continguts') {
         elements = area.continguts || [];
+    } else if (estat.tabActiva === 'avaluacio') {
+        elements = area.avaluacio || [];
     } else if (estat.tabActiva === 'transversals') {
         elements = DADES_TRANSVERSALES;
     }
@@ -752,6 +793,16 @@ function renderitzarElements() {
             grups[tipus].forEach(e => {
                 const seleccionat = estat.seleccionats.includes(e.id) ? 'selected' : '';
                 const checked = estat.seleccionats.includes(e.id) ? 'checked' : '';
+                
+                // 🆕 Metadades per a criteris d'avaluació
+                let metaHTML = '';
+                if (e.instrument) {
+                    metaHTML += `<span class="element-badge badge-instrument">${t('lbl_instrument')} ${e.instrument[lang]}</span>`;
+                }
+                if (e.vinculats && e.vinculats.length > 0) {
+                    metaHTML += `<span class="element-badge badge-vinculat">${t('lbl_vinculat')} ${e.vinculats.join(', ')}</span>`;
+                }
+                
                 html += `<div class="element-item ${seleccionat}" onclick="toggleElement('${e.id}')">
                     <input type="checkbox" ${checked} onclick="event.stopPropagation(); toggleElement('${e.id}')">
                     <div class="element-content">
@@ -760,6 +811,7 @@ function renderitzarElements() {
                             <span class="element-title">${e.titol[lang]}</span>
                         </div>
                         <div class="element-desc">${e.descripcio[lang]}</div>
+                        ${metaHTML ? `<div class="element-meta">${metaHTML}</div>` : ''}
                     </div>
                 </div>`;
             });
@@ -793,24 +845,14 @@ function renderitzarSortida() {
         return;
     }
     
-    // Recollir tots els elements seleccionats agrupats per tipus
-    const agrupats = { competencies: [], objectius: [], continguts: [], transversals: [] };
+    const agrupats = { competencies: [], objectius: [], continguts: [], avaluacio: [], transversals: [] };
     
     estat.seleccionats.forEach(id => {
-        // Buscar a totes les àrees i transversals
         Object.values(DADES_AREES).forEach(area => {
-            if (area.competencies) {
-                const e = area.competencies.find(x => x.id === id);
-                if (e) agrupats.competencies.push(e);
-            }
-            if (area.objectius) {
-                const e = area.objectius.find(x => x.id === id);
-                if (e) agrupats.objectius.push(e);
-            }
-            if (area.continguts) {
-                const e = area.continguts.find(x => x.id === id);
-                if (e) agrupats.continguts.push(e);
-            }
+            if (area.competencies) { const e = area.competencies.find(x => x.id === id); if (e) agrupats.competencies.push(e); }
+            if (area.objectius) { const e = area.objectius.find(x => x.id === id); if (e) agrupats.objectius.push(e); }
+            if (area.continguts) { const e = area.continguts.find(x => x.id === id); if (e) agrupats.continguts.push(e); }
+            if (area.avaluacio) { const e = area.avaluacio.find(x => x.id === id); if (e) agrupats.avaluacio.push(e); }
         });
         const eT = DADES_TRANSVERSALES.find(x => x.id === id);
         if (eT) agrupats.transversals.push(eT);
@@ -846,6 +888,17 @@ function renderitzarSortida() {
         html += `</div>`;
     }
     
+    // 🆕 NOVA SECCIÓ: AVALUACIÓ
+    if (agrupats.avaluacio.length > 0) {
+        html += `<div class="output-section"><div class="output-section-title">${t('sortida_avaluacio')}</div>`;
+        agrupats.avaluacio.forEach(e => {
+            html += `<div class="output-item">📋 <strong>${e.codi}:</strong> ${e.titol[lang]}</div>`;
+            html += `<div class="output-item-detail">🎯 ${e.instrument[lang]} · 🔗 ${e.vinculats.join(', ')}</div>`;
+            total++;
+        });
+        html += `</div>`;
+    }
+    
     if (agrupats.transversals.length > 0) {
         html += `<div class="output-section"><div class="output-section-title">${t('sortida_transversals')}</div>`;
         agrupats.transversals.forEach(e => {
@@ -864,13 +917,14 @@ function renderitzarSortida() {
 // ==========================================
 function generarTextSortida(format = 'pla') {
     const lang = localStorage.getItem('idioma_preferit') || 'ca';
-    const agrupats = { competencies: [], objectius: [], continguts: [], transversals: [] };
+    const agrupats = { competencies: [], objectius: [], continguts: [], avaluacio: [], transversals: [] };
     
     estat.seleccionats.forEach(id => {
         Object.values(DADES_AREES).forEach(area => {
             if (area.competencies) { const e = area.competencies.find(x => x.id === id); if (e) agrupats.competencies.push(e); }
             if (area.objectius) { const e = area.objectius.find(x => x.id === id); if (e) agrupats.objectius.push(e); }
             if (area.continguts) { const e = area.continguts.find(x => x.id === id); if (e) agrupats.continguts.push(e); }
+            if (area.avaluacio) { const e = area.avaluacio.find(x => x.id === id); if (e) agrupats.avaluacio.push(e); }
         });
         const eT = DADES_TRANSVERSALES.find(x => x.id === id);
         if (eT) agrupats.transversals.push(eT);
@@ -890,6 +944,16 @@ function generarTextSortida(format = 'pla') {
         if (agrupats.continguts.length > 0) {
             text += `## ${t('sortida_continguts')}\n\n`;
             agrupats.continguts.forEach(e => { text += `- **${e.codi}:** ${e.titol[lang]}\n  ${e.descripcio[lang]}\n\n`; });
+        }
+        // 🆕 AVALUACIÓ EN MARKDOWN
+        if (agrupats.avaluacio.length > 0) {
+            text += `## ${t('sortida_avaluacio')}\n\n`;
+            agrupats.avaluacio.forEach(e => { 
+                text += `- **${e.codi}:** ${e.titol[lang]}\n`;
+                text += `  ${e.descripcio[lang]}\n`;
+                text += `  - 🎯 *${t('lbl_instrument')}* ${e.instrument[lang]}\n`;
+                text += `  - 🔗 *${t('lbl_vinculat')}* ${e.vinculats.join(', ')}\n\n`;
+            });
         }
         if (agrupats.transversals.length > 0) {
             text += `## ${t('sortida_transversals')}\n\n`;
@@ -911,6 +975,17 @@ function generarTextSortida(format = 'pla') {
             agrupats.continguts.forEach(e => { text += `• ${e.codi}: ${e.titol[lang]}\n  ${e.descripcio[lang]}\n`; });
             text += '\n';
         }
+        // 🆕 AVALUACIÓ EN TEXT PLA
+        if (agrupats.avaluacio.length > 0) {
+            text += `${t('sortida_avaluacio')}\n`;
+            agrupats.avaluacio.forEach(e => { 
+                text += `• ${e.codi}: ${e.titol[lang]}\n`;
+                text += `  ${e.descripcio[lang]}\n`;
+                text += `  → ${t('lbl_instrument')} ${e.instrument[lang]}\n`;
+                text += `  → ${t('lbl_vinculat')} ${e.vinculats.join(', ')}\n`;
+            });
+            text += '\n';
+        }
         if (agrupats.transversals.length > 0) {
             text += `${t('sortida_transversals')}\n`;
             agrupats.transversals.forEach(e => { text += `• ${e.codi}: ${e.titol[lang]}\n  ${e.descripcio[lang]}\n`; });
@@ -927,7 +1002,6 @@ function copiarAlPortapapers() {
     navigator.clipboard.writeText(text).then(() => {
         mostrarToast(t('toast_copiat'), 'success');
     }).catch(() => {
-        // Fallback
         const ta = document.createElement('textarea');
         ta.value = text;
         document.body.appendChild(ta);
@@ -1049,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderitzarAreas();
     renderitzarElements();
     renderitzarSortida();
-    console.log('✅ Biblioteca Curricular carregada');
+    console.log('✅ Biblioteca Curricular Fase A carregada');
 });
 </script>
 </body>
