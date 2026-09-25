@@ -100,7 +100,7 @@ var ST=(function(){
     <button type="button" data-lang="ca">CA</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button>
   </div>
   <div class="tools">
-    <a id="lnkStu" href="fitxa-alumne.html" target="_blank" rel="noopener"></a>
+    <a id="lnkStu" href="fitxa_alumne.html" target="_blank" rel="noopener"></a>
     <button type="button" id="bNew"></button>
     <button type="button" id="bExpStu" class="primary"></button>
     <button type="button" id="bExp"></button>
@@ -616,7 +616,7 @@ main.addEventListener('click',onClick);
 };
 
  $('bExpStu').onclick=function(){
- var out={app:'fitxa-alumne',generated:new Date().toISOString(),sessions:[]};
+ var out={app:'fitxa_alumne',generated:new Date().toISOString(),sessions:[]};
  var i,j;
  for(i=0;i<plan.sessions.length;i++){
   var x=plan.sessions[i];
@@ -629,7 +629,7 @@ main.addEventListener('click',onClick);
   if(x.evVis)o.ev=x.ev;
   out.sessions.push(o);
  }
- download('fitxa-alumne-dades.json',JSON.stringify(out));
+ download('fitxa_alumne-dades.json',JSON.stringify(out));
  toast(t('studentNote'));
 };
 
