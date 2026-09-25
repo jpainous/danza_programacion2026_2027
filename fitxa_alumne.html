@@ -620,17 +620,19 @@ function safeName(s){return String(s||'alumne').replace(/[^a-zA-Z0-9_-]+/g,'-').
  }
 };
  $('bImpP').onclick=function(){$('fImp').click();};
+ function dtStamp(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
  $('bBak').onclick=function(){
  var b=$('bBak');
  if(b.getAttribute('data-arm')!=='1'){
   b.setAttribute('data-arm','1');
-  if(b._to)clearTimeout(b._to);
-  b._to=setTimeout(function(){b.removeAttribute('data-arm');},4000);
   b.textContent=t('confirmClr');
+  b._to=setTimeout(function(){b.removeAttribute('data-arm');b.textContent=t('bBak');},4000);
   return;
  }
- clearTimeout(b._to);b.removeAttribute('data-arm');
- download('fitxa-copia-'+safeName(me.profile.name)+'-'+clock().replace(/[^\d]/g,'')+'.json',JSON.stringify({app:'fitxa-alumne-backup',prog:prog,me:me}));
+ clearTimeout(b._to);b.removeAttribute('data-arm');b.textContent=t('bBak');
+ var data=JSON.stringify({app:'fitxa-alumne-backup',prog:prog,me:me});
+ download('fitxa-alumne-seguretat-'+dtStamp()+'.json',data);
+ setTimeout(function(){download('fitxa-alumne-copia.json',data);},500);
  log('L_IMPBAK','(export)');save(true);
 };
 

@@ -607,7 +607,13 @@ main.addEventListener('click',onClick);
  setTimeout(function(){window.print();},200);
 };
 
- $('bExp').onclick=function(){download('planificador-copia.json',JSON.stringify(plan));};
+ function dtStamp(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
+ $('bExp').onclick=function(){
+ var data=JSON.stringify(plan);
+ download('planificador-seguretat-'+dtStamp()+'.json',data);
+ setTimeout(function(){download('planificador-dades.json',data);},500);
+ toast('2 fitxers: seguretat datada + planificador-dades.json');
+};
 
  $('bExpStu').onclick=function(){
  var out={app:'fitxa-alumne',generated:new Date().toISOString(),sessions:[]};
