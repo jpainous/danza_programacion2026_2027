@@ -21,16 +21,17 @@
   #savestate{font-size:.72rem;opacity:.9}
   #memwarn{display:none;background:#fff3cd;color:#7a5b00;padding:.5rem 1rem;font-size:.8rem;border-bottom:1px solid #e6d9a2}
   main{max-width:1100px;margin:1.2rem auto;padding:0 1rem}
-  .card{background:var(--card);border:1px solid var(--bord);border-radius:14px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden}
-  .card.nl{background:#f4f4f5}
-  .chead{display:flex;gap:.5rem;align-items:center;padding:.7rem .9rem;cursor:pointer;flex-wrap:wrap}
-  .chead:hover{background:#f7f3fc}
+  .card{background:var(--card);border:1px solid #d8cdea;border-top:4px solid var(--pri);border-radius:14px;margin-bottom:1.35rem;box-shadow:0 2px 8px rgba(75,46,111,.10);overflow:hidden}
+  .card.nl{border-top-color:var(--grisc)}
+  .chead{display:flex;gap:.5rem;align-items:center;padding:.75rem .9rem;cursor:pointer;flex-wrap:wrap;background:#f7f3fc;border-bottom:1px solid #efe8f7}
+  .chead:hover{background:#f1e9f9}
   .tw{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--pri);width:1.4rem}
-  .cmeta{flex:1;min-width:220px}
-  .cmeta b{color:var(--pri);margin-right:.5rem}
+  .cmeta{flex:1;min-width:220px;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+  .snum{display:inline-flex;align-items:center;justify-content:center;background:var(--pri);color:#fff;border-radius:50%;min-width:1.55rem;height:1.55rem;font-size:.72rem;font-weight:700;flex:none}
+  .cmeta b{color:var(--pri);background:#efe7f5;border-radius:10px;padding:.05rem .55rem;font-size:.82rem;white-space:nowrap}
   .cmeta .topic{font-family:Georgia,serif;font-size:.98rem}
   .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:10px;vertical-align:middle}
-  .nlb{background:var(--grisc);color:#fff;margin-left:.5rem}
+  .nlb{background:var(--grisc);color:#fff}
   .ccounts{font-size:.72rem;color:var(--gris);background:#f4eefb;border-radius:10px;padding:.25rem .6rem}
   .mini{background:none;border:none;cursor:pointer;opacity:.4;font-size:.82rem;padding:0 .15rem;line-height:1}
   .mini:hover{opacity:1}
@@ -42,12 +43,20 @@
   .grid2{display:grid;grid-template-columns:170px 1fr;gap:.8rem;margin:.8rem 0}
   @media(max-width:640px){.grid2{grid-template-columns:1fr}}
   .fld span{display:block;font-size:.75rem;font-weight:700;color:var(--pri2);margin-bottom:.2rem}
-  input[type=text],input[type=email],input[type=date],textarea,select.st{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;background:#fffdf7}
+  input[type=text],input[type=email],input[type=date],textarea,select.st,select.msel{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;background:#fffdf7}
   textarea{resize:vertical}
   input:focus,textarea:focus,select:focus{outline:2px solid var(--pri2)}
-  .sect{margin:.9rem 0;border:1px solid var(--bord);border-radius:10px;padding:.7rem .8rem;background:#fdfbf8}
+  .sect{margin:.9rem 0;border:1px solid var(--bord);border-left:4px solid #ccc;border-radius:10px;padding:.7rem .8rem;background:#fdfbf8}
+  .se-obj{border-left-color:#8e6fb8}.se-obj h3{color:#8e6fb8}
+  .se-act{border-left-color:var(--blau)}.se-act h3{color:var(--blau)}
+  .se-res{border-left-color:var(--verd)}.se-res h3{color:var(--verd)}
+  .se-av{border-left-color:var(--taronja)}.se-av h3{color:var(--taronja)}
+  .se-comp{border-left-color:#b0567a}.se-comp h3{color:#b0567a}
+  .se-ev{border-left-color:var(--grisc)}.se-ev h3{color:var(--grisc)}
   .secth{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.4rem}
   .secth h3{margin:0;font-size:.92rem;color:var(--pri);flex:1;min-width:180px}
+  .cpy{background:none;border:1px solid #d8cdea;border-radius:8px;padding:.12rem .45rem;cursor:pointer;font-size:.78rem;opacity:.7;color:var(--pri)}
+  .cpy:hover{opacity:1;background:#fff}
   .chk{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;color:var(--gris);cursor:pointer;white-space:nowrap}
   .add{background:var(--pri2);color:#fff;border:none;border-radius:8px;padding:.3rem .65rem;font-size:.78rem;font-weight:600;cursor:pointer}
   .rows{display:flex;flex-direction:column;gap:.35rem}
@@ -56,30 +65,36 @@
   @media(max-width:700px){.row,.row.mini-row{grid-template-columns:1fr}.row .time{max-width:150px}}
   .row textarea{min-height:48px}
   .row.act input[type=text].time{font-variant-numeric:tabular-nums}
+  .lks{grid-column:1/-1;display:none;flex-wrap:wrap;gap:.3rem;margin-top:-.1rem}
+  .lks a{display:inline-block;background:#eaf3fb;color:var(--blau);border:1px solid #bcd7ea;border-radius:14px;padding:.08rem .55rem;font-size:.74rem;text-decoration:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lks a:hover{background:#d8eaf8;text-decoration:underline}
   select.st{font-size:.78rem;padding:.35rem}
   .hint{font-size:.75rem;color:var(--gris);margin:.3rem 0}
   .st-plan{border-left:3px solid var(--blau)}
   .st-done{border-left:3px solid var(--verd)}
   .st-pause{border-left:3px solid var(--taronja)}
   .st-drop{border-left:3px solid var(--grisc);opacity:.55}
-  /* ===== modal ===== */
+  /* modal */
   .mwrap{display:none;position:fixed;inset:0;background:rgba(30,20,40,.55);z-index:98;align-items:center;justify-content:center;padding:1rem}
   .mwrap.on{display:flex}
-  .mbox{background:#fff;border-radius:14px;max-width:540px;width:100%;padding:1.1rem 1.2rem;box-shadow:0 10px 40px rgba(0,0,0,.35);max-height:85vh;overflow:auto}
+  .mbox{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:1.1rem 1.2rem;box-shadow:0 10px 40px rgba(0,0,0,.35);max-height:85vh;overflow:auto}
   .mtitle{font-weight:700;color:var(--pri);font-size:1.05rem;margin-bottom:.5rem}
-  .mbox input{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.9rem}
+  .mbox input,.mbox select{width:100%;border:1px solid var(--bord);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.9rem}
   .mflbl{display:block;font-size:.78rem;font-weight:700;color:var(--pri2);margin:.6rem 0 .2rem}
   .mbtns{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.9rem;justify-content:flex-end}
   .mbtns button{border:none;border-radius:8px;padding:.5rem .9rem;font-weight:600;cursor:pointer;font-size:.85rem;background:#eee;color:var(--tinta)}
   .mbtns button.pri{background:var(--pri2);color:#fff}
+  .mradio{display:flex;gap:1rem;flex-wrap:wrap;font-size:.86rem;margin:.2rem 0}
+  .mradio label{display:flex;align-items:center;gap:.3rem;cursor:pointer}
   .mtable{font-size:.88rem;width:100%;border-collapse:collapse}
   .mtable td{padding:.25rem .5rem .25rem 0;vertical-align:top}
   #toast{position:fixed;bottom:18px;left:50%;margin-left:-120px;width:240px;text-align:center;background:var(--tinta);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:99}
   #toast.show{opacity:1}
   @media print{
-    .topbar,#toast,.add,.del,.tw,.chk,.hint,.tools,#errbox,#memwarn,.mini,.mwrap{display:none!important}
-    .card{border:none;box-shadow:none;page-break-inside:avoid}
+    .topbar,#toast,.add,.del,.tw,.chk,.hint,.tools,#errbox,#memwarn,.mini,.mwrap,.cpy{display:none!important}
+    .card{border:none;box-shadow:none;page-break-inside:avoid;border-top:2px solid #999}
     .sbody{display:block!important;border-top:1px solid #ccc}
+    .chead{background:none}
     input,textarea,select{border:none!important;background:none!important;height:auto!important}
     .print-swap{white-space:pre-wrap;border:none!important;padding:0!important;font:inherit;font-size:.88rem}
     body{background:#fff}
@@ -146,7 +161,7 @@ var I18N={
 ca:{t1:"Planificador de sessions - Fisiologia",t2:"C&egrave;lia Painous Mart&iacute; - Fisiologia aplicada a la dansa - 2026-27",
 openStu:"&#127891; Fitxa de l'alumne",bNew:"+ Afegeix sessi&oacute;",bExpStu:"Exporta per a l'alumnat",bExp:"Exporta c&ograve;pia",bImp:"Importa c&ograve;pia",bPrint:"Imprimeix",bData:"&#9432; Dades",
 saved:"Desat",fltAll:"Totes les activitats",stPlan:"Prevista",stDone:"Feta",stPause:"En pausa",stDrop:"Descartada",
-fDate:"Data",fTopic:"Tema de la sessi&oacute;",objTitle:"Objectius de la sessi&oacute;",actTitle:"Activitats a desenvolupar",resTitle:"Recursos online",avTitle:"Mitjans audiovisuals",compTitle:"Treball complementari",evTitle:"Evid&egrave;ncies de la sessi&oacute;",
+fDate:"Data",fTopic:"Tema de la sessi&oacute;",objTitle:"&#127919; Objectius de la sessi&oacute;",actTitle:"&#9654; Activitats a desenvolupar",resTitle:"&#128279; Recursos online",avTitle:"&#127916; Mitjans audiovisuals",compTitle:"&#127968; Treball complementari",evTitle:"&#9989; Evid&egrave;ncies de la sessi&oacute;",
 visStudent:"Visible per l'alumnat",addAct:"Afegeix activitat",addLine:"Afegeix l&iacute;nia",del:"Esborra",delSes:"Esborra la sessi&oacute; (2 clics)",
 mvUp:"Mou la sessi&oacute; amunt",mvDown:"Mou la sessi&oacute; avall",dupT:"Duplica la sessi&oacute; com a plantilla",
 noLectiva:"No lectiu",noTopic:"(sense t&iacute;tol)",noActs:"Encara no hi ha activitats.",noItems:"Encara no hi ha elements.",
@@ -158,18 +173,22 @@ filterHint:"Estat: prevista / feta / en pausa / descartada. El filtre superior a
 diTitle:"Dades en &uacute;s",diSes:"Sessions carregades:",diKey:"Clau interna:",diImp:"Fitxer per importar:",diLast:"Darrera edici&oacute;:",diBack:"Darrera c&ograve;pia de seguretat:",diNone:"mai",
 diNote:"Les dades viuen nom&eacute;s en aquest navegador, en aquest ordinador. Per portar-les a un altre: <b>Exporta c&ograve;pia</b> aqu&iacute; i <b>Importa c&ograve;pia</b> all&agrave;, triant planificador-dades.json.",
 emTitle:"Enviar la c&ograve;pia per correu",emAsk:"Vols enviar la c&ograve;pia de seguretat per email?",emMail:"Correu de destinaci&oacute;:",
-emHint:"S'obrir&agrave; el teu programa de correu amb el destinatari i el text preparats: hi haur&agrave;s d'adjuntar manualment el fitxer descarregat. Si no s'obre cap correu, fes servir &laquo;Copiar les dades&raquo; i enganxa-les al missatge.",
+cliLbl:"Obrir el correu amb:",cliDef:"Programa per defecte (mailto)",cliGmail:"Gmail (al navegador)",cliOut:"Outlook (al navegador)",
+emHint:"Haur&agrave;s d'adjuntar manualment el fitxer descarregat. Amb Gmail o Outlook web, el text del missatge tamb&eacute; queda copiat al porta-retalls per si cal enganxar-lo.",
 emSend:"Enviar",emCopy:"Copiar les dades",emClose:"Tancar",
 emSent:"Correu preparat: adjunta el fitxer i envia'l.",emBad:"Introdueix un correu electr&ograve;nic v&agrave;lid.",
 copOk:"Dades copiades al porta-retalls.",copFail:"No s'ha pogut copiar autom&agrave;ticament: copia manualment.",
 emBody1:"C&ograve;pia de seguretat del Planificador de sessions (Fisiologia aplicada a la dansa).",
 emBody2:"Data de la c&ograve;pia:",emBody3:"Sessions incloses:",
 emBody4:"Adjunta a aquest correu el fitxer {f} (i, si vols, tamb&eacute; planificador-dades.json).",
-emBody5:"Per restaurar: obre el planificador &rarr; Importa c&ograve;pia &rarr; tria planificador-dades.json."},
+emBody5:"Per restaurar: obre el planificador &rarr; Importa c&ograve;pia &rarr; tria planificador-dades.json.",
+cpyT:"&#10697; Copia aquest bloc a una altra sessi&oacute;",copTitle:"Copia el bloc",copDst:"Sessió de destí:",copMode:"Què vull fer:",
+copAdd:"Afegir al contingut existent",copRepl:"Substituir el contingut existent",copGo:"Copia",copBlkOk:"Bloc copiat.",copSelf:"(aquesta sessió)",
+copSameTxt:"Copiar un bloc de texte a la mateixa sessió no té efecte: tria una altra sessió de destí."},
 es:{t1:"Planificador de sesiones - Fisiologia",t2:"C&egrave;lia Painous Mart&iacute; - Fisiolog&iacute;a aplicada a la danza - 2026-27",
 openStu:"&#127891; Ficha del alumnado",bNew:"+ A&ntilde;adir sesi&oacute;n",bExpStu:"Exportar para el alumnado",bExp:"Exportar copia",bImp:"Importar copia",bPrint:"Imprimir",bData:"&#9432; Datos",
 saved:"Guardado",fltAll:"Todas las actividades",stPlan:"Prevista",stDone:"Hecha",stPause:"En pausa",stDrop:"Descartada",
-fDate:"Fecha",fTopic:"Tema de la sesi&oacute;n",objTitle:"Objetivos de la sesi&oacute;n",actTitle:"Actividades a desarrollar",resTitle:"Recursos online",avTitle:"Medios audiovisuales",compTitle:"Trabajo complementario",evTitle:"Evidencias de la sesi&oacute;n",
+fDate:"Fecha",fTopic:"Tema de la sesi&oacute;n",objTitle:"&#127919; Objetivos de la sesi&oacute;n",actTitle:"&#9654; Actividades a desarrollar",resTitle:"&#128279; Recursos online",avTitle:"&#127916; Medios audiovisuales",compTitle:"&#127968; Trabajo complementario",evTitle:"&#9989; Evidencias de la sesi&oacute;n",
 visStudent:"Visible para el alumnado",addAct:"A&ntilde;adir actividad",addLine:"A&ntilde;adir l&iacute;nea",del:"Borrar",delSes:"Borrar la sesi&oacute;n (2 clics)",
 mvUp:"Mover la sesi&oacute;n arriba",mvDown:"Mover la sesi&oacute;n abajo",dupT:"Duplicar la sesi&oacute;n como plantilla",
 noLectiva:"No lectivo",noTopic:"(sin t&iacute;tulo)",noActs:"Todav&iacute;a no hay actividades.",noItems:"Todav&iacute;a no hay elementos.",
@@ -181,18 +200,22 @@ filterHint:"Estado: prevista / hecha / en pausa / descartada. El filtro superior
 diTitle:"Datos en uso",diSes:"Sesiones cargadas:",diKey:"Clave interna:",diImp:"Archivo para importar:",diLast:"&Uacute;ltima edici&oacute;n:",diBack:"&Uacute;ltima copia de seguridad:",diNone:"nunca",
 diNote:"Los datos viven solo en este navegador, en este ordenador. Para llevarlos a otro: <b>Exportar copia</b> aqu&iacute; y <b>Importar copia</b> all&iacute;, eligiendo planificador-dades.json.",
 emTitle:"Enviar la copia por correo",emAsk:"&iquest;Quieres enviar la copia de seguridad por email?",emMail:"Correo de destino:",
-emHint:"Se abrir&aacute; tu programa de correo con el destinatario y el texto preparados: tendr&aacute;s que adjuntar manualmente el archivo descargado. Si no se abre ning&uacute;n correo, usa &laquo;Copiar los datos&raquo; y p&eacute;galos en el mensaje.",
+cliLbl:"Abrir el correo con:",cliDef:"Programa por defecto (mailto)",cliGmail:"Gmail (en el navegador)",cliOut:"Outlook (en el navegador)",
+emHint:"Tendr&aacute;s que adjuntar manualmente el archivo descargado. Con Gmail u Outlook web, el texto del mensaje tambi&eacute;n queda copiado al portapapeles por si hay que pegarlo.",
 emSend:"Enviar",emCopy:"Copiar los datos",emClose:"Cerrar",
 emSent:"Correo preparado: adjunta el archivo y env&iacute;alo.",emBad:"Introduce un correo electr&oacute;nico v&aacute;lido.",
 copOk:"Datos copiados al portapapeles.",copFail:"No se ha podido copiar autom&aacute;ticamente: copia manualmente.",
 emBody1:"Copia de seguridad del Planificador de sesiones (Fisiolog&iacute;a aplicada a la danza).",
 emBody2:"Fecha de la copia:",emBody3:"Sesiones incluidas:",
 emBody4:"Adjunta a este correo el archivo {f} (y, si quieres, tambi&eacute;n planificador-dades.json).",
-emBody5:"Para restaurar: abre el planificador &rarr; Importar copia &rarr; elige planificador-dades.json."},
+emBody5:"Para restaurar: abre el planificador &rarr; Importar copia &rarr; elige planificador-dades.json.",
+cpyT:"&#10697; Copia este bloque a otra sesi&oacute;n",copTitle:"Copiar el bloque",copDst:"Sesión de destino:",copMode:"Qu&eacute; quiero hacer:",
+copAdd:"A&ntilde;adir al contenido existente",copRepl:"Sustituir el contenido existente",copGo:"Copiar",copBlkOk:"Bloque copiado.",copSelf:"(esta sesi&oacute;n)",
+copSameTxt:"Copiar un bloque de texto a la misma sesi&oacute;n no tiene efecto: elige otra sesi&oacute;n de destino."},
 en:{t1:"Session planner - Physiology",t2:"Celia Painous Marti - Physiology Applied to Dance - 2026-27",
 openStu:"&#127891; Student sheet",bNew:"+ Add session",bExpStu:"Export for students",bExp:"Export backup",bImp:"Import backup",bPrint:"Print",bData:"&#9432; Data",
 saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
-fDate:"Date",fTopic:"Session topic",objTitle:"Session objectives",actTitle:"Activities to carry out",resTitle:"Online resources",avTitle:"Audiovisual media",compTitle:"Complementary work",evTitle:"Session evidence",
+fDate:"Date",fTopic:"Session topic",objTitle:"&#127919; Session objectives",actTitle:"&#9654; Activities to carry out",resTitle:"&#128279; Online resources",avTitle:"&#127916; Audiovisual media",compTitle:"&#127968; Complementary work",evTitle:"&#9989; Session evidence",
 visStudent:"Visible to students",addAct:"Add activity",addLine:"Add line",del:"Delete",delSes:"Delete session (2 clicks)",
 mvUp:"Move session up",mvDown:"Move session down",dupT:"Duplicate session as template",
 noLectiva:"Non-teaching",noTopic:"(untitled)",noActs:"No activities yet.",noItems:"No items yet.",
@@ -204,14 +227,18 @@ filterHint:"Status: planned / done / on hold / discarded. The top filter shows o
 diTitle:"Data in use",diSes:"Loaded sessions:",diKey:"Internal key:",diImp:"File to import:",diLast:"Last edit:",diBack:"Last backup:",diNone:"never",
 diNote:"The data lives only in this browser, on this computer. To move it elsewhere: <b>Export backup</b> here and <b>Import backup</b> there, choosing planificador-dades.json.",
 emTitle:"Email the backup",emAsk:"Do you want to email the backup?",emMail:"Destination email:",
-emHint:"Your mail app will open with recipient and text ready: you must manually attach the downloaded file. If no mail app opens, use 'Copy data' and paste it into the message.",
+cliLbl:"Open mail with:",cliDef:"Default program (mailto)",cliGmail:"Gmail (in the browser)",cliOut:"Outlook (in the browser)",
+emHint:"You must attach the downloaded file manually. With Gmail or Outlook web, the message text is also copied to the clipboard in case you need to paste it.",
 emSend:"Send",emCopy:"Copy data",emClose:"Close",
 emSent:"Email ready: attach the file and send it.",emBad:"Please enter a valid email address.",
 copOk:"Data copied to the clipboard.",copFail:"Automatic copy failed: copy manually.",
 emBody1:"Backup of the Session Planner (Physiology Applied to Dance).",
 emBody2:"Backup date:",emBody3:"Sessions included:",
 emBody4:"Attach the file {f} to this email (and, if you wish, planificador-dades.json too).",
-emBody5:"To restore: open the planner &rarr; Import backup &rarr; choose planificador-dades.json."}};
+emBody5:"To restore: open the planner &rarr; Import backup &rarr; choose planificador-dades.json.",
+cpyT:"&#10697; Copy this block to another session",copTitle:"Copy the block",copDst:"Destination session:",copMode:"What do I want to do:",
+copAdd:"Add to existing content",copRepl:"Replace existing content",copGo:"Copy",copBlkOk:"Block copied.",copSelf:"(this session)",
+copSameTxt:"Copying a text block to the same session has no effect: choose another destination session."}};
 
 /* ================== ESTAT ================== */
 var lang=ST.getItem(KEY+'L')||'ca';
@@ -233,11 +260,6 @@ function S(date,topic,obj,nl){
  return {id:uid(),date:date||'',topic:topic||'',noLectiva:!!nl,objVis:true,obj:obj||'',acts:[],res:[],av:[],compVis:true,comp:'',evVis:true,ev:''};
 }
 
-function defaultMeta(){
- return {app:'planificador',key:KEY,lastSaved:null,lastBackup:null};
-}
-
-/* Objectius orientatius del pla C: llistes de linies curtes, unides en executar-se */
 function seed(){
  var a=[
   ['2026-10-09','Presentacio. Homeostasi i fisiologia cel-lular',[
@@ -310,8 +332,10 @@ function seed(){
  ];
  var out=[],i,topics=['Presentacio. Homeostasi i fisiologia cel-lular','Sistema musculoesqueletic I','Sistema musculoesqueletic II','Festiu de lliure disposicio CSD','Sistema nervios I','Preparacio i enviament de treballs orals','Sistema nervios II / Son','Presentacions de treballs orals / La sang','Sistema hormonal','Nutricio (nutricionista + practica)','Avaluacio parcial','Aparell cardiovascular','Aparell respiratori','Examen final'];
  for(i=0;i<a.length;i++){a[i][1]=topics[i];out.push(S(a[i][0],a[i][1],(a[i][2]||[]).join('\n'),a[i][3]));}
- return {v:5,sessions:out,meta:defaultMeta()};
+ return {v:5,sessions:out,meta:{app:'planificador',key:KEY,lastSaved:null,lastBackup:null}};
 }
+
+function defaultMeta(){ return {app:'planificador',key:KEY,lastSaved:null,lastBackup:null}; }
 
 function norm(x){
  var i,a;
@@ -385,10 +409,34 @@ function countsHTML(c){
  return t('cActs')+' '+c.at+' / '+t('cVis')+' '+c.av+' | '+t('cRes')+' '+c.rt+' | '+t('cLinks')+' '+c.links+
   ' | '+t('cAv')+' '+c.vt+' | '+t('cComp')+' '+(c.comp?'si':'-')+' | '+t('cEv')+' '+(c.ev?'si':'-');
 }
-function metaHTML(x){
- var h='<b>'+fmt(x.date)+'</b><span class="topic">'+(esc(x.topic)||t('noTopic'))+'</span>';
+function metaHTML(x,num){
+ var h='';
+ if(num)h+='<span class="snum">'+num+'</span>';
+ h+='<b>'+fmt(x.date)+'</b><span class="topic">'+(esc(x.topic)||t('noTopic'))+'</span>';
  if(x.noLectiva)h+='<span class="badge nlb">'+t('noLectiva')+'</span>';
  return h;
+}
+
+/* ================== ENLLAOS ACTIUS ================== */
+function updateLinks(row,txt){
+ if(!row)return;
+ var box=row.querySelector('.lks');
+ if(!box)return;
+ var urls=String(txt||'').match(/https?:\/\/[^\s]+/g)||[];
+ if(!urls.length){box.style.display='none';box.innerHTML='';return;}
+ box.style.display='flex';
+ box.innerHTML=urls.map(function(u){
+  var v=u.length>44?u.slice(0,44)+'…':u;
+  return '<a href="'+esc(u)+'" target="_blank" rel="noopener">&#128279; '+esc(v)+'</a>';
+ }).join('');
+}
+function refreshAllLinks(root){
+ if(!root)return;
+ var rows=root.querySelectorAll('.row'),i;
+ for(i=0;i<rows.length;i++){
+  var ta=rows[i].querySelector('textarea');
+  updateLinks(rows[i],ta?ta.value:'');
+ }
 }
 
 /* ================== FILES I BLOCS ================== */
@@ -404,33 +452,37 @@ function actRow(a){
  +'<option value="drop"'+(a.st==='drop'?' selected':'')+'>'+esc(t('stDrop'))+'</option>'
  +'</select>'
  +'<button type="button" class="del" data-del-act="'+a.id+'" title="'+esc(t('del'))+'"> &#10005;</button>'
+ +'<div class="lks"></div>'
  +'</div>';
 }
 function resRow(r){
  return '<div class="row mini-row">'
  +'<textarea data-rid="'+r.id+'" data-k="txt" rows="2" placeholder="'+esc(t('phRes'))+'">'+esc(r.txt)+'</textarea>'
  +'<label class="chk"><input type="checkbox" data-rid="'+r.id+'" data-k="vis"'+(r.vis?' checked':'')+'> &#128065;</label>'
- +'<button type="button" class="del" data-del-res="'+r.id+'" title="'+esc(t('del'))+'"> &#10005;</button></div>';
+ +'<button type="button" class="del" data-del-res="'+r.id+'" title="'+esc(t('del'))+'"> &#10005;</button>'
+ +'<div class="lks"></div></div>';
 }
 function avRow(v){
  return '<div class="row mini-row">'
  +'<textarea data-vid="'+v.id+'" data-k="txt" rows="2" placeholder="'+esc(t('phAv'))+'">'+esc(v.txt)+'</textarea>'
  +'<label class="chk"><input type="checkbox" data-vid="'+v.id+'" data-k="vis"'+(v.vis?' checked':'')+'> &#128065;</label>'
- +'<button type="button" class="del" data-del-av="'+v.id+'" title="'+esc(t('del'))+'"> &#10005;</button></div>';
+ +'<button type="button" class="del" data-del-av="'+v.id+'" title="'+esc(t('del'))+'"> &#10005;</button>'
+ +'<div class="lks"></div></div>';
 }
-function block(title,key,val,inner){
- return '<div class="sect"><div class="secth"><h3>'+title+'</h3>'
+function block(title,key,val,inner,cls,clau){
+ var btn=clau?('<button type="button" class="cpy" data-copyb="'+clau+'" title="'+esc(t('cpyT'))+'">&#10697;</button>'):'';
+ return '<div class="sect '+(cls||'')+'"><div class="secth"><h3>'+title+'</h3>'+btn
  +'<label class="chk"><input type="checkbox" data-f="'+key+'"'+(val?' checked':'')+'>'+esc(t('visStudent'))+'</label></div>'
  +inner+'</div>';
 }
 
 /* ================== TARGETA DE SESSIO ================== */
-function cardHTML(x){
+function cardHTML(x,num){
  var c=counts(x),open=!!EXP[x.id],h;
  h='<section class="card'+(x.noLectiva?' nl':'')+'" id="c-'+x.id+'" data-sid="'+x.id+'">'
  +'<div class="chead" data-toggle="'+x.id+'">'
  +'<button type="button" class="tw" tabindex="-1">'+(open?'&#9660;':'&#9656;')+'</button>'
- +'<div class="cmeta">'+metaHTML(x)+'</div>'
+ +'<div class="cmeta">'+metaHTML(x,num)+'</div>'
  +'<div class="ccounts" id="k-'+x.id+'">'+countsHTML(c)+'</div>'
  +'<button type="button" class="mini" data-up="'+x.id+'" title="'+esc(t('mvUp'))+'">&#9650;</button>'
  +'<button type="button" class="mini" data-down="'+x.id+'" title="'+esc(t('mvDown'))+'">&#9660;</button>'
@@ -443,16 +495,16 @@ function cardHTML(x){
   +'<label class="fld"><span>'+t('fDate')+'</span><input type="date" data-f="date" value="'+esc(x.date)+'"></label>'
   +'<label class="fld"><span>'+t('fTopic')+'</span><input type="text" data-f="topic" value="'+esc(x.topic)+'"></label>'
   +'</div>'
-  +block(t('objTitle'),'objVis',x.objVis,'<textarea rows="4" data-f="obj" placeholder="'+esc(t('phObj'))+'">'+esc(x.obj)+'</textarea>')
-  +'<div class="sect"><div class="secth"><h3>'+t('actTitle')+'</h3><button type="button" class="add" data-add="acts">+ '+esc(t('addAct'))+'</button></div>'
+  +block(t('objTitle'),'objVis',x.objVis,'<textarea rows="4" data-f="obj" placeholder="'+esc(t('phObj'))+'">'+esc(x.obj)+'</textarea>','se-obj','obj')
+  +'<div class="sect se-act"><div class="secth"><h3>'+t('actTitle')+'</h3><button type="button" class="cpy" data-copyb="acts" title="'+esc(t('cpyT'))+'">&#10697;</button><button type="button" class="add" data-add="acts">+ '+esc(t('addAct'))+'</button></div>'
   +'<div class="rows">'+(x.acts.length?x.acts.map(actRow).join(''):'<p class="hint">'+t('noActs')+'</p>')+'</div>'
   +'<p class="hint">'+t('filterHint')+'</p></div>'
-  +'<div class="sect"><div class="secth"><h3>'+t('resTitle')+'</h3><button type="button" class="add" data-add="res">+ '+esc(t('addLine'))+'</button></div>'
+  +'<div class="sect se-res"><div class="secth"><h3>'+t('resTitle')+'</h3><button type="button" class="cpy" data-copyb="res" title="'+esc(t('cpyT'))+'">&#10697;</button><button type="button" class="add" data-add="res">+ '+esc(t('addLine'))+'</button></div>'
   +'<div class="rows">'+(x.res.length?x.res.map(resRow).join(''):'<p class="hint">'+t('noItems')+'</p>')+'</div></div>'
-  +'<div class="sect"><div class="secth"><h3>'+t('avTitle')+'</h3><button type="button" class="add" data-add="av">+ '+esc(t('addLine'))+'</button></div>'
+  +'<div class="sect se-av"><div class="secth"><h3>'+t('avTitle')+'</h3><button type="button" class="cpy" data-copyb="av" title="'+esc(t('cpyT'))+'">&#10697;</button><button type="button" class="add" data-add="av">+ '+esc(t('addLine'))+'</button></div>'
   +'<div class="rows">'+(x.av.length?x.av.map(avRow).join(''):'<p class="hint">'+t('noItems')+'</p>')+'</div></div>'
-  +block(t('compTitle'),'compVis',x.compVis,'<textarea rows="2" data-f="comp" placeholder="'+esc(t('phComp'))+'">'+esc(x.comp)+'</textarea>')
-  +block(t('evTitle'),'evVis',x.evVis,'<textarea rows="2" data-f="ev" placeholder="'+esc(t('phEv'))+'">'+esc(x.ev)+'</textarea>')
+  +block(t('compTitle'),'compVis',x.compVis,'<textarea rows="2" data-f="comp" placeholder="'+esc(t('phComp'))+'">'+esc(x.comp)+'</textarea>','se-comp','comp')
+  +block(t('evTitle'),'evVis',x.evVis,'<textarea rows="2" data-f="ev" placeholder="'+esc(t('phEv'))+'">'+esc(x.ev)+'</textarea>','se-ev','ev')
   +'</div>';
  }
  h+='</section>';
@@ -465,10 +517,11 @@ function updateCounts(x){var k=$('k-'+x.id);if(k)k.innerHTML=countsHTML(counts(x
 
 function render(){
  var y=window.pageYOffset,h='',i;
- for(i=0;i<plan.sessions.length;i++)h+=cardHTML(plan.sessions[i]);
+ for(i=0;i<plan.sessions.length;i++)h+=cardHTML(plan.sessions[i],i+1);
  $('main').innerHTML=h;
  var rows=document.querySelectorAll('.row.act');
  for(i=0;i<rows.length;i++)applyRowFilter(rows[i]);
+ refreshAllLinks($('main'));
  try{window.scrollTo(0,y);}catch(e){}
  applyStatic();
 }
@@ -477,11 +530,12 @@ function renderCard(x){
  var el=$('c-'+x.id);
  if(el){
   var d=document.createElement('div');
-  d.innerHTML=cardHTML(x);
+  d.innerHTML=cardHTML(x,idxOf(x.id)+1);
   var neu=d.firstChild;
   el.parentNode.replaceChild(neu,el);
   var rows=neu.querySelectorAll('.row.act');
   for(var i=0;i<rows.length;i++)applyRowFilter(rows[i]);
+  refreshAllLinks(neu);
  }
  updateCounts(x);
 }
@@ -554,14 +608,14 @@ function onEdit(e){
  if(f!==null&&f!==undefined&&f!==''){
   if(f==='date'||f==='topic'||f==='obj'||f==='comp'||f==='ev')x[f]=el.value;
   if(f==='objVis'||f==='compVis'||f==='evVis')x[f]=el.checked;
-  if(f==='date'||f==='topic'){var m=cardEl.querySelector('.cmeta');if(m)m.innerHTML=metaHTML(x);}
+  if(f==='date'||f==='topic'){var m=cardEl.querySelector('.cmeta');if(m)m.innerHTML=metaHTML(x,idxOf(x.id)+1);}
  }else{
   var aid=el.getAttribute('data-aid'),rid=el.getAttribute('data-rid'),vid=el.getAttribute('data-vid'),k=el.getAttribute('data-k');
   if(aid){
    var a=null;
    for(i=0;i<x.acts.length;i++)if(x.acts[i].id===aid)a=x.acts[i];
    if(a){
-    if(k==='txt')a.txt=el.value;
+    if(k==='txt'){a.txt=el.value;updateLinks(el.parentNode,el.value);}
     else if(k==='time')a.time=el.value;
     else if(k==='vis')a.vis=el.checked;
     else if(k==='st'){a.st=el.value;var row=el.parentNode;row.setAttribute('data-st',a.st);row.className='row act st-'+a.st;applyRowFilter(row);}
@@ -569,20 +623,74 @@ function onEdit(e){
   }else if(rid){
    var r=null;
    for(i=0;i<x.res.length;i++)if(x.res[i].id===rid)r=x.res[i];
-   if(r){if(k==='txt')r.txt=el.value;else if(k==='vis')r.vis=el.checked;}
+   if(r){if(k==='txt'){r.txt=el.value;updateLinks(el.parentNode,el.value);}else if(k==='vis')r.vis=el.checked;}
   }else if(vid){
    var v=null;
    for(i=0;i<x.av.length;i++)if(x.av[i].id===vid)v=x.av[i];
-   if(v){if(k==='txt')v.txt=el.value;else if(k==='vis')v.vis=el.checked;}
+   if(v){if(k==='txt'){v.txt=el.value;updateLinks(el.parentNode,el.value);}else if(k==='vis')v.vis=el.checked;}
   }
  }
  updateCounts(x);
  scheduleSave();
 }
 
+/* ---- copia de blocs ---- */
+var BLK={obj:'objTitle',acts:'actTitle',res:'resTitle',av:'avTitle',comp:'compTitle',ev:'evTitle'};
+function sessLabel(x,i){
+ return (i+1)+' &middot; '+fmt(x.date)+' &middot; '+esc(x.topic||t('noTopic'));
+}
+function openCopyModal(fromSid,clau){
+ var from=plan.sessions[idxOf(fromSid)];
+ if(!from)return;
+ var i,oi=idxOf(fromSid);
+ var def=plan.sessions[oi+1]||plan.sessions[oi-1]||from;
+ var opts='';
+ for(i=0;i<plan.sessions.length;i++){
+  var x=plan.sessions[i];
+  var tag=(x.id===fromSid)?(' &middot; '+t('copSelf')):'';
+  opts+='<option value="'+x.id+'"'+(x.id===def.id?' selected':'')+'>'+sessLabel(x,i)+tag+'</option>';
+ }
+ openModal(t('copTitle'),
+  '<p class="hint">'+t(BLK[clau])+'</p>'
+ +'<label class="mflbl">'+t('copDst')+'</label><select id="cpDst" class="msel">'+opts+'</select>'
+ +'<label class="mflbl">'+t('copMode')+'</label>'
+ +'<div class="mradio">'
+ +'<label><input type="radio" name="cpMode" value="add" checked>'+esc(t('copAdd'))+'</label>'
+ +'<label><input type="radio" name="cpMode" value="repl">'+esc(t('copRepl'))+'</label>'
+ +'</div>',
+  [[t('copGo'),'pri',function(){
+     var toId=$('cpDst').value;
+     var mode=(document.querySelector('input[name="cpMode"]:checked')||{}).value||'add';
+     var to=plan.sessions[idxOf(toId)];
+     if(!to){closeModal();return;}
+     if(to.id===from.id&&(clau==='obj'||clau==='comp'||clau==='ev')){
+      toast(t('copSameTxt'));closeModal();return;
+     }
+     if(clau==='obj')to.obj=(mode==='add'&&to.obj)?(to.obj+'\n'+from.obj):from.obj;
+     else if(clau==='comp')to.comp=(mode==='add'&&to.comp)?(to.comp+'\n'+from.comp):from.comp;
+     else if(clau==='ev')to.ev=(mode==='add'&&to.ev)?(to.ev+'\n'+from.ev):from.ev;
+     else if(clau==='acts'){
+      var ca=from.acts.map(function(a){return {id:uid(),txt:a.txt,time:a.time,vis:a.vis,st:a.st};});
+      to.acts=(mode==='add')?to.acts.concat(ca):ca;
+     }else if(clau==='res'){
+      var cr=from.res.map(function(r){return {id:uid(),txt:r.txt,vis:r.vis};});
+      to.res=(mode==='add')?to.res.concat(cr):cr;
+     }else if(clau==='av'){
+      var cv=from.av.map(function(v){return {id:uid(),txt:v.txt,vis:v.vis};});
+      to.av=(mode==='add')?to.av.concat(cv):cv;
+     }
+     EXP[to.id]=true;
+     renderCard(to);scheduleSave();closeModal();
+     toast(t('copBlkOk'));
+     var el=$('c-'+to.id);
+     if(el&&el.scrollIntoView)el.scrollIntoView();
+   }],
+   [t('emClose'),'',function(){closeModal();}]]);
+}
+
 function onClick(e){
  var el=e.target,node=el;
- var toggleEl=null,addEl=null,upEl=null,downEl=null,dupEl=null,delAct=null,delRes=null,delAv=null,delSes=null;
+ var toggleEl=null,addEl=null,upEl=null,downEl=null,dupEl=null,delAct=null,delRes=null,delAv=null,delSes=null,copybEl=null;
  while(node&&node!==document.body){
   if(node.getAttribute){
    if(!delSes&&node.getAttribute('data-del-ses'))delSes=node;
@@ -593,6 +701,7 @@ function onClick(e){
    if(!upEl&&node.getAttribute('data-up'))upEl=node;
    if(!downEl&&node.getAttribute('data-down'))downEl=node;
    if(!dupEl&&node.getAttribute('data-dup'))dupEl=node;
+   if(!copybEl&&node.getAttribute('data-copyb'))copybEl=node;
    if(!toggleEl&&node.getAttribute('data-toggle'))toggleEl=node;
   }
   node=node.parentNode;
@@ -634,6 +743,12 @@ function onClick(e){
   renderCard(y);scheduleSave();
   return;
  }
+ if(copybEl){
+  var cardEl3=ancestorWithSid(el);
+  if(!cardEl3)return;
+  openCopyModal(cardEl3.getAttribute('data-sid'),copybEl.getAttribute('data-copyb'));
+  return;
+ }
  if(upEl){moveSession(upEl.getAttribute('data-up'),-1);return;}
  if(downEl){moveSession(downEl.getAttribute('data-down'),1);return;}
  if(dupEl){dupSession(dupEl.getAttribute('data-dup'));return;}
@@ -658,10 +773,9 @@ function download(name,txt){
 }
 function dtStamp(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
 
-/* --- enviament per correu (millora 1) --- */
-function copyData(){
- var txt=JSON.stringify(plan);
- var done=function(){toast(t('copOk'));};
+/* --- porta-retalls --- */
+function copyText(txt,okMsg){
+ var done=function(){toast(okMsg||t('copOk'));};
  if(navigator.clipboard&&navigator.clipboard.writeText){
   navigator.clipboard.writeText(txt).then(done,function(){fallbackCopy(txt,done);});
  }else fallbackCopy(txt,done);
@@ -674,32 +788,51 @@ function fallbackCopy(txt,done){
  document.body.removeChild(ta);
  if(ok)done();else toast(t('copFail'));
 }
+function copyData(){copyText(JSON.stringify(plan));}
+
+/* --- enviament per correu amb selector de client --- */
 function askSendEmail(f1){
  var def=ST.getItem(KEY+'MAIL')||'';
+ var cli=ST.getItem(KEY+'CLI')||'def';
  openModal(t('emTitle'),
   '<p>'+t('emAsk')+'</p>'
  +'<label class="mflbl">'+t('emMail')+'</label>'
  +'<input type="email" id="emTo" value="'+esc(def)+'">'
+ +'<label class="mflbl">'+t('cliLbl')+'</label>'
+ +'<select id="emCli" class="msel">'
+ +'<option value="def"'+(cli==='def'?' selected':'')+'>'+esc(t('cliDef'))+'</option>'
+ +'<option value="gmail"'+(cli==='gmail'?' selected':'')+'>'+esc(t('cliGmail'))+'</option>'
+ +'<option value="out"'+(cli==='out'?' selected':'')+'>'+esc(t('cliOut'))+'</option>'
+ +'</select>'
  +'<p class="hint">'+t('emHint')+'</p>',
   [[t('emSend'),'pri',function(){
      var to=$('emTo').value.trim();
      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)){toast(t('emBad'));return;}
-     ST.setItem(KEY+'MAIL',to);
+     var c=$('emCli').value;
+     ST.setItem(KEY+'MAIL',to);ST.setItem(KEY+'CLI',c);
+     var su=t('emTitle')+' - '+dtStamp();
      var body=t('emBody1')+'\n\n'+t('emBody2')+' '+new Date().toLocaleString()
       +'\n'+t('emBody3')+' '+plan.sessions.length
       +'\n\n'+t('emBody4').replace('{f}',f1)
       +'\n\n'+t('emBody5');
-     var url='mailto:'+to+'?subject='+encodeURIComponent(t('emTitle')+' - '+dtStamp())
-      +'&body='+encodeURIComponent(body);
+     var eTo=encodeURIComponent(to),eSu=encodeURIComponent(su),eBd=encodeURIComponent(body);
      closeModal();
-     window.location.href=url;
-     setTimeout(function(){toast(t('emSent'));},600);
+     if(c==='gmail'){
+      window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+eTo+'&su='+eSu+'&body='+eBd,'_blank');
+      copyText(body,t('emSent')+' + '+t('copOk'));
+     }else if(c==='out'){
+      window.open('https://outlook.office.com/mail/deeplink/compose?to='+eTo+'&subject='+eSu+'&body='+eBd,'_blank');
+      copyText(body,t('emSent')+' + '+t('copOk'));
+     }else{
+      window.location.href='mailto:'+to+'?subject='+eSu+'&body='+eBd;
+      setTimeout(function(){toast(t('emSent'));},600);
+     }
    }],
    [t('emCopy'),'',function(){copyData();}],
    [t('emClose'),'',function(){closeModal();}]]);
 }
 
-/* --- informacio de dades en us (millora 3) --- */
+/* --- informacio de dades en us --- */
 function showData(){
  var m=plan.meta||{};
  var f=function(iso){if(!iso)return t('diNone');try{return new Date(iso).toLocaleString();}catch(e){return String(iso);}};
