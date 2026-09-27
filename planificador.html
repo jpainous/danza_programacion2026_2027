@@ -418,17 +418,59 @@ function metaHTML(x,num){
 }
 
 /* ================== ENLLAOS ACTIUS ================== */
+var GENERIC=['index.html','index.htm','index.php','default.html','main.html','home.html',
+             'edit','view','watch','print','preview','share','download','embed'];
+function pathParts_(u){
+  var m=String(u).match(/^https?:\/\/([^\/#?]+)([^#?]*)/i);
+  if(!m)return null;
+  return {dom:m[1],parts:m[2].split('/').filter(Boolean)};
+}
+function linkLabel_(u,segments){
+  var p=pathParts_(u);
+  if(!p)return String(u);
+  if(!p.parts.length)return p.dom;
+  var n=Math.min(segments,p.parts.length);
+  return '/'+p.parts.slice(-n).join('/');
+}
+function linkLabelSmart_(u){
+  var p=pathParts_(u);
+  if(!p)return String(u);
+  if(!p.parts.length)return p.dom;
+  var last=p.parts[p.parts.length-1];
+  var gen=GENERIC.indexOf(last.toLowerCase())>-1;
+  var segs=(gen||(last.length<5&&p.parts.length>1))?2:1;
+  return linkLabel_(u,segs);
+}
+function hiHaDuplicades(arr){
+  var i,j,a,b;
+  for(i=0;i<arr.length;i++)for(j=i+1;j<arr.length;j++){
+    a=String(arr[i]).toLowerCase();b=String(arr[j]).toLowerCase();
+    if(a===b)return true;
+  }
+  return false;
+}
 function updateLinks(row,txt){
- if(!row)return;
- var box=row.querySelector('.lks');
- if(!box)return;
- var urls=String(txt||'').match(/https?:\/\/[^\s]+/g)||[];
- if(!urls.length){box.style.display='none';box.innerHTML='';return;}
- box.style.display='flex';
- box.innerHTML=urls.map(function(u){
-  var v=u.length>44?u.slice(0,44)+'…':u;
-  return '<a href="'+esc(u)+'" target="_blank" rel="noopener">&#128279; '+esc(v)+'</a>';
- }).join('');
+  if(!row)return;
+  var box=row.querySelector('.lks');
+  if(!box)return;
+  var urls=String(txt||'').match(/https?:\/\/[^\s]+/g)||[];
+  if(!urls.length){box.style.display='none';box.innerHTML='';return;}
+  urls=urls.map(function(u){return u.replace(/[.,;:!?"']+$/,'');});
+
+  /* etiqueta intel·ligent + escalat si hi ha repetides a la mateixa capsa */
+  var labels=urls.map(linkLabelSmart_);
+  if(hiHaDuplicades(labels))labels=urls.map(function(u){return linkLabel_(u,2);});
+  if(hiHaDuplicades(labels))labels=urls.map(function(u){
+    var p=pathParts_(u);
+    return p?p.dom+linkLabel_(u,2):String(u);
+  });
+
+  box.style.display='flex';
+  box.innerHTML=urls.map(function(u,i){
+    var v=labels[i];
+    if(v.length>44)v='…'+v.slice(-44);   /* retall per l'esquerra: es conserva el final */
+    return '<a href="'+esc(u)+'" target="_blank" rel="noopener" title="'+esc(u)+'">&#128279; '+esc(v)+'</a>';
+  }).join('');
 }
 function refreshAllLinks(root){
  if(!root)return;
