@@ -184,7 +184,12 @@ emBody4:"Adjunta a aquest correu el fitxer {f} (i, si vols, tamb&eacute; planifi
 emBody5:"Per restaurar: obre el planificador &rarr; Importa c&ograve;pia &rarr; tria planificador-dades.json.",
 cpyT:"&#10697; Copia aquest bloc a una altra sessi&oacute;",copTitle:"Copia el bloc",copDst:"Sessió de destí:",copMode:"Què vull fer:",
 copAdd:"Afegir al contingut existent",copRepl:"Substituir el contingut existent",copGo:"Copia",copBlkOk:"Bloc copiat.",copSelf:"(aquesta sessió)",
-copSameTxt:"Copiar un bloc de texte a la mateixa sessió no té efecte: tria una altra sessió de destí."},
+copSameTxt:"Copiar un bloc de texte a la mateixa sessió no té efecte: tria una altra sessió de destí.",
+/* NOU */
+bigOpen:"Mostra la sessió en una pestanya nova",bigTitle:"Sessió",bigClose:"Tanca la pestanya",
+bigAct:"Activitats",bigRes:"Recursos online",bigAv:"Mitjans audiovisuals",bigComp:"Treball complementari",bigEv:"Evidències",bigObj:"Objectius",
+bigNoTopic:"(sense títol)",bigTime:"Horari",bigHint:"Aquesta és una vista de només lectura. Tanca la pestanya per tornar al planificador.",
+bigBlocked:"El navegador ha bloquejat l'obertura de la pestanya. Permet les finestres emergents per a aquesta pàgina."},
 es:{t1:"Planificador de sesiones - Fisiologia",t2:"C&egrave;lia Painous Mart&iacute; - Fisiolog&iacute;a aplicada a la danza - 2026-27",
 openStu:"&#127891; Ficha del alumnado",bNew:"+ A&ntilde;adir sesi&oacute;n",bExpStu:"Exportar para el alumnado",bExp:"Exportar copia",bImp:"Importar copia",bPrint:"Imprimir",bData:"&#9432; Datos",
 saved:"Guardado",fltAll:"Todas las actividades",stPlan:"Prevista",stDone:"Hecha",stPause:"En pausa",stDrop:"Descartada",
@@ -207,11 +212,16 @@ emSent:"Correo preparado: adjunta el archivo y env&iacute;alo.",emBad:"Introduce
 copOk:"Datos copiados al portapapeles.",copFail:"No se ha podido copiar autom&aacute;ticamente: copia manualmente.",
 emBody1:"Copia de seguridad del Planificador de sesiones (Fisiolog&iacute;a aplicada a la danza).",
 emBody2:"Fecha de la copia:",emBody3:"Sesiones incluidas:",
-emBody4:"Adjunta a este correo el archivo {f} (y, si quieres, tambi&eacute;n planificador-dades.json).",
+emBody4:"Adjunta a este correo el archivo {f} (y, si quieres, tamb&eacute;n planificador-dades.json).",
 emBody5:"Para restaurar: abre el planificador &rarr; Importar copia &rarr; elige planificador-dades.json.",
 cpyT:"&#10697; Copia este bloque a otra sesi&oacute;n",copTitle:"Copiar el bloque",copDst:"Sesión de destino:",copMode:"Qu&eacute; quiero hacer:",
 copAdd:"A&ntilde;adir al contenido existente",copRepl:"Sustituir el contenido existente",copGo:"Copiar",copBlkOk:"Bloque copiado.",copSelf:"(esta sesi&oacute;n)",
-copSameTxt:"Copiar un bloque de texto a la misma sesi&oacute;n no tiene efecto: elige otra sesi&oacute;n de destino."},
+copSameTxt:"Copiar un bloque de texto a la misma sesión no tiene efecto: elige otra sesión de destino.",
+/* NOU */
+bigOpen:"Mostrar la sesión en una pestaña nueva",bigTitle:"Sesión",bigClose:"Cerrar la pestaña",
+bigAct:"Actividades",bigRes:"Recursos online",bigAv:"Medios audiovisuales",bigComp:"Trabajo complementario",bigEv:"Evidencias",bigObj:"Objetivos",
+bigNoTopic:"(sin título)",bigTime:"Horario",bigHint:"Esta es una vista de solo lectura. Cierra la pestaña para volver al planificador.",
+bigBlocked:"El navegador ha bloqueado la apertura de la pestaña. Permite las ventanas emergentes para esta página."},
 en:{t1:"Session planner - Physiology",t2:"Celia Painous Marti - Physiology Applied to Dance - 2026-27",
 openStu:"&#127891; Student sheet",bNew:"+ Add session",bExpStu:"Export for students",bExp:"Export backup",bImp:"Import backup",bPrint:"Print",bData:"&#9432; Data",
 saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
@@ -238,7 +248,12 @@ emBody4:"Attach the file {f} to this email (and, if you wish, planificador-dades
 emBody5:"To restore: open the planner &rarr; Import backup &rarr; choose planificador-dades.json.",
 cpyT:"&#10697; Copy this block to another session",copTitle:"Copy the block",copDst:"Destination session:",copMode:"What do I want to do:",
 copAdd:"Add to existing content",copRepl:"Replace existing content",copGo:"Copy",copBlkOk:"Block copied.",copSelf:"(this session)",
-copSameTxt:"Copying a text block to the same session has no effect: choose another destination session."}};
+copSameTxt:"Copying a text block to the same session has no effect: choose another destination session.",
+/* NOU */
+bigOpen:"Show session in a new tab",bigTitle:"Session",bigClose:"Close tab",
+bigAct:"Activities",bigRes:"Online resources",bigAv:"Audiovisual media",bigComp:"Complementary work",bigEv:"Evidence",bigObj:"Objectives",
+bigNoTopic:"(untitled)",bigTime:"Time",bigHint:"This is a read-only view. Close the tab to return to the planner.",
+bigBlocked:"The browser blocked opening the tab. Allow pop-ups for this page."}};
 
 /* ================== ESTAT ================== */
 var lang=ST.getItem(KEY+'L')||'ca';
@@ -456,19 +471,16 @@ function updateLinks(row,txt){
   var urls=String(txt||'').match(/https?:\/\/[^\s]+/g)||[];
   if(!urls.length){box.style.display='none';box.innerHTML='';return;}
   urls=urls.map(function(u){return u.replace(/[.,;:!?"']+$/,'');});
-
-  /* etiqueta intel·ligent + escalat si hi ha repetides a la mateixa capsa */
   var labels=urls.map(linkLabelSmart_);
   if(hiHaDuplicades(labels))labels=urls.map(function(u){return linkLabel_(u,2);});
   if(hiHaDuplicades(labels))labels=urls.map(function(u){
     var p=pathParts_(u);
     return p?p.dom+linkLabel_(u,2):String(u);
   });
-
   box.style.display='flex';
   box.innerHTML=urls.map(function(u,i){
     var v=labels[i];
-    if(v.length>44)v='…'+v.slice(-44);   /* retall per l'esquerra: es conserva el final */
+    if(v.length>44)v='…'+v.slice(-44);
     return '<a href="'+esc(u)+'" target="_blank" rel="noopener" title="'+esc(u)+'">&#128279; '+esc(v)+'</a>';
   }).join('');
 }
@@ -526,6 +538,8 @@ function cardHTML(x,num){
  +'<button type="button" class="tw" tabindex="-1">'+(open?'&#9660;':'&#9656;')+'</button>'
  +'<div class="cmeta">'+metaHTML(x,num)+'</div>'
  +'<div class="ccounts" id="k-'+x.id+'">'+countsHTML(c)+'</div>'
+ /* NOU: botó per obrir en pestanya nova */
+ +'<button type="button" class="mini" data-big="'+x.id+'" title="'+esc(t('bigOpen'))+'" aria-label="'+esc(t('bigOpen'))+'">&#128438;</button>'
  +'<button type="button" class="mini" data-up="'+x.id+'" title="'+esc(t('mvUp'))+'">&#9650;</button>'
  +'<button type="button" class="mini" data-down="'+x.id+'" title="'+esc(t('mvDown'))+'">&#9660;</button>'
  +'<button type="button" class="mini" data-dup="'+x.id+'" title="'+esc(t('dupT'))+'">&#10697;</button>'
@@ -730,9 +744,148 @@ function openCopyModal(fromSid,clau){
    [t('emClose'),'',function(){closeModal();}]]);
 }
 
+/* ================== NOU: OBRE LA SESSIÓ EN UNA PESTANYA NOVA ================== */
+function buildSessionPage(x){
+ try{
+  var title=(x.topic||t('bigNoTopic'));
+  var css=
+   'body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#faf8fc;color:#2a2530;line-height:1.6;padding:1.5rem}'+
+   '.wrap{max-width:900px;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 6px 30px rgba(75,46,111,.12);padding:2rem 2.2rem 2.5rem}'+
+   'h1{font-family:Georgia,serif;font-size:2rem;color:#4b2e6f;margin:0 0 .3rem;line-height:1.2}'+
+   '.sub{color:#6b6570;font-size:1rem;margin-bottom:1.6rem;padding-bottom:1rem;border-bottom:2px solid #efe7f5}'+
+   '.badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.15rem .6rem;border-radius:10px;background:#7a8288;color:#fff;margin-left:.5rem;vertical-align:middle}'+
+   '.sect{margin:1.4rem 0;padding:1rem 1.2rem;border-radius:12px;border-left:6px solid #ccc;background:#fdfbf8}'+
+   '.sect h2{margin:0 0 .7rem;font-size:1.25rem}'+
+   '.se-obj{border-left-color:#8e6fb8}.se-obj h2{color:#8e6fb8}'+
+   '.se-act{border-left-color:#1f5f8b}.se-act h2{color:#1f5f8b}'+
+   '.se-res{border-left-color:#2e7d4f}.se-res h2{color:#2e7d4f}'+
+   '.se-av{border-left-color:#c05621}.se-av h2{color:#c05621}'+
+   '.se-comp{border-left-color:#b0567a}.se-comp h2{color:#b0567a}'+
+   '.se-ev{border-left-color:#7a8288}.se-ev h2{color:#7a8288}'+
+   '.pre{white-space:pre-wrap;font:inherit;margin:0;font-size:1.05rem;line-height:1.7}'+
+   '.act{display:grid;grid-template-columns:1fr 130px;gap:1rem;padding:.7rem .2rem;border-bottom:1px dashed #e0d8ea;font-size:1.05rem}'+
+   '.act:last-child{border-bottom:none}'+
+   '.act .btime{color:#5f3d8a;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}'+
+   '.act .btxt{white-space:pre-wrap}'+
+   '.list{list-style:none;padding:0;margin:0}'+
+   '.list li{padding:.5rem .2rem;border-bottom:1px dashed #e0d8ea;white-space:pre-wrap;font-size:1.05rem}'+
+   '.list li:last-child{border-bottom:none}'+
+   '.list a{color:#1f5f8b;text-decoration:none}'+
+   '.list a:hover{text-decoration:underline}'+
+   '.hint{margin-top:2rem;text-align:center;color:#6b6570;font-size:.85rem}'+
+   '@media(max-width:640px){body{padding:.5rem}.wrap{padding:1.2rem}h1{font-size:1.4rem}.act{grid-template-columns:1fr}.act .btime{text-align:left}}';
+
+  var h='<!DOCTYPE html><html lang="'+lang+'"><head><meta charset="UTF-8">'+
+   '<meta name="viewport" content="width=device-width, initial-scale=1.0">'+
+   '<title>'+esc(title)+' · '+esc(t('bigTitle'))+'</title><style>'+css+'</style></head><body><div class="wrap">';
+
+  h+='<h1>'+esc(title);
+  if(x.noLectiva)h+='<span class="badge">'+esc(t('noLectiva'))+'</span>';
+  h+='</h1>';
+  h+='<div class="sub">'+fmt(x.date)+'</div>';
+
+  /* Objectius */
+  if(x.objVis&&x.obj){
+   h+='<div class="sect se-obj"><h2>'+t('bigObj')+'</h2><pre class="pre">'+esc(x.obj)+'</pre></div>';
+  }
+
+  /* Activitats */
+  var acts=(x.acts&&x.acts.length)?x.acts.filter(function(a){return a&&a.vis&&a.st!=='drop';}):[];
+  if(acts.length){
+   h+='<div class="sect se-act"><h2>'+t('bigAct')+'</h2>';
+   for(var i=0;i<acts.length;i++){
+    h+='<div class="act"><div class="btxt">'+esc(acts[i].txt)+'</div>';
+    if(acts[i].time)h+='<div class="btime">'+esc(acts[i].time)+'</div>';
+    h+='</div>';
+   }
+   h+='</div>';
+  }
+
+  /* Recursos */
+  var res=(x.res&&x.res.length)?x.res.filter(function(r){return r&&r.vis&&r.txt&&String(r.txt).replace(/\s/g,'');}):[];
+  if(res.length){
+   h+='<div class="sect se-res"><h2>'+t('bigRes')+'</h2><ul class="list">';
+   for(var j=0;j<res.length;j++){
+    h+='<li>'+linkify(res[j].txt)+'</li>';
+   }
+   h+='</ul></div>';
+  }
+
+  /* Audiovisuals */
+  var av=(x.av&&x.av.length)?x.av.filter(function(v){return v&&v.vis&&v.txt&&String(v.txt).replace(/\s/g,'');}):[];
+  if(av.length){
+   h+='<div class="sect se-av"><h2>'+t('bigAv')+'</h2><ul class="list">';
+   for(var k=0;k<av.length;k++){
+    h+='<li>'+linkify(av[k].txt)+'</li>';
+   }
+   h+='</ul></div>';
+  }
+
+  /* Treball complementari */
+  if(x.compVis&&x.comp&&String(x.comp).replace(/\s/g,'')){
+   h+='<div class="sect se-comp"><h2>'+t('bigComp')+'</h2><pre class="pre">'+esc(x.comp)+'</pre></div>';
+  }
+
+  /* Evidències */
+  if(x.evVis&&x.ev&&String(x.ev).replace(/\s/g,'')){
+   h+='<div class="sect se-ev"><h2>'+t('bigEv')+'</h2><pre class="pre">'+esc(x.ev)+'</pre></div>';
+  }
+
+  h+='<p class="hint">'+t('bigHint')+'</p>';
+  h+='</div></body></html>';
+  return h;
+ }catch(err){
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Error</title></head>'+
+   '<body style="font-family:system-ui;padding:2rem;background:#faf8fc">'+
+   '<h1>Error construint la pàgina</h1>'+
+   '<pre style="background:#fff3cd;padding:1rem;border-radius:10px;white-space:pre-wrap">'+
+   esc(err.message)+'\n\n'+esc(err.stack||'')+'</pre></body></html>';
+ }
+}
+
+/* Converteix els enllaços del text en <a>, conservant la resta de text */
+function linkify(txt){
+ try{
+  var s=esc(txt);
+  return s.replace(/(https?:\/\/[^\s<]+)/g,function(u){
+    var clean=String(u).replace(/[.,;:!?"']+$/,'');
+    var trail=u.slice(clean.length);
+    return '<a href="'+clean+'" target="_blank" rel="noopener">'+clean+'</a>'+trail;
+  });
+ }catch(e){
+  return esc(txt);
+ }
+}
+
+/* Obre la sessió en una pestanya nova fent servir un Blob URL.
+   Aquest mètode funciona bé en file:// i en http:// */
+function openBig(sid){
+ var x=plan.sessions[idxOf(sid)];
+ if(!x){toast('Sessió no trobada');return;}
+ var html=buildSessionPage(x);
+ 
+ // Creem un Blob amb el contingut HTML
+ var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+ var url=URL.createObjectURL(blob);
+ 
+ // Obrim la pestanya nova
+ var w=window.open(url,'_blank');
+ 
+ if(!w){
+  // Si el navegador bloqueja la finestra, alliberem l'URL i avisem
+  URL.revokeObjectURL(url);
+  toast(t('bigBlocked'));
+  return;
+ }
+ 
+ // Alliberem l'URL quan ja no calgui (donem 1 minut de marge)
+ setTimeout(function(){try{URL.revokeObjectURL(url);}catch(e){}},60000);
+}
+/* fi NOU */
+
 function onClick(e){
  var el=e.target,node=el;
- var toggleEl=null,addEl=null,upEl=null,downEl=null,dupEl=null,delAct=null,delRes=null,delAv=null,delSes=null,copybEl=null;
+ var toggleEl=null,addEl=null,upEl=null,downEl=null,dupEl=null,delAct=null,delRes=null,delAv=null,delSes=null,copybEl=null,bigEl=null; /* NOU: bigEl */
  while(node&&node!==document.body){
   if(node.getAttribute){
    if(!delSes&&node.getAttribute('data-del-ses'))delSes=node;
@@ -744,10 +897,12 @@ function onClick(e){
    if(!downEl&&node.getAttribute('data-down'))downEl=node;
    if(!dupEl&&node.getAttribute('data-dup'))dupEl=node;
    if(!copybEl&&node.getAttribute('data-copyb'))copybEl=node;
+   if(!bigEl&&node.getAttribute('data-big'))bigEl=node; /* NOU */
    if(!toggleEl&&node.getAttribute('data-toggle'))toggleEl=node;
   }
   node=node.parentNode;
  }
+ if(bigEl){openBig(bigEl.getAttribute('data-big'));return;} /* NOU */
  if(delSes){
   if(delSes.className.indexOf('confirm')<0){
    delSes.className='del ses confirm';
@@ -802,10 +957,10 @@ function onClick(e){
 }
 
 /* ================== EXPORTACIO ================== */
-function download(name,txt){
+function download(name,txt,mime){
  try{
   var a=document.createElement('a');
-  var blob=new Blob([txt],{type:'application/json'});
+  var blob=new Blob([txt],{type:mime||'application/json'});
   a.href=URL.createObjectURL(blob);
   a.download=name;
   document.body.appendChild(a);
