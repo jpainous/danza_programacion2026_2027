@@ -83,11 +83,11 @@
     <button id="bExport"></button>
     <button id="bImport"></button>
     <button id="bReset" class="danger"></button>
-    <button id="bPrint"></button>
-    <span class="savestate" id="savestate"></span>
+<button id="bPrint"></button>
+<button id="bPlanner" class="primary"></button>
+<span class="savestate" id="savestate"></span>
   </div>
 </header>
-
 <div class="layout">
   <nav id="nav"></nav>
   <main id="main"></main>
@@ -101,9 +101,9 @@ const KEY='fisiodanza_plaC_r2';
 const DATA={
 /* ================= CATALÀ ================= */
 ca:{
-ui:{brand:"Fisiologia · Pla C (rev. 2)",brandSub:"Pla docent desplegat · Grau en Dansa · Institut del Teatre · 2026-27 · Professora: Cèlia Painous Martí",
+ui:{brand:"Fisiologia · Pla C (rev. 2)",brandSub:"Pla docent desplegat · Grau en Dansa · Institut del Teatre · 2026-27 · Professora: Cèlia",
  edit:"✏️ Edita",editing:"✅ Acaba l'edició",save:"💾 Desa",export:"⬇ Exporta canvis",import:"⬆ Importa canvis",
- reset:"↺ Restaura l'original",print:"🖨 Imprimeix / PDF",saved:"Desat",nochanges:"No hi ha canvis nous",
+ reset:"↺ Restaura l'original",print:"🖨 Imprimeix / PDF",planner:"📋 Obre el planificador de sessions",saved:"Desat",nochanges:"No hi ha canvis nous",
  resetMsg:"Vols restaurar el contingut ORIGINAL d'aquest idioma? Perdràs les teves edicions.",edited:"editat",navTitle:"Índex"},
 secs:[
 {id:"dades",t:"1. Dades identificatives",h:`
@@ -114,7 +114,7 @@ secs:[
 <tr><th>Titulació / centre</th><td>Grau en Dansa · Institut del Teatre (Diputació de Barcelona)</td></tr>
 <tr><th>Curs / especialitat</th><td>1r curs · Coreografia i interpretació / Pedagogia de la dansa</td></tr>
 <tr><th>Tipus / adscripció</th><td>Formació bàsica · Departament de Moviment</td></tr>
-<tr><th>Professorat</th><td>Cèlia Painous Martí</td></tr>
+<tr><th>Professorat</th><td>Cèlia [cognoms — completar]</td></tr>
 <tr><th>Crèdits / hores</th><td>3 ECTS · 75 h = 45 h presencials (60 %) + 30 h de treball autònom (40 %) *</td></tr>
 <tr><th>Calendari</th><td>1r semestre · 9-oct-2026 a 22-gen-2027 · <b>13 divendres lectius</b> (sessions de 3 h) + 1 festiu de lliure disposició CSD (30-oct)</td></tr>
 <tr><th>Llengua vehicular</th><td>Català</td></tr>
@@ -332,7 +332,7 @@ secs:[
 es:{
 ui:{brand:"Fisiología · Plan C (rev. 2)",brandSub:"Plan docente desplegado · Grado en Danza · Institut del Teatre · 2026-27 · Profesora: Cèlia",
  edit:"✏️ Editar",editing:"✅ Terminar edición",save:"💾 Guardar",export:"⬇ Exportar cambios",import:"⬆ Importar cambios",
- reset:"↺ Restaurar original",print:"🖨 Imprimir / PDF",saved:"Guardado",nochanges:"No hay cambios nuevos",
+ reset:"↺ Restaurar original",print:"🖨 Imprimir / PDF",planner:"📋 Abrir el planificador de sesiones",saved:"Guardado",nochanges:"No hay cambios nuevos",
  resetMsg:"¿Restaurar el contenido ORIGINAL de este idioma? Se perderán tus ediciones.",edited:"editado",navTitle:"Índice"},
 secs:[
 {id:"dades",t:"1. Datos identificativos",h:`
@@ -561,7 +561,7 @@ secs:[
 en:{
 ui:{brand:"Physiology · Plan C (rev. 2)",brandSub:"Deployed teaching plan · Degree in Dance · Institut del Teatre · 2026-27 · Lecturer: Cèlia",
  edit:"✏️ Edit",editing:"✅ Finish editing",save:"💾 Save",export:"⬇ Export changes",import:"⬆ Import changes",
- reset:"↺ Restore original",print:"🖨 Print / PDF",saved:"Saved",nochanges:"No new changes",
+ reset:"↺ Restore original",print:"🖨 Print / PDF",planner:"📋 Open the session planner",saved:"Saved",nochanges:"No new changes",
  resetMsg:"Restore the ORIGINAL content of this language? Your edits will be lost.",edited:"edited",navTitle:"Contents"},
 secs:[
 {id:"dades",t:"1. Identification data",h:`
@@ -812,6 +812,7 @@ function render(){
   $('#bImport').textContent=d.ui.import;
   $('#bReset').textContent=d.ui.reset;
   $('#bPrint').textContent=d.ui.print;
+  $('#bPlanner').textContent=d.ui.planner;
   document.querySelectorAll('#langBox button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
   $('#nav').innerHTML='<strong class="navtitle">'+d.ui.navTitle+'</strong>'+
     d.secs.map((s,i)=>'<a href="#s-'+s.id+'" data-i="'+i+'">'+s.t+'</a>').join('');
@@ -852,12 +853,20 @@ function resetLang(){
   localStorage.setItem(KEY+'_overrides',JSON.stringify(overrides));
   render();toast(U().saved);
 }
+function dtStamp(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
 function exportJSON(){
-  const blob=new Blob([JSON.stringify({app:KEY,exported:new Date().toISOString(),overrides},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='plaC-rev2-edicions.json';a.click();
-}
-function importJSON(file){
+  var data=JSON.stringify({app:KEY,exported:new Date().toISOString(),overrides},null,2);
+  var a1=document.createElement('a');
+  a1.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+  a1.download='programacio-seguretat-'+dtStamp()+'.json';
+  document.body.appendChild(a1);a1.click();
+  setTimeout(function(){
+    var a2=document.createElement('a');
+    a2.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+    a2.download='programacio-dades.json';
+    document.body.appendChild(a2);a2.click();
+  },500);
+}function importJSON(file){
   const r=new FileReader();
   r.onload=e=>{
     try{
@@ -879,6 +888,7 @@ function importJSON(file){
  $('#bReset').onclick=resetLang;
  $('#bExport').onclick=exportJSON;
  $('#bPrint').onclick=()=>window.print();
+ $('#bPlanner').onclick=function(){window.open('planificador.html','_blank');};
  $('#bImport').onclick=()=>$('#fileImp').click();
  $('#fileImp').onchange=e=>{if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';};
 
