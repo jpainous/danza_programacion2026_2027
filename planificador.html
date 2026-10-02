@@ -189,6 +189,7 @@ copSameTxt:"Copiar un bloc de texte a la mateixa sessió no té efecte: tria una
 bigOpen:"Mostra la sessió en una pestanya nova",bigTitle:"Sessió",bigClose:"Tanca la pestanya",
 bigAct:"Activitats",bigRes:"Recursos online",bigAv:"Mitjans audiovisuals",bigComp:"Treball complementari",bigEv:"Evidències",bigObj:"Objectius",
 bigNoTopic:"(sense títol)",bigTime:"Horari",bigHint:"Aquesta és una vista de només lectura. Tanca la pestanya per tornar al planificador.",
+bigEmpty:"(buit)",
 bigBlocked:"El navegador ha bloquejat l'obertura de la pestanya. Permet les finestres emergents per a aquesta pàgina."},
 es:{t1:"Planificador de sesiones - Fisiologia",t2:"C&egrave;lia Painous Mart&iacute; - Fisiolog&iacute;a aplicada a la danza - 2026-27",
 openStu:"&#127891; Ficha del alumnado",bNew:"+ A&ntilde;adir sesi&oacute;n",bExpStu:"Exportar para el alumnado",bExp:"Exportar copia",bImp:"Importar copia",bPrint:"Imprimir",bData:"&#9432; Datos",
@@ -222,6 +223,7 @@ bigOpen:"Mostrar la sesión en una pestaña nueva",bigTitle:"Sesión",bigClose:"
 bigAct:"Actividades",bigRes:"Recursos online",bigAv:"Medios audiovisuales",bigComp:"Trabajo complementario",bigEv:"Evidencias",bigObj:"Objetivos",
 bigNoTopic:"(sin título)",bigTime:"Horario",bigHint:"Esta es una vista de solo lectura. Cierra la pestaña para volver al planificador.",
 bigBlocked:"El navegador ha bloqueado la apertura de la pestaña. Permite las ventanas emergentes para esta página."},
+bigEmpty:"(vacío)",
 en:{t1:"Session planner - Physiology",t2:"Celia Painous Marti - Physiology Applied to Dance - 2026-27",
 openStu:"&#127891; Student sheet",bNew:"+ Add session",bExpStu:"Export for students",bExp:"Export backup",bImp:"Import backup",bPrint:"Print",bData:"&#9432; Data",
 saved:"Saved",fltAll:"All activities",stPlan:"Planned",stDone:"Done",stPause:"On hold",stDrop:"Discarded",
@@ -253,6 +255,7 @@ copSameTxt:"Copying a text block to the same session has no effect: choose anoth
 bigOpen:"Show session in a new tab",bigTitle:"Session",bigClose:"Close tab",
 bigAct:"Activities",bigRes:"Online resources",bigAv:"Audiovisual media",bigComp:"Complementary work",bigEv:"Evidence",bigObj:"Objectives",
 bigNoTopic:"(untitled)",bigTime:"Time",bigHint:"This is a read-only view. Close the tab to return to the planner.",
+bigEmpty:"(empty)",
 bigBlocked:"The browser blocked opening the tab. Allow pop-ups for this page."}};
 
 /* ================== ESTAT ================== */
@@ -763,10 +766,17 @@ function buildSessionPage(x){
    '.se-comp{border-left-color:#b0567a}.se-comp h2{color:#b0567a}'+
    '.se-ev{border-left-color:#7a8288}.se-ev h2{color:#7a8288}'+
    '.pre{white-space:pre-wrap;font:inherit;margin:0;font-size:1.05rem;line-height:1.7}'+
-   '.act{display:grid;grid-template-columns:1fr 130px;gap:1rem;padding:.7rem .2rem;border-bottom:1px dashed #e0d8ea;font-size:1.05rem}'+
+   '.empty{color:#9a94a0;font-style:italic;font-size:.95rem}'+
+   '.act{display:grid;grid-template-columns:1fr 130px;gap:1rem;padding:.7rem .2rem;border-bottom:1px dashed #e0d8ea;font-size:1.05rem;align-items:start}'+
    '.act:last-child{border-bottom:none}'+
    '.act .btime{color:#5f3d8a;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}'+
    '.act .btxt{white-space:pre-wrap}'+
+   '.act .bst{display:inline-block;font-size:.7rem;font-weight:700;padding:.1rem .5rem;border-radius:10px;margin-right:.5rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.03em}'+
+   '.st-plan{background:#dbe9f7;color:#1f5f8b}'+
+   '.st-done{background:#d8efdf;color:#2e7d4f}'+
+   '.st-pause{background:#fbe0cf;color:#c05621}'+
+   '.st-drop{background:#e6e8ea;color:#5a6066}'+
+   '.act.drop .btxt{opacity:.55;text-decoration:line-through}'+
    '.list{list-style:none;padding:0;margin:0}'+
    '.list li{padding:.5rem .2rem;border-bottom:1px dashed #e0d8ea;white-space:pre-wrap;font-size:1.05rem}'+
    '.list li:last-child{border-bottom:none}'+
@@ -784,52 +794,92 @@ function buildSessionPage(x){
   h+='</h1>';
   h+='<div class="sub">'+fmt(x.date)+'</div>';
 
-  /* Objectius */
-  if(x.objVis&&x.obj){
-   h+='<div class="sect se-obj"><h2>'+t('bigObj')+'</h2><pre class="pre">'+esc(x.obj)+'</pre></div>';
+  /* ---------- OBJECTIUS: sempre visible ---------- */
+  h+='<div class="sect se-obj"><h2>'+t('bigObj')+'</h2>';
+  if(x.obj&&String(x.obj).replace(/\s/g,'')){
+   h+='<pre class="pre">'+esc(x.obj)+'</pre>';
+  }else{
+   h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
+  h+='</div>';
 
-  /* Activitats */
-  var acts=(x.acts&&x.acts.length)?x.acts.filter(function(a){return a&&a.vis&&a.st!=='drop';}):[];
-  if(acts.length){
-   h+='<div class="sect se-act"><h2>'+t('bigAct')+'</h2>';
+  /* ---------- ACTIVITATS: totes, amb estat ---------- */
+  h+='<div class="sect se-act"><h2>'+t('bigAct')+'</h2>';
+  var acts=(x.acts&&x.acts.length)?x.acts:null;
+  if(acts&&acts.length){
    for(var i=0;i<acts.length;i++){
-    h+='<div class="act"><div class="btxt">'+esc(acts[i].txt)+'</div>';
-    if(acts[i].time)h+='<div class="btime">'+esc(acts[i].time)+'</div>';
+    var a=acts[i];
+    if(!a)continue;
+    var hasTxt=(a.txt&&String(a.txt).replace(/\s/g,''));
+    var st=a.st||'plan';
+    var stLbl=t('stPlan');
+    if(st==='done')stLbl=t('stDone');
+    else if(st==='pause')stLbl=t('stPause');
+    else if(st==='drop')stLbl=t('stDrop');
+    var cls=(st==='drop')?'act drop':'act';
+    h+='<div class="'+cls+'"><div class="btxt">';
+    h+='<span class="bst st-'+st+'">'+esc(stLbl)+'</span>';
+    h+=(hasTxt?esc(a.txt):'<span class="empty">'+t('bigEmpty')+'</span>');
+    h+='</div>';
+    if(a.time)h+='<div class="btime">'+esc(a.time)+'</div>';
     h+='</div>';
    }
-   h+='</div>';
+  }else{
+   h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
+  h+='</div>';
 
-  /* Recursos */
-  var res=(x.res&&x.res.length)?x.res.filter(function(r){return r&&r.vis&&r.txt&&String(r.txt).replace(/\s/g,'');}):[];
-  if(res.length){
-   h+='<div class="sect se-res"><h2>'+t('bigRes')+'</h2><ul class="list">';
+  /* ---------- RECURSOS ---------- */
+  h+='<div class="sect se-res"><h2>'+t('bigRes')+'</h2>';
+  var res=(x.res&&x.res.length)?x.res:null;
+  if(res&&res.length){
+   h+='<ul class="list">';
    for(var j=0;j<res.length;j++){
-    h+='<li>'+linkify(res[j].txt)+'</li>';
+    var r=res[j];
+    if(!r)continue;
+    var rt=(r.txt&&String(r.txt).replace(/\s/g,''))?linkify(r.txt):'<span class="empty">'+t('bigEmpty')+'</span>';
+    h+='<li>'+rt+'</li>';
    }
-   h+='</ul></div>';
+   h+='</ul>';
+  }else{
+   h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
+  h+='</div>';
 
-  /* Audiovisuals */
-  var av=(x.av&&x.av.length)?x.av.filter(function(v){return v&&v.vis&&v.txt&&String(v.txt).replace(/\s/g,'');}):[];
-  if(av.length){
-   h+='<div class="sect se-av"><h2>'+t('bigAv')+'</h2><ul class="list">';
+  /* ---------- AUDIOVISUALS ---------- */
+  h+='<div class="sect se-av"><h2>'+t('bigAv')+'</h2>';
+  var av=(x.av&&x.av.length)?x.av:null;
+  if(av&&av.length){
+   h+='<ul class="list">';
    for(var k=0;k<av.length;k++){
-    h+='<li>'+linkify(av[k].txt)+'</li>';
+    var v=av[k];
+    if(!v)continue;
+    var vt=(v.txt&&String(v.txt).replace(/\s/g,''))?linkify(v.txt):'<span class="empty">'+t('bigEmpty')+'</span>';
+    h+='<li>'+vt+'</li>';
    }
-   h+='</ul></div>';
+   h+='</ul>';
+  }else{
+   h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
+  h+='</div>';
 
-  /* Treball complementari */
-  if(x.compVis&&x.comp&&String(x.comp).replace(/\s/g,'')){
-   h+='<div class="sect se-comp"><h2>'+t('bigComp')+'</h2><pre class="pre">'+esc(x.comp)+'</pre></div>';
+  /* ---------- TREBALL COMPLEMENTARI ---------- */
+  h+='<div class="sect se-comp"><h2>'+t('bigComp')+'</h2>';
+  if(x.comp&&String(x.comp).replace(/\s/g,'')){
+   h+='<pre class="pre">'+esc(x.comp)+'</pre>';
+  }else{
+   h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
+  h+='</div>';
 
-  /* Evidències */
-  if(x.evVis&&x.ev&&String(x.ev).replace(/\s/g,'')){
-   h+='<div class="sect se-ev"><h2>'+t('bigEv')+'</h2><pre class="pre">'+esc(x.ev)+'</pre></div>';
+  /* ---------- EVIDÈNCIES ---------- */
+  h+='<div class="sect se-ev"><h2>'+t('bigEv')+'</h2>';
+  if(x.ev&&String(x.ev).replace(/\s/g,'')){
+   h+='<pre class="pre">'+esc(x.ev)+'</pre>';
+  }else{
+   h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
+  h+='</div>';
 
   h+='<p class="hint">'+t('bigHint')+'</p>';
   h+='</div></body></html>';
