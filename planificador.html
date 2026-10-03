@@ -489,10 +489,18 @@ function updateLinks(row,txt){
 }
 function refreshAllLinks(root){
  if(!root)return;
+ // Files (.row): activitats, recursos, audiovisuals
  var rows=root.querySelectorAll('.row'),i;
  for(i=0;i<rows.length;i++){
   var ta=rows[i].querySelector('textarea');
   updateLinks(rows[i],ta?ta.value:'');
+ }
+ // Blocs (.sect amb data-linkblock): objectius, comp, ev
+ var secs=root.querySelectorAll('.sect[data-linkblock]'),j;
+ for(j=0;j<secs.length;j++){
+  var s=secs[j];
+  var ta2=s.querySelector('textarea');
+  if(ta2)updateLinks(s,ta2.value);
  }
 }
 
@@ -528,9 +536,11 @@ function avRow(v){
 }
 function block(title,key,val,inner,cls,clau){
  var btn=clau?('<button type="button" class="cpy" data-copyb="'+clau+'" title="'+esc(t('cpyT'))+'">&#10697;</button>'):'';
- return '<div class="sect '+(cls||'')+'"><div class="secth"><h3>'+title+'</h3>'+btn
+ return '<div class="sect '+(cls||'')+'" data-linkblock="'+(clau||'')+'"><div class="secth"><h3>'+title+'</h3>'+btn
  +'<label class="chk"><input type="checkbox" data-f="'+key+'"'+(val?' checked':'')+'>'+esc(t('visStudent'))+'</label></div>'
- +inner+'</div>';
+ +inner
+ +'<div class="lks lks-block"></div>'
+ +'</div>';
 }
 
 /* ================== TARGETA DE SESSIO ================== */
@@ -666,6 +676,10 @@ function onEdit(e){
  var i,f=el.getAttribute('data-f');
  if(f!==null&&f!==undefined&&f!==''){
   if(f==='date'||f==='topic'||f==='obj'||f==='comp'||f==='ev')x[f]=el.value;
+if(f==='obj'||f==='comp'||f==='ev'){
+  var sec=el.closest('.sect');
+  if(sec)updateLinks(sec,el.value);
+}
   if(f==='objVis'||f==='compVis'||f==='evVis')x[f]=el.checked;
   if(f==='date'||f==='topic'){var m=cardEl.querySelector('.cmeta');if(m)m.innerHTML=metaHTML(x,idxOf(x.id)+1);}
  }else{
@@ -782,6 +796,9 @@ function buildSessionPage(x){
    '.list li:last-child{border-bottom:none}'+
    '.list a{color:#1f5f8b;text-decoration:none}'+
    '.list a:hover{text-decoration:underline}'+
+   /* NOU: Estil explícit perquè els enllaços en aquests blocs també es vegin clarament */
+   '.pre a, .btxt a{color:#1f5f8b;text-decoration:underline}'+
+   '.pre a:hover, .btxt a:hover{color:#15456b}'+
    '.hint{margin-top:2rem;text-align:center;color:#6b6570;font-size:.85rem}'+
    '@media(max-width:640px){body{padding:.5rem}.wrap{padding:1.2rem}h1{font-size:1.4rem}.act{grid-template-columns:1fr}.act .btime{text-align:left}}';
 
@@ -797,7 +814,7 @@ function buildSessionPage(x){
   /* ---------- OBJECTIUS: sempre visible ---------- */
   h+='<div class="sect se-obj"><h2>'+t('bigObj')+'</h2>';
   if(x.obj&&String(x.obj).replace(/\s/g,'')){
-   h+='<pre class="pre">'+esc(x.obj)+'</pre>';
+   h+='<pre class="pre">'+linkify(x.obj)+'</pre>';
   }else{
    h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
@@ -819,7 +836,7 @@ function buildSessionPage(x){
     var cls=(st==='drop')?'act drop':'act';
     h+='<div class="'+cls+'"><div class="btxt">';
     h+='<span class="bst st-'+st+'">'+esc(stLbl)+'</span>';
-    h+=(hasTxt?esc(a.txt):'<span class="empty">'+t('bigEmpty')+'</span>');
+    h+=(hasTxt?linkify(a.txt):'<span class="empty">'+t('bigEmpty')+'</span>');
     h+='</div>';
     if(a.time)h+='<div class="btime">'+esc(a.time)+'</div>';
     h+='</div>';
@@ -866,7 +883,7 @@ function buildSessionPage(x){
   /* ---------- TREBALL COMPLEMENTARI ---------- */
   h+='<div class="sect se-comp"><h2>'+t('bigComp')+'</h2>';
   if(x.comp&&String(x.comp).replace(/\s/g,'')){
-   h+='<pre class="pre">'+esc(x.comp)+'</pre>';
+   h+='<pre class="pre">'+linkify(x.comp)+'</pre>';
   }else{
    h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
@@ -875,7 +892,7 @@ function buildSessionPage(x){
   /* ---------- EVIDÈNCIES ---------- */
   h+='<div class="sect se-ev"><h2>'+t('bigEv')+'</h2>';
   if(x.ev&&String(x.ev).replace(/\s/g,'')){
-   h+='<pre class="pre">'+esc(x.ev)+'</pre>';
+   h+='<pre class="pre">'+linkify(x.ev)+'</pre>';
   }else{
    h+='<p class="empty">'+t('bigEmpty')+'</p>';
   }
@@ -907,28 +924,22 @@ function linkify(txt){
  }
 }
 
-/* Obre la sessió en una pestanya nova fent servir un Blob URL.
-   Aquest mètode funciona bé en file:// i en http:// */
+/* Obre la sessió en una pestanya nova fent servir un Blob URL. */
 function openBig(sid){
  var x=plan.sessions[idxOf(sid)];
  if(!x){toast('Sessió no trobada');return;}
  var html=buildSessionPage(x);
  
- // Creem un Blob amb el contingut HTML
  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
  var url=URL.createObjectURL(blob);
- 
- // Obrim la pestanya nova
  var w=window.open(url,'_blank');
  
  if(!w){
-  // Si el navegador bloqueja la finestra, alliberem l'URL i avisem
   URL.revokeObjectURL(url);
   toast(t('bigBlocked'));
   return;
  }
  
- // Alliberem l'URL quan ja no calgui (donem 1 minut de marge)
  setTimeout(function(){try{URL.revokeObjectURL(url);}catch(e){}},60000);
 }
 /* fi NOU */
